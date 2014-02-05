@@ -1,0 +1,37 @@
+USE CASE: Importing transactions from bank CSV into GnuCash XML database
+
+* Detailed Scenario:
+
+- I select the CSV file to be used as input
+- I select the Gnc file to be used as output
+- From the Gnc data file, I select:
+   - The Account to be used as the origin of the funds
+   - The Account hierarchy used for the expenses 
+- I'm presented with a list of the transactions contained in the CSV file
+- I can select which transactions will be imported/ignored:
+  - by indicating first and last line number 
+  - by marking individual lines
+- I can associate each individual transaction with an expense account
+- I can edit the description of some transactions
+- Once I'm ready, I execute the import and the App saves the new transactions to the Gnc file 
+
+* Sashimi Slices:
+
+Kernel:
+- The app reads a CSV file of a fixed name residing in the current directory
+- The app opens a Gnc file of a fixed name residing in the current directory
+- The app finds an Account named "Bank Account" as source of the funds
+- The app will use the Account "Expenses" as expense hierarchy
+- The app shows all the transactions in the CSV file
+- On import, all transactions are imported
+
+Expansions:
+- Selection of the input file
+- Selection of the output file
+- Selection of the source account
+- Selection of the target account hierarchy
+- Ignoring transactions by line number
+- Ignoring individual transactions
+- Associating individual transactions with expense accounts in the hierarchy
+- Editing transaction data
+- Formatted display of transaction data
