@@ -1,7 +1,7 @@
 package gncimport.presenters;
 
-import gncimporter.boundaries.TxModel;
-import gncimporter.boundaries.TxView;
+import gncimport.boundaries.TxModel;
+import gncimport.boundaries.TxView;
 
 public class MainWindowPresenter
 {

@@ -3,9 +3,9 @@ package gncimport.tests.unit;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import gncimport.boundaries.TxModel;
+import gncimport.boundaries.TxView;
 import gncimport.presenters.MainWindowPresenter;
-import gncimporter.boundaries.TxModel;
-import gncimporter.boundaries.TxView;
 
 import org.junit.Before;
 import org.junit.Test;

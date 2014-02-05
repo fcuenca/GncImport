@@ -1,4 +1,4 @@
-package gncimporter.boundaries;
+package gncimport.boundaries;
 
 public interface TxModel
 {
