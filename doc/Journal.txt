@@ -1,0 +1,21 @@
+---++ Wed Jan 5:
+
+Decided what Process to follow:
+
+   - Select a feature: do Product Sashimi to slice it
+   - Identify Kernel slice
+      - Create a failing end-to-end-test
+      - Test drive implementation
+      - Make the e-to-e test pass
+      - Integrate the UI. Exploratory test.
+   - Continue with "expansion" slices, and repeat.
+
+First feature is "Basic import"; the kernel slice is import to/from hard-coded file names, 
+with all the selections set to default. 
+
+Where to start?
+
+   - "I like to start any application with a feature that tells the user something, then work my way back to the 
+     feature that lets the user provide information." [JB]
+   - First "micro-feature" is to display the (hard coded) number of transactions in the status line.
+   

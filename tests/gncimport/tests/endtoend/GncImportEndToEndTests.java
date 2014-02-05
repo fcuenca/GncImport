@@ -17,8 +17,8 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	@Test
 	public void browse_transactions_on_app_init()
 	{
-		_appDriver.shouldDisplayTransactionGridWithTransactionCount(20);
 		_appDriver.shouldDisplayTransactionCountInStatusBar(20);
+		_appDriver.shouldDisplayTransactionGridWithTransactionCount(20);
 	}
 
 }

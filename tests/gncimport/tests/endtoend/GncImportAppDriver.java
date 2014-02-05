@@ -1,5 +1,7 @@
 package gncimport.tests.endtoend;
 
+import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import gncimport.ui.GncImport;
 
@@ -9,6 +11,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.fixture.JLabelFixture;
 
 public class GncImportAppDriver
 {
@@ -35,6 +38,7 @@ public class GncImportAppDriver
 
 	public void shouldDisplayTransactionCountInStatusBar(int txCount)
 	{
-		fail("niy");
+		JLabelFixture label = _mainWindow.label("TX_COUNT");
+		assertThat(label.text(), containsString("" + txCount + " transaction"));
 	}
 }
