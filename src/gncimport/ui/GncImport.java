@@ -112,4 +112,11 @@ public class GncImport extends JPanel implements TxView
 		return sb;
 	}
 
+	@Override
+	public void displayTxData(TxTableModel tableModel)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
 }

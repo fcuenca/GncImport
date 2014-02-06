@@ -2,12 +2,15 @@ package gncimport.models;
 
 import gncimport.boundaries.TxModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FakeTxModel implements TxModel
 {
 	@Override
-	public int getTxCount()
+	public List<TxData> fetchTransactions()
 	{
-		return 0;
+		return new ArrayList<TxData>();
 	}
 
 }

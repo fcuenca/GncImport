@@ -3,6 +3,10 @@ package gncimport.presenters;
 import gncimport.boundaries.MainWindowRenderer;
 import gncimport.boundaries.TxModel;
 import gncimport.boundaries.TxView;
+import gncimport.models.TxData;
+import gncimport.ui.TxTableModel;
+
+import java.util.List;
 
 public class MainWindowPresenter implements MainWindowRenderer
 {
@@ -18,6 +22,9 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onInit()
 	{
-		_view.displayTxCount(_model.getTxCount());
+		List<TxData> txData = _model.fetchTransactions();
+
+		_view.displayTxData(new TxTableModel(txData));
+		_view.displayTxCount(txData.size());
 	}
 }

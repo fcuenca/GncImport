@@ -6,7 +6,11 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gncimport.boundaries.TxModel;
+import gncimport.models.TxData;
 import gncimport.ui.GncImport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -24,7 +28,8 @@ public class GncImportAppDriver
 	public GncImportAppDriver(Robot robot, int expectedTxCount)
 	{
 		_model = mock(TxModel.class);
-		when(_model.getTxCount()).thenReturn(expectedTxCount);
+		when(_model.fetchTransactions()).thenReturn(createTestTxs(expectedTxCount));
+		// when(_model.getTxCount()).thenReturn(expectedTxCount);
 
 		JFrame frame = GuiActionRunner.execute(new GuiQuery<JFrame>()
 		{
@@ -38,6 +43,16 @@ public class GncImportAppDriver
 		_mainWindow.show();
 	}
 
+	private List<TxData> createTestTxs(int expectedTxCount)
+	{
+		ArrayList<TxData> txs = new ArrayList<TxData>();
+		for (int i = 0; i < expectedTxCount; i++)
+		{
+			txs.add(new TxData("1/1/2014", i, "Tx " + i));
+		}
+		return txs;
+	}
+
 	public void shouldDisplayTransactionGridWithTransactionCount(int txCount)
 	{
 		fail("niy");
@@ -48,4 +63,5 @@ public class GncImportAppDriver
 		JLabelFixture label = _mainWindow.label("TX_COUNT");
 		assertThat(label.text(), containsString("" + txCount + " transaction"));
 	}
+
 }

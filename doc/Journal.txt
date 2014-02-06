@@ -18,4 +18,4 @@ Where to start?
    - "I like to start any application with a feature that tells the user something, then work my way back to the 
      feature that lets the user provide information." [JB]
    - First "micro-feature" is to display the (hard coded) number of transactions in the status line.
-   
+   - Second micro-feature: display a grid of transactions (still hard coded)

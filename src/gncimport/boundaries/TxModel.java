@@ -1,8 +1,10 @@
 package gncimport.boundaries;
 
+import gncimport.models.TxData;
+
+import java.util.List;
+
 public interface TxModel
 {
-
-	int getTxCount();
-
+	List<TxData> fetchTransactions();
 }
