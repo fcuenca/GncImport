@@ -5,7 +5,7 @@ Decided what Process to follow:
    - Select a feature: do Product Sashimi to slice it
    - Identify Kernel slice
       - Create a failing end-to-end-test
-      - Test drive implementation
+      - Test drive implementation by "micro-feature"
       - Make the e-to-e test pass
       - Integrate the UI. Exploratory test.
    - Continue with "expansion" slices, and repeat.

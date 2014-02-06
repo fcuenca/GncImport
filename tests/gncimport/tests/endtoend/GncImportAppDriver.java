@@ -1,8 +1,8 @@
 package gncimport.tests.endtoend;
 
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gncimport.boundaries.TxModel;
@@ -19,6 +19,7 @@ import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JLabelFixture;
+import org.fest.swing.fixture.JTableFixture;
 
 public class GncImportAppDriver
 {
@@ -55,7 +56,8 @@ public class GncImportAppDriver
 
 	public void shouldDisplayTransactionGridWithTransactionCount(int txCount)
 	{
-		fail("niy");
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		assertThat(grid.rowCount(), is(txCount));
 	}
 
 	public void shouldDisplayTransactionCountInStatusBar(int txCount)

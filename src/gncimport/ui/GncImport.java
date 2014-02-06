@@ -11,6 +11,8 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import org.jdesktop.swingx.JXStatusBar;
 
@@ -21,6 +23,7 @@ public class GncImport extends JPanel implements TxView
 
 	private final MainWindowRenderer _presenter;
 	private JLabel _statusLabel;
+	private JTable _table;
 
 	public static void main(String[] args)
 	{
@@ -74,8 +77,15 @@ public class GncImport extends JPanel implements TxView
 
 	private void initialize()
 	{
+		setLayout(new BorderLayout());
+		setOpaque(true);
+
+		JScrollPane grid = createGridPane();
+		add(grid, BorderLayout.CENTER);
+
 		JXStatusBar statusBar = createStatusBar();
 		add(statusBar, BorderLayout.PAGE_END);
+
 		_presenter.onInit();
 	}
 
@@ -100,6 +110,14 @@ public class GncImport extends JPanel implements TxView
 		_statusLabel.setText(message);
 	}
 
+	private JScrollPane createGridPane()
+	{
+		_table = new JTable();
+		_table.setName("TRANSACTION_GRID");
+
+		return new JScrollPane(_table);
+	}
+
 	private JXStatusBar createStatusBar()
 	{
 		JXStatusBar sb = new JXStatusBar();
@@ -115,8 +133,7 @@ public class GncImport extends JPanel implements TxView
 	@Override
 	public void displayTxData(TxTableModel tableModel)
 	{
-		// TODO Auto-generated method stub
-
+		_table.setModel(tableModel);
 	}
 
 }
