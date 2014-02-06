@@ -2,6 +2,7 @@ package gncimport.ui;
 
 import gncimport.boundaries.MainWindowRenderer;
 import gncimport.boundaries.TxView;
+import gncimport.models.FakeTxModel;
 import gncimport.presenters.MainWindowPresenter;
 
 import java.awt.BorderLayout;
@@ -46,20 +47,29 @@ public class GncImport extends JPanel implements TxView
 
 		_mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		GncImport newContentPane = new GncImport(new MainWindowPresenter(null, null));
+		GncImport newContentPane = new GncImport();
 
 		_mainFrame.setContentPane(newContentPane);
 
 		return _mainFrame;
 	}
 
+	public GncImport()
+	{
+		this._presenter = new MainWindowPresenter(new FakeTxModel(), this);
+		initialize();
+	}
+
 	public GncImport(MainWindowRenderer presenter)
 	{
 		this._presenter = presenter;
+		initialize();
+	}
 
+	private void initialize()
+	{
 		JXStatusBar statusBar = createStatusBar();
 		add(statusBar, BorderLayout.PAGE_END);
-
 		_presenter.onInit();
 	}
 
