@@ -1,6 +1,7 @@
 package gncimport.ui;
 
 import gncimport.boundaries.MainWindowRenderer;
+import gncimport.boundaries.TxModel;
 import gncimport.boundaries.TxView;
 import gncimport.models.FakeTxModel;
 import gncimport.presenters.MainWindowPresenter;
@@ -43,20 +44,25 @@ public class GncImport extends JPanel implements TxView
 
 	public static JFrame createMainFrame()
 	{
+		return createMainFrame(new FakeTxModel());
+	}
+
+	public static JFrame createMainFrame(TxModel model)
+	{
 		_mainFrame = new JFrame("GnuCash Transaction Import");
 
 		_mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		GncImport newContentPane = new GncImport();
+		GncImport newContentPane = new GncImport(model);
 
 		_mainFrame.setContentPane(newContentPane);
 
 		return _mainFrame;
 	}
 
-	public GncImport()
+	public GncImport(TxModel model)
 	{
-		this._presenter = new MainWindowPresenter(new FakeTxModel(), this);
+		this._presenter = new MainWindowPresenter(model, this);
 		initialize();
 	}
 

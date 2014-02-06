@@ -11,7 +11,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	@Override
 	protected void onSetUp()
 	{
-		_appDriver = new GncImportAppDriver(robot());
+		_appDriver = new GncImportAppDriver(robot(), 20);
 	}
 
 	@Test

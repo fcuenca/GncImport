@@ -3,6 +3,9 @@ package gncimport.tests.endtoend;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import gncimport.boundaries.TxModel;
 import gncimport.ui.GncImport;
 
 import javax.swing.JFrame;
@@ -16,14 +19,18 @@ import org.fest.swing.fixture.JLabelFixture;
 public class GncImportAppDriver
 {
 	private FrameFixture _mainWindow;
+	private TxModel _model;
 
-	public GncImportAppDriver(Robot robot)
+	public GncImportAppDriver(Robot robot, int expectedTxCount)
 	{
+		_model = mock(TxModel.class);
+		when(_model.getTxCount()).thenReturn(expectedTxCount);
+
 		JFrame frame = GuiActionRunner.execute(new GuiQuery<JFrame>()
 		{
 			protected JFrame executeInEDT()
 			{
-				return GncImport.createMainFrame();
+				return GncImport.createMainFrame(_model);
 			}
 		});
 
