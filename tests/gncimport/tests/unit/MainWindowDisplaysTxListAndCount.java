@@ -69,4 +69,32 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 		assertThat(viewFixture.label(JLabelMatcher.withName("TX_COUNT")).text(), is("10 transactions."));
 	}
 
+	@Test
+	public void displays_transaction_count_in_singular()
+	{
+		GncImport view = GuiActionRunner.execute(new ViewDriver()
+		{
+			protected void doActionsOnView(GncImport v)
+			{
+				v.displayTxCount(1);
+			}
+		});
+
+		JPanelFixture viewFixture = new JPanelFixture(robot(), view);
+
+		assertThat(viewFixture.label(JLabelMatcher.withName("TX_COUNT")).text(), is("1 transaction."));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void rejects_negative_transaction_count()
+	{
+		GuiActionRunner.execute(new ViewDriver()
+		{
+			protected void doActionsOnView(GncImport v)
+			{
+				v.displayTxCount(-1);
+			}
+		});
+	}
+
 }

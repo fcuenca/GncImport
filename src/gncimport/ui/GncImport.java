@@ -82,7 +82,20 @@ public class GncImport extends JPanel implements TxView
 	@Override
 	public void displayTxCount(int count)
 	{
-		String message = "" + count + " transactions.";
+		if (count < 0)
+		{
+			throw new IllegalArgumentException("Transaction count can't be negative");
+		}
+		String message = "" + count;
+
+		if (count == 1)
+		{
+			message += " transaction.";
+		}
+		else
+		{
+			message += " transactions.";
+		}
 
 		_statusLabel.setText(message);
 	}
