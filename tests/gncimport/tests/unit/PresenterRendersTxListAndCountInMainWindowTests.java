@@ -1,6 +1,8 @@
 package gncimport.tests.unit;
 
 import static gncimport.tests.unit.ListUtils.list_of;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,17 +12,21 @@ import gncimport.models.TxData;
 import gncimport.presenters.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.internal.matchers.TypeSafeMatcher;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RenderTxListAndCountInMainWindowTests
+public class PresenterRendersTxListAndCountInMainWindowTests
 {
 	@Captor
 	private ArgumentCaptor<TxTableModel> expectedTxList;
@@ -51,43 +57,41 @@ public class RenderTxListAndCountInMainWindowTests
 		verify(_view).displayTxData(expectedTxList.capture());
 		verify(_view).displayTxCount(2);
 
-		// assertThat(expectedTxList.getValue().getRowCount(), is(2));
-		// assertThat(expectedTxList.getValue(),
-		// containsTransactions(actualTxs));
+		assertThat(expectedTxList.getValue().getRowCount(), is(2));
+		assertThat(expectedTxList.getValue(), containsTransactions(actualTxs));
 	}
 
-	// private Matcher<TxTableModel> containsTransactions(final List<TxData>
-	// transactionList)
-	// {
-	// return new TypeSafeMatcher<TxTableModel>()
-	// {
-	// Matcher<Iterable<? extends Object>> collectionMatcher =
-	// org.hamcrest.Matchers
-	// .contains(transactionList.toArray());
-	//
-	// @Override
-	// public void describeTo(final Description description)
-	// {
-	// collectionMatcher.describeTo(description);
-	// }
-	//
-	// @Override
-	// public boolean matchesSafely(TxTableModel item)
-	// {
-	// List<TxData> theTxs = new ArrayList<TxData>();
-	//
-	// for (int i = 0; i < transactionList.size(); i++)
-	// {
-	// TxData t = new TxData((String) item.getValueAt(i, 0),
-	// (Double) item.getValueAt(i, 1),
-	// (String) item.getValueAt(i, 2));
-	// theTxs.add(t);
-	// }
-	//
-	// return collectionMatcher.matches(theTxs);
-	//
-	// }
-	// };
-	// }
+	private Matcher<TxTableModel> containsTransactions(final List<TxData> transactionList)
+	{
+		return new TypeSafeMatcher<TxTableModel>()
+		{
+			Matcher<Iterable<? extends Object>> collectionMatcher =
+					org.hamcrest.Matchers
+							.contains(transactionList.toArray());
+
+			@Override
+			public void describeTo(final Description description)
+			{
+				collectionMatcher.describeTo(description);
+			}
+
+			@Override
+			public boolean matchesSafely(TxTableModel item)
+			{
+				List<TxData> theTxs = new ArrayList<TxData>();
+
+				for (int i = 0; i < transactionList.size(); i++)
+				{
+					TxData t = new TxData((String) item.getValueAt(i, 0),
+							(Double) item.getValueAt(i, 1),
+							(String) item.getValueAt(i, 2));
+					theTxs.add(t);
+				}
+
+				return collectionMatcher.matches(theTxs);
+
+			}
+		};
+	}
 
 }
