@@ -61,7 +61,7 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 			}
 		});
 
-		verify(_presenter).onOpenCsvFile(anyString());
+		verify(_presenter).onReadFromCsvFile(anyString());
 	}
 
 	@Test

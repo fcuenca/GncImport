@@ -21,4 +21,10 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_appDriver.shouldDisplayTransactionGridWithTransactionCount(20);
 	}
 
+	@Test
+	public void save_imported_transactions()
+	{
+		_appDriver.shouldSaveTransactionsToGncFile();
+	}
+
 }

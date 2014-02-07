@@ -52,7 +52,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 
 		when(_model.fetchTransactionsFrom("/path/to/file.csv")).thenReturn(actualTxs);
 
-		_presenter.onOpenCsvFile("/path/to/file.csv");
+		_presenter.onReadFromCsvFile("/path/to/file.csv");
 
 		verify(_view).displayTxData(expectedTxList.capture());
 		verify(_view).displayTxCount(2);

@@ -7,4 +7,6 @@ import java.util.List;
 public interface TxModel
 {
 	List<TxData> fetchTransactionsFrom(String fileName);
+
+	void saveTxTo(List<TxData> transactions, String fileName);
 }

@@ -18,11 +18,18 @@ public class MainWindowPresenter implements MainWindowRenderer
 	}
 
 	@Override
-	public void onOpenCsvFile(String fileName)
+	public void onReadFromCsvFile(String fileName)
 	{
 		List<TxData> txData = _model.fetchTransactionsFrom(fileName);
 
 		_view.displayTxData(new TxTableModel(txData));
 		_view.displayTxCount(txData.size());
+	}
+
+	public void onSaveToGncFile(String fileName)
+	{
+		List<TxData> txData = _view.getTxTableModel().getTransactions();
+
+		_model.saveTxTo(txData, fileName);
 	}
 }

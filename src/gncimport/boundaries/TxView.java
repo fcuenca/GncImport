@@ -9,4 +9,6 @@ public interface TxView
 
 	void displayTxData(TxTableModel tableModel);
 
+	TxTableModel getTxTableModel();
+
 }

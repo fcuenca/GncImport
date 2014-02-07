@@ -25,4 +25,11 @@ public class FakeTxModel implements TxModel
 		return result;
 	}
 
+	@Override
+	public void saveTxTo(List<TxData> transactions, String fileName)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
 }

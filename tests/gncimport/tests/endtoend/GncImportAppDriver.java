@@ -3,6 +3,7 @@ package gncimport.tests.endtoend;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import gncimport.GncImportApp;
 import gncimport.boundaries.TxModel;
 import gncimport.models.FakeTxModel;
@@ -47,6 +48,11 @@ public class GncImportAppDriver
 	{
 		JLabelFixture label = _mainWindow.label("TX_COUNT");
 		assertThat(label.text(), containsString("" + txCount + " transaction"));
+	}
+
+	public void shouldSaveTransactionsToGncFile()
+	{
+		fail("niy");
 	}
 
 }

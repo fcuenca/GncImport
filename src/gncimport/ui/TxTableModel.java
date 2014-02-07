@@ -77,4 +77,9 @@ public class TxTableModel extends AbstractTableModel
 	{
 		return "TxTableModel [" + _transactions + "]";
 	}
+
+	public List<TxData> getTransactions()
+	{
+		return _transactions;
+	}
 }

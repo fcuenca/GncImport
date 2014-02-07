@@ -3,6 +3,6 @@ package gncimport.ui;
 public interface MainWindowRenderer
 {
 
-	public abstract void onOpenCsvFile(String fileName);
+	public abstract void onReadFromCsvFile(String fileName);
 
 }

@@ -20,3 +20,4 @@ Where to start?
    - First "micro-feature" is to display the (hard coded) number of transactions in the status line.
    - Second micro-feature: display a grid of transactions (still hard coded)
    - 3rd micro-feature: read data from real CSV file
+   - 4th micro-feature: write to GNC file
