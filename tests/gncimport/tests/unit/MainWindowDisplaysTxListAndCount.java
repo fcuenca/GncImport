@@ -5,6 +5,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import gncimport.models.TxData;
@@ -60,7 +61,7 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 			}
 		});
 
-		verify(_presenter).onInit();
+		verify(_presenter).onOpenCsvFile(anyString());
 	}
 
 	@Test

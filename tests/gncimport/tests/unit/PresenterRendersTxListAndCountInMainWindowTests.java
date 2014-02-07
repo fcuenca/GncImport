@@ -44,15 +44,15 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	}
 
 	@Test
-	public void displays_available_transactions_on_init()
+	public void displays_available_transactions_from_file()
 	{
 		List<TxData> actualTxs = list_of(
 				new TxData("Nov 15, 2012", 12, "Taxi ride"),
 				new TxData("Dec 17, 2012", 98, "Groceries"));
 
-		when(_model.fetchTransactions()).thenReturn(actualTxs);
+		when(_model.fetchTransactionsFrom("/path/to/file.csv")).thenReturn(actualTxs);
 
-		_presenter.onInit();
+		_presenter.onOpenCsvFile("/path/to/file.csv");
 
 		verify(_view).displayTxData(expectedTxList.capture());
 		verify(_view).displayTxCount(2);

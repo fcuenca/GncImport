@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface TxModel
 {
-	List<TxData> fetchTransactions();
+	List<TxData> fetchTransactionsFrom(String fileName);
 }

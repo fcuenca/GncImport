@@ -18,9 +18,9 @@ public class MainWindowPresenter implements MainWindowRenderer
 	}
 
 	@Override
-	public void onInit()
+	public void onOpenCsvFile(String fileName)
 	{
-		List<TxData> txData = _model.fetchTransactions();
+		List<TxData> txData = _model.fetchTransactionsFrom(fileName);
 
 		_view.displayTxData(new TxTableModel(txData));
 		_view.displayTxCount(txData.size());

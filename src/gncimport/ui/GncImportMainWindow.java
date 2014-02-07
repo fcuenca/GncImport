@@ -42,7 +42,8 @@ public class GncImportMainWindow extends JPanel implements TxView
 		JXStatusBar statusBar = createStatusBar();
 		add(statusBar, BorderLayout.PAGE_END);
 
-		_presenter.onInit();
+		_presenter.onOpenCsvFile(
+				getClass().getResource("../tests/data/rbc.csv").getPath());
 	}
 
 	@Override

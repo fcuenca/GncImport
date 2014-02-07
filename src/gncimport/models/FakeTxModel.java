@@ -1,18 +1,28 @@
 package gncimport.models;
 
-import static gncimport.tests.unit.ListUtils.list_of;
+import gncimport.adaptors.RbcExportParser;
 import gncimport.boundaries.TxModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FakeTxModel implements TxModel
 {
 	@Override
-	public List<TxData> fetchTransactions()
+	public List<TxData> fetchTransactionsFrom(String fileName)
 	{
-		return list_of(
-				new TxData("Nov 15, 2012", 12, "Taxi ride"),
-				new TxData("Dec 17, 2012", 98, "Groceries"));
+		List<TxData> result = new ArrayList<TxData>();
+		try
+		{
+			RbcExportParser parser = new RbcExportParser(fileName);
+			return parser.getTransactions();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 }

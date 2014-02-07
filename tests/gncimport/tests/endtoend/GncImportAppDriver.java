@@ -3,14 +3,9 @@ package gncimport.tests.endtoend;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import gncimport.GncImportApp;
 import gncimport.boundaries.TxModel;
-import gncimport.models.TxData;
-
-import java.util.ArrayList;
-import java.util.List;
+import gncimport.models.FakeTxModel;
 
 import javax.swing.JFrame;
 
@@ -28,8 +23,7 @@ public class GncImportAppDriver
 
 	public GncImportAppDriver(Robot robot, int expectedTxCount)
 	{
-		_model = mock(TxModel.class);
-		when(_model.fetchTransactions()).thenReturn(createTestTxs(expectedTxCount));
+		_model = new FakeTxModel();
 
 		JFrame frame = GuiActionRunner.execute(new GuiQuery<JFrame>()
 		{
@@ -41,16 +35,6 @@ public class GncImportAppDriver
 
 		_mainWindow = new FrameFixture(robot, frame);
 		_mainWindow.show();
-	}
-
-	private List<TxData> createTestTxs(int expectedTxCount)
-	{
-		ArrayList<TxData> txs = new ArrayList<TxData>();
-		for (int i = 0; i < expectedTxCount; i++)
-		{
-			txs.add(new TxData("1/1/2014", i, "Tx " + i));
-		}
-		return txs;
 	}
 
 	public void shouldDisplayTransactionGridWithTransactionCount(int txCount)
