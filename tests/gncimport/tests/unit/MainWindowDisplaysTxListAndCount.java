@@ -7,9 +7,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import gncimport.boundaries.MainWindowRenderer;
 import gncimport.models.TxData;
-import gncimport.ui.GncImport;
+import gncimport.ui.GncImportMainWindow;
+import gncimport.ui.MainWindowRenderer;
 import gncimport.ui.TxTableModel;
 
 import java.util.List;
@@ -28,13 +28,13 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 {
 	private MainWindowRenderer _presenter;
 
-	abstract class ViewDriver extends GuiQuery<GncImport>
+	abstract class ViewDriver extends GuiQuery<GncImportMainWindow>
 	{
-		abstract protected void doActionsOnView(GncImport v);
+		abstract protected void doActionsOnView(GncImportMainWindow v);
 
-		protected GncImport executeInEDT()
+		protected GncImportMainWindow executeInEDT()
 		{
-			GncImport v = new GncImport(_presenter);
+			GncImportMainWindow v = new GncImportMainWindow(_presenter);
 
 			doActionsOnView(v);
 
@@ -51,11 +51,11 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 	@Test
 	public void requests_initizialization_from_presenter_on_construction()
 	{
-		GuiActionRunner.execute(new GuiQuery<GncImport>()
+		GuiActionRunner.execute(new GuiQuery<GncImportMainWindow>()
 		{
-			protected GncImport executeInEDT()
+			protected GncImportMainWindow executeInEDT()
 			{
-				new GncImport(_presenter);
+				new GncImportMainWindow(_presenter);
 				return null;
 			}
 		});
@@ -66,9 +66,9 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 	@Test
 	public void displays_transaction_count_in_plural()
 	{
-		GncImport view = GuiActionRunner.execute(new ViewDriver()
+		GncImportMainWindow view = GuiActionRunner.execute(new ViewDriver()
 		{
-			protected void doActionsOnView(GncImport v)
+			protected void doActionsOnView(GncImportMainWindow v)
 			{
 				v.displayTxCount(10);
 			}
@@ -82,9 +82,9 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 	@Test
 	public void displays_transaction_count_in_singular()
 	{
-		GncImport view = GuiActionRunner.execute(new ViewDriver()
+		GncImportMainWindow view = GuiActionRunner.execute(new ViewDriver()
 		{
-			protected void doActionsOnView(GncImport v)
+			protected void doActionsOnView(GncImportMainWindow v)
 			{
 				v.displayTxCount(1);
 			}
@@ -100,7 +100,7 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 	{
 		GuiActionRunner.execute(new ViewDriver()
 		{
-			protected void doActionsOnView(GncImport v)
+			protected void doActionsOnView(GncImportMainWindow v)
 			{
 				v.displayTxCount(-1);
 			}
@@ -116,9 +116,9 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 
 		final TxTableModel tableModel = new TxTableModel(actualTxs);
 
-		GncImport view = GuiActionRunner.execute(new ViewDriver()
+		GncImportMainWindow view = GuiActionRunner.execute(new ViewDriver()
 		{
-			protected void doActionsOnView(GncImport v)
+			protected void doActionsOnView(GncImportMainWindow v)
 			{
 				v.displayTxData(tableModel);
 			}

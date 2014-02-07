@@ -1,4 +1,4 @@
-package gncimport.boundaries;
+package gncimport.ui;
 
 public interface MainWindowRenderer
 {

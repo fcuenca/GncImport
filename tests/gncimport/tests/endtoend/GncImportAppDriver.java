@@ -5,9 +5,9 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gncimport.GncImportApp;
 import gncimport.boundaries.TxModel;
 import gncimport.models.TxData;
-import gncimport.ui.GncImport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +30,12 @@ public class GncImportAppDriver
 	{
 		_model = mock(TxModel.class);
 		when(_model.fetchTransactions()).thenReturn(createTestTxs(expectedTxCount));
-		// when(_model.getTxCount()).thenReturn(expectedTxCount);
 
 		JFrame frame = GuiActionRunner.execute(new GuiQuery<JFrame>()
 		{
 			protected JFrame executeInEDT()
 			{
-				return GncImport.createMainFrame(_model);
+				return GncImportApp.createMainFrame(_model);
 			}
 		});
 

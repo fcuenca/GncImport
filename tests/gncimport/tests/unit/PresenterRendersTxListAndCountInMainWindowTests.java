@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 import gncimport.boundaries.TxModel;
 import gncimport.boundaries.TxView;
 import gncimport.models.TxData;
-import gncimport.presenters.MainWindowPresenter;
+import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 
 import java.util.ArrayList;

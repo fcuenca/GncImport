@@ -1,10 +1,8 @@
-package gncimport.presenters;
+package gncimport.ui;
 
-import gncimport.boundaries.MainWindowRenderer;
 import gncimport.boundaries.TxModel;
 import gncimport.boundaries.TxView;
 import gncimport.models.TxData;
-import gncimport.ui.TxTableModel;
 
 import java.util.List;
 
