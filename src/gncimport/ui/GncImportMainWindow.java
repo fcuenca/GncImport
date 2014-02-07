@@ -4,7 +4,10 @@ import gncimport.boundaries.TxModel;
 import gncimport.boundaries.TxView;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -13,11 +16,12 @@ import javax.swing.JTable;
 import org.jdesktop.swingx.JXStatusBar;
 
 @SuppressWarnings("serial")
-public class GncImportMainWindow extends JPanel implements TxView
+public class GncImportMainWindow extends JPanel implements TxView, ActionListener
 {
 	private final MainWindowRenderer _presenter;
 	private JLabel _statusLabel;
 	private JTable _table;
+	JButton _saveButton;
 
 	public GncImportMainWindow(TxModel model)
 	{
@@ -36,11 +40,9 @@ public class GncImportMainWindow extends JPanel implements TxView
 		setLayout(new BorderLayout());
 		setOpaque(true);
 
-		JScrollPane grid = createGridPane();
-		add(grid, BorderLayout.CENTER);
-
-		JXStatusBar statusBar = createStatusBar();
-		add(statusBar, BorderLayout.PAGE_END);
+		add(createGridPane(), BorderLayout.CENTER);
+		add(createStatusBar(), BorderLayout.PAGE_END);
+		add(createImportButton(), BorderLayout.PAGE_START);
 
 		_presenter.onReadFromCsvFile(
 				getClass().getResource("../tests/data/rbc.csv").getPath());
@@ -87,6 +89,16 @@ public class GncImportMainWindow extends JPanel implements TxView
 		return sb;
 	}
 
+	private JButton createImportButton()
+	{
+		JButton saveButton = new JButton("Import");
+
+		saveButton.setName("SAVE_BUTTON");
+		saveButton.addActionListener(this);
+
+		return saveButton;
+	}
+
 	@Override
 	public void displayTxData(TxTableModel tableModel)
 	{
@@ -96,8 +108,13 @@ public class GncImportMainWindow extends JPanel implements TxView
 	@Override
 	public TxTableModel getTxTableModel()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return (TxTableModel) _table.getModel();
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		_presenter.onSaveToGncFile(
+				getClass().getResource("../tests/data/checkbook.xml").getPath() + ".new");
+	}
 }

@@ -26,6 +26,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		_view.displayTxCount(txData.size());
 	}
 
+	@Override
 	public void onSaveToGncFile(String fileName)
 	{
 		List<TxData> txData = _view.getTxTableModel().getTransactions();

@@ -52,6 +52,8 @@ public class GncImportAppDriver
 
 	public void shouldSaveTransactionsToGncFile()
 	{
+		_mainWindow.button("SAVE_BUTTON").click();
+
 		fail("niy");
 	}
 
