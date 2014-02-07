@@ -8,8 +8,6 @@ import javax.swing.JFrame;
 
 public class GncImportApp
 {
-	private static JFrame _mainFrame;
-
 	public static void main(String[] args)
 	{
 		javax.swing.SwingUtilities.invokeLater(new Runnable()
@@ -37,15 +35,15 @@ public class GncImportApp
 
 	public static JFrame createMainFrame(TxModel model)
 	{
-		_mainFrame = new JFrame("GnuCash Transaction Import");
+		JFrame mainFrame = new JFrame("GnuCash Transaction Import");
 
-		_mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		GncImportMainWindow newContentPane = new GncImportMainWindow(model);
 
-		_mainFrame.setContentPane(newContentPane);
+		mainFrame.setContentPane(newContentPane);
 
-		return _mainFrame;
+		return mainFrame;
 	}
 
 }
