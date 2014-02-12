@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class RbcExportParser
 			if (csv.length() > 1)
 			{
 				List<Object> values = csv.executeProcessors(processors);
-				result.add(new TxData(values.get(2).toString(), new Double(values.get(6).toString()),
+				result.add(new TxData(values.get(2).toString(), new BigDecimal(values.get(6).toString()),
 						values.get(4) + " - " + values.get(5)));
 			}
 		}

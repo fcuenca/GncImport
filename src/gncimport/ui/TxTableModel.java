@@ -2,6 +2,7 @@ package gncimport.ui;
 
 import gncimport.models.TxData;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -10,10 +11,16 @@ import javax.swing.table.AbstractTableModel;
 public class TxTableModel extends AbstractTableModel
 {
 	private final List<TxData> _transactions;
+	private DecimalFormat _amountFormatter;
 
 	public TxTableModel(List<TxData> transactions)
 	{
-		this._transactions = transactions;
+		_amountFormatter = new DecimalFormat();
+		_amountFormatter.setMaximumFractionDigits(2);
+		_amountFormatter.setMinimumFractionDigits(2);
+		_amountFormatter.setGroupingUsed(false);
+
+		_transactions = transactions;
 	}
 
 	@Override
@@ -43,7 +50,7 @@ public class TxTableModel extends AbstractTableModel
 			return transaction.date;
 
 		case 1:
-			return transaction.amount;
+			return _amountFormatter.format(transaction.amount);
 
 		case 2:
 			return transaction.description;

@@ -1,13 +1,14 @@
 package gncimport.models;
 
+import java.math.BigDecimal;
+
 public class TxData
 {
-
 	public final String date;
-	public final double amount;
+	public final BigDecimal amount;
 	public final String description;
 
-	public TxData(String date, double amount, String description)
+	public TxData(String date, BigDecimal amount, String description)
 	{
 		this.date = date;
 		this.amount = amount;
@@ -15,13 +16,17 @@ public class TxData
 	}
 
 	@Override
+	public String toString()
+	{
+		return "[" + date + ", " + amount + ", " + description + "]";
+	}
+
+	@Override
 	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(amount);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		return result;
@@ -37,7 +42,13 @@ public class TxData
 		if (getClass() != obj.getClass())
 			return false;
 		TxData other = (TxData) obj;
-		if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))
+		if (amount == null)
+		{
+			if (other.amount != null)
+				return false;
+		}
+		// equals not used for amount because it includes comparing the scale!
+		else if (amount.compareTo(other.amount) != 0)
 			return false;
 		if (date == null)
 		{
@@ -54,11 +65,5 @@ public class TxData
 		else if (!description.equals(other.description))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString()
-	{
-		return "[" + date + ", " + amount + ", " + description + "]";
 	}
 }

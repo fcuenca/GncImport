@@ -8,6 +8,7 @@ import gncimport.models.TxData;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class ReadingTransactionDataFromRbcExportTests
 
 			List<TxData> txs = parser.getTransactions();
 
-			TxData expected = new TxData("1/2/2014", -1635.00, "MISC PAYMENT - IMH POOL I LP ");
+			TxData expected = new TxData("1/2/2014", new BigDecimal("-1635.00"), "MISC PAYMENT - IMH POOL I LP ");
 
 			assertThat(txs.get(0), is(expected));
 		}
@@ -73,8 +74,8 @@ public class ReadingTransactionDataFromRbcExportTests
 
 			List<TxData> txs = parser.getTransactions();
 
-			assertThat(txs.get(0).amount, is(-1635.00));
-			assertThat(txs.get(1).amount, is(33.25));
+			assertThat(txs.get(0).amount, is(new BigDecimal("-1635.00")));
+			assertThat(txs.get(1).amount, is(new BigDecimal("33.25")));
 		}
 		catch (IOException e)
 		{

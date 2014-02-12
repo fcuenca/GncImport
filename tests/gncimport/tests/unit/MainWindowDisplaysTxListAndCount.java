@@ -1,6 +1,5 @@
 package gncimport.tests.unit;
 
-import static gncimport.tests.unit.ListUtils.list_of;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertNotNull;
@@ -8,12 +7,9 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import gncimport.models.TxData;
 import gncimport.ui.GncImportMainWindow;
 import gncimport.ui.MainWindowRenderer;
 import gncimport.ui.TxTableModel;
-
-import java.util.List;
 
 import javax.swing.table.TableModel;
 
@@ -111,11 +107,7 @@ public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
 	@Test
 	public void displays_transaction_grid()
 	{
-		List<TxData> actualTxs = list_of(
-				new TxData("Nov 15, 2012", 12, "Taxi ride"),
-				new TxData("Dec 17, 2012", 98, "Groceries"));
-
-		final TxTableModel tableModel = new TxTableModel(actualTxs);
+		final TxTableModel tableModel = new TxTableModel(SampleTxData.txDataList());
 
 		GncImportMainWindow view = GuiActionRunner.execute(new ViewDriver()
 		{

@@ -1,29 +1,20 @@
 package gncimport.tests.unit;
 
-import static gncimport.tests.unit.ListUtils.list_of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import gncimport.models.TxData;
 import gncimport.ui.TxTableModel;
-
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class TxTableModelTests
 {
-	private List<TxData> _actualTxs;
 	private TxTableModel _model;
 
 	@Before
 	public void setUp()
 	{
-		_actualTxs = list_of(
-				new TxData("Nov 15, 2012", 12, "Taxi ride"),
-				new TxData("Dec 17, 2012", 98, "Groceries"));
-
-		_model = new TxTableModel(_actualTxs);
+		_model = new TxTableModel(SampleTxData.txDataList());
 	}
 
 	@Test
@@ -50,7 +41,7 @@ public class TxTableModelTests
 	public void maps_transaction_fields_to_table_columns()
 	{
 		assertThat((String) (_model.getValueAt(0, 0)), is("Nov 15, 2012"));
-		assertThat((Double) (_model.getValueAt(1, 1)), is((Double) 98.0));
+		assertThat((String) (_model.getValueAt(1, 1)), is("98.00"));
 		assertThat((String) (_model.getValueAt(1, 2)), is("Groceries"));
 	}
 

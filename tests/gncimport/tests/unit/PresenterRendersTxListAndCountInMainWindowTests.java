@@ -1,6 +1,5 @@
 package gncimport.tests.unit;
 
-import static gncimport.tests.unit.ListUtils.list_of;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -12,6 +11,7 @@ import gncimport.models.TxData;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +46,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	@Test
 	public void displays_available_transactions_from_file()
 	{
-		List<TxData> actualTxs = list_of(
-				new TxData("Nov 15, 2012", 12, "Taxi ride"),
-				new TxData("Dec 17, 2012", 98, "Groceries"));
+		List<TxData> actualTxs = SampleTxData.txDataList();
 
 		when(_model.fetchTransactionsFrom("/path/to/file.csv")).thenReturn(actualTxs);
 
@@ -57,7 +55,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 		verify(_view).displayTxData(expectedTxList.capture());
 		verify(_view).displayTxCount(2);
 
-		assertThat(expectedTxList.getValue().getRowCount(), is(2));
+		assertThat(expectedTxList.getValue().getRowCount(), is(SampleTxData.dataListCount()));
 		assertThat(expectedTxList.getValue(), containsTransactions(actualTxs));
 	}
 
@@ -83,7 +81,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 				for (int i = 0; i < transactionList.size(); i++)
 				{
 					TxData t = new TxData((String) item.getValueAt(i, 0),
-							(Double) item.getValueAt(i, 1),
+							new BigDecimal((String) item.getValueAt(i, 1)),
 							(String) item.getValueAt(i, 2));
 					theTxs.add(t);
 				}

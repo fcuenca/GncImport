@@ -1,6 +1,5 @@
 package gncimport.tests.unit;
 
-import static gncimport.tests.unit.ListUtils.list_of;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,9 +32,7 @@ public class PresenterSavesImportedTransactiosToGncFile
 	@Test
 	public void transactions_from_view_are_forwarded_to_model()
 	{
-		List<TxData> actualTxs = list_of(
-				new TxData("Nov 15, 2012", 12, "Taxi ride"),
-				new TxData("Dec 17, 2012", 98, "Groceries"));
+		List<TxData> actualTxs = SampleTxData.txDataList();
 
 		TxTableModel txTableModel = new TxTableModel(actualTxs);
 
