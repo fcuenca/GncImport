@@ -114,7 +114,6 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		_presenter.onSaveToGncFile(
-				getClass().getResource("../tests/data/checkbook.xml").getPath() + ".new");
+		_presenter.onSaveToGncFile(getClass().getResource("../tests/data/checkbook.xml").getPath());
 	}
 }

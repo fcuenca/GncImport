@@ -3,10 +3,11 @@ package gncimport.tests.endtoend;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import gncimport.GncImportApp;
 import gncimport.boundaries.TxModel;
 import gncimport.models.FakeTxModel;
+
+import java.io.File;
 
 import javax.swing.JFrame;
 
@@ -52,9 +53,16 @@ public class GncImportAppDriver
 
 	public void shouldSaveTransactionsToGncFile()
 	{
+		File output = new File("/tmp/checkbook-new.xml");
+
+		if (output.exists())
+		{
+			assertThat("Leftover file couldn't be deleted", output.delete(), is(true));
+		}
+
 		_mainWindow.button("SAVE_BUTTON").click();
 
-		fail("niy");
+		assertThat("Output hasn't been created", output.exists(), is(true));
 	}
 
 }
