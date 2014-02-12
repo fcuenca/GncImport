@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,8 @@ public class RbcExportParser
 
 	public List<TxData> getTransactions() throws IOException
 	{
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+
 		ArrayList<TxData> result = new ArrayList<TxData>();
 
 		CsvListReader csv = new CsvListReader(_txFileReader, CsvPreference.STANDARD_PREFERENCE);
@@ -55,8 +59,17 @@ public class RbcExportParser
 			if (csv.length() > 1)
 			{
 				List<Object> values = csv.executeProcessors(processors);
-				result.add(new TxData(values.get(2).toString(), new BigDecimal(values.get(6).toString()),
-						values.get(4) + " - " + values.get(5)));
+				try
+				{
+					result.add(new TxData(
+							dateFormatter.parse(values.get(2).toString()),
+							new BigDecimal(values.get(6).toString()),
+							values.get(4) + " - " + values.get(5)));
+				}
+				catch (ParseException e)
+				{
+					throw new RuntimeException("Date cannot be parsed: " + values.get(2).toString(), e);
+				}
 			}
 		}
 

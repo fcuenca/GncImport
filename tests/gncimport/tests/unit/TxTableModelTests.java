@@ -40,7 +40,7 @@ public class TxTableModelTests
 	@Test
 	public void maps_transaction_fields_to_table_columns()
 	{
-		assertThat((String) (_model.getValueAt(0, 0)), is("Nov 15, 2012"));
+		assertThat((String) (_model.getValueAt(0, 0)), is("11/15/2012"));
 		assertThat((String) (_model.getValueAt(1, 1)), is("98.00"));
 		assertThat((String) (_model.getValueAt(1, 2)), is("Groceries"));
 	}

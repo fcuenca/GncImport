@@ -2,6 +2,7 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,6 +13,8 @@ import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,12 +81,22 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 			{
 				List<TxData> theTxs = new ArrayList<TxData>();
 
+				SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+
 				for (int i = 0; i < transactionList.size(); i++)
 				{
-					TxData t = new TxData((String) item.getValueAt(i, 0),
-							new BigDecimal((String) item.getValueAt(i, 1)),
-							(String) item.getValueAt(i, 2));
-					theTxs.add(t);
+					TxData t;
+					try
+					{
+						t = new TxData(dateFormatter.parse((String) item.getValueAt(i, 0)),
+								new BigDecimal((String) item.getValueAt(i, 1)),
+								(String) item.getValueAt(i, 2));
+						theTxs.add(t);
+					}
+					catch (ParseException e)
+					{
+						fail("Parse error: " + e.getMessage());
+					}
 				}
 
 				return collectionMatcher.matches(theTxs);

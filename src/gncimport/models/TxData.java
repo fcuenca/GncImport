@@ -1,14 +1,15 @@
 package gncimport.models;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class TxData
 {
-	public final String date;
+	public final Date date;
 	public final BigDecimal amount;
 	public final String description;
 
-	public TxData(String date, BigDecimal amount, String description)
+	public TxData(Date date, BigDecimal amount, String description)
 	{
 		this.date = date;
 		this.amount = amount;

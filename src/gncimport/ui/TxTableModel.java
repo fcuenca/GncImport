@@ -3,6 +3,7 @@ package gncimport.ui;
 import gncimport.models.TxData;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -12,6 +13,7 @@ public class TxTableModel extends AbstractTableModel
 {
 	private final List<TxData> _transactions;
 	private DecimalFormat _amountFormatter;
+	private SimpleDateFormat _dateFormatter;
 
 	public TxTableModel(List<TxData> transactions)
 	{
@@ -19,6 +21,8 @@ public class TxTableModel extends AbstractTableModel
 		_amountFormatter.setMaximumFractionDigits(2);
 		_amountFormatter.setMinimumFractionDigits(2);
 		_amountFormatter.setGroupingUsed(false);
+
+		_dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
 
 		_transactions = transactions;
 	}
@@ -47,7 +51,7 @@ public class TxTableModel extends AbstractTableModel
 		switch (column)
 		{
 		case 0:
-			return transaction.date;
+			return _dateFormatter.format(transaction.date);
 
 		case 1:
 			return _amountFormatter.format(transaction.amount);
