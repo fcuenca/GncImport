@@ -5,10 +5,8 @@ import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import gncimport.ui.GncImportMainWindow;
-import gncimport.ui.MainWindowRenderer;
 import gncimport.ui.TxTableModel;
 
 import javax.swing.table.TableModel;
@@ -18,33 +16,10 @@ import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.JPanelFixture;
 import org.fest.swing.fixture.JTableFixture;
-import org.fest.swing.junit.testcase.FestSwingJUnitTestCase;
 import org.junit.Test;
 
-public class MainWindowDisplaysTxListAndCount extends FestSwingJUnitTestCase
+public class MainWindowDisplaysTxListAndCount extends MainWindowTests
 {
-	private MainWindowRenderer _presenter;
-
-	abstract class ViewDriver extends GuiQuery<GncImportMainWindow>
-	{
-		abstract protected void doActionsOnView(GncImportMainWindow v);
-
-		protected GncImportMainWindow executeInEDT()
-		{
-			GncImportMainWindow v = new GncImportMainWindow(_presenter);
-
-			doActionsOnView(v);
-
-			return v;
-		}
-	}
-
-	@Override
-	protected void onSetUp()
-	{
-		_presenter = mock(MainWindowRenderer.class);
-	}
-
 	@Test
 	public void requests_initizialization_from_presenter_on_construction()
 	{

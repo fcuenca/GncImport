@@ -31,6 +31,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		List<TxData> txData = _view.getTxTableModel().getTransactions();
 
-		_model.saveTxTo(txData, fileName);
+		_model.saveTxTo(txData, _view.getSourceAccountId(), fileName);
 	}
 }

@@ -8,5 +8,5 @@ public interface TxModel
 {
 	List<TxData> fetchTransactionsFrom(String fileName);
 
-	void saveTxTo(List<TxData> transactions, String fileName);
+	void saveTxTo(List<TxData> transactions, String sourceAccountId, String fileName);
 }

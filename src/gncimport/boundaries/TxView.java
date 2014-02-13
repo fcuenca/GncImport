@@ -11,4 +11,6 @@ public interface TxView
 
 	TxTableModel getTxTableModel();
 
+	String getSourceAccountId();
+
 }

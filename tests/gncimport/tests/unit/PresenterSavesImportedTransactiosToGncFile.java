@@ -37,10 +37,11 @@ public class PresenterSavesImportedTransactiosToGncFile
 		TxTableModel txTableModel = new TxTableModel(actualTxs);
 
 		when(_view.getTxTableModel()).thenReturn(txTableModel);
+		when(_view.getSourceAccountId()).thenReturn("acc-id");
 
 		_presenter.onSaveToGncFile("/path/to/file.gnucash");
 
-		verify(_model).saveTxTo(actualTxs, "/path/to/file.gnucash");
+		verify(_model).saveTxTo(actualTxs, "acc-id", "/path/to/file.gnucash");
 	}
 
 }
