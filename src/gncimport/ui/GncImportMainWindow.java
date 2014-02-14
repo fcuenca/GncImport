@@ -7,6 +7,7 @@ import gncimport.models.TxData;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,7 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXStatusBar;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 @SuppressWarnings("serial")
 public class GncImportMainWindow extends JPanel implements TxView, ActionListener
@@ -130,5 +133,23 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public String getSourceAccountId()
 	{
 		return SOURCE_ACCOUNT_ID;
+	}
+
+	@Override
+	public void handleException(Exception e)
+	{
+		String stackTrace = "";
+
+		for (StackTraceElement se : e.getStackTrace())
+		{
+			stackTrace += se.toString() + "\n";
+		}
+
+		JXErrorPane.showDialog(this,
+				new ErrorInfo("Critical Error",
+						e.getMessage(),
+						stackTrace,
+						null,
+						e, Level.SEVERE, null));
 	}
 }

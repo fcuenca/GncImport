@@ -13,4 +13,6 @@ public interface TxView
 
 	String getSourceAccountId();
 
+	void handleException(Exception exception);
+
 }

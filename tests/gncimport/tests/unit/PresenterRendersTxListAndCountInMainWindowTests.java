@@ -3,6 +3,7 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -60,6 +61,18 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 
 		assertThat(expectedTxList.getValue().getRowCount(), is(SampleTxData.dataListCount()));
 		assertThat(expectedTxList.getValue(), containsTransactions(actualTxs));
+	}
+
+	@Test
+	public void notifies_view_on_exceptions()
+	{
+		RuntimeException exception = new RuntimeException();
+
+		when(_model.fetchTransactionsFrom(anyString())).thenThrow(exception);
+
+		_presenter.onReadFromCsvFile("/path/to/file.csv");
+
+		verify(_view).handleException(exception);
 	}
 
 	private Matcher<TxTableModel> containsTransactions(final List<TxData> transactionList)
