@@ -10,6 +10,9 @@ import java.util.Map;
 
 public class FakeTxModel implements TxModel
 {
+	private static final String DEFAULT_SOURCE_ACCOUNT_ID = "64833494284bad5fb390e84d38c65a54";
+	private static final String DEFAULT_TARGET_ACCOUNT_ID = "e31486ad3b2c6cdedccf135d13538b29";
+
 	@Override
 	public List<TxData> fetchTransactionsFrom(String fileName)
 	{
@@ -56,5 +59,17 @@ public class FakeTxModel implements TxModel
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getDefaultSourceAccountId()
+	{
+		return DEFAULT_SOURCE_ACCOUNT_ID;
+	}
+
+	@Override
+	public String getDefaultTargetAccountId()
+	{
+		return DEFAULT_TARGET_ACCOUNT_ID;
 	}
 }

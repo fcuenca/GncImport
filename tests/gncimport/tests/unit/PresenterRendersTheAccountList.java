@@ -16,7 +16,6 @@ import org.junit.Test;
 
 public class PresenterRendersTheAccountList
 {
-
 	private MainWindowPresenter _presenter;
 	private TxView _view;
 	private TxModel _model;
@@ -35,11 +34,12 @@ public class PresenterRendersTheAccountList
 		Map<String, String> accountList = new HashMap<String, String>();
 
 		when(_model.getAccounts()).thenReturn(accountList);
+		when(_model.getDefaultSourceAccountId()).thenReturn("acc-id");
 
 		_presenter.onLoadGncFile("/path/to/gnc.xml");
 
 		verify(_model).openGncFile("/path/to/gnc.xml");
-		verify(_view).displayAccounts(accountList, "64833494284bad5fb390e84d38c65a54");
+		verify(_view).displayAccounts(accountList, "acc-id");
 	}
 
 	@Test

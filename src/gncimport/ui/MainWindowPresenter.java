@@ -8,9 +8,6 @@ import java.util.List;
 
 public class MainWindowPresenter implements MainWindowRenderer
 {
-	private static final String DEFAULT_SOURCE_ACCOUNT_ID = "64833494284bad5fb390e84d38c65a54";
-	private static final String DEFAULT_TARGET_ACCOUNT_ID = "e31486ad3b2c6cdedccf135d13538b29";
-
 	private final TxModel _model;
 	private final TxView _view;
 
@@ -27,10 +24,11 @@ public class MainWindowPresenter implements MainWindowRenderer
 		try
 		{
 			newTransactionData = _model.fetchTransactionsFrom(fileName);
+			String targetAccId = _model.getDefaultTargetAccountId();
 
 			for (TxData txData : newTransactionData)
 			{
-				txData.targetAccoundId = DEFAULT_TARGET_ACCOUNT_ID;
+				txData.targetAccoundId = targetAccId;
 			}
 
 			_view.displayTxData(new TxTableModel(newTransactionData));
@@ -63,7 +61,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		try
 		{
 			_model.openGncFile(fileName);
-			_view.displayAccounts(_model.getAccounts(), DEFAULT_SOURCE_ACCOUNT_ID);
+			_view.displayAccounts(_model.getAccounts(), _model.getDefaultSourceAccountId());
 		}
 		catch (Exception e)
 		{

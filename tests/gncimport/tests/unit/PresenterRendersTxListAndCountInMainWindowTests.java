@@ -69,6 +69,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 		List<TxData> actualTxs = SampleTxData.txDataList();
 
 		when(_model.fetchTransactionsFrom("/path/to/file.csv")).thenReturn(actualTxs);
+		when(_model.getDefaultTargetAccountId()).thenReturn("acc-id");
 
 		_presenter.onReadFromCsvFile("/path/to/file.csv");
 
@@ -76,7 +77,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 
 		for (TxData txData : expectedTxList.getValue().getTransactions())
 		{
-			assertThat(txData.toString(), txData.targetAccoundId, is("e31486ad3b2c6cdedccf135d13538b29"));
+			assertThat(txData.toString(), txData.targetAccoundId, is("acc-id"));
 		}
 
 	}

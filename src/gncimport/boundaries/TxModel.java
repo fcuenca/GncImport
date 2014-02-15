@@ -14,4 +14,8 @@ public interface TxModel
 	void saveTxTo(List<TxData> transactions, String sourceAccountId, String fileName);
 
 	Map<String, String> getAccounts();
+
+	String getDefaultSourceAccountId();
+
+	String getDefaultTargetAccountId();
 }
