@@ -6,9 +6,12 @@ TODO:
   Options:
    - force a particular order: 1st Gnc, then Csv
    - allow any order, but disallow Import button until both are loaded
+- GncFile.findAccountByName: what if names are not unique?
    
 ==================
 DONE:
 - Presenter to set the default target account in TxData instead of the view
 - Presenter to set the default source account ID
+- Model.saveTxTo: the filename should be the output file name, instead of a hard-coded value 
+   -> change after implementing the openopenGncFile function (!!)
  

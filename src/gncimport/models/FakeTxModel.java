@@ -8,10 +8,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.gnucash.xml.gnc.Account;
+
 public class FakeTxModel implements TxModel
 {
-	private static final String DEFAULT_SOURCE_ACCOUNT_ID = "64833494284bad5fb390e84d38c65a54";
-	private static final String DEFAULT_TARGET_ACCOUNT_ID = "e31486ad3b2c6cdedccf135d13538b29";
+	private static final String DEFAULT_SOURCE_ACCOUNT = "Checking Account";
+	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
+
+	private GncFile _gnc;
 
 	@Override
 	public List<TxData> fetchTransactionsFrom(String fileName)
@@ -31,15 +35,13 @@ public class FakeTxModel implements TxModel
 	{
 		try
 		{
-			GncFile gnc = new GncFile(fileName);
-
 			for (TxData txData : transactions)
 			{
-				gnc.addTransaction(txData.date, txData.description, txData.amount,
+				_gnc.addTransaction(txData.date, txData.description, txData.amount,
 						sourceAccountId, txData.targetAccoundId);
 			}
 
-			gnc.saveTo("/tmp/checkbook-new.xml");
+			_gnc.saveTo(fileName);
 		}
 		catch (IOException e)
 		{
@@ -50,8 +52,14 @@ public class FakeTxModel implements TxModel
 	@Override
 	public void openGncFile(String fileName)
 	{
-		// TODO Auto-generated method stub
-
+		try
+		{
+			_gnc = new GncFile(fileName);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -64,12 +72,26 @@ public class FakeTxModel implements TxModel
 	@Override
 	public String getDefaultSourceAccountId()
 	{
-		return DEFAULT_SOURCE_ACCOUNT_ID;
+		Account account = _gnc.findAccountByName(DEFAULT_SOURCE_ACCOUNT);
+
+		if (account != null)
+		{
+			return account.getId().getValue();
+		}
+
+		throw new RuntimeException("Default Source Account can't be found: " + DEFAULT_SOURCE_ACCOUNT);
 	}
 
 	@Override
 	public String getDefaultTargetAccountId()
 	{
-		return DEFAULT_TARGET_ACCOUNT_ID;
+		Account account = _gnc.findAccountByName(DEFAULT_TARGET_ACCOUNT);
+
+		if (account != null)
+		{
+			return account.getId().getValue();
+		}
+
+		throw new RuntimeException("Default Target Account can't be found: " + DEFAULT_TARGET_ACCOUNT);
 	}
 }
