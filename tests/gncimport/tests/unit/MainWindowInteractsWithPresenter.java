@@ -1,12 +1,14 @@
 package gncimport.tests.unit;
 
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import gncimport.ui.GncImportMainWindow;
 
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.junit.Test;
+import org.mockito.InOrder;
 
 public class MainWindowInteractsWithPresenter extends MainWindowTests
 {
@@ -22,8 +24,10 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 			}
 		});
 
-		verify(_presenter).onReadFromCsvFile(anyString());
-		verify(_presenter).onLoadGncFile(anyString());
+		InOrder inOrder = inOrder(_presenter);
+
+		inOrder.verify(_presenter).onLoadGncFile(anyString());
+		inOrder.verify(_presenter).onReadFromCsvFile(anyString());
 	}
 
 	@Test

@@ -5,3 +5,7 @@ DONE - Presenter to set the default target account in TxData instead of the view
 - Presenter to set the default source account ID
 - GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
 
+- Resolve temporal coupling in loading the input files through enable/disable controls in the UI
+  Options:
+   - force a particular order: 1st Gnc, then Csv
+   - allow any order, but disallow Import button until both are loaded
