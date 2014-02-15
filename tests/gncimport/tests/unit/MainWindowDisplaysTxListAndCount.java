@@ -4,8 +4,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
 import gncimport.ui.GncImportMainWindow;
 import gncimport.ui.TxTableModel;
 
@@ -13,27 +11,12 @@ import javax.swing.table.TableModel;
 
 import org.fest.swing.core.matcher.JLabelMatcher;
 import org.fest.swing.edt.GuiActionRunner;
-import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.JPanelFixture;
 import org.fest.swing.fixture.JTableFixture;
 import org.junit.Test;
 
 public class MainWindowDisplaysTxListAndCount extends MainWindowTests
 {
-	@Test
-	public void requests_initizialization_from_presenter_on_construction()
-	{
-		GuiActionRunner.execute(new GuiQuery<GncImportMainWindow>()
-		{
-			protected GncImportMainWindow executeInEDT()
-			{
-				new GncImportMainWindow(_presenter);
-				return null;
-			}
-		});
-
-		verify(_presenter).onReadFromCsvFile(anyString());
-	}
 
 	@Test
 	public void displays_transaction_count_in_plural()

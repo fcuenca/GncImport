@@ -2,6 +2,8 @@ package gncimport.boundaries;
 
 import gncimport.ui.TxTableModel;
 
+import java.util.Map;
+
 public interface TxView
 {
 
@@ -14,5 +16,7 @@ public interface TxView
 	String getSourceAccountId();
 
 	void handleException(Exception exception);
+
+	void displayAccounts(Map<String, String> accountList, String selectedAccountId);
 
 }

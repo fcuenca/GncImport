@@ -64,6 +64,24 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	}
 
 	@Test
+	public void sets_default_target_account_on_imported_transactions()
+	{
+		List<TxData> actualTxs = SampleTxData.txDataList();
+
+		when(_model.fetchTransactionsFrom("/path/to/file.csv")).thenReturn(actualTxs);
+
+		_presenter.onReadFromCsvFile("/path/to/file.csv");
+
+		verify(_view).displayTxData(expectedTxList.capture());
+
+		for (TxData txData : expectedTxList.getValue().getTransactions())
+		{
+			assertThat(txData.toString(), txData.targetAccoundId, is("e31486ad3b2c6cdedccf135d13538b29"));
+		}
+
+	}
+
+	@Test
 	public void notifies_view_on_exceptions()
 	{
 		RuntimeException exception = new RuntimeException();
@@ -79,9 +97,23 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	{
 		return new TypeSafeMatcher<TxTableModel>()
 		{
-			Matcher<Iterable<? extends Object>> collectionMatcher =
-					org.hamcrest.Matchers
-							.contains(transactionList.toArray());
+			Matcher<Iterable<? extends Object>> collectionMatcher = buildExpectedResult(transactionList);
+
+			private Matcher<Iterable<? extends Object>> buildExpectedResult(final List<TxData> transactionList)
+			{
+				List<String> visibleFields = new ArrayList<String>();
+
+				for (TxData t : transactionList)
+				{
+					visibleFields.add("[" +
+							t.date + ", " +
+							t.amount.setScale(2) + ", " +
+							t.description + "]");
+				}
+
+				return org.hamcrest.Matchers
+						.contains(visibleFields.toArray());
+			}
 
 			@Override
 			public void describeTo(final Description description)
@@ -92,19 +124,18 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 			@Override
 			public boolean matchesSafely(TxTableModel item)
 			{
-				List<TxData> theTxs = new ArrayList<TxData>();
-
 				SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+				List<String> visibleFields = new ArrayList<String>();
 
-				for (int i = 0; i < transactionList.size(); i++)
+				for (int i = 0; i < item.getRowCount(); i++)
 				{
-					TxData t;
 					try
 					{
-						t = new TxData(dateFormatter.parse((String) item.getValueAt(i, 0)),
-								new BigDecimal((String) item.getValueAt(i, 1)),
-								(String) item.getValueAt(i, 2));
-						theTxs.add(t);
+						String s = "[" +
+								dateFormatter.parse((String) item.getValueAt(i, 0)) + ", " +
+								new BigDecimal((String) item.getValueAt(i, 1)).setScale(2) + ", " +
+								(String) item.getValueAt(i, 2) + "]";
+						visibleFields.add(s);
 					}
 					catch (ParseException e)
 					{
@@ -112,10 +143,9 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 					}
 				}
 
-				return collectionMatcher.matches(theTxs);
+				return collectionMatcher.matches(visibleFields);
 
 			}
 		};
 	}
-
 }

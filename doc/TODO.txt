@@ -1,0 +1,7 @@
+TODO:
+
+DONE - Presenter to set the default target account in TxData instead of the view
+- expose Swing names as constants in the View/Presenter class
+- Presenter to set the default source account ID
+- GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
+

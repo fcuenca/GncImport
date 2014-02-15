@@ -7,4 +7,6 @@ public interface MainWindowRenderer
 
 	public abstract void onSaveToGncFile(String fileName);
 
+	public abstract void onLoadGncFile(String fileName);
+
 }

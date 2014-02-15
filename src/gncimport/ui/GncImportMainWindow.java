@@ -2,11 +2,11 @@ package gncimport.ui;
 
 import gncimport.boundaries.TxModel;
 import gncimport.boundaries.TxView;
-import gncimport.models.TxData;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 import java.util.logging.Level;
 
 import javax.swing.JButton;
@@ -22,13 +22,12 @@ import org.jdesktop.swingx.error.ErrorInfo;
 @SuppressWarnings("serial")
 public class GncImportMainWindow extends JPanel implements TxView, ActionListener
 {
-	private static final String SOURCE_ACCOUNT_ID = "64833494284bad5fb390e84d38c65a54";
-	private static final String TARGET_ACCOUNT_ID = "e31486ad3b2c6cdedccf135d13538b29";
 
 	private final MainWindowRenderer _presenter;
 	private JLabel _statusLabel;
 	private JTable _table;
 	JButton _saveButton;
+	private String _sourceAccountId;
 
 	public GncImportMainWindow(TxModel model)
 	{
@@ -51,8 +50,8 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		add(createStatusBar(), BorderLayout.PAGE_END);
 		add(createImportButton(), BorderLayout.PAGE_START);
 
-		_presenter.onReadFromCsvFile(
-				getClass().getResource("../tests/data/rbc.csv").getPath());
+		_presenter.onLoadGncFile(getClass().getResource("../tests/data/checkbook.xml").getPath());
+		_presenter.onReadFromCsvFile(getClass().getResource("../tests/data/rbc.csv").getPath());
 	}
 
 	@Override
@@ -110,11 +109,6 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public void displayTxData(TxTableModel tableModel)
 	{
 		_table.setModel(tableModel);
-
-		for (TxData txData : tableModel.getTransactions())
-		{
-			txData.targetAccoundId = TARGET_ACCOUNT_ID;
-		}
 	}
 
 	@Override
@@ -126,13 +120,18 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
+		onImportClick();
+	}
+
+	public void onImportClick()
+	{
 		_presenter.onSaveToGncFile(getClass().getResource("../tests/data/checkbook.xml").getPath());
 	}
 
 	@Override
 	public String getSourceAccountId()
 	{
-		return SOURCE_ACCOUNT_ID;
+		return _sourceAccountId;
 	}
 
 	@Override
@@ -151,5 +150,11 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 						stackTrace,
 						null,
 						e, Level.SEVERE, null));
+	}
+
+	@Override
+	public void displayAccounts(Map<String, String> accountList, String selectedAccountId)
+	{
+		_sourceAccountId = selectedAccountId;
 	}
 }

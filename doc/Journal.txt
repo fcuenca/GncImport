@@ -21,3 +21,13 @@ Where to start?
    - Second micro-feature: display a grid of transactions (still hard coded)
    - 3rd micro-feature: read data from real CSV file
    - 4th micro-feature: write to GNC file
+   
+---++Thu Feb 13:
+
+Next Step: Lookup of account IDs from GNC file:
+    - first step: hard-code IDs in presenter -> then push down to model
+    - 2nd step: hard-code account names, look-up ids from GNC file
+    - 3rd step: Move hard-coded account names to some sort of config object
+    
+    
+
