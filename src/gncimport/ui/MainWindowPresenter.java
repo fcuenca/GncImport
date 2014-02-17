@@ -25,12 +25,11 @@ public class MainWindowPresenter implements MainWindowRenderer
 		try
 		{
 			newTransactionData = _model.fetchTransactionsFrom(fileName);
-			String targetAccId = _model.getDefaultTargetAccountId();
+			AccountData targetAcc = _model.getDefaultTargetAccount();
 
 			for (TxData txData : newTransactionData)
 			{
-				// txData.targetAccoundId = targetAccId;
-				txData.targetAccount = new AccountData("niy", targetAccId);
+				txData.targetAccount = targetAcc;
 			}
 
 			_view.displayTxData(new TxTableModel(newTransactionData));
@@ -63,7 +62,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		try
 		{
 			_model.openGncFile(fileName);
-			_view.displaySourceAccount(_model.getDefaultSourceAccountName());
+			_view.displaySourceAccount(_model.getDefaultSourceAccount().getName());
 		}
 		catch (Exception e)
 		{

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.boundaries.TxModel;
 import gncimport.boundaries.TxView;
+import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
@@ -58,7 +59,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 		verify(_view).displayTxData(expectedTxList.capture());
 		verify(_view).displayTxCount(2);
 
-		assertThat(expectedTxList.getValue().getRowCount(), is(SampleTxData.dataListCount()));
+		assertThat(expectedTxList.getValue().getRowCount(), is(actualTxs.size()));
 		assertThat(expectedTxList.getValue(), containsTransactions(actualTxs));
 	}
 
@@ -66,9 +67,10 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	public void sets_default_target_account_on_imported_transactions()
 	{
 		List<TxData> actualTxs = SampleTxData.txDataList();
+		AccountData expectedTargetAcc = new AccountData("Expenses", "acc-id");
 
 		when(_model.fetchTransactionsFrom("/path/to/file.csv")).thenReturn(actualTxs);
-		when(_model.getDefaultTargetAccountId()).thenReturn("acc-id");
+		when(_model.getDefaultTargetAccount()).thenReturn(expectedTargetAcc);
 
 		_presenter.onReadFromCsvFile("/path/to/file.csv");
 
@@ -76,9 +78,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 
 		for (TxData txData : expectedTxList.getValue().getTransactions())
 		{
-			// assertThat(txData.toString(), txData.targetAccoundId,
-			// is("acc-id"));
-			assertThat(txData.toString(), txData.targetAccount.getId(), is("acc-id"));
+			assertThat(txData.toString(), txData.targetAccount, is(expectedTargetAcc));
 		}
 
 	}

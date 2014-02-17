@@ -18,8 +18,12 @@ public class SampleTxData
 				new TxData(new Date(2012 - 1900, 11, 17), new BigDecimal("98"), "Groceries"));
 	}
 
-	public static int dataListCount()
+	@SuppressWarnings("deprecation")
+	public static List<TxData> txDataListWithAccounts()
 	{
-		return 2;
+		return list_of(
+				new TxData(new Date(2012 - 1900, 10, 15), new BigDecimal("12"), "Taxi ride", "Expenses", "id-1"),
+				new TxData(new Date(2012 - 1900, 11, 17), new BigDecimal("98"), "Groceries"));
 	}
+
 }

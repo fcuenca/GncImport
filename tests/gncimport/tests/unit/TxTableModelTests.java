@@ -14,7 +14,7 @@ public class TxTableModelTests
 	@Before
 	public void setUp()
 	{
-		_model = new TxTableModel(SampleTxData.txDataList());
+		_model = new TxTableModel(SampleTxData.txDataListWithAccounts());
 	}
 
 	@Test
@@ -29,12 +29,13 @@ public class TxTableModelTests
 		assertThat(_model.getColumnName(0), is("Date"));
 		assertThat(_model.getColumnName(1), is("Amount"));
 		assertThat(_model.getColumnName(2), is("Description"));
+		assertThat(_model.getColumnName(3), is("Account"));
 	}
 
 	@Test
 	public void returns_proper_column_count()
 	{
-		assertThat(_model.getColumnCount(), is(3));
+		assertThat(_model.getColumnCount(), is(4));
 	}
 
 	@Test
@@ -43,6 +44,13 @@ public class TxTableModelTests
 		assertThat((String) (_model.getValueAt(0, 0)), is("11/15/2012"));
 		assertThat((String) (_model.getValueAt(1, 1)), is("98.00"));
 		assertThat((String) (_model.getValueAt(1, 2)), is("Groceries"));
+		assertThat((String) (_model.getValueAt(0, 3)), is("Expenses"));
+	}
+
+	@Test
+	public void can_handle_rows_without_account_set()
+	{
+		assertThat((String) (_model.getValueAt(1, 3)), is(""));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

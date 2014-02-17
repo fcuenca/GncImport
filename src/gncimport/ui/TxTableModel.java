@@ -11,6 +11,8 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class TxTableModel extends AbstractTableModel
 {
+	private String[] _columns = new String[] { "Date", "Amount", "Description", "Account" };
+
 	private final List<TxData> _transactions;
 	private DecimalFormat _amountFormatter;
 	private SimpleDateFormat _dateFormatter;
@@ -30,7 +32,7 @@ public class TxTableModel extends AbstractTableModel
 	@Override
 	public int getColumnCount()
 	{
-		return 3;
+		return _columns.length;
 	}
 
 	@Override
@@ -59,6 +61,10 @@ public class TxTableModel extends AbstractTableModel
 		case 2:
 			return transaction.description;
 
+		case 3:
+			return transaction.targetAccount != null ?
+					transaction.targetAccount.getName() : "";
+
 		default:
 			throw new RuntimeException("this line should be unreachable!");
 		}
@@ -67,20 +73,8 @@ public class TxTableModel extends AbstractTableModel
 	@Override
 	public String getColumnName(int column)
 	{
-		switch (column)
-		{
-		case 0:
-			return "Date";
 
-		case 1:
-			return "Amount";
-
-		case 2:
-			return "Description";
-
-		default:
-			throw new RuntimeException("this line should be unreachable!");
-		}
+		return _columns[column];
 	}
 
 	@Override

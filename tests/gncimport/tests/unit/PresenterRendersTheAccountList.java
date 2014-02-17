@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.boundaries.TxModel;
 import gncimport.boundaries.TxView;
+import gncimport.models.AccountData;
 import gncimport.ui.MainWindowPresenter;
 
 import org.junit.Before;
@@ -27,7 +28,8 @@ public class PresenterRendersTheAccountList
 	@Test
 	public void renders_default_source_account_on_file_open()
 	{
-		when(_model.getDefaultSourceAccountName()).thenReturn("RBC Checking");
+		AccountData expectedAccount = new AccountData("RBC Checking", "some-id");
+		when(_model.getDefaultSourceAccount()).thenReturn(expectedAccount);
 
 		_presenter.onLoadGncFile("/path/to/gnc.xml");
 

@@ -1,5 +1,6 @@
 package gncimport.boundaries;
 
+import gncimport.models.AccountData;
 import gncimport.models.TxData;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface TxModel
 
 	void saveTxTo(List<TxData> transactions, String fileName);
 
-	String getDefaultTargetAccountId();
+	AccountData getDefaultTargetAccount();
 
-	String getDefaultSourceAccountName();
+	AccountData getDefaultSourceAccount();
 }

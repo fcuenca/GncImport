@@ -17,6 +17,12 @@ public class TxData
 		this.description = description;
 	}
 
+	public TxData(Date date, BigDecimal amount, String description, String accName, String accId)
+	{
+		this(date, amount, description);
+		this.targetAccount = new AccountData(accName, accId);
+	}
+
 	@Override
 	public String toString()
 	{

@@ -74,21 +74,21 @@ public class FakeTxModel implements TxModel
 	}
 
 	@Override
-	public String getDefaultTargetAccountId()
+	public AccountData getDefaultTargetAccount()
 	{
 		Account account = _gnc.findAccountByName(DEFAULT_TARGET_ACCOUNT);
 
 		if (account != null)
 		{
-			return account.getId().getValue();
+			return new AccountData(account.getName(), account.getId().getValue());
 		}
 
 		throw new RuntimeException("Default Target Account can't be found: " + DEFAULT_TARGET_ACCOUNT);
 	}
 
 	@Override
-	public String getDefaultSourceAccountName()
+	public AccountData getDefaultSourceAccount()
 	{
-		return DEFAULT_SOURCE_ACCOUNT;
+		return new AccountData(DEFAULT_SOURCE_ACCOUNT, "id-niy");
 	}
 }
