@@ -2,6 +2,7 @@ package gncimport.ui;
 
 import gncimport.boundaries.TxModel;
 import gncimport.boundaries.TxView;
+import gncimport.models.AccountData;
 import gncimport.models.TxData;
 
 import java.util.List;
@@ -28,7 +29,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 			for (TxData txData : newTransactionData)
 			{
-				txData.targetAccoundId = targetAccId;
+				// txData.targetAccoundId = targetAccId;
+				txData.targetAccount = new AccountData("niy", targetAccId);
 			}
 
 			_view.displayTxData(new TxTableModel(newTransactionData));
@@ -47,7 +49,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			List<TxData> txData = _view.getTxTableModel().getTransactions();
 
-			_model.saveTxTo(txData, _view.getSourceAccountId(), fileName);
+			_model.saveTxTo(txData, fileName);
 		}
 		catch (Exception e)
 		{
@@ -61,7 +63,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		try
 		{
 			_model.openGncFile(fileName);
-			_view.displayAccounts(_model.getAccounts(), _model.getDefaultSourceAccountId());
+			_view.displaySourceAccount(_model.getDefaultSourceAccountName());
 		}
 		catch (Exception e)
 		{

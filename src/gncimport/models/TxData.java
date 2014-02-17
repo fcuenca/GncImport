@@ -8,7 +8,7 @@ public class TxData
 	public final Date date;
 	public final BigDecimal amount;
 	public final String description;
-	public String targetAccoundId;
+	public AccountData targetAccount;
 
 	public TxData(Date date, BigDecimal amount, String description)
 	{
@@ -20,7 +20,8 @@ public class TxData
 	@Override
 	public String toString()
 	{
-		return "[" + date + ", " + amount + ", " + description + ", " + targetAccoundId + "]";
+		return "[" + date + ", " + amount + ", " + description + ", " +
+				targetAccount != null ? targetAccount.getId() : "null" + "]";
 	}
 
 	@Override
@@ -31,7 +32,8 @@ public class TxData
 		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((targetAccoundId == null) ? 0 : targetAccoundId.hashCode());
+		result = prime * result
+				+ ((targetAccount == null || targetAccount.getId() == null) ? 0 : targetAccount.getId().hashCode());
 		return result;
 	}
 
@@ -67,13 +69,15 @@ public class TxData
 		}
 		else if (!description.equals(other.description))
 			return false;
-		if (targetAccoundId == null)
+
+		if (targetAccount == null)
 		{
-			if (other.targetAccoundId != null)
+			if (other.targetAccount != null)
 				return false;
 		}
-		else if (!targetAccoundId.equals(other.targetAccoundId))
+		else if (other.targetAccount == null || !targetAccount.getId().equals(other.targetAccount.getId()))
 			return false;
+
 		return true;
 	}
 }

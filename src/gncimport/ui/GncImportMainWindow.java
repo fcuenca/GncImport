@@ -6,9 +6,9 @@ import gncimport.boundaries.TxView;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
 import java.util.logging.Level;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,7 +27,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JLabel _statusLabel;
 	private JTable _table;
 	JButton _saveButton;
-	private String _sourceAccountId;
+	private JLabel _sourceAccLabel;
 
 	public GncImportMainWindow(TxModel model)
 	{
@@ -46,12 +46,24 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		setLayout(new BorderLayout());
 		setOpaque(true);
 
+		add(createAccountBox(), BorderLayout.PAGE_START);
 		add(createGridPane(), BorderLayout.CENTER);
 		add(createStatusBar(), BorderLayout.PAGE_END);
-		add(createImportButton(), BorderLayout.PAGE_START);
 
 		_presenter.onLoadGncFile(getClass().getResource("../tests/data/checkbook.xml").getPath());
 		_presenter.onReadFromCsvFile(getClass().getResource("../tests/data/rbc.csv").getPath());
+	}
+
+	private JPanel createAccountBox()
+	{
+		_sourceAccLabel = new JLabel("Source Account: NOT SET");
+
+		JPanel box = new JPanel();
+		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
+		box.add(_sourceAccLabel);
+		box.add(createImportButton());
+
+		return box;
 	}
 
 	@Override
@@ -129,12 +141,6 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 
 	@Override
-	public String getSourceAccountId()
-	{
-		return _sourceAccountId;
-	}
-
-	@Override
 	public void handleException(Exception e)
 	{
 		String stackTrace = "";
@@ -153,8 +159,8 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 
 	@Override
-	public void displayAccounts(Map<String, String> accountList, String selectedAccountId)
+	public void displaySourceAccount(String accountName)
 	{
-		_sourceAccountId = selectedAccountId;
+		_sourceAccLabel.setText("Source Account: " + accountName);
 	}
 }

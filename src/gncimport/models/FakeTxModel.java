@@ -6,7 +6,6 @@ import gnclib.GncFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import org.gnucash.xml.gnc.Account;
 
@@ -31,14 +30,14 @@ public class FakeTxModel implements TxModel
 	}
 
 	@Override
-	public void saveTxTo(List<TxData> transactions, String sourceAccountId, String fileName)
+	public void saveTxTo(List<TxData> transactions, String fileName)
 	{
 		try
 		{
 			for (TxData txData : transactions)
 			{
 				_gnc.addTransaction(txData.date, txData.description, txData.amount,
-						sourceAccountId, txData.targetAccoundId);
+						getDefaultSourceAccountId(), txData.targetAccount.getId());
 			}
 
 			_gnc.saveTo(fileName);
@@ -62,15 +61,7 @@ public class FakeTxModel implements TxModel
 		}
 	}
 
-	@Override
-	public Map<String, String> getAccounts()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDefaultSourceAccountId()
+	private String getDefaultSourceAccountId()
 	{
 		Account account = _gnc.findAccountByName(DEFAULT_SOURCE_ACCOUNT);
 
@@ -93,5 +84,11 @@ public class FakeTxModel implements TxModel
 		}
 
 		throw new RuntimeException("Default Target Account can't be found: " + DEFAULT_TARGET_ACCOUNT);
+	}
+
+	@Override
+	public String getDefaultSourceAccountName()
+	{
+		return DEFAULT_SOURCE_ACCOUNT;
 	}
 }
