@@ -7,6 +7,8 @@ import gncimport.models.TxData;
 
 import java.util.List;
 
+import org.gnucash.xml.gnc.Account;
+
 public class MainWindowPresenter implements MainWindowRenderer
 {
 	private final TxModel _model;
@@ -63,6 +65,24 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			_model.openGncFile(fileName);
 			_view.displaySourceAccount(_model.getDefaultSourceAccount().getName());
+		}
+		catch (Exception e)
+		{
+			_view.handleException(e);
+		}
+	}
+
+	public void onSelectSourceAccount()
+	{
+		try
+		{
+			List<Account> accounts = _model.getAccounts();
+			AccountTreeBuilder builder = new AccountTreeBuilder();
+			for (Account account : accounts)
+			{
+				builder.addNodeFor(account);
+			}
+			_view.displayAccountTree(builder.getRoot());
 		}
 		catch (Exception e)
 		{

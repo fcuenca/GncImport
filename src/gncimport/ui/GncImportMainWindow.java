@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXStatusBar;
@@ -162,5 +163,12 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public void displaySourceAccount(String accountName)
 	{
 		_sourceAccLabel.setText("Source Account: " + accountName);
+	}
+
+	@Override
+	public void displayAccountTree(DefaultMutableTreeNode rootNode)
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

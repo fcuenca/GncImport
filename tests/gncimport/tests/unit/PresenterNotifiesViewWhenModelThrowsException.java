@@ -23,7 +23,7 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	@Before
 	public void setUp()
 	{
-		_expectedException = new RuntimeException("ahhhhh");
+		_expectedException = new RuntimeException("ahhhhh: exception wasn't handled!");
 
 		_model = mock(TxModel.class, new Answer<Object>()
 		{
@@ -60,6 +60,14 @@ public class PresenterNotifiesViewWhenModelThrowsException
 		when(_view.getTxTableModel()).thenReturn(new TxTableModel(SampleTxData.txDataList()));
 
 		_presenter.onSaveToGncFile("/path/to/file.gnucash");
+
+		verify(_view).handleException(_expectedException);
+	}
+
+	@Test
+	public void when_displaying_account_tree()
+	{
+		_presenter.onSelectSourceAccount();
 
 		verify(_view).handleException(_expectedException);
 	}

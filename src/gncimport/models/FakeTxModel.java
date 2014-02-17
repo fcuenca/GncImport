@@ -91,4 +91,11 @@ public class FakeTxModel implements TxModel
 	{
 		return new AccountData(DEFAULT_SOURCE_ACCOUNT, "id-niy");
 	}
+
+	@Override
+	public List<Account> getAccounts()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

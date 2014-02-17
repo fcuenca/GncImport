@@ -15,7 +15,7 @@ public class AccountTreeBuilder
 	private DefaultMutableTreeNode _rootNode;
 	private Map<String, DefaultMutableTreeNode> _map = new HashMap<String, DefaultMutableTreeNode>();
 
-	public void addNode(final Account account)
+	public void addNodeFor(final Account account)
 	{
 		checkAccountIsValid(account);
 

@@ -5,6 +5,8 @@ import gncimport.models.TxData;
 
 import java.util.List;
 
+import org.gnucash.xml.gnc.Account;
+
 public interface TxModel
 {
 	void openGncFile(String fileName);
@@ -16,4 +18,6 @@ public interface TxModel
 	AccountData getDefaultTargetAccount();
 
 	AccountData getDefaultSourceAccount();
+
+	List<Account> getAccounts();
 }

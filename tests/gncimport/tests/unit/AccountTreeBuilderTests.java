@@ -1,5 +1,6 @@
 package gncimport.tests.unit;
 
+import static gncimport.tests.unit.SampleAccountData.accountWith;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.models.AccountData;
@@ -8,9 +9,6 @@ import gncimport.ui.AccountTreeBuilder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import org.gnucash.xml.act.Id;
-import org.gnucash.xml.act.Parent;
-import org.gnucash.xml.gnc.Account;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +25,7 @@ public class AccountTreeBuilderTests
 	@Test
 	public void single_root_node()
 	{
-		_builder.addNode(accountWith("Root Node", "id-0", null));
+		_builder.addNodeFor(accountWith("Root Node", "id-0", null));
 
 		assertNodeEquals(_builder.getRoot(), "Root Node", new String[] {});
 	}
@@ -35,9 +33,9 @@ public class AccountTreeBuilderTests
 	@Test
 	public void single_root_with_children()
 	{
-		_builder.addNode(accountWith("Root Node", "id-0", null));
-		_builder.addNode(accountWith("Child 1", "id-1", "id-0"));
-		_builder.addNode(accountWith("Child 2", "id-2", "id-0"));
+		_builder.addNodeFor(accountWith("Root Node", "id-0", null));
+		_builder.addNodeFor(accountWith("Child 1", "id-1", "id-0"));
+		_builder.addNodeFor(accountWith("Child 2", "id-2", "id-0"));
 
 		assertNodeEquals(_builder.getRoot(), "Root Node",
 				new String[] { "Child 1", "Child 2" });
@@ -46,11 +44,11 @@ public class AccountTreeBuilderTests
 	@Test
 	public void simple_hierarchy()
 	{
-		_builder.addNode(accountWith("Root Node", "id-0", null));
-		_builder.addNode(accountWith("Parent", "id-1", "id-0"));
-		_builder.addNode(accountWith("Child 1", "id-2", "id-1"));
-		_builder.addNode(accountWith("Child 2", "id-3", "id-1"));
-		_builder.addNode(accountWith("Child 3", "id-4", "id-0"));
+		_builder.addNodeFor(accountWith("Root Node", "id-0", null));
+		_builder.addNodeFor(accountWith("Parent", "id-1", "id-0"));
+		_builder.addNodeFor(accountWith("Child 1", "id-2", "id-1"));
+		_builder.addNodeFor(accountWith("Child 2", "id-3", "id-1"));
+		_builder.addNodeFor(accountWith("Child 3", "id-4", "id-0"));
 
 		DefaultMutableTreeNode root = _builder.getRoot();
 
@@ -65,8 +63,8 @@ public class AccountTreeBuilderTests
 	@Test
 	public void nodes_store_account_as_payload()
 	{
-		_builder.addNode(accountWith("Root Node", "id-0", null));
-		_builder.addNode(accountWith("Child 1", "id-1", "id-0"));
+		_builder.addNodeFor(accountWith("Root Node", "id-0", null));
+		_builder.addNodeFor(accountWith("Child 1", "id-1", "id-0"));
 
 		AccountData child1 =
 				(AccountData) ((DefaultMutableTreeNode) (_builder.getRoot().getChildAt(0))).getUserObject();
@@ -78,55 +76,33 @@ public class AccountTreeBuilderTests
 	@Test(expected = IllegalArgumentException.class)
 	public void nodes_shouldnt_be_null()
 	{
-		_builder.addNode(null);
+		_builder.addNodeFor(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void only_one_root_node_is_expected()
 	{
-		_builder.addNode(accountWith("Root Node", "id-0", null));
-		_builder.addNode(accountWith("Root Node", "id-1", null));
+		_builder.addNodeFor(accountWith("Root Node", "id-0", null));
+		_builder.addNodeFor(accountWith("Root Node", "id-1", null));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void unknown_parent_is_rejected()
 	{
-		_builder.addNode(accountWith("Root Node", "id-0", null));
-		_builder.addNode(accountWith("Child", "id-1", "non-existant-id"));
+		_builder.addNodeFor(accountWith("Root Node", "id-0", null));
+		_builder.addNodeFor(accountWith("Child", "id-1", "non-existant-id"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void acccounts_should_have_an_id()
 	{
-		_builder.addNode(accountWith("Root Node", null, null));
+		_builder.addNodeFor(accountWith("Root Node", null, null));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void acount_ids_shouldnt_be_blank()
 	{
-		_builder.addNode(accountWith("Root Node", "", null));
-	}
-
-	private Account accountWith(String accName, String accId, String parentAccId)
-	{
-		Account account = new Account();
-		account.setName(accName);
-
-		if (accId != null)
-		{
-			Id id = new Id();
-			id.setValue(accId);
-			account.setId(id);
-		}
-
-		if (parentAccId != null)
-		{
-			Parent parent = new Parent();
-			parent.setValue(parentAccId);
-			account.setParent(parent);
-		}
-
-		return account;
+		_builder.addNodeFor(accountWith("Root Node", "", null));
 	}
 
 	private void assertNodeEquals(TreeNode node, String nodeName, String[] expectedChildren)
