@@ -95,7 +95,6 @@ public class FakeTxModel implements TxModel
 	@Override
 	public List<Account> getAccounts()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return _gnc.getAccounts();
 	}
 }

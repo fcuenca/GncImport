@@ -27,7 +27,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private final MainWindowRenderer _presenter;
 	private JLabel _statusLabel;
 	private JTable _table;
-	JButton _saveButton;
+	JButton _importButton;
 	private JLabel _sourceAccLabel;
 
 	public GncImportMainWindow(TxModel model)
@@ -62,6 +62,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		JPanel box = new JPanel();
 		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
 		box.add(_sourceAccLabel);
+		box.add(createSelectAccountButton());
 		box.add(createImportButton());
 
 		return box;
@@ -110,9 +111,19 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	private JButton createImportButton()
 	{
-		JButton saveButton = new JButton("Import");
+		_importButton = new JButton("Import");
 
-		saveButton.setName("SAVE_BUTTON");
+		_importButton.setName("SAVE_BUTTON");
+		_importButton.addActionListener(this);
+
+		return _importButton;
+	}
+
+	private JButton createSelectAccountButton()
+	{
+		JButton saveButton = new JButton("Select Source Account");
+
+		saveButton.setName("SELECT_SRC_ACC_BUTTON");
 		saveButton.addActionListener(this);
 
 		return saveButton;
@@ -133,7 +144,19 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		onImportClick();
+		if (e.getSource() == _importButton)
+		{
+			onImportClick();
+		}
+		else
+		{
+			onSelectSourceAccClick();
+		}
+	}
+
+	public void onSelectSourceAccClick()
+	{
+		_presenter.onSelectSourceAccount();
 	}
 
 	public void onImportClick()
@@ -168,7 +191,9 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	@Override
 	public void displayAccountTree(DefaultMutableTreeNode rootNode)
 	{
-		// TODO Auto-generated method stub
+		AccountTreeBrowserDialog dlg = new AccountTreeBrowserDialog(null, "Source Account", rootNode);
+
+		dlg.setVisible(true);
 
 	}
 }

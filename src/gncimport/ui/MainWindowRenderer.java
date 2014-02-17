@@ -9,4 +9,6 @@ public interface MainWindowRenderer
 
 	public abstract void onLoadGncFile(String fileName);
 
+	public abstract void onSelectSourceAccount();
+
 }
