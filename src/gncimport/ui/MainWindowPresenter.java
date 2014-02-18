@@ -1,20 +1,22 @@
 package gncimport.ui;
 
-import gncimport.boundaries.TxModel;
+import gncimport.boundaries.TxImportModel;
 import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 
 import java.util.List;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import org.gnucash.xml.gnc.Account;
 
 public class MainWindowPresenter implements MainWindowRenderer
 {
-	private final TxModel _model;
+	private final TxImportModel _model;
 	private final TxView _view;
 
-	public MainWindowPresenter(TxModel model, TxView view)
+	public MainWindowPresenter(TxImportModel model, TxView view)
 	{
 		this._model = model;
 		this._view = view;
@@ -78,12 +80,22 @@ public class MainWindowPresenter implements MainWindowRenderer
 		try
 		{
 			List<Account> accounts = _model.getAccounts();
+
 			AccountTreeBuilder builder = new AccountTreeBuilder();
 			for (Account account : accounts)
 			{
 				builder.addNodeFor(account);
 			}
-			_view.displayAccountTree(builder.getRoot());
+
+			DefaultMutableTreeNode selectedNode = _view.displayAccountTree(builder.getRoot());
+
+			if (selectedNode != null)
+			{
+				AccountData selectedAccount = (AccountData) selectedNode.getUserObject();
+
+				_model.setSourceAccount(selectedAccount);
+				_view.displaySourceAccount(selectedAccount.getName());
+			}
 		}
 		catch (Exception e)
 		{

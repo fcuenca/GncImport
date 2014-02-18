@@ -16,5 +16,5 @@ public interface TxView
 
 	void displaySourceAccount(String accountName);
 
-	void displayAccountTree(DefaultMutableTreeNode rootNode);
+	DefaultMutableTreeNode displayAccountTree(DefaultMutableTreeNode rootNode);
 }

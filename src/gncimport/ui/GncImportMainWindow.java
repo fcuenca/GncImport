@@ -1,6 +1,6 @@
 package gncimport.ui;
 
-import gncimport.boundaries.TxModel;
+import gncimport.boundaries.TxImportModel;
 import gncimport.boundaries.TxView;
 
 import java.awt.BorderLayout;
@@ -30,7 +30,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	JButton _importButton;
 	private JLabel _sourceAccLabel;
 
-	public GncImportMainWindow(TxModel model)
+	public GncImportMainWindow(TxImportModel model)
 	{
 		this._presenter = new MainWindowPresenter(model, this);
 		initialize();
@@ -189,11 +189,12 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 
 	@Override
-	public void displayAccountTree(DefaultMutableTreeNode rootNode)
+	public DefaultMutableTreeNode displayAccountTree(DefaultMutableTreeNode rootNode)
 	{
 		AccountTreeBrowserDialog dlg = new AccountTreeBrowserDialog(null, "Source Account", rootNode);
 
 		dlg.setVisible(true);
 
+		return (DefaultMutableTreeNode) dlg.getSelectedNode();
 	}
 }

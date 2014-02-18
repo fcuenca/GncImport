@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gncimport.boundaries.TxModel;
+import gncimport.boundaries.TxImportModel;
 import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
@@ -37,12 +37,12 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 
 	private MainWindowPresenter _presenter;
 	private TxView _view;
-	private TxModel _model;
+	private TxImportModel _model;
 
 	@Before
 	public void SetUp()
 	{
-		_model = mock(TxModel.class);
+		_model = mock(TxImportModel.class);
 		_view = mock(TxView.class);
 		_presenter = new MainWindowPresenter(_model, _view);
 	}

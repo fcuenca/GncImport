@@ -4,8 +4,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 import gncimport.GncImportApp;
-import gncimport.boundaries.TxModel;
-import gncimport.models.FakeTxModel;
+import gncimport.boundaries.TxImportModel;
+import gncimport.models.LocalFileTxImportModel;
 
 import java.io.File;
 
@@ -21,11 +21,11 @@ import org.fest.swing.fixture.JTableFixture;
 public class GncImportAppDriver
 {
 	private FrameFixture _mainWindow;
-	private TxModel _model;
+	private TxImportModel _model;
 
 	public GncImportAppDriver(Robot robot, int expectedTxCount)
 	{
-		_model = new FakeTxModel();
+		_model = new LocalFileTxImportModel();
 
 		JFrame frame = GuiActionRunner.execute(new GuiQuery<JFrame>()
 		{

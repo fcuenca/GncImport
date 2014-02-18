@@ -2,10 +2,13 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gncimport.boundaries.TxModel;
+import gncimport.boundaries.TxImportModel;
 import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 import gncimport.ui.MainWindowPresenter;
@@ -30,12 +33,12 @@ public class PresenterRendersTheAccountList
 
 	private MainWindowPresenter _presenter;
 	private TxView _view;
-	private TxModel _model;
+	private TxImportModel _model;
 
 	@Before
 	public void SetUp()
 	{
-		_model = mock(TxModel.class);
+		_model = mock(TxImportModel.class);
 		_view = mock(TxView.class);
 		_presenter = new MainWindowPresenter(_model, _view);
 	}
@@ -66,5 +69,29 @@ public class PresenterRendersTheAccountList
 		assertThat(expectedAccTree.getValue().toString(), is("Root Account"));
 		assertThat(expectedAccTree.getValue().getChildCount(), is(2));
 		assertThat(expectedAccTree.getValue().getChildAt(0).getChildAt(1).toString(), is("Child 2"));
+	}
+
+	@Test
+	public void keeps_source_account_if_no_selection_is_made()
+	{
+		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(null);
+
+		_presenter.onSelectSourceAccount();
+
+		verify(_view, never()).displaySourceAccount(anyString());
+	}
+
+	@Test
+	public void resets_source_account_if_selection_is_made()
+	{
+		AccountData selectedAccount = new AccountData("New Acc", "acc-id");
+		DefaultMutableTreeNode selectedNode = new DefaultMutableTreeNode(selectedAccount);
+
+		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(selectedNode);
+
+		_presenter.onSelectSourceAccount();
+
+		verify(_view).displaySourceAccount("New Acc");
+		verify(_model).setSourceAccount(selectedAccount);
 	}
 }

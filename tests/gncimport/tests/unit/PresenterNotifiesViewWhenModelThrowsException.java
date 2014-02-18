@@ -3,7 +3,7 @@ package gncimport.tests.unit;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gncimport.boundaries.TxModel;
+import gncimport.boundaries.TxImportModel;
 import gncimport.boundaries.TxView;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
@@ -18,14 +18,14 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	private RuntimeException _expectedException;
 	private MainWindowPresenter _presenter;
 	private TxView _view;
-	private TxModel _model;
+	private TxImportModel _model;
 
 	@Before
 	public void setUp()
 	{
 		_expectedException = new RuntimeException("ahhhhh: exception wasn't handled!");
 
-		_model = mock(TxModel.class, new Answer<Object>()
+		_model = mock(TxImportModel.class, new Answer<Object>()
 		{
 			@Override
 			public Object answer(InvocationOnMock invocation)
@@ -71,5 +71,4 @@ public class PresenterNotifiesViewWhenModelThrowsException
 
 		verify(_view).handleException(_expectedException);
 	}
-
 }

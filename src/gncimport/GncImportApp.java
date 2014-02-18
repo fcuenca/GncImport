@@ -1,7 +1,7 @@
 package gncimport;
 
-import gncimport.boundaries.TxModel;
-import gncimport.models.FakeTxModel;
+import gncimport.boundaries.TxImportModel;
+import gncimport.models.LocalFileTxImportModel;
 import gncimport.ui.GncImportMainWindow;
 
 import javax.swing.JFrame;
@@ -30,10 +30,10 @@ public class GncImportApp
 
 	public static JFrame createMainFrame()
 	{
-		return createMainFrame(new FakeTxModel());
+		return createMainFrame(new LocalFileTxImportModel());
 	}
 
-	public static JFrame createMainFrame(TxModel model)
+	public static JFrame createMainFrame(TxImportModel model)
 	{
 		JFrame mainFrame = new JFrame("GnuCash Transaction Import");
 
