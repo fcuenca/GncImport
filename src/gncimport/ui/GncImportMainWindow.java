@@ -2,18 +2,23 @@ package gncimport.ui;
 
 import gncimport.boundaries.TxImportModel;
 import gncimport.boundaries.TxView;
+import gncimport.models.AccountData;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.jdesktop.swingx.JXErrorPane;
@@ -130,9 +135,14 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 
 	@Override
-	public void displayTxData(TxTableModel tableModel)
+	public void displayTxData(TxTableModel tableModel, List<AccountData> targetAccounts)
 	{
 		_table.setModel(tableModel);
+
+		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
+
+		JComboBox comboBox = new JComboBox(targetAccounts.toArray());
+		accountColumn.setCellEditor(new DefaultCellEditor(comboBox));
 	}
 
 	@Override

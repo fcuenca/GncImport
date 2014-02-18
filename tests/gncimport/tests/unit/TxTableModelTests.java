@@ -2,6 +2,7 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import gncimport.models.AccountData;
 import gncimport.ui.TxTableModel;
 
 import org.junit.Before;
@@ -63,5 +64,15 @@ public class TxTableModelTests
 	public void verifies_row_bounds()
 	{
 		_model.getValueAt(2, 0);
+	}
+
+	@Test
+	public void allows_editing_target_account_column()
+	{
+		AccountData newAccount = new AccountData("New Acc", "id");
+
+		_model.setValueAt(newAccount, 0, 3);
+
+		assertThat((String) (_model.getValueAt(0, 3)), is("New Acc"));
 	}
 }

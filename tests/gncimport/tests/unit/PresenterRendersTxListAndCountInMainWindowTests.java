@@ -3,6 +3,8 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gnucash.xml.gnc.Account;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -34,6 +37,9 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 {
 	@Captor
 	private ArgumentCaptor<TxTableModel> expectedTxList;
+
+	@Captor
+	private ArgumentCaptor<List<AccountData>> expectedAccList;
 
 	private MainWindowPresenter _presenter;
 	private TxView _view;
@@ -56,11 +62,35 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 
 		_presenter.onReadFromCsvFile("/path/to/file.csv");
 
-		verify(_view).displayTxData(expectedTxList.capture());
-		verify(_view).displayTxCount(2);
+		verify(_view).displayTxData(expectedTxList.capture(), anyListOf(AccountData.class));
 
 		assertThat(expectedTxList.getValue().getRowCount(), is(actualTxs.size()));
 		assertThat(expectedTxList.getValue(), containsTransactions(actualTxs));
+	}
+
+	@Test
+	public void displays_transaction_count_on_file_open()
+	{
+		List<TxData> actualTxs = SampleTxData.txDataList();
+
+		when(_model.fetchTransactionsFrom("/path/to/file.csv")).thenReturn(actualTxs);
+
+		_presenter.onReadFromCsvFile("/path/to/file.csv");
+
+		verify(_view).displayTxCount(2);
+	}
+
+	@Test
+	public void sets_list_of_available_target_accounts()
+	{
+		List<Account> accountList = SampleAccountData.testAccountList();
+		when(_model.getAccounts()).thenReturn(accountList);
+
+		_presenter.onReadFromCsvFile("/path/to/file.csv");
+
+		verify(_view).displayTxData(any(TxTableModel.class), expectedAccList.capture());
+
+		assertThat(expectedAccList.getValue().size(), is(accountList.size()));
 	}
 
 	@Test
@@ -74,13 +104,12 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 
 		_presenter.onReadFromCsvFile("/path/to/file.csv");
 
-		verify(_view).displayTxData(expectedTxList.capture());
+		verify(_view).displayTxData(expectedTxList.capture(), anyListOf(AccountData.class));
 
 		for (TxData txData : expectedTxList.getValue().getTransactions())
 		{
 			assertThat(txData.toString(), txData.targetAccount, is(expectedTargetAcc));
 		}
-
 	}
 
 	private Matcher<TxTableModel> containsTransactions(final List<TxData> transactionList)

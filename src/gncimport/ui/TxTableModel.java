@@ -1,5 +1,6 @@
 package gncimport.ui;
 
+import gncimport.models.AccountData;
 import gncimport.models.TxData;
 
 import java.text.DecimalFormat;
@@ -11,6 +12,8 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class TxTableModel extends AbstractTableModel
 {
+	public static final int ACCOUNT_COLUMN = 3;
+
 	private String[] _columns = new String[] { "Date", "Amount", "Description", "Account" };
 
 	private final List<TxData> _transactions;
@@ -81,6 +84,18 @@ public class TxTableModel extends AbstractTableModel
 	public String toString()
 	{
 		return "TxTableModel [" + _transactions + "]";
+	}
+
+	@Override
+	public boolean isCellEditable(int row, int col)
+	{
+		return col == ACCOUNT_COLUMN;
+	}
+
+	@Override
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex)
+	{
+		_transactions.get(rowIndex).targetAccount = (AccountData) aValue;
 	}
 
 	public List<TxData> getTransactions()

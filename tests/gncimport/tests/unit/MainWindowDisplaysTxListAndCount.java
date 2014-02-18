@@ -4,8 +4,11 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import gncimport.models.AccountData;
 import gncimport.ui.GncImportMainWindow;
 import gncimport.ui.TxTableModel;
+
+import java.util.ArrayList;
 
 import javax.swing.table.TableModel;
 
@@ -71,7 +74,7 @@ public class MainWindowDisplaysTxListAndCount extends MainWindowTests
 		{
 			protected void doActionsOnView(GncImportMainWindow v)
 			{
-				v.displayTxData(tableModel);
+				v.displayTxData(tableModel, new ArrayList<AccountData>());
 			}
 		});
 
