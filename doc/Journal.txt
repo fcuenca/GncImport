@@ -27,7 +27,18 @@ Where to start?
 Next Step: Lookup of account IDs from GNC file:
     - first step: hard-code IDs in presenter -> then push down to model
     - 2nd step: hard-code account names, look-up ids from GNC file
-    - 3rd step: Move hard-coded account names to some sort of config object
+    - 3rd step: Move hard-coded account names to some sort of config object => decided to do this later
+    
+---++Tue Feb 18:
+
+Next Step: implement the idea of "target account hierarchy", rather than an individual account.
+    - 1st step: Restrict the list of accounts sent to the UI to those in the hierarchy 
+       - hard coded for now to "Enero 2014"
+       - lookup the default target account by name under the hierarchy
+    - 2nd: show the target in the UI; then allow to change it
+       - requires adding a second hierarchy in the test file
+    - 3rd: decide how to select the hierarchy: ask? take from date? ?? 
+    
     
     
 

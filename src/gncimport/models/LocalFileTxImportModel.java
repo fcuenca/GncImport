@@ -5,7 +5,10 @@ import gncimport.boundaries.TxImportModel;
 import gnclib.GncFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.gnucash.xml.gnc.Account;
 
@@ -61,7 +64,7 @@ public class LocalFileTxImportModel implements TxImportModel
 		try
 		{
 			_gnc = new GncFile(fileName);
-			_defaultTargetAccount = loadAccount(DEFAULT_TARGET_ACCOUNT);
+			_defaultTargetAccount = loadAccountWithParent(DEFAULT_TARGET_ACCOUNT, "Enero 2014");
 			_sourceAccount = loadAccount(DEFAULT_SOURCE_ACCOUNT);
 		}
 		catch (IOException e)
@@ -103,6 +106,47 @@ public class LocalFileTxImportModel implements TxImportModel
 			return new AccountData(account.getName(), account.getId().getValue());
 		}
 
-		throw new RuntimeException("Account can't be found: " + DEFAULT_TARGET_ACCOUNT);
+		throw new RuntimeException("Account can't be found: " + accName);
+	}
+
+	private AccountData loadAccountWithParent(String accName, String parentName)
+	{
+		Account account = null;
+		Account parent = null;
+
+		Map<String, List<Account>> accTree = new HashMap<String, List<Account>>();
+
+		for (Account a : _gnc.getAccounts())
+		{
+			if (a.getName().equals(parentName))
+			{
+				parent = a;
+			}
+
+			String parentId = a.getParent() != null ? a.getParent().getValue() : null;
+			List<Account> children = accTree.get(parentId);
+			if (children == null)
+			{
+				children = new ArrayList<Account>();
+				accTree.put(parentId, children);
+			}
+			children.add(a);
+		}
+
+		for (Account a : accTree.get(parent.getId().getValue()))
+		{
+			if (a.getName().equals(accName))
+			{
+				account = a;
+				break;
+			}
+		}
+
+		if (account != null)
+		{
+			return new AccountData(account.getName(), account.getId().getValue());
+		}
+
+		throw new RuntimeException("Account can't be found: " + accName);
 	}
 }

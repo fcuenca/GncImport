@@ -65,9 +65,10 @@ public class LocalFileImportTests
 	{
 		List<Account> accounts = _model.getAccounts();
 
-		assertThat(accounts.size(), is(8));
+		assertThat(accounts.size(), is(21));
 		assertThat(accounts.get(0).getName(), is("Root Account"));
-		assertThat(accounts.get(7).getName(), is("Opening Balances"));
+		assertThat(accounts.get(7).getName(), is("Gastos Mensuales"));
+		assertThat(accounts.get(20).getName(), is("Expenses"));
 	}
 
 	@Test
