@@ -86,15 +86,9 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		try
 		{
-			List<Account> accounts = _model.getAccounts();
+			DefaultMutableTreeNode accountRoot = getAccountTree();
 
-			AccountTreeBuilder builder = new AccountTreeBuilder();
-			for (Account account : accounts)
-			{
-				builder.addNodeFor(account);
-			}
-
-			DefaultMutableTreeNode selectedNode = _view.displayAccountTree(builder.getRoot());
+			DefaultMutableTreeNode selectedNode = _view.displayAccountTree(accountRoot);
 
 			if (selectedNode != null)
 			{
@@ -108,5 +102,42 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			_view.handleException(e);
 		}
+	}
+
+	@Override
+	public void onSelectTargetAccount()
+	{
+		try
+		{
+			DefaultMutableTreeNode accountRoot = getAccountTree();
+
+			DefaultMutableTreeNode selectedNode = _view.displayAccountTree(accountRoot);
+
+			if (selectedNode != null)
+			{
+				AccountData selectedAccount = (AccountData) selectedNode.getUserObject();
+
+				_model.setTargetAccount(selectedAccount);
+				_view.displayTargetHierarchy(selectedAccount.getName());
+			}
+		}
+		catch (Exception e)
+		{
+			_view.handleException(e);
+		}
+	}
+
+	private DefaultMutableTreeNode getAccountTree()
+	{
+		List<Account> accounts = _model.getAccounts();
+
+		AccountTreeBuilder builder = new AccountTreeBuilder();
+		for (Account account : accounts)
+		{
+			builder.addNodeFor(account);
+		}
+
+		DefaultMutableTreeNode accountRoot = builder.getRoot();
+		return accountRoot;
 	}
 }

@@ -161,7 +161,7 @@ public class GncImportMainWindow extends JPanel implements TxView
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO
+				onSelectTargetAccClick();
 			}
 		});
 
@@ -193,6 +193,11 @@ public class GncImportMainWindow extends JPanel implements TxView
 	public void onImportClick()
 	{
 		_presenter.onSaveToGncFile("/tmp/checkbook-new.xml");
+	}
+
+	public void onSelectTargetAccClick()
+	{
+		_presenter.onSelectTargetAccount();
 	}
 
 	@Override

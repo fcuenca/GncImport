@@ -65,9 +65,17 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	}
 
 	@Test
-	public void when_displaying_account_tree()
+	public void when_selecting_source_account()
 	{
 		_presenter.onSelectSourceAccount();
+
+		verify(_view).handleException(_expectedException);
+	}
+
+	@Test
+	public void when_selecting_target_account()
+	{
+		_presenter.onSelectTargetAccount();
 
 		verify(_view).handleException(_expectedException);
 	}

@@ -19,7 +19,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
 
 	private GncFile _gnc;
-	private AccountData _defaultTargetAccount;
+	private AccountData _targetAccount;
 	private AccountData _sourceAccount;
 	private Map<String, List<Account>> _accTree = new HashMap<String, List<Account>>();
 	private Account _targetHierarcyParent;
@@ -68,9 +68,8 @@ public class LocalFileTxImportModel implements TxImportModel
 		{
 			_gnc = new GncFile(fileName);
 
-			initializeTargetHierarchy(DEFAULT_TARGET_HIERARCHY);
-			_defaultTargetAccount = loadAccountUnderHierarchy(DEFAULT_TARGET_ACCOUNT);
-			_sourceAccount = loadAccount(DEFAULT_SOURCE_ACCOUNT);
+			initializeTargetAccount(DEFAULT_TARGET_HIERARCHY, DEFAULT_TARGET_ACCOUNT);
+			initializeSourceAccount(DEFAULT_SOURCE_ACCOUNT);
 		}
 		catch (IOException e)
 		{
@@ -78,10 +77,21 @@ public class LocalFileTxImportModel implements TxImportModel
 		}
 	}
 
+	private void initializeSourceAccount(String accountName)
+	{
+		_sourceAccount = loadAccount(accountName);
+	}
+
+	private void initializeTargetAccount(String hierarchyName, String accountName)
+	{
+		initializeTargetHierarchy(hierarchyName);
+		_targetAccount = loadAccountUnderHierarchy(accountName);
+	}
+
 	@Override
 	public AccountData getDefaultTargetAccount()
 	{
-		return _defaultTargetAccount;
+		return _targetAccount;
 	}
 
 	@Override
@@ -105,7 +115,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	@Override
 	public AccountData getDefaultTargetHierarchyAccount()
 	{
-		return new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getParent().getValue());
+		return new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getId().getValue());
 	}
 
 	@Override
@@ -119,6 +129,12 @@ public class LocalFileTxImportModel implements TxImportModel
 		}
 
 		return accounts;
+	}
+
+	@Override
+	public void setTargetAccount(AccountData accountData)
+	{
+		initializeTargetAccount(accountData.getName(), DEFAULT_TARGET_ACCOUNT);
 	}
 
 	private AccountData loadAccount(String accName)

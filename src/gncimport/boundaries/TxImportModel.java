@@ -26,4 +26,6 @@ public interface TxImportModel
 	List<AccountData> getCandidateTargetAccounts();
 
 	AccountData getDefaultTargetHierarchyAccount();
+
+	void setTargetAccount(AccountData accountData);
 }

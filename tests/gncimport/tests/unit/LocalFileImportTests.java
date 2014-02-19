@@ -17,6 +17,12 @@ import org.junit.Test;
 public class LocalFileImportTests
 {
 
+	private static final String FEBRERO2014_ID = "882f951395a92f8ea103fe0e9dbfbda5";
+	private static final String ENERO2014_ID = "454018fbf408f8c3e607bd51f22c5373";
+	private static final String CHECKINGACC_ID = "64833494284bad5fb390e84d38c65a54";
+	private static final String EXPENSES_FEBRERO_ID = "1edf8498fcda9b8a677160b0b6357287";
+	private static final String EXPENSES_ENERO_ID = "e31486ad3b2c6cdedccf135d13538b29";
+
 	private class LocalFileTxImportModel_ForTesting extends LocalFileTxImportModel
 	{
 
@@ -48,7 +54,7 @@ public class LocalFileImportTests
 		AccountData account = _model.getDefaultSourceAccount();
 
 		assertThat(account.getName(), is("Checking Account"));
-		assertThat(account.getId(), is("64833494284bad5fb390e84d38c65a54"));
+		assertThat(account.getId(), is(CHECKINGACC_ID));
 	}
 
 	@Test
@@ -57,7 +63,7 @@ public class LocalFileImportTests
 		AccountData account = _model.getDefaultTargetAccount();
 
 		assertThat(account.getName(), is("Expenses"));
-		assertThat(account.getId(), is("e31486ad3b2c6cdedccf135d13538b29"));
+		assertThat(account.getId(), is(EXPENSES_ENERO_ID));
 	}
 
 	@Test
@@ -75,7 +81,7 @@ public class LocalFileImportTests
 		AccountData account = _model.getDefaultTargetHierarchyAccount();
 
 		assertThat(account.getName(), is("Enero 2014"));
-		assertThat(account.getId(), is("eeab2d12582428bbc3e10da3a12520fc"));
+		assertThat(account.getId(), is(ENERO2014_ID));
 	}
 
 	@Test
@@ -83,7 +89,7 @@ public class LocalFileImportTests
 	{
 		List<Account> accounts = _model.getAccounts();
 
-		assertThat(accounts.size(), is(21));
+		assertThat(accounts.size(), is(34));
 		assertThat(accounts.get(0).getName(), is("Root Account"));
 		assertThat(accounts.get(7).getName(), is("Gastos Mensuales"));
 		assertThat(accounts.get(20).getName(), is("Expenses"));
@@ -98,7 +104,7 @@ public class LocalFileImportTests
 
 		assertThat(_model.detectedFileName, is("new-file.xml"));
 		assertThat(_model.detectedTransactions, is(txList));
-		assertThat(_model.detectedSourceAccId, is("64833494284bad5fb390e84d38c65a54"));
+		assertThat(_model.detectedSourceAccId, is(CHECKINGACC_ID));
 	}
 
 	@Test
@@ -111,5 +117,19 @@ public class LocalFileImportTests
 		_model.saveTxTo(txList, "new-file.xml");
 
 		assertThat(_model.detectedSourceAccId, is("new-id"));
+	}
+
+	@Test
+	public void default_target_account_can_be_overriden()
+	{
+		AccountData newAccount = new AccountData("Febrero 2014", "irrelevant-id");
+
+		_model.setTargetAccount(newAccount);
+
+		assertThat(_model.getDefaultTargetHierarchyAccount().getName(), is("Febrero 2014"));
+		assertThat(_model.getDefaultTargetHierarchyAccount().getId(), is(FEBRERO2014_ID));
+
+		assertThat(_model.getDefaultTargetAccount().getName(), is("Expenses"));
+		assertThat(_model.getDefaultTargetAccount().getId(), is(EXPENSES_FEBRERO_ID));
 	}
 }

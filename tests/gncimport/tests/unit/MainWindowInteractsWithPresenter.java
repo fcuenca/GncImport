@@ -58,4 +58,18 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 		verify(_presenter).onSelectSourceAccount();
 	}
 
+	@Test
+	public void triggers_target_account_selection()
+	{
+		GuiActionRunner.execute(new ViewDriver()
+		{
+			protected void doActionsOnView(GncImportMainWindow v)
+			{
+				v.onSelectTargetAccClick();
+			}
+		});
+
+		verify(_presenter).onSelectTargetAccount();
+	}
+
 }
