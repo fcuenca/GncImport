@@ -103,6 +103,12 @@ public class LocalFileTxImportModel implements TxImportModel
 	}
 
 	@Override
+	public AccountData getDefaultTargetHierarchyAccount()
+	{
+		return new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getParent().getValue());
+	}
+
+	@Override
 	public List<AccountData> getCandidateTargetAccounts()
 	{
 		ArrayList<AccountData> accounts = new ArrayList<AccountData>();

@@ -20,4 +20,6 @@ public interface TxView
 	void displaySourceAccount(String accountName);
 
 	DefaultMutableTreeNode displayAccountTree(DefaultMutableTreeNode rootNode);
+
+	void displayTargetHierarchy(String accountName);
 }

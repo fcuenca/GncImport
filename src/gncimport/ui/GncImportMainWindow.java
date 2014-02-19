@@ -34,6 +34,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JTable _table;
 	JButton _importButton;
 	private JLabel _sourceAccLabel;
+	private JLabel _targetAccLabel;
 
 	public GncImportMainWindow(TxImportModel model)
 	{
@@ -63,10 +64,12 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JPanel createAccountBox()
 	{
 		_sourceAccLabel = new JLabel("Source Account: NOT SET");
+		_targetAccLabel = new JLabel("Target Account: NOT SET");
 
 		JPanel box = new JPanel();
 		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
 		box.add(_sourceAccLabel);
+		box.add(_targetAccLabel);
 		box.add(createSelectAccountButton());
 		box.add(createImportButton());
 
@@ -196,6 +199,12 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public void displaySourceAccount(String accountName)
 	{
 		_sourceAccLabel.setText("Source Account: " + accountName);
+	}
+
+	@Override
+	public void displayTargetHierarchy(String accountName)
+	{
+		_targetAccLabel.setText("Target Account: " + accountName);
 	}
 
 	@Override

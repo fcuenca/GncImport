@@ -70,6 +70,15 @@ public class LocalFileImportTests
 	}
 
 	@Test
+	public void can_provide_default_target_hierarchy_parent()
+	{
+		AccountData account = _model.getDefaultTargetHierarchyAccount();
+
+		assertThat(account.getName(), is("Enero 2014"));
+		assertThat(account.getId(), is("eeab2d12582428bbc3e10da3a12520fc"));
+	}
+
+	@Test
 	public void can_provide_list_of_accounts()
 	{
 		List<Account> accounts = _model.getAccounts();

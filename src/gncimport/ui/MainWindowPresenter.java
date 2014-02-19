@@ -73,6 +73,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			_model.openGncFile(fileName);
 			_view.displaySourceAccount(_model.getDefaultSourceAccount().getName());
+			_view.displayTargetHierarchy(_model.getDefaultTargetHierarchyAccount().getName());
 		}
 		catch (Exception e)
 		{

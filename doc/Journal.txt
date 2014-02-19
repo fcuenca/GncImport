@@ -39,6 +39,8 @@ Next Step: implement the idea of "target account hierarchy", rather than an indi
        - requires adding a second hierarchy in the test file
     - 3rd: decide how to select the hierarchy: ask? take from date? ?? 
     
+    - AHA!! I need to be able to select accounts OUTSIDE the target hierarchy (income, special expenses, etc.)
+    
     
     
 

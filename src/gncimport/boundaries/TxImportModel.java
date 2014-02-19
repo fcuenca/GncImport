@@ -24,4 +24,6 @@ public interface TxImportModel
 	void saveTxTo(List<TxData> transactions, String fileName);
 
 	List<AccountData> getCandidateTargetAccounts();
+
+	AccountData getDefaultTargetHierarchyAccount();
 }
