@@ -26,13 +26,12 @@ import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 @SuppressWarnings("serial")
-public class GncImportMainWindow extends JPanel implements TxView, ActionListener
+public class GncImportMainWindow extends JPanel implements TxView
 {
 
 	private final MainWindowRenderer _presenter;
 	private JLabel _statusLabel;
 	private JTable _table;
-	JButton _importButton;
 	private JLabel _sourceAccLabel;
 	private JLabel _targetAccLabel;
 
@@ -71,6 +70,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		box.add(_sourceAccLabel);
 		box.add(_targetAccLabel);
 		box.add(createSelectAccountButton());
+		box.add(createTargetAccountButton());
 		box.add(createImportButton());
 
 		return box;
@@ -119,22 +119,53 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	private JButton createImportButton()
 	{
-		_importButton = new JButton("Import");
+		JButton button = new JButton("Import");
 
-		_importButton.setName("SAVE_BUTTON");
-		_importButton.addActionListener(this);
+		button.setName("SAVE_BUTTON");
+		button.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				onImportClick();
+			}
+		});
 
-		return _importButton;
+		return button;
 	}
 
 	private JButton createSelectAccountButton()
 	{
-		JButton saveButton = new JButton("Select Source Account");
+		JButton button = new JButton("Select Source Account");
 
-		saveButton.setName("SELECT_SRC_ACC_BUTTON");
-		saveButton.addActionListener(this);
+		button.setName("SELECT_SRC_ACC_BUTTON");
+		button.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				onSelectSourceAccClick();
+			}
+		});
 
-		return saveButton;
+		return button;
+	}
+
+	private JButton createTargetAccountButton()
+	{
+		JButton button = new JButton("Select Target Account");
+
+		button.setName("SELECT_TARGET_ACC_BUTTON");
+		button.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO
+			}
+		});
+
+		return button;
 	}
 
 	@Override
@@ -152,19 +183,6 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public TxTableModel getTxTableModel()
 	{
 		return (TxTableModel) _table.getModel();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == _importButton)
-		{
-			onImportClick();
-		}
-		else
-		{
-			onSelectSourceAccClick();
-		}
 	}
 
 	public void onSelectSourceAccClick()
