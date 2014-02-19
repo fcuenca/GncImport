@@ -22,4 +22,6 @@ public interface TxView
 	DefaultMutableTreeNode displayAccountTree(DefaultMutableTreeNode rootNode);
 
 	void displayTargetHierarchy(String accountName);
+
+	void updateCandidateTargetAccountList(List<AccountData> accountList);
 }

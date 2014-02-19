@@ -107,6 +107,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 				_model.setTargetAccount(selectedAccount);
 				_view.displayTargetHierarchy(selectedAccount.getName());
+				_view.updateCandidateTargetAccountList(_model.getCandidateTargetAccounts());
 			}
 		}
 		catch (Exception e)

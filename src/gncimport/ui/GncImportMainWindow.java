@@ -173,10 +173,7 @@ public class GncImportMainWindow extends JPanel implements TxView
 	{
 		_table.setModel(tableModel);
 
-		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
-
-		JComboBox comboBox = new JComboBox(targetAccounts.toArray());
-		accountColumn.setCellEditor(new DefaultCellEditor(comboBox));
+		updateCandidateTargetAccountList(targetAccounts);
 	}
 
 	@Override
@@ -238,5 +235,14 @@ public class GncImportMainWindow extends JPanel implements TxView
 		dlg.setVisible(true);
 
 		return (DefaultMutableTreeNode) dlg.getSelectedNode();
+	}
+
+	@Override
+	public void updateCandidateTargetAccountList(List<AccountData> accountList)
+	{
+		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
+
+		JComboBox comboBox = new JComboBox(accountList.toArray());
+		accountColumn.setCellEditor(new DefaultCellEditor(comboBox));
 	}
 }

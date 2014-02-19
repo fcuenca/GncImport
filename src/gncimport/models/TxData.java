@@ -7,7 +7,7 @@ public class TxData
 {
 	public final Date date;
 	public final BigDecimal amount;
-	public final String description;
+	public String description;
 	public AccountData targetAccount;
 
 	public TxData(Date date, BigDecimal amount, String description)

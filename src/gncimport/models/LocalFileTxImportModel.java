@@ -23,26 +23,32 @@ public class LocalFileTxImportModel implements TxImportModel
 	private AccountData _sourceAccount;
 	private Map<String, List<Account>> _accTree = new HashMap<String, List<Account>>();
 	private Account _targetHierarcyParent;
+	private List<TxData> _txList;
 
 	@Override
 	public List<TxData> fetchTransactionsFrom(String fileName)
 	{
 		try
 		{
-			List<TxData> txList = new RbcExportParser(fileName).getTransactions();
+			_txList = new RbcExportParser(fileName).getTransactions();
 
-			AccountData targetAcc = getDefaultTargetAccount();
+			resetTargetAccountInImportList();
 
-			for (TxData txData : txList)
-			{
-				txData.targetAccount = targetAcc;
-			}
-
-			return txList;
+			return _txList;
 		}
 		catch (Exception e)
 		{
 			throw new RuntimeException(e);
+		}
+	}
+
+	private void resetTargetAccountInImportList()
+	{
+		AccountData targetAcc = getDefaultTargetAccount();
+
+		for (TxData txData : _txList)
+		{
+			txData.targetAccount = targetAcc;
 		}
 	}
 
@@ -144,6 +150,10 @@ public class LocalFileTxImportModel implements TxImportModel
 	public void setTargetAccount(AccountData accountData)
 	{
 		initializeTargetAccount(accountData.getName(), DEFAULT_TARGET_ACCOUNT);
+		if (_txList != null)
+		{
+			resetTargetAccountInImportList();
+		}
 	}
 
 	private AccountData loadAccount(String accName)

@@ -152,4 +152,16 @@ public class LocalFileImportTests
 		assertThat(_model.getDefaultTargetAccount().getName(), is("Expenses"));
 		assertThat(_model.getDefaultTargetAccount().getId(), is(EXPENSES_FEBRERO_ID));
 	}
+
+	@Test
+	public void changing_target_account_changes_import_txList()
+	{
+		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+
+		_model.setTargetAccount(new AccountData("Febrero 2014", "irrelevant-id"));
+
+		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
+		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
+
+	}
 }

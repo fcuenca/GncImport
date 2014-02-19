@@ -13,6 +13,7 @@ import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 import gncimport.ui.MainWindowPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -127,12 +128,15 @@ public class PresenterRendersTheAccountList
 	{
 		AccountData selectedAccount = new AccountData("New Acc", "acc-id");
 		DefaultMutableTreeNode selectedNode = new DefaultMutableTreeNode(selectedAccount);
+		List<AccountData> accountList = new ArrayList<AccountData>();
 
+		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
 		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(selectedNode);
 
 		_presenter.onSelectTargetAccount();
 
 		verify(_view).displayTargetHierarchy("New Acc");
+		verify(_view).updateCandidateTargetAccountList(accountList);
 		verify(_model).setTargetAccount(selectedAccount);
 	}
 
