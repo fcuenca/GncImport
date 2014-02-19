@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gnucash.xml.gnc.Account;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -37,9 +37,6 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 {
 	@Captor
 	private ArgumentCaptor<TxTableModel> expectedTxList;
-
-	@Captor
-	private ArgumentCaptor<List<AccountData>> expectedAccList;
 
 	private MainWindowPresenter _presenter;
 	private TxView _view;
@@ -83,14 +80,12 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	@Test
 	public void sets_list_of_available_target_accounts()
 	{
-		List<Account> accountList = SampleAccountData.testAccountList();
-		when(_model.getAccounts()).thenReturn(accountList);
+		List<AccountData> accountList = new ArrayList<AccountData>();
+		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
 
 		_presenter.onReadFromCsvFile("/path/to/file.csv");
 
-		verify(_view).displayTxData(any(TxTableModel.class), expectedAccList.capture());
-
-		assertThat(expectedAccList.getValue().size(), is(accountList.size()));
+		verify(_view).displayTxData(any(TxTableModel.class), same(accountList));
 	}
 
 	@Test

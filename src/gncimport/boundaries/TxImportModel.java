@@ -22,4 +22,6 @@ public interface TxImportModel
 	void setSourceAccount(AccountData accountData);
 
 	void saveTxTo(List<TxData> transactions, String fileName);
+
+	List<AccountData> getCandidateTargetAccounts();
 }

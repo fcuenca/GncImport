@@ -14,12 +14,15 @@ import org.gnucash.xml.gnc.Account;
 
 public class LocalFileTxImportModel implements TxImportModel
 {
+	private static final String DEFAULT_TARGET_HIERARCHY = "Enero 2014";
 	private static final String DEFAULT_SOURCE_ACCOUNT = "Checking Account";
 	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
 
 	private GncFile _gnc;
 	private AccountData _defaultTargetAccount;
 	private AccountData _sourceAccount;
+	private Map<String, List<Account>> _accTree = new HashMap<String, List<Account>>();
+	private Account _targetHierarcyParent;
 
 	@Override
 	public List<TxData> fetchTransactionsFrom(String fileName)
@@ -64,7 +67,9 @@ public class LocalFileTxImportModel implements TxImportModel
 		try
 		{
 			_gnc = new GncFile(fileName);
-			_defaultTargetAccount = loadAccountWithParent(DEFAULT_TARGET_ACCOUNT, "Enero 2014");
+
+			initializeTargetHierarchy(DEFAULT_TARGET_HIERARCHY);
+			_defaultTargetAccount = loadAccountUnderHierarchy(DEFAULT_TARGET_ACCOUNT);
 			_sourceAccount = loadAccount(DEFAULT_SOURCE_ACCOUNT);
 		}
 		catch (IOException e)
@@ -97,6 +102,19 @@ public class LocalFileTxImportModel implements TxImportModel
 		_sourceAccount = accountData;
 	}
 
+	@Override
+	public List<AccountData> getCandidateTargetAccounts()
+	{
+		ArrayList<AccountData> accounts = new ArrayList<AccountData>();
+
+		for (Account a : _accTree.get(_targetHierarcyParent.getId().getValue()))
+		{
+			accounts.add(new AccountData(a.getName(), a.getId().getValue()));
+		}
+
+		return accounts;
+	}
+
 	private AccountData loadAccount(String accName)
 	{
 		Account account = _gnc.findAccountByName(accName);
@@ -109,31 +127,10 @@ public class LocalFileTxImportModel implements TxImportModel
 		throw new RuntimeException("Account can't be found: " + accName);
 	}
 
-	private AccountData loadAccountWithParent(String accName, String parentName)
+	private AccountData loadAccountUnderHierarchy(String accName)
 	{
 		Account account = null;
-		Account parent = null;
-
-		Map<String, List<Account>> accTree = new HashMap<String, List<Account>>();
-
-		for (Account a : _gnc.getAccounts())
-		{
-			if (a.getName().equals(parentName))
-			{
-				parent = a;
-			}
-
-			String parentId = a.getParent() != null ? a.getParent().getValue() : null;
-			List<Account> children = accTree.get(parentId);
-			if (children == null)
-			{
-				children = new ArrayList<Account>();
-				accTree.put(parentId, children);
-			}
-			children.add(a);
-		}
-
-		for (Account a : accTree.get(parent.getId().getValue()))
+		for (Account a : _accTree.get(_targetHierarcyParent.getId().getValue()))
 		{
 			if (a.getName().equals(accName))
 			{
@@ -148,5 +145,25 @@ public class LocalFileTxImportModel implements TxImportModel
 		}
 
 		throw new RuntimeException("Account can't be found: " + accName);
+	}
+
+	private void initializeTargetHierarchy(String parentName)
+	{
+		for (Account a : _gnc.getAccounts())
+		{
+			if (a.getName().equals(parentName))
+			{
+				_targetHierarcyParent = a;
+			}
+
+			String parentId = a.getParent() != null ? a.getParent().getValue() : null;
+			List<Account> children = _accTree.get(parentId);
+			if (children == null)
+			{
+				children = new ArrayList<Account>();
+				_accTree.put(parentId, children);
+			}
+			children.add(a);
+		}
 	}
 }

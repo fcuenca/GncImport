@@ -61,6 +61,15 @@ public class LocalFileImportTests
 	}
 
 	@Test
+	public void can_provide_default_candidate_target_account_list()
+	{
+		List<AccountData> list = _model.getCandidateTargetAccounts();
+
+		assertThat(list.size(), is(11));
+		assertThat(list.get(10).getName(), is("Expenses"));
+	}
+
+	@Test
 	public void can_provide_list_of_accounts()
 	{
 		List<Account> accounts = _model.getAccounts();

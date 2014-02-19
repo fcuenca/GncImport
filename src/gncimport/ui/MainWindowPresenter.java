@@ -5,7 +5,6 @@ import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -33,26 +32,13 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 			setDefaultTargetAccount(newTransactionData);
 
-			List<AccountData> targetAccounts = getCandidateTargetAccounts();
-
-			_view.displayTxData(new TxTableModel(newTransactionData), targetAccounts);
+			_view.displayTxData(new TxTableModel(newTransactionData), _model.getCandidateTargetAccounts());
 			_view.displayTxCount(newTransactionData.size());
 		}
 		catch (Exception e)
 		{
 			_view.handleException(e);
 		}
-	}
-
-	private ArrayList<AccountData> getCandidateTargetAccounts()
-	{
-		ArrayList<AccountData> targetAccounts = new ArrayList<AccountData>();
-
-		for (Account acc : _model.getAccounts())
-		{
-			targetAccounts.add(new AccountData(acc.getName(), acc.getId().getValue()));
-		}
-		return targetAccounts;
 	}
 
 	private void setDefaultTargetAccount(List<TxData> newTransactionData)
