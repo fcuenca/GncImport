@@ -7,6 +7,7 @@ import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxData;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,25 @@ public class LocalFileImportTests
 	{
 		_model = new LocalFileTxImportModel_ForTesting();
 		_model.openGncFile(getClass().getResource("../data/checkbook.xml").getPath());
+	}
+
+	@Test
+	public void fetches_transactions_to_import_from_file()
+	{
+		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+
+		assertThat(txList.size(), is(20));
+		assertThat(txList.get(0).description, is("MISC PAYMENT - IMH POOL I LP "));
+		assertThat(txList.get(0).amount, is(new BigDecimal("-1635.00")));
+	}
+
+	@Test
+	public void assigns_target_account_to_new_transactions()
+	{
+		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+
+		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
+		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_ENERO_ID));
 	}
 
 	@Test

@@ -88,25 +88,6 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 		verify(_view).displayTxData(any(TxTableModel.class), same(accountList));
 	}
 
-	@Test
-	public void sets_default_target_account_on_imported_transactions()
-	{
-		List<TxData> actualTxs = SampleTxData.txDataList();
-		AccountData expectedTargetAcc = new AccountData("Expenses", "acc-id");
-
-		when(_model.fetchTransactionsFrom("/path/to/file.csv")).thenReturn(actualTxs);
-		when(_model.getDefaultTargetAccount()).thenReturn(expectedTargetAcc);
-
-		_presenter.onReadFromCsvFile("/path/to/file.csv");
-
-		verify(_view).displayTxData(expectedTxList.capture(), anyListOf(AccountData.class));
-
-		for (TxData txData : expectedTxList.getValue().getTransactions())
-		{
-			assertThat(txData.toString(), txData.targetAccount, is(expectedTargetAcc));
-		}
-	}
-
 	private Matcher<TxTableModel> containsTransactions(final List<TxData> transactionList)
 	{
 		return new TypeSafeMatcher<TxTableModel>()

@@ -30,24 +30,12 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			newTransactionData = _model.fetchTransactionsFrom(fileName);
 
-			setDefaultTargetAccount(newTransactionData);
-
 			_view.displayTxData(new TxTableModel(newTransactionData), _model.getCandidateTargetAccounts());
 			_view.displayTxCount(newTransactionData.size());
 		}
 		catch (Exception e)
 		{
 			_view.handleException(e);
-		}
-	}
-
-	private void setDefaultTargetAccount(List<TxData> newTransactionData)
-	{
-		AccountData targetAcc = _model.getDefaultTargetAccount();
-
-		for (TxData txData : newTransactionData)
-		{
-			txData.targetAccount = targetAcc;
 		}
 	}
 

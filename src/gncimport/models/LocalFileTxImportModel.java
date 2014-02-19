@@ -29,7 +29,16 @@ public class LocalFileTxImportModel implements TxImportModel
 	{
 		try
 		{
-			return new RbcExportParser(fileName).getTransactions();
+			List<TxData> txList = new RbcExportParser(fileName).getTransactions();
+
+			AccountData targetAcc = getDefaultTargetAccount();
+
+			for (TxData txData : txList)
+			{
+				txData.targetAccount = targetAcc;
+			}
+
+			return txList;
 		}
 		catch (Exception e)
 		{
