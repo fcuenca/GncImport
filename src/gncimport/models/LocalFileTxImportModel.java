@@ -42,16 +42,6 @@ public class LocalFileTxImportModel implements TxImportModel
 		}
 	}
 
-	private void resetTargetAccountInImportList()
-	{
-		AccountData targetAcc = getDefaultTargetAccount();
-
-		for (TxData txData : _txList)
-		{
-			txData.targetAccount = targetAcc;
-		}
-	}
-
 	@Override
 	public void saveTxTo(List<TxData> transactions, String fileName)
 	{
@@ -92,15 +82,66 @@ public class LocalFileTxImportModel implements TxImportModel
 		}
 	}
 
-	private void initializeSourceAccount(String accountName)
-	{
-		_sourceAccount = loadAccount(accountName);
-	}
-
 	private void initializeTargetAccount(String hierarchyName, String accountName)
 	{
 		initializeTargetHierarchy(hierarchyName);
-		_targetAccount = loadAccountUnderHierarchy(accountName);
+		_targetAccount = findAccountUnderTargetHierarchy(accountName);
+	}
+
+	private void initializeTargetHierarchy(String parentName)
+	{
+		for (Account a : _gnc.getAccounts())
+		{
+			if (a.getName().equals(parentName))
+			{
+				_targetHierarcyParent = a;
+			}
+
+			String parentId = a.getParent() != null ? a.getParent().getValue() : null;
+			List<Account> children = _accTree.get(parentId);
+			if (children == null)
+			{
+				children = new ArrayList<Account>();
+				_accTree.put(parentId, children);
+			}
+			children.add(a);
+		}
+	}
+
+	private AccountData findAccountUnderTargetHierarchy(String accName)
+	{
+		Account account = null;
+
+		for (Account a : _accTree.get(_targetHierarcyParent.getId().getValue()))
+		{
+			if (a.getName().equals(accName))
+			{
+				account = a;
+				break;
+			}
+		}
+
+		if (account != null)
+		{
+			return new AccountData(account.getName(), account.getId().getValue());
+		}
+
+		throw new RuntimeException("Account can't be found: " + accName);
+	}
+
+	private void initializeSourceAccount(String accountName)
+	{
+		Account account = _gnc.findAccountByName(accountName);
+
+		if (account != null)
+		{
+			_sourceAccount = new AccountData(account.getName(), account.getId().getValue());
+		}
+		else
+		{
+			throw new RuntimeException("Account can't be found: " + accountName);
+		}
+
 	}
 
 	@Override
@@ -150,61 +191,43 @@ public class LocalFileTxImportModel implements TxImportModel
 	public void setTargetAccount(AccountData accountData)
 	{
 		initializeTargetAccount(accountData.getName(), DEFAULT_TARGET_ACCOUNT);
+
 		if (_txList != null)
 		{
 			resetTargetAccountInImportList();
 		}
 	}
 
-	private AccountData loadAccount(String accName)
+	private void resetTargetAccountInImportList()
 	{
-		Account account = _gnc.findAccountByName(accName);
+		AccountData defaultAcc = getDefaultTargetAccount();
+		List<AccountData> candidateTargetAccounts = getCandidateTargetAccounts();
 
-		if (account != null)
+		for (TxData txData : _txList)
 		{
-			return new AccountData(account.getName(), account.getId().getValue());
+			if (txData.targetAccount == null)
+			{
+				txData.targetAccount = defaultAcc;
+			}
+			else
+			{
+				txData.targetAccount = findEquivalentInList(
+						txData.targetAccount.getName(), candidateTargetAccounts, defaultAcc);
+			}
 		}
-
-		throw new RuntimeException("Account can't be found: " + accName);
 	}
 
-	private AccountData loadAccountUnderHierarchy(String accName)
+	private AccountData findEquivalentInList(String accName, List<AccountData> candidateTargetAccounts,
+			AccountData defaultAcc)
 	{
-		Account account = null;
-		for (Account a : _accTree.get(_targetHierarcyParent.getId().getValue()))
+		for (AccountData acc : candidateTargetAccounts)
 		{
-			if (a.getName().equals(accName))
+			if (acc.getName().equals(accName))
 			{
-				account = a;
-				break;
+				return acc;
 			}
 		}
 
-		if (account != null)
-		{
-			return new AccountData(account.getName(), account.getId().getValue());
-		}
-
-		throw new RuntimeException("Account can't be found: " + accName);
-	}
-
-	private void initializeTargetHierarchy(String parentName)
-	{
-		for (Account a : _gnc.getAccounts())
-		{
-			if (a.getName().equals(parentName))
-			{
-				_targetHierarcyParent = a;
-			}
-
-			String parentId = a.getParent() != null ? a.getParent().getValue() : null;
-			List<Account> children = _accTree.get(parentId);
-			if (children == null)
-			{
-				children = new ArrayList<Account>();
-				_accTree.put(parentId, children);
-			}
-			children.add(a);
-		}
+		return defaultAcc;
 	}
 }

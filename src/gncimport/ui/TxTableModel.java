@@ -12,6 +12,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class TxTableModel extends AbstractTableModel
 {
+	public static final int DESCRIPTION_COLUMN = 2;
 	public static final int ACCOUNT_COLUMN = 3;
 
 	private String[] _columns = new String[] { "Date", "Amount", "Description", "Account" };
@@ -89,13 +90,20 @@ public class TxTableModel extends AbstractTableModel
 	@Override
 	public boolean isCellEditable(int row, int col)
 	{
-		return col == ACCOUNT_COLUMN;
+		return col == ACCOUNT_COLUMN || col == DESCRIPTION_COLUMN;
 	}
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 	{
-		_transactions.get(rowIndex).targetAccount = (AccountData) aValue;
+		if (columnIndex == ACCOUNT_COLUMN)
+		{
+			_transactions.get(rowIndex).targetAccount = (AccountData) aValue;
+		}
+		else
+		{
+			_transactions.get(rowIndex).description = (String) aValue;
+		}
 	}
 
 	public List<TxData> getTransactions()

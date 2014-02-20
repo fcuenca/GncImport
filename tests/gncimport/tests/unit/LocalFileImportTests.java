@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class LocalFileImportTests
 {
-
+	private static final String SUPPLIES_FEB_ID = "2c6be57ad1474692f6f569384668c4ac";
 	private static final String FEBRERO2014_ID = "882f951395a92f8ea103fe0e9dbfbda5";
 	private static final String ENERO2014_ID = "454018fbf408f8c3e607bd51f22c5373";
 	private static final String CHECKINGACC_ID = "64833494284bad5fb390e84d38c65a54";
@@ -162,6 +162,31 @@ public class LocalFileImportTests
 
 		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
+	}
 
+	@Test
+	public void preserves_changes_when_switching_target_hierarchy_that_contains_equivalent_account()
+	{
+		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+
+		txList.get(10).targetAccount = new AccountData("Supplies", "the-id");
+
+		_model.setTargetAccount(new AccountData("Febrero 2014", "irrelevant-id"));
+
+		assertThat(txList.get(10).targetAccount.getName(), is("Supplies"));
+		assertThat(txList.get(10).targetAccount.getId(), is(SUPPLIES_FEB_ID));
+	}
+
+	@Test
+	public void changes_target_to_default_when_switching_target_hierarchy_that_doesnot_contain_equivalent_account()
+	{
+		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+
+		txList.get(10).targetAccount = new AccountData("Some Esoteric Account", "the-id");
+
+		_model.setTargetAccount(new AccountData("Febrero 2014", "irrelevant-id"));
+
+		assertThat(txList.get(10).targetAccount.getName(), is("Expenses"));
+		assertThat(txList.get(10).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
 	}
 }

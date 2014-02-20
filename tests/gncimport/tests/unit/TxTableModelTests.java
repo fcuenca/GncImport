@@ -75,4 +75,12 @@ public class TxTableModelTests
 
 		assertThat((String) (_model.getValueAt(0, 3)), is("New Acc"));
 	}
+
+	@Test
+	public void allows_editing_description_column()
+	{
+		_model.setValueAt("Groceries - Metro Market", 1, 2);
+
+		assertThat((String) (_model.getValueAt(1, 2)), is("Groceries - Metro Market"));
+	}
 }

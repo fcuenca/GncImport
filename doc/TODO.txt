@@ -10,8 +10,6 @@ TODO:
 - GncFile.findAccountByName: what if names are not unique?
 - What if the model can't find the default source/target accounts in the gnc file?
 
-BUG:
-- changing the Target Account doesn't change the Accounts attached to the TxData objects !!
    
 ==================
 DONE:
@@ -19,4 +17,5 @@ DONE:
 - Presenter to set the default source account ID
 - Model.saveTxTo: the filename should be the output file name, instead of a hard-coded value 
    -> change after implementing the openopenGncFile function (!!)
+- BUG: changing the Target Account doesn't change the Accounts attached to the TxData objects !!
  
