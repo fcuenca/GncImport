@@ -1,5 +1,7 @@
 package gncimport.ui;
 
+import gncimport.models.AccountData;
+
 public interface MainWindowRenderer
 {
 
@@ -12,5 +14,7 @@ public interface MainWindowRenderer
 	public abstract void onSelectSourceAccount();
 
 	public abstract void onSelectTargetHierarchy();
+
+	AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc);
 
 }

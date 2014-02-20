@@ -5,6 +5,7 @@ import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -243,43 +244,36 @@ public class GncImportMainWindow extends JPanel implements TxView
 		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
 
 		JComboBox comboBox = new JComboBox(accountList.toArray());
+		// JComboBox comboBox = new JComboBox(new AccountData[] { new
+		// AccountData("fer", "id") });
+
 		DefaultCellEditor editor = new DefaultCellEditor(comboBox)
 		{
-			// private AccountData originalValue;
+			private AccountData originalValue;
 
-			// SPIKE SOLUTION
-			// @Override
-			// public Component getTableCellEditorComponent(JTable table, Object
-			// value, boolean isSelected, int row,
-			// int column)
-			// {
-			// originalValue =
-			// getTxTableModel().getTransactions().get(row).targetAccount;
-			// return super.getTableCellEditorComponent(table, value,
-			// isSelected, row, column);
-			// }
-			//
-			// @Override
-			// public Object getCellEditorValue()
-			// {
-			// AccountData value = (AccountData) super.getCellEditorValue();
-			//
-			// if (value.getName().equals("Expenses"))
-			// {
-			// ((JComboBox) getComponent()).hidePopup();
-			// DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
-			// root.add(new DefaultMutableTreeNode("acc 1"));
-			// root.add(new DefaultMutableTreeNode("acc 2"));
-			//
-			// DefaultMutableTreeNode selected = displayAccountTree(root);
-			// return new AccountData("Was: " + originalValue.getName() +
-			// " Now: " +
-			// selected.getUserObject().toString(), value.getId());
-			// }
-			// return value;
-			// }
+			@Override
+			public Component getTableCellEditorComponent(JTable table, Object
+					value, boolean isSelected, int row, int column)
+			{
+				originalValue = getTxTableModel().getTransactions().get(row).targetAccount;
 
+				((JComboBox) getComponent()).setSelectedItem(originalValue);
+
+				return super.getTableCellEditorComponent(table, value,
+						isSelected, row, column);
+			}
+
+			@Override
+			public Object getCellEditorValue()
+			{
+				AccountData newValue = (AccountData) super.getCellEditorValue();
+
+				((JComboBox) getComponent()).hidePopup();
+
+				return _presenter.onTargetAccountSelected(newValue, originalValue);
+			}
 		};
+
 		accountColumn.setCellEditor(editor);
 	}
 }

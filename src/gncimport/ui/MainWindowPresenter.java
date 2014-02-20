@@ -118,20 +118,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		}
 	}
 
-	private DefaultMutableTreeNode getAccountTree()
-	{
-		List<Account> accounts = _model.getAccounts();
-
-		AccountTreeBuilder builder = new AccountTreeBuilder();
-		for (Account account : accounts)
-		{
-			builder.addNodeFor(account);
-		}
-
-		DefaultMutableTreeNode accountRoot = builder.getRoot();
-		return accountRoot;
-	}
-
+	@Override
 	public AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc)
 	{
 		if (!newAcc.equals(OTHER_ACC_PLACEHOLDER))
@@ -171,4 +158,19 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		return null;
 	}
+
+	private DefaultMutableTreeNode getAccountTree()
+	{
+		List<Account> accounts = _model.getAccounts();
+
+		AccountTreeBuilder builder = new AccountTreeBuilder();
+		for (Account account : accounts)
+		{
+			builder.addNodeFor(account);
+		}
+
+		DefaultMutableTreeNode accountRoot = builder.getRoot();
+		return accountRoot;
+	}
+
 }

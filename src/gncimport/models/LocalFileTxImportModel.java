@@ -73,6 +73,7 @@ public class LocalFileTxImportModel implements TxImportModel
 		{
 			_gnc = new GncFile(fileName);
 
+			initializeAccountTree();
 			initializeTargetAccount(DEFAULT_TARGET_HIERARCHY, DEFAULT_TARGET_ACCOUNT);
 			initializeSourceAccount(DEFAULT_SOURCE_ACCOUNT);
 		}
@@ -84,19 +85,16 @@ public class LocalFileTxImportModel implements TxImportModel
 
 	private void initializeTargetAccount(String hierarchyName, String accountName)
 	{
-		initializeTargetHierarchy(hierarchyName);
+		_targetHierarcyParent = _gnc.findAccountByName(hierarchyName);
 		_targetAccount = findAccountUnderTargetHierarchy(accountName);
 	}
 
-	private void initializeTargetHierarchy(String parentName)
+	private void initializeAccountTree()
 	{
+		_accTree = new HashMap<String, List<Account>>();
+
 		for (Account a : _gnc.getAccounts())
 		{
-			if (a.getName().equals(parentName))
-			{
-				_targetHierarcyParent = a;
-			}
-
 			String parentId = a.getParent() != null ? a.getParent().getValue() : null;
 			List<Account> children = _accTree.get(parentId);
 			if (children == null)

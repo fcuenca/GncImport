@@ -1,5 +1,7 @@
 package gncimport.tests.unit;
 
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.models.AccountData;
@@ -189,4 +191,25 @@ public class LocalFileImportTests
 		assertThat(txList.get(10).targetAccount.getName(), is("Some Esoteric Account"));
 		assertThat(txList.get(10).targetAccount.getId(), is("the-id"));
 	}
+
+	@Test
+	public void changing_target_account_changes_candidate_account_list()
+	{
+		_model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+
+		List<AccountData> initialCandidates = _model.getCandidateTargetAccounts();
+
+		_model.setTargetAccount(new AccountData("Febrero 2014", "irrelevant-id"));
+
+		List<AccountData> newCandidates = _model.getCandidateTargetAccounts();
+
+		assertThat(newCandidates, not(hasItems(asArray(initialCandidates))));
+		assertThat(newCandidates.size(), is(11));
+	}
+
+	private AccountData[] asArray(List<AccountData> accountList)
+	{
+		return accountList.toArray(new AccountData[accountList.size()]);
+	}
+
 }
