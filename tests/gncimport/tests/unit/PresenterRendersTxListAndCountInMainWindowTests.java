@@ -3,9 +3,7 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -75,17 +73,6 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 		_presenter.onReadFromCsvFile("/path/to/file.csv");
 
 		verify(_view).displayTxCount(2);
-	}
-
-	@Test
-	public void sets_list_of_available_target_accounts()
-	{
-		List<AccountData> accountList = new ArrayList<AccountData>();
-		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
-
-		_presenter.onReadFromCsvFile("/path/to/file.csv");
-
-		verify(_view).displayTxData(any(TxTableModel.class), same(accountList));
 	}
 
 	private Matcher<TxTableModel> containsTransactions(final List<TxData> transactionList)

@@ -13,7 +13,6 @@ import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 import gncimport.ui.MainWindowPresenter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -95,49 +94,6 @@ public class PresenterRendersTheAccountList
 
 		verify(_view).displaySourceAccount("New Acc");
 		verify(_model).setSourceAccount(selectedAccount);
-	}
-
-	@Test
-	public void renders_the_target_account_tree()
-	{
-		List<Account> accountList = SampleAccountData.testAccountList();
-
-		when(_model.getAccounts()).thenReturn(accountList);
-
-		_presenter.onSelectTargetAccount();
-
-		verify(_view).displayAccountTree(expectedAccTree.capture());
-
-		assertThat(expectedAccTree.getValue().toString(), is("Root Account"));
-		assertThat(expectedAccTree.getValue().getChildCount(), is(2));
-		assertThat(expectedAccTree.getValue().getChildAt(0).getChildAt(1).toString(), is("Child 2"));
-	}
-
-	@Test
-	public void keeps_target_account_if_no_selection_is_made()
-	{
-		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(null);
-
-		_presenter.onSelectTargetAccount();
-
-		verify(_view, never()).displaySourceAccount(anyString());
-	}
-
-	@Test
-	public void resets_target_account_if_selection_is_made()
-	{
-		AccountData selectedAccount = new AccountData("New Acc", "acc-id");
-		DefaultMutableTreeNode selectedNode = new DefaultMutableTreeNode(selectedAccount);
-		List<AccountData> accountList = new ArrayList<AccountData>();
-
-		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
-		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(selectedNode);
-
-		_presenter.onSelectTargetAccount();
-
-		verify(_view).displayTargetHierarchy("New Acc");
-		verify(_view).updateCandidateTargetAccountList(accountList);
-		verify(_model).setTargetAccount(selectedAccount);
 	}
 
 }

@@ -40,6 +40,7 @@ Next Step: implement the idea of "target account hierarchy", rather than an indi
     - 3rd: decide how to select the hierarchy: ask? take from date? ?? 
     
     - AHA!! I need to be able to select accounts OUTSIDE the target hierarchy (income, special expenses, etc.)
+       => and this has implications in the reset target hierarchy scenario when deciding to revert account to default!
     
     
     

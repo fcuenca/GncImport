@@ -243,6 +243,29 @@ public class GncImportMainWindow extends JPanel implements TxView
 		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
 
 		JComboBox comboBox = new JComboBox(accountList.toArray());
-		accountColumn.setCellEditor(new DefaultCellEditor(comboBox));
+		DefaultCellEditor editor = new DefaultCellEditor(comboBox)
+		{
+			// TODO: Spiked solution for intercepting the "OTHER" value
+			// @Override
+			// public Object getCellEditorValue()
+			// {
+			// AccountData value = (AccountData) super.getCellEditorValue();
+			//
+			// if (value.getName().equals("Expenses"))
+			// {
+			// ((JComboBox) getComponent()).hidePopup();
+			// DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+			// root.add(new DefaultMutableTreeNode("acc 1"));
+			// root.add(new DefaultMutableTreeNode("acc 2"));
+			//
+			// DefaultMutableTreeNode selected = displayAccountTree(root);
+			// return new AccountData("Fer " +
+			// selected.getUserObject().toString(), value.getId());
+			// }
+			// return value;
+			// }
+
+		};
+		accountColumn.setCellEditor(editor);
 	}
 }

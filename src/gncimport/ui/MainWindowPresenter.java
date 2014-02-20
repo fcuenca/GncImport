@@ -5,6 +5,7 @@ import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -30,13 +31,21 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			newTransactionData = _model.fetchTransactionsFrom(fileName);
 
-			_view.displayTxData(new TxTableModel(newTransactionData), _model.getCandidateTargetAccounts());
+			_view.displayTxData(new TxTableModel(newTransactionData), buildTargetAccountList());
 			_view.displayTxCount(newTransactionData.size());
 		}
 		catch (Exception e)
 		{
 			_view.handleException(e);
 		}
+	}
+
+	private List<AccountData> buildTargetAccountList()
+	{
+		List<AccountData> candidates = new ArrayList<AccountData>(_model.getCandidateTargetAccounts());
+		candidates.add(new AccountData("<< OTHER >>", "-1"));
+
+		return candidates;
 	}
 
 	@Override
@@ -107,7 +116,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 				_model.setTargetAccount(selectedAccount);
 				_view.displayTargetHierarchy(selectedAccount.getName());
-				_view.updateCandidateTargetAccountList(_model.getCandidateTargetAccounts());
+				_view.updateCandidateTargetAccountList(buildTargetAccountList());
 			}
 		}
 		catch (Exception e)
