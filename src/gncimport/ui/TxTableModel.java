@@ -14,8 +14,9 @@ public class TxTableModel extends AbstractTableModel
 {
 	public static final int DESCRIPTION_COLUMN = 2;
 	public static final int ACCOUNT_COLUMN = 3;
+	public static final int IGNORE_COLUMN = 4;
 
-	private String[] _columns = new String[] { "Date", "Amount", "Description", "Account" };
+	private String[] _columns = new String[] { "Date", "Amount", "Description", "Account", "Ignore" };
 
 	private final List<TxData> _transactions;
 	private DecimalFormat _amountFormatter;
@@ -69,6 +70,9 @@ public class TxTableModel extends AbstractTableModel
 			return transaction.targetAccount != null ?
 					transaction.targetAccount.getName() : "";
 
+		case 4:
+			return new Boolean(transaction.doNotImport);
+
 		default:
 			throw new RuntimeException("this line should be unreachable!");
 		}
@@ -90,7 +94,7 @@ public class TxTableModel extends AbstractTableModel
 	@Override
 	public boolean isCellEditable(int row, int col)
 	{
-		return col == ACCOUNT_COLUMN || col == DESCRIPTION_COLUMN;
+		return col == ACCOUNT_COLUMN || col == DESCRIPTION_COLUMN || col == IGNORE_COLUMN;
 	}
 
 	@Override
@@ -100,14 +104,29 @@ public class TxTableModel extends AbstractTableModel
 		{
 			_transactions.get(rowIndex).targetAccount = (AccountData) aValue;
 		}
+		else if (columnIndex == IGNORE_COLUMN)
+		{
+			_transactions.get(rowIndex).doNotImport = ((Boolean) aValue).booleanValue();
+		}
 		else
 		{
 			_transactions.get(rowIndex).description = (String) aValue;
 		}
 	}
 
+	@Override
+	public Class<?> getColumnClass(int columnIndex)
+	{
+		if (columnIndex == IGNORE_COLUMN)
+		{
+			return Boolean.class;
+		}
+		return super.getColumnClass(columnIndex);
+	}
+
 	public List<TxData> getTransactions()
 	{
 		return _transactions;
 	}
+
 }

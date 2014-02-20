@@ -244,8 +244,6 @@ public class GncImportMainWindow extends JPanel implements TxView
 		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
 
 		JComboBox comboBox = new JComboBox(accountList.toArray());
-		// JComboBox comboBox = new JComboBox(new AccountData[] { new
-		// AccountData("fer", "id") });
 
 		DefaultCellEditor editor = new DefaultCellEditor(comboBox)
 		{

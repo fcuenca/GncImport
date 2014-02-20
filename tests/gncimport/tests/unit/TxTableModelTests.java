@@ -31,12 +31,13 @@ public class TxTableModelTests
 		assertThat(_model.getColumnName(1), is("Amount"));
 		assertThat(_model.getColumnName(2), is("Description"));
 		assertThat(_model.getColumnName(3), is("Account"));
+		assertThat(_model.getColumnName(4), is("Ignore"));
 	}
 
 	@Test
 	public void returns_proper_column_count()
 	{
-		assertThat(_model.getColumnCount(), is(4));
+		assertThat(_model.getColumnCount(), is(5));
 	}
 
 	@Test
@@ -82,5 +83,19 @@ public class TxTableModelTests
 		_model.setValueAt("Groceries - Metro Market", 1, 2);
 
 		assertThat((String) (_model.getValueAt(1, 2)), is("Groceries - Metro Market"));
+	}
+
+	@Test
+	public void default_value_for_ignore_flag_is_false()
+	{
+		assertThat((Boolean) false, is((Boolean) _model.getValueAt(0, 4)));
+	}
+
+	@Test
+	public void allows_changing_the_ignore_flag()
+	{
+		_model.setValueAt(new Boolean(true), 1, 4);
+
+		assertThat((Boolean) (_model.getValueAt(1, 4)), is(new Boolean(true)));
 	}
 }

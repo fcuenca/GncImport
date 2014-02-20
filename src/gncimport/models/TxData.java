@@ -7,6 +7,7 @@ public class TxData
 {
 	public final Date date;
 	public final BigDecimal amount;
+	public boolean doNotImport;
 	public String description;
 	public AccountData targetAccount;
 
