@@ -33,8 +33,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class PresenterRendersTargetAccounts
 {
-	private static final AccountData OTHER_PLACEHOLDER = new AccountData("<< OTHER >>", "-1");
-
 	@Captor
 	private ArgumentCaptor<DefaultMutableTreeNode> expectedAccTree;
 
@@ -79,7 +77,7 @@ public class PresenterRendersTargetAccounts
 		verify(_view).displayTxData(any(TxTableModel.class), expectedAccountList.capture());
 
 		assertThat(expectedAccountList.getValue(), hasSize(accountList.size() + 1));
-		assertThat(expectedAccountList.getValue(), hasItem(OTHER_PLACEHOLDER));
+		assertThat(expectedAccountList.getValue(), hasItem(MainWindowPresenter.OTHER_ACC_PLACEHOLDER));
 	}
 
 	@Test
@@ -89,7 +87,7 @@ public class PresenterRendersTargetAccounts
 
 		when(_model.getAccounts()).thenReturn(accountList);
 
-		_presenter.onSelectTargetAccount();
+		_presenter.onSelectTargetHierarchy();
 
 		verify(_view).displayAccountTree(expectedAccTree.capture());
 
@@ -108,7 +106,7 @@ public class PresenterRendersTargetAccounts
 		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
 		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(selectedNode);
 
-		_presenter.onSelectTargetAccount();
+		_presenter.onSelectTargetHierarchy();
 
 		verify(_view).displayTargetHierarchy("New Acc");
 		verify(_view).updateCandidateTargetAccountList(expectedAccountList.capture());
@@ -116,18 +114,64 @@ public class PresenterRendersTargetAccounts
 
 		assertThat(expectedAccountList.getValue(), hasItems(asArray(accountList)));
 		assertThat(expectedAccountList.getValue(), hasSize(accountList.size() + 1));
-		assertThat(expectedAccountList.getValue(), hasItem(OTHER_PLACEHOLDER));
+		assertThat(expectedAccountList.getValue(), hasItem(MainWindowPresenter.OTHER_ACC_PLACEHOLDER));
 
 	}
 
 	@Test
-	public void keeps_target_account_if_no_selection_is_made()
+	public void keeps_target_hierarchy_if_no_selection_is_made()
 	{
 		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(null);
 
-		_presenter.onSelectTargetAccount();
+		_presenter.onSelectTargetHierarchy();
 
 		verify(_view, never()).displaySourceAccount(anyString());
+	}
+
+	@Test
+	public void returns_the_target_account_when_selected_from_candidate_list()
+	{
+		AccountData originalAcc = new AccountData("Original", "id-1");
+		AccountData newAcc = new AccountData("New Account", "id-2");
+
+		AccountData returnedAcc = _presenter.onTargetAccountSelected(newAcc, originalAcc);
+
+		assertThat(returnedAcc, is(newAcc));
+	}
+
+	@Test
+	public void displays_account_tree_when_selecting_OTHER_as_target()
+	{
+		AccountData originalAcc = new AccountData("Original", "id-1");
+		AccountData selectedAccount = new AccountData("New Acc", "acc-id");
+		DefaultMutableTreeNode selectedNode = new DefaultMutableTreeNode(selectedAccount);
+		List<Account> sampleAccounts = SampleAccountData.testAccountList();
+
+		when(_model.getAccounts()).thenReturn(sampleAccounts);
+		when(_view.displayAccountTree(expectedAccTree.capture())).thenReturn(selectedNode);
+
+		AccountData returnedAcc = _presenter.onTargetAccountSelected(
+				MainWindowPresenter.OTHER_ACC_PLACEHOLDER, originalAcc);
+
+		assertThat(returnedAcc, is(selectedAccount));
+
+		assertThat(expectedAccTree.getValue().toString(), is("Root Account"));
+		assertThat(expectedAccTree.getValue().getChildCount(), is(2));
+		assertThat(expectedAccTree.getValue().getChildAt(0).getChildAt(1).toString(), is("Child 2"));
+	}
+
+	@Test
+	public void keeps_target_account_when_no_selection_is_made()
+	{
+		AccountData originalAcc = new AccountData("Original", "id-1");
+
+		when(_model.getAccounts()).thenReturn(SampleAccountData.testAccountList());
+		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(null);
+
+		AccountData returnedAcc = _presenter.onTargetAccountSelected(
+				MainWindowPresenter.OTHER_ACC_PLACEHOLDER, originalAcc);
+
+		assertThat(returnedAcc, is(originalAcc));
 	}
 
 	private AccountData[] asArray(List<AccountData> accountList)

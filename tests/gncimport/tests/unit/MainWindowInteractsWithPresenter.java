@@ -65,11 +65,11 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 		{
 			protected void doActionsOnView(GncImportMainWindow v)
 			{
-				v.onSelectTargetAccClick();
+				v.onSelectTargetHierarchyClick();
 			}
 		});
 
-		verify(_presenter).onSelectTargetAccount();
+		verify(_presenter).onSelectTargetHierarchy();
 	}
 
 }

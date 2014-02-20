@@ -11,6 +11,6 @@ public interface MainWindowRenderer
 
 	public abstract void onSelectSourceAccount();
 
-	public abstract void onSelectTargetAccount();
+	public abstract void onSelectTargetHierarchy();
 
 }

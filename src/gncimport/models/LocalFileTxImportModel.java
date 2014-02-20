@@ -211,14 +211,17 @@ public class LocalFileTxImportModel implements TxImportModel
 			}
 			else
 			{
-				txData.targetAccount = findEquivalentInList(
-						txData.targetAccount.getName(), candidateTargetAccounts, defaultAcc);
+				AccountData equivalent = findEquivalentInList(txData.targetAccount.getName(), candidateTargetAccounts);
+
+				if (equivalent != null)
+				{
+					txData.targetAccount = equivalent;
+				}
 			}
 		}
 	}
 
-	private AccountData findEquivalentInList(String accName, List<AccountData> candidateTargetAccounts,
-			AccountData defaultAcc)
+	private AccountData findEquivalentInList(String accName, List<AccountData> candidateTargetAccounts)
 	{
 		for (AccountData acc : candidateTargetAccounts)
 		{
@@ -228,6 +231,6 @@ public class LocalFileTxImportModel implements TxImportModel
 			}
 		}
 
-		return defaultAcc;
+		return null;
 	}
 }

@@ -69,8 +69,8 @@ public class GncImportMainWindow extends JPanel implements TxView
 		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
 		box.add(_sourceAccLabel);
 		box.add(_targetAccLabel);
-		box.add(createSelectAccountButton());
-		box.add(createTargetAccountButton());
+		box.add(createSelectSourceAccountButton());
+		box.add(createSelectTargetHierarchyButton());
 		box.add(createImportButton());
 
 		return box;
@@ -134,7 +134,7 @@ public class GncImportMainWindow extends JPanel implements TxView
 		return button;
 	}
 
-	private JButton createSelectAccountButton()
+	private JButton createSelectSourceAccountButton()
 	{
 		JButton button = new JButton("Select Source Account");
 
@@ -151,9 +151,9 @@ public class GncImportMainWindow extends JPanel implements TxView
 		return button;
 	}
 
-	private JButton createTargetAccountButton()
+	private JButton createSelectTargetHierarchyButton()
 	{
-		JButton button = new JButton("Select Target Account");
+		JButton button = new JButton("Select Target Hierarchy");
 
 		button.setName("SELECT_TARGET_ACC_BUTTON");
 		button.addActionListener(new ActionListener()
@@ -161,7 +161,7 @@ public class GncImportMainWindow extends JPanel implements TxView
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				onSelectTargetAccClick();
+				onSelectTargetHierarchyClick();
 			}
 		});
 
@@ -192,9 +192,9 @@ public class GncImportMainWindow extends JPanel implements TxView
 		_presenter.onSaveToGncFile("/tmp/checkbook-new.xml");
 	}
 
-	public void onSelectTargetAccClick()
+	public void onSelectTargetHierarchyClick()
 	{
-		_presenter.onSelectTargetAccount();
+		_presenter.onSelectTargetHierarchy();
 	}
 
 	@Override
@@ -245,7 +245,20 @@ public class GncImportMainWindow extends JPanel implements TxView
 		JComboBox comboBox = new JComboBox(accountList.toArray());
 		DefaultCellEditor editor = new DefaultCellEditor(comboBox)
 		{
-			// TODO: Spiked solution for intercepting the "OTHER" value
+			// private AccountData originalValue;
+
+			// SPIKE SOLUTION
+			// @Override
+			// public Component getTableCellEditorComponent(JTable table, Object
+			// value, boolean isSelected, int row,
+			// int column)
+			// {
+			// originalValue =
+			// getTxTableModel().getTransactions().get(row).targetAccount;
+			// return super.getTableCellEditorComponent(table, value,
+			// isSelected, row, column);
+			// }
+			//
 			// @Override
 			// public Object getCellEditorValue()
 			// {
@@ -259,7 +272,8 @@ public class GncImportMainWindow extends JPanel implements TxView
 			// root.add(new DefaultMutableTreeNode("acc 2"));
 			//
 			// DefaultMutableTreeNode selected = displayAccountTree(root);
-			// return new AccountData("Fer " +
+			// return new AccountData("Was: " + originalValue.getName() +
+			// " Now: " +
 			// selected.getUserObject().toString(), value.getId());
 			// }
 			// return value;

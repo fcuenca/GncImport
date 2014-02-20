@@ -1,10 +1,13 @@
 package gncimport.tests.unit;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.boundaries.TxImportModel;
 import gncimport.boundaries.TxView;
+import gncimport.models.AccountData;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 
@@ -73,10 +76,22 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	}
 
 	@Test
-	public void when_selecting_target_account()
+	public void when_selecting_target_hierarchy()
 	{
-		_presenter.onSelectTargetAccount();
+		_presenter.onSelectTargetHierarchy();
 
 		verify(_view).handleException(_expectedException);
+	}
+
+	@Test
+	public void when_selecting_target_account()
+	{
+		AccountData originalAcc = new AccountData("Original", "id-1");
+
+		AccountData selectedAcc = _presenter.onTargetAccountSelected(
+				MainWindowPresenter.OTHER_ACC_PLACEHOLDER, originalAcc);
+
+		verify(_view).handleException(_expectedException);
+		assertThat(selectedAcc, is(originalAcc));
 	}
 }

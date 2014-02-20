@@ -14,6 +14,8 @@ import org.gnucash.xml.gnc.Account;
 
 public class MainWindowPresenter implements MainWindowRenderer
 {
+	public static final AccountData OTHER_ACC_PLACEHOLDER = new AccountData("<< OTHER >>", "-1");
+
 	private final TxImportModel _model;
 	private final TxView _view;
 
@@ -43,7 +45,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	private List<AccountData> buildTargetAccountList()
 	{
 		List<AccountData> candidates = new ArrayList<AccountData>(_model.getCandidateTargetAccounts());
-		candidates.add(new AccountData("<< OTHER >>", "-1"));
+		candidates.add(OTHER_ACC_PLACEHOLDER);
 
 		return candidates;
 	}
@@ -83,14 +85,10 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		try
 		{
-			DefaultMutableTreeNode accountRoot = getAccountTree();
+			AccountData selectedAccount = selectAccountFromTree();
 
-			DefaultMutableTreeNode selectedNode = _view.displayAccountTree(accountRoot);
-
-			if (selectedNode != null)
+			if (selectedAccount != null)
 			{
-				AccountData selectedAccount = (AccountData) selectedNode.getUserObject();
-
 				_model.setSourceAccount(selectedAccount);
 				_view.displaySourceAccount(selectedAccount.getName());
 			}
@@ -102,18 +100,13 @@ public class MainWindowPresenter implements MainWindowRenderer
 	}
 
 	@Override
-	public void onSelectTargetAccount()
+	public void onSelectTargetHierarchy()
 	{
 		try
 		{
-			DefaultMutableTreeNode accountRoot = getAccountTree();
-
-			DefaultMutableTreeNode selectedNode = _view.displayAccountTree(accountRoot);
-
-			if (selectedNode != null)
+			AccountData selectedAccount = selectAccountFromTree();
+			if (selectedAccount != null)
 			{
-				AccountData selectedAccount = (AccountData) selectedNode.getUserObject();
-
 				_model.setTargetAccount(selectedAccount);
 				_view.displayTargetHierarchy(selectedAccount.getName());
 				_view.updateCandidateTargetAccountList(buildTargetAccountList());
@@ -137,5 +130,45 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		DefaultMutableTreeNode accountRoot = builder.getRoot();
 		return accountRoot;
+	}
+
+	public AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc)
+	{
+		if (!newAcc.equals(OTHER_ACC_PLACEHOLDER))
+		{
+			return newAcc;
+		}
+
+		try
+		{
+			final AccountData selectedAcc = selectAccountFromTree();
+			if (selectedAcc != null)
+			{
+				return selectedAcc;
+			}
+			else
+			{
+				return originalAcc;
+			}
+		}
+		catch (Exception e)
+		{
+			_view.handleException(e);
+			return originalAcc;
+		}
+	}
+
+	private AccountData selectAccountFromTree()
+	{
+		DefaultMutableTreeNode accountRoot = getAccountTree();
+		DefaultMutableTreeNode selectedNode = _view.displayAccountTree(accountRoot);
+
+		if (selectedNode != null)
+		{
+			AccountData selectedAccount = (AccountData) selectedNode.getUserObject();
+			return selectedAccount;
+		}
+
+		return null;
 	}
 }

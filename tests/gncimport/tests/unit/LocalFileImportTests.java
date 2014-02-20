@@ -165,7 +165,7 @@ public class LocalFileImportTests
 	}
 
 	@Test
-	public void preserves_changes_when_switching_target_hierarchy_that_contains_equivalent_account()
+	public void selects_equivalent_account_under_new_hierarchy_if_available()
 	{
 		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
 
@@ -178,7 +178,7 @@ public class LocalFileImportTests
 	}
 
 	@Test
-	public void changes_target_to_default_when_switching_target_hierarchy_that_doesnot_contain_equivalent_account()
+	public void preserves_target_account_selection_without_equivalent_under_new_hierarchy()
 	{
 		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
 
@@ -186,7 +186,7 @@ public class LocalFileImportTests
 
 		_model.setTargetAccount(new AccountData("Febrero 2014", "irrelevant-id"));
 
-		assertThat(txList.get(10).targetAccount.getName(), is("Expenses"));
-		assertThat(txList.get(10).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
+		assertThat(txList.get(10).targetAccount.getName(), is("Some Esoteric Account"));
+		assertThat(txList.get(10).targetAccount.getId(), is("the-id"));
 	}
 }
