@@ -34,11 +34,22 @@ public class LocalFileImportTests
 		public List<TxData> detectedTransactions;
 
 		@Override
-		protected void saveToGncFile(String fileName, List<TxData> transactions, String sourceAccId) throws IOException
+		protected void saveToGncFile(String fileName) throws IOException
 		{
 			detectedFileName = fileName;
+		}
+
+		@Override
+		protected void addNewTransactions(List<TxData> transactions, String sourceAccId)
+		{
 			detectedTransactions = transactions;
 			detectedSourceAccId = sourceAccId;
+			super.addNewTransactions(transactions, sourceAccId);
+		}
+
+		public int getTxCount()
+		{
+			return _gnc.getTransactionCount();
 		}
 	}
 
@@ -120,13 +131,33 @@ public class LocalFileImportTests
 	@Test
 	public void can_save_to_new_file()
 	{
-		List<TxData> txList = new ArrayList<TxData>();
+		List<TxData> txList = SampleTxData.txDataListWithAllAccounts();
+
+		int initialTxCount = _model.getTxCount();
 
 		_model.saveTxTo(txList, "new-file.xml");
 
 		assertThat(_model.detectedFileName, is("new-file.xml"));
 		assertThat(_model.detectedTransactions, is(txList));
 		assertThat(_model.detectedSourceAccId, is(CHECKINGACC_ID));
+
+		assertThat(_model.getTxCount(), is(initialTxCount + txList.size()));
+	}
+
+	@Test
+	public void some_transactions_can_be_ignored_while_saving()
+	{
+		List<TxData> txList = SampleTxData.txDataListWithAllAccounts();
+
+		txList.get(1).doNotImport = true;
+		txList.get(3).doNotImport = true;
+		txList.get(4).doNotImport = true;
+
+		int initialTxCount = _model.getTxCount();
+
+		_model.saveTxTo(txList, "new-file.xml");
+
+		assertThat(_model.getTxCount(), is(initialTxCount + txList.size() - 3));
 	}
 
 	@Test

@@ -18,7 +18,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	private static final String DEFAULT_SOURCE_ACCOUNT = "Checking Account";
 	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
 
-	private GncFile _gnc;
+	protected GncFile _gnc;
 	private AccountData _targetAccount;
 	private AccountData _sourceAccount;
 	private Map<String, List<Account>> _accTree = new HashMap<String, List<Account>>();
@@ -47,7 +47,8 @@ public class LocalFileTxImportModel implements TxImportModel
 	{
 		try
 		{
-			saveToGncFile(fileName, transactions, _sourceAccount.getId());
+			addNewTransactions(transactions, _sourceAccount.getId());
+			saveToGncFile(fileName);
 		}
 		catch (IOException e)
 		{
@@ -55,14 +56,20 @@ public class LocalFileTxImportModel implements TxImportModel
 		}
 	}
 
-	protected void saveToGncFile(String fileName, List<TxData> transactions, String sourceAccId) throws IOException
+	protected void addNewTransactions(List<TxData> transactions, String sourceAccId)
 	{
 		for (TxData txData : transactions)
 		{
-			_gnc.addTransaction(txData.date, txData.description, txData.amount,
-					sourceAccId, txData.targetAccount.getId());
+			if (txData.doNotImport == false)
+			{
+				_gnc.addTransaction(txData.date, txData.description, txData.amount,
+						sourceAccId, txData.targetAccount.getId());
+			}
 		}
+	}
 
+	protected void saveToGncFile(String fileName) throws IOException
+	{
 		_gnc.saveTo(fileName);
 	}
 

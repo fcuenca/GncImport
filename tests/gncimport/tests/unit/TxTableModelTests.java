@@ -15,7 +15,7 @@ public class TxTableModelTests
 	@Before
 	public void setUp()
 	{
-		_model = new TxTableModel(SampleTxData.txDataListWithAccounts());
+		_model = new TxTableModel(SampleTxData.txDataListWithSomeAccounts());
 	}
 
 	@Test
