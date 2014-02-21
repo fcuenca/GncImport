@@ -6,12 +6,12 @@ import gncimport.models.AccountData;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.logging.Level;
 
-import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -27,14 +27,22 @@ import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 @SuppressWarnings("serial")
-public class GncImportMainWindow extends JPanel implements TxView
+public class GncImportMainWindow extends JPanel implements TxView, ActionListener
 {
+	public static final String IMPORT_BUTTON = "IMPORT_BUTTON";
+	public static final String SELECT_TARGET_ACC_BUTTON = "SELECT_TARGET_ACC_BUTTON";
+	public static final String SELECT_SRC_ACC_BUTTON = "SELECT_SRC_ACC_BUTTON";
+	public static final String OPEN_CSV_BUTTON = "OPEN_CSV_BUTTON";
+	public static final String OPEN_GNC_BUTTON = "OPEN_GNC_BUTTON";
 
 	private final MainWindowRenderer _presenter;
+
 	private JLabel _statusLabel;
 	private JTable _table;
 	private JLabel _sourceAccLabel;
 	private JLabel _targetAccLabel;
+	private JLabel _gncFileLabel;
+	private JLabel _csvFileLabel;
 
 	public GncImportMainWindow(TxImportModel model)
 	{
@@ -53,26 +61,36 @@ public class GncImportMainWindow extends JPanel implements TxView
 		setLayout(new BorderLayout());
 		setOpaque(true);
 
-		add(createAccountBox(), BorderLayout.PAGE_START);
+		add(createControlBox(), BorderLayout.PAGE_START);
 		add(createGridPane(), BorderLayout.CENTER);
 		add(createStatusBar(), BorderLayout.PAGE_END);
 
-		_presenter.onLoadGncFile(getClass().getResource("../tests/data/checkbook.xml").getPath());
-		_presenter.onReadFromCsvFile(getClass().getResource("../tests/data/rbc.csv").getPath());
 	}
 
-	private JPanel createAccountBox()
+	private JPanel createControlBox()
 	{
+		_gncFileLabel = new JLabel("Select GNC File");
+		_csvFileLabel = new JLabel("Select CSV File");
+
 		_sourceAccLabel = new JLabel("Source Account: NOT SET");
 		_targetAccLabel = new JLabel("Target Account: NOT SET");
 
 		JPanel box = new JPanel();
-		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
+		box.setLayout(new GridLayout(0, 2));
+
+		box.add(_gncFileLabel);
+		box.add(createButton(OPEN_GNC_BUTTON, "..."));
+
+		box.add(_csvFileLabel);
+		box.add(createButton(OPEN_CSV_BUTTON, "..."));
+
 		box.add(_sourceAccLabel);
+		box.add(createButton(SELECT_SRC_ACC_BUTTON, "..."));
+
 		box.add(_targetAccLabel);
-		box.add(createSelectSourceAccountButton());
-		box.add(createSelectTargetHierarchyButton());
-		box.add(createImportButton());
+		box.add(createButton(SELECT_TARGET_ACC_BUTTON, "..."));
+
+		box.add(createButton(IMPORT_BUTTON, "Import"));
 
 		return box;
 	}
@@ -118,53 +136,13 @@ public class GncImportMainWindow extends JPanel implements TxView
 		return sb;
 	}
 
-	private JButton createImportButton()
+	protected JButton createButton(String actionCommand, String label)
 	{
-		JButton button = new JButton("Import");
+		JButton button = new JButton(label);
 
-		button.setName("SAVE_BUTTON");
-		button.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				onImportClick();
-			}
-		});
-
-		return button;
-	}
-
-	private JButton createSelectSourceAccountButton()
-	{
-		JButton button = new JButton("Select Source Account");
-
-		button.setName("SELECT_SRC_ACC_BUTTON");
-		button.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				onSelectSourceAccClick();
-			}
-		});
-
-		return button;
-	}
-
-	private JButton createSelectTargetHierarchyButton()
-	{
-		JButton button = new JButton("Select Target Hierarchy");
-
-		button.setName("SELECT_TARGET_ACC_BUTTON");
-		button.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				onSelectTargetHierarchyClick();
-			}
-		});
+		button.setActionCommand(actionCommand);
+		button.setName(actionCommand);
+		button.addActionListener(this);
 
 		return button;
 	}
@@ -181,21 +159,6 @@ public class GncImportMainWindow extends JPanel implements TxView
 	public TxTableModel getTxTableModel()
 	{
 		return (TxTableModel) _table.getModel();
-	}
-
-	public void onSelectSourceAccClick()
-	{
-		_presenter.onSelectSourceAccount();
-	}
-
-	public void onImportClick()
-	{
-		_presenter.onSaveToGncFile("/tmp/checkbook-new.xml");
-	}
-
-	public void onSelectTargetHierarchyClick()
-	{
-		_presenter.onSelectTargetHierarchy();
 	}
 
 	@Override
@@ -273,5 +236,60 @@ public class GncImportMainWindow extends JPanel implements TxView
 		};
 
 		accountColumn.setCellEditor(editor);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getActionCommand().equals(OPEN_GNC_BUTTON))
+		{
+			String fileName = getClass().getResource("../tests/data/checkbook.xml").getPath();
+			onLoadGncFile(fileName);
+			_gncFileLabel.setText(fileName);
+		}
+		else if (e.getActionCommand().equals(OPEN_CSV_BUTTON))
+		{
+			String fileName = getClass().getResource("../tests/data/rbc.csv").getPath();
+			onLoadCsvFile(fileName);
+			_csvFileLabel.setText(fileName);
+		}
+		else if (e.getActionCommand().equals(IMPORT_BUTTON))
+		{
+			onImportClick();
+		}
+		else if (e.getActionCommand().equals(SELECT_SRC_ACC_BUTTON))
+		{
+			onSelectSourceAccClick();
+		}
+		else if (e.getActionCommand().equals(SELECT_TARGET_ACC_BUTTON))
+		{
+			onSelectTargetHierarchyClick();
+		}
+
+	}
+
+	public void onSelectSourceAccClick()
+	{
+		_presenter.onSelectSourceAccount();
+	}
+
+	public void onImportClick()
+	{
+		_presenter.onSaveToGncFile("/tmp/checkbook-new.xml");
+	}
+
+	public void onSelectTargetHierarchyClick()
+	{
+		_presenter.onSelectTargetHierarchy();
+	}
+
+	public void onLoadCsvFile(String fileName)
+	{
+		_presenter.onReadFromCsvFile(fileName);
+	}
+
+	public void onLoadGncFile(String fileName)
+	{
+		_presenter.onLoadGncFile(fileName);
 	}
 }

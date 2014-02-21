@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import gncimport.GncImportApp;
 import gncimport.boundaries.TxImportModel;
 import gncimport.models.LocalFileTxImportModel;
+import gncimport.ui.GncImportMainWindow;
 
 import java.io.File;
 
@@ -47,6 +48,9 @@ public class GncImportAppDriver
 
 	public void shouldDisplayTransactionCountInStatusBar(int txCount)
 	{
+		_mainWindow.button(GncImportMainWindow.OPEN_GNC_BUTTON).click();
+		_mainWindow.button(GncImportMainWindow.OPEN_CSV_BUTTON).click();
+
 		JLabelFixture label = _mainWindow.label("TX_COUNT");
 		assertThat(label.text(), containsString("" + txCount + " transaction"));
 	}
@@ -60,7 +64,9 @@ public class GncImportAppDriver
 			assertThat("Leftover file couldn't be deleted", output.delete(), is(true));
 		}
 
-		_mainWindow.button("SAVE_BUTTON").click();
+		_mainWindow.button(GncImportMainWindow.OPEN_GNC_BUTTON).click();
+		_mainWindow.button(GncImportMainWindow.OPEN_CSV_BUTTON).click();
+		_mainWindow.button(GncImportMainWindow.IMPORT_BUTTON).click();
 
 		assertThat("Output hasn't been created", output.exists(), is(true));
 	}

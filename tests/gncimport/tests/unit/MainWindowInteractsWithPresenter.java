@@ -1,33 +1,40 @@
 package gncimport.tests.unit;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import gncimport.ui.GncImportMainWindow;
 
 import org.fest.swing.edt.GuiActionRunner;
-import org.fest.swing.edt.GuiQuery;
 import org.junit.Test;
-import org.mockito.InOrder;
 
 public class MainWindowInteractsWithPresenter extends MainWindowTests
 {
 	@Test
-	public void requests_initizialization_from_presenter_on_construction()
+	public void triggers_loading_of_gnc_file()
 	{
-		GuiActionRunner.execute(new GuiQuery<GncImportMainWindow>()
+		GuiActionRunner.execute(new ViewDriver()
 		{
-			protected GncImportMainWindow executeInEDT()
+			protected void doActionsOnView(GncImportMainWindow v)
 			{
-				new GncImportMainWindow(_presenter);
-				return null;
+				v.onLoadGncFile("/path/to/file.gnc");
 			}
 		});
 
-		InOrder inOrder = inOrder(_presenter);
+		verify(_presenter).onLoadGncFile("/path/to/file.gnc");
+	}
 
-		inOrder.verify(_presenter).onLoadGncFile(anyString());
-		inOrder.verify(_presenter).onReadFromCsvFile(anyString());
+	@Test
+	public void triggers_loading_of_csv_file()
+	{
+		GuiActionRunner.execute(new ViewDriver()
+		{
+			protected void doActionsOnView(GncImportMainWindow v)
+			{
+				v.onLoadCsvFile("/path/to/file.csv");
+			}
+		});
+
+		verify(_presenter).onReadFromCsvFile("/path/to/file.csv");
 	}
 
 	@Test
