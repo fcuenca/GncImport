@@ -109,37 +109,37 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		c.gridy = 1;
 		c.anchor = GridBagConstraints.LINE_START;
 		c.weightx = 1.0;
-		box.add(_csvFileLabel, c);
+		box.add(_sourceAccLabel, c);
 
 		c.gridx = 1;
 		c.gridy = 1;
 		c.anchor = GridBagConstraints.LINE_END;
 		c.weightx = 0;
-		box.add(openCsvBtn, c);
-
-		c.gridx = 0;
-		c.gridy = 2;
-		c.anchor = GridBagConstraints.LINE_START;
-		c.weightx = 1.0;
-		box.add(_sourceAccLabel, c);
-
-		c.gridx = 1;
-		c.gridy = 2;
-		c.anchor = GridBagConstraints.LINE_END;
-		c.weightx = 0;
 		box.add(selectSrcBtn, c);
 
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 2;
 		c.anchor = GridBagConstraints.LINE_START;
 		c.weightx = 1.0;
 		box.add(_targetAccLabel, c);
 
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 2;
 		c.anchor = GridBagConstraints.LINE_END;
 		c.weightx = 0;
 		box.add(selectTargetBtn, c);
+
+		c.gridx = 0;
+		c.gridy = 3;
+		c.anchor = GridBagConstraints.LINE_START;
+		c.weightx = 1.0;
+		box.add(_csvFileLabel, c);
+
+		c.gridx = 1;
+		c.gridy = 3;
+		c.anchor = GridBagConstraints.LINE_END;
+		c.weightx = 0;
+		box.add(openCsvBtn, c);
 
 		return box;
 	}
