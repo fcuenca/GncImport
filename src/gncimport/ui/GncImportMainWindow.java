@@ -15,6 +15,7 @@ import java.util.logging.Level;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -47,6 +48,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JLabel _targetAccLabel;
 	private JLabel _gncFileLabel;
 	private JLabel _csvFileLabel;
+	private JComboBox _candidateTargetAccComboBox = new JComboBox();
 
 	public GncImportMainWindow(TxImportModel model)
 	{
@@ -210,6 +212,36 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		_table.setModel(tableModel);
 
 		updateCandidateTargetAccountList(targetAccounts);
+
+		DefaultCellEditor editor = new DefaultCellEditor(_candidateTargetAccComboBox)
+		{
+			private AccountData originalValue;
+
+			@Override
+			public Component getTableCellEditorComponent(JTable table, Object
+					value, boolean isSelected, int row, int column)
+			{
+				originalValue = getTxTableModel().getTransactions().get(row).targetAccount;
+
+				((JComboBox) getComponent()).setSelectedItem(originalValue);
+
+				return super.getTableCellEditorComponent(table, value,
+						isSelected, row, column);
+			}
+
+			@Override
+			public Object getCellEditorValue()
+			{
+				AccountData newValue = (AccountData) super.getCellEditorValue();
+
+				((JComboBox) getComponent()).hidePopup();
+
+				return _presenter.onTargetAccountSelected(newValue, originalValue);
+			}
+		};
+
+		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
+		accountColumn.setCellEditor(editor);
 	}
 
 	@Override
@@ -261,38 +293,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	@Override
 	public void updateCandidateTargetAccountList(List<AccountData> accountList)
 	{
-		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
-
-		JComboBox comboBox = new JComboBox(accountList.toArray());
-
-		DefaultCellEditor editor = new DefaultCellEditor(comboBox)
-		{
-			private AccountData originalValue;
-
-			@Override
-			public Component getTableCellEditorComponent(JTable table, Object
-					value, boolean isSelected, int row, int column)
-			{
-				originalValue = getTxTableModel().getTransactions().get(row).targetAccount;
-
-				((JComboBox) getComponent()).setSelectedItem(originalValue);
-
-				return super.getTableCellEditorComponent(table, value,
-						isSelected, row, column);
-			}
-
-			@Override
-			public Object getCellEditorValue()
-			{
-				AccountData newValue = (AccountData) super.getCellEditorValue();
-
-				((JComboBox) getComponent()).hidePopup();
-
-				return _presenter.onTargetAccountSelected(newValue, originalValue);
-			}
-		};
-
-		accountColumn.setCellEditor(editor);
+		_candidateTargetAccComboBox.setModel(new DefaultComboBoxModel(accountList.toArray()));
 	}
 
 	@Override
