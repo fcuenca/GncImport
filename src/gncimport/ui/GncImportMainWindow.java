@@ -6,6 +6,7 @@ import gncimport.models.AccountData;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -27,6 +28,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -49,6 +51,8 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JLabel _gncFileLabel;
 	private JLabel _csvFileLabel;
 	private JComboBox _candidateTargetAccComboBox = new JComboBox();
+	private JXDatePicker _fromDatePicker;
+	private JXDatePicker _toDatePicker;
 
 	public GncImportMainWindow(TxImportModel model)
 	{
@@ -80,6 +84,9 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 		_sourceAccLabel = new JLabel("Source Account: NOT SET");
 		_targetAccLabel = new JLabel("Target Account: NOT SET");
+
+		_toDatePicker = new JXDatePicker();
+		_fromDatePicker = new JXDatePicker();
 
 		JButton openGncBtn = createButton(OPEN_GNC_BUTTON, "Open");
 		JButton openCsvBtn = createButton(OPEN_CSV_BUTTON, "Open");
@@ -140,6 +147,26 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		c.anchor = GridBagConstraints.LINE_END;
 		c.weightx = 0;
 		box.add(openCsvBtn, c);
+
+		JPanel dateBox = new JPanel(new FlowLayout());
+		dateBox.add(new JLabel("From"));
+		dateBox.add(_fromDatePicker);
+		dateBox.add(new JLabel("To"));
+		dateBox.add(_toDatePicker);
+
+		c.gridx = 0;
+		c.gridy = 4;
+		c.anchor = GridBagConstraints.LINE_START;
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 1.0;
+		box.add(dateBox, c);
+
+		c.gridx = 1;
+		c.gridy = 4;
+		c.anchor = GridBagConstraints.LINE_END;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0;
+		box.add(createButton("FILTER", "Filter"), c);
 
 		return box;
 	}
@@ -307,6 +334,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 			{
 				onLoadGncFile(fileName);
 				_gncFileLabel.setText(fileName);
+				_gncFileLabel.setToolTipText(fileName);
 			}
 		}
 		else if (e.getActionCommand().equals(OPEN_CSV_BUTTON))
@@ -317,6 +345,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 			{
 				onLoadCsvFile(fileName);
 				_csvFileLabel.setText(fileName);
+				_csvFileLabel.setToolTipText(fileName);
 			}
 		}
 		else if (e.getActionCommand().equals(IMPORT_BUTTON))
@@ -331,7 +360,10 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		{
 			onSelectTargetHierarchyClick();
 		}
-
+		else if (e.getActionCommand().equals("FILTER"))
+		{
+			onFilterTxList();
+		}
 	}
 
 	protected String promptForFile()
@@ -372,5 +404,10 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public void onLoadGncFile(String fileName)
 	{
 		_presenter.onLoadGncFile(fileName);
+	}
+
+	private void onFilterTxList()
+	{
+		_presenter.onFilterTxList(_fromDatePicker.getDate(), _toDatePicker.getDate());
 	}
 }

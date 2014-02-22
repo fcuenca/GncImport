@@ -6,6 +6,7 @@ import gncimport.models.AccountData;
 import gncimport.models.TxData;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -169,6 +170,13 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		DefaultMutableTreeNode accountRoot = builder.getRoot();
 		return accountRoot;
+	}
+
+	@Override
+	public void onFilterTxList(Date fromDate, Date toDate)
+	{
+		_view.displayTxData(new TxTableModel(_model.filterTxList(fromDate, toDate)),
+				buildTargetAccountList());
 	}
 
 }

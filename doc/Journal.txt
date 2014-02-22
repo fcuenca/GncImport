@@ -44,4 +44,6 @@ Next Step: implement the idea of "target account hierarchy", rather than an indi
     
     
     
+---++Sat Feb 22:
 
+Next Step: add date filtering for the transaction list (so that I don't have to edit the CSV file!)

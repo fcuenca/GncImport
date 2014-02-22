@@ -3,6 +3,7 @@ package gncimport.boundaries;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 
+import java.util.Date;
 import java.util.List;
 
 import org.gnucash.xml.gnc.Account;
@@ -28,4 +29,6 @@ public interface TxImportModel
 	AccountData getDefaultTargetHierarchyAccount();
 
 	void setTargetHierarchy(AccountData accountData);
+
+	List<TxData> filterTxList(Date fromDate, Date toDate);
 }

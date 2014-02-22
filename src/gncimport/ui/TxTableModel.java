@@ -2,6 +2,7 @@ package gncimport.ui;
 
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
+import gncimport.utils.ProgrammerError;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -74,7 +75,7 @@ public class TxTableModel extends AbstractTableModel
 			return new Boolean(transaction.doNotImport);
 
 		default:
-			throw new RuntimeException("this line should be unreachable!");
+			throw new ProgrammerError("this line should be unreachable!");
 		}
 	}
 

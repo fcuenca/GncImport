@@ -2,10 +2,12 @@ package gncimport.models;
 
 import gncimport.adaptors.RbcExportParser;
 import gncimport.boundaries.TxImportModel;
+import gncimport.utils.ProgrammerError;
 import gnclib.GncFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	private AccountData _sourceAccount;
 	private Map<String, List<Account>> _accTree = new HashMap<String, List<Account>>();
 	private Account _targetHierarcyParent;
-	private List<TxData> _txList;
+	private List<TxData> _txListOriginal;
 
 	private final String _defaultTargetAccName;
 
@@ -33,11 +35,11 @@ public class LocalFileTxImportModel implements TxImportModel
 	{
 		try
 		{
-			_txList = new RbcExportParser(fileName).getTransactions();
+			_txListOriginal = new RbcExportParser(fileName).getTransactions();
 
 			resetTargetAccountInImportList();
 
-			return _txList;
+			return _txListOriginal;
 		}
 		catch (Exception e)
 		{
@@ -193,7 +195,7 @@ public class LocalFileTxImportModel implements TxImportModel
 			_targetAccount = new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getId().getValue());
 		}
 
-		if (_txList != null)
+		if (_txListOriginal != null)
 		{
 			resetTargetAccountInImportList();
 		}
@@ -204,7 +206,7 @@ public class LocalFileTxImportModel implements TxImportModel
 		AccountData defaultAcc = getDefaultTargetAccount();
 		List<AccountData> candidateTargetAccounts = getCandidateTargetAccounts();
 
-		for (TxData txData : _txList)
+		for (TxData txData : _txListOriginal)
 		{
 			if (txData.targetAccount == null)
 			{
@@ -233,5 +235,26 @@ public class LocalFileTxImportModel implements TxImportModel
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<TxData> filterTxList(Date fromDate, Date toDate)
+	{
+		if (_txListOriginal == null)
+		{
+			throw new ProgrammerError("fetch hasn't been called yet!");
+		}
+
+		ArrayList<TxData> filteredList = new ArrayList<TxData>();
+
+		for (TxData tx : _txListOriginal)
+		{
+			if (tx.date.compareTo(fromDate) >= 0 && tx.date.compareTo(toDate) < 0)
+			{
+				filteredList.add(tx);
+			}
+		}
+
+		return filteredList;
 	}
 }

@@ -9,10 +9,12 @@ import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxData;
 import gncimport.tests.data.SampleTxData;
 import gncimport.tests.data.TestDataConfig;
+import gncimport.utils.ProgrammerError;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.gnucash.xml.gnc.Account;
@@ -287,6 +289,65 @@ public class LocalFileImportTests
 
 		assertThat(list.size(), is(1));
 		assertThat(list.get(0), is(new AccountData("Special Expenses", SPECIAL_EXPENSES_ID)));
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void can_filter_transactions_to_import()
+	{
+		_model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+
+		Date fromDate = new Date(2014 - 1900, 0, 10);
+		Date toDate = new Date(2014 - 1900, 0, 30);
+
+		List<TxData> txList = _model.filterTxList(fromDate, toDate);
+
+		assertThat(txList.size(), is(12));
+
+		assertThat(txList.get(0).date, is(new Date(2014 - 1900, 0, 10)));
+		assertThat(txList.get(11).date, is(new Date(2014 - 1900, 0, 29)));
+	}
+
+	@Test(expected = ProgrammerError.class)
+	public void filtering_is_valid_only_after_fetching()
+	{
+		_model.filterTxList(new Date(), new Date());
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void filter_can_be_reset_to_re_include_filtered_out_transactions()
+	{
+		_model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+
+		Date fromDate = new Date(2014 - 1900, 0, 10);
+		Date toDate = new Date(2014 - 1900, 0, 30);
+
+		_model.filterTxList(fromDate, toDate);
+
+		fromDate = new Date(0, 0, 1);
+		List<TxData> txList = _model.filterTxList(fromDate, toDate);
+
+		assertThat(txList.size(), is(18));
+
+		assertThat(txList.get(0).date, is(new Date(2014 - 1900, 0, 2)));
+		assertThat(txList.get(17).date, is(new Date(2014 - 1900, 0, 29)));
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void resetting_target_hierarchy_also_affects_filtered_out_transactions()
+	{
+		_model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		_model.filterTxList(new Date(2014 - 1900, 0, 10), new Date(2014 - 1900, 0, 30));
+
+		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
+
+		List<TxData> txList = _model.filterTxList(new Date(0, 0, 1), new Date(3000 - 1900, 0, 1));
+
+		assertThat(txList.get(0).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
+		assertThat(txList.get(10).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
+		assertThat(txList.get(txList.size() - 1).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
 	}
 
 	private AccountData[] asArray(List<AccountData> accountList)

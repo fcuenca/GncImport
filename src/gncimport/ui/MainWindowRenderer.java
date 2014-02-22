@@ -2,6 +2,8 @@ package gncimport.ui;
 
 import gncimport.models.AccountData;
 
+import java.util.Date;
+
 public interface MainWindowRenderer
 {
 
@@ -16,5 +18,7 @@ public interface MainWindowRenderer
 	public abstract void onSelectTargetHierarchy();
 
 	AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc);
+
+	void onFilterTxList(Date fromDate, Date toDate);
 
 }
