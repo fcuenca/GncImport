@@ -1,15 +1,11 @@
 TODO:
 
 - check that Target Account & Source accounts are different
-- expose Swing names as constants in the View/Presenter class
-- GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
 - Resolve temporal coupling in loading the input files through enable/disable controls in the UI
   Options:
    - force a particular order: 1st Gnc, then Csv
    - allow any order, but disallow Import button until both are loaded
-- GncFile.findAccountByName: what if names are not unique?
-- What if the model can't find the default source/target accounts in the gnc file?
-
+- GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
    
 ==================
 DONE:
@@ -19,4 +15,8 @@ DONE:
    -> change after implementing the openopenGncFile function (!!)
 - BUG: changing the Target Account doesn't change the Accounts attached to the TxData objects !!
 - select current account when displaying the target account pop-up (currently shows the last selected item)
+- can source and target be set in any order? => YES
+- expose Swing names as constants in the View/Presenter class
+- GncFile.findAccountByName: what if names are not unique? => no an issue. it will return the first.
+- What if the model can't find the default source/target accounts in the gnc file?
  

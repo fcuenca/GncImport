@@ -21,6 +21,7 @@ import org.junit.Test;
 
 public class LocalFileImportTests
 {
+	private static final String SPECIAL_EXPENSES_ID = "1eb826d327e81be51e663430f5b7adb9";
 	private static final String SUPPLIES_FEB_ID = "2c6be57ad1474692f6f569384668c4ac";
 	private static final String FEBRERO2014_ID = "882f951395a92f8ea103fe0e9dbfbda5";
 	private static final String ENERO2014_ID = "454018fbf408f8c3e607bd51f22c5373";
@@ -248,9 +249,48 @@ public class LocalFileImportTests
 		assertThat(newCandidates.size(), is(11));
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void target_hierarchy_must_exist()
+	{
+		AccountData newAccount = new AccountData("Doesn't Exist", "irrelevant-id");
+
+		_model.setTargetHierarchy(newAccount);
+	}
+
+	@Test
+	public void defaults_to_hierarchy_parent_if_default_acc_name_not_found()
+	{
+		LocalFileTxImportModel_ForTesting model = new LocalFileTxImportModel_ForTesting("doesn't exist");
+
+		model.openGncFile(getClass().getResource("../data/checkbook.xml").getPath());
+		model.setSourceAccount(new AccountData("Checking Account", CHECKINGACC_ID));
+
+		model.setTargetHierarchy(new AccountData("Enero 2014", "irrelevant-id"));
+
+		assertThat(model.getDefaultTargetAccount(), is(new AccountData("Enero 2014", ENERO2014_ID)));
+	}
+
+	@Test
+	public void defaults_to_hierarchy_parent_if_parent_has_no_children()
+	{
+		_model.setTargetHierarchy(new AccountData("Special Expenses", "irrelevant-id"));
+
+		assertThat(_model.getDefaultTargetAccount(), is(new AccountData("Special Expenses", SPECIAL_EXPENSES_ID)));
+	}
+
+	@Test
+	public void selecting_hierarchy_with_no_children_gives_only_parent_as_candidate()
+	{
+		_model.setTargetHierarchy(new AccountData("Special Expenses", "irrelevant-id"));
+
+		List<AccountData> list = _model.getCandidateTargetAccounts();
+
+		assertThat(list.size(), is(1));
+		assertThat(list.get(0), is(new AccountData("Special Expenses", SPECIAL_EXPENSES_ID)));
+	}
+
 	private AccountData[] asArray(List<AccountData> accountList)
 	{
 		return accountList.toArray(new AccountData[accountList.size()]);
 	}
-
 }

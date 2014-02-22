@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 public class GncImportApp
 {
-	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
+	private static final String DEFAULT_TARGET_ACCOUNT = "Gastos Varios";
 
 	public static void main(String[] args)
 	{

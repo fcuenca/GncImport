@@ -110,23 +110,19 @@ public class LocalFileTxImportModel implements TxImportModel
 
 	private AccountData findAccountUnderTargetHierarchy(String accName)
 	{
-		Account account = null;
+		List<Account> children = _accTree.get(_targetHierarcyParent.getId().getValue());
 
-		for (Account a : _accTree.get(_targetHierarcyParent.getId().getValue()))
+		if (children != null)
 		{
-			if (a.getName().equals(accName))
+			for (Account a : children)
 			{
-				account = a;
-				break;
+				if (a.getName().equals(accName))
+				{
+					return new AccountData(a.getName(), a.getId().getValue());
+				}
 			}
 		}
-
-		if (account != null)
-		{
-			return new AccountData(account.getName(), account.getId().getValue());
-		}
-
-		throw new RuntimeException("Account can't be found: " + accName);
+		return null;
 	}
 
 	@Override
@@ -163,10 +159,18 @@ public class LocalFileTxImportModel implements TxImportModel
 	public List<AccountData> getCandidateTargetAccounts()
 	{
 		ArrayList<AccountData> accounts = new ArrayList<AccountData>();
+		List<Account> children = _accTree.get(_targetHierarcyParent.getId().getValue());
 
-		for (Account a : _accTree.get(_targetHierarcyParent.getId().getValue()))
+		if (children != null)
 		{
-			accounts.add(new AccountData(a.getName(), a.getId().getValue()));
+			for (Account a : children)
+			{
+				accounts.add(new AccountData(a.getName(), a.getId().getValue()));
+			}
+		}
+		else
+		{
+			accounts.add(new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getId().getValue()));
 		}
 
 		return accounts;
@@ -176,7 +180,18 @@ public class LocalFileTxImportModel implements TxImportModel
 	public void setTargetHierarchy(AccountData accountData)
 	{
 		_targetHierarcyParent = _gnc.findAccountByName(accountData.getName());
+
+		if (_targetHierarcyParent == null)
+		{
+			throw new IllegalArgumentException("Target hierarchy not found: " + accountData.getName());
+		}
+
 		_targetAccount = findAccountUnderTargetHierarchy(_defaultTargetAccName);
+
+		if (_targetAccount == null)
+		{
+			_targetAccount = new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getId().getValue());
+		}
 
 		if (_txList != null)
 		{
