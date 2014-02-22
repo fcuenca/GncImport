@@ -59,7 +59,10 @@ public class LocalFileImportTests
 	public void setUp()
 	{
 		_model = new LocalFileTxImportModel_ForTesting();
+
 		_model.openGncFile(getClass().getResource("../data/checkbook.xml").getPath());
+		_model.setSourceAccount(new AccountData("Checking Account", CHECKINGACC_ID));
+		_model.setTargetHierarchy(new AccountData("Enero 2014", "ignored-id"));
 	}
 
 	@Test
@@ -84,7 +87,7 @@ public class LocalFileImportTests
 	@Test
 	public void can_provide_default_source_account()
 	{
-		AccountData account = _model.getDefaultSourceAccount();
+		AccountData account = _model.getSourceAccount();
 
 		assertThat(account.getName(), is("Checking Account"));
 		assertThat(account.getId(), is(CHECKINGACC_ID));
@@ -177,7 +180,7 @@ public class LocalFileImportTests
 	{
 		AccountData newAccount = new AccountData("Febrero 2014", "irrelevant-id");
 
-		_model.setTargetAccount(newAccount);
+		_model.setTargetHierarchy(newAccount);
 
 		assertThat(_model.getDefaultTargetHierarchyAccount().getName(), is("Febrero 2014"));
 		assertThat(_model.getDefaultTargetHierarchyAccount().getId(), is(FEBRERO2014_ID));
@@ -191,7 +194,7 @@ public class LocalFileImportTests
 	{
 		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
 
-		_model.setTargetAccount(new AccountData("Febrero 2014", "irrelevant-id"));
+		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
 
 		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
@@ -204,7 +207,7 @@ public class LocalFileImportTests
 
 		txList.get(10).targetAccount = new AccountData("Supplies", "the-id");
 
-		_model.setTargetAccount(new AccountData("Febrero 2014", "irrelevant-id"));
+		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
 
 		assertThat(txList.get(10).targetAccount.getName(), is("Supplies"));
 		assertThat(txList.get(10).targetAccount.getId(), is(SUPPLIES_FEB_ID));
@@ -217,7 +220,7 @@ public class LocalFileImportTests
 
 		txList.get(10).targetAccount = new AccountData("Some Esoteric Account", "the-id");
 
-		_model.setTargetAccount(new AccountData("Febrero 2014", "irrelevant-id"));
+		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
 
 		assertThat(txList.get(10).targetAccount.getName(), is("Some Esoteric Account"));
 		assertThat(txList.get(10).targetAccount.getId(), is("the-id"));
@@ -230,7 +233,7 @@ public class LocalFileImportTests
 
 		List<AccountData> initialCandidates = _model.getCandidateTargetAccounts();
 
-		_model.setTargetAccount(new AccountData("Febrero 2014", "irrelevant-id"));
+		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
 
 		List<AccountData> newCandidates = _model.getCandidateTargetAccounts();
 

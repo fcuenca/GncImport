@@ -44,16 +44,11 @@ public class PresenterRendersTheAccountList
 	}
 
 	@Test
-	public void renders_default_source_and_target_account_on_file_open()
+	public void initilizes_gnc_file()
 	{
-		when(_model.getDefaultSourceAccount()).thenReturn(new AccountData("RBC Checking", "id-1"));
-		when(_model.getDefaultTargetHierarchyAccount()).thenReturn(new AccountData("Enero 2014", "id-2"));
-
 		_presenter.onLoadGncFile("/path/to/gnc.xml");
 
 		verify(_model).openGncFile("/path/to/gnc.xml");
-		verify(_view).displaySourceAccount("RBC Checking");
-		verify(_view).displayTargetHierarchy("Enero 2014");
 	}
 
 	@Test

@@ -26,6 +26,7 @@ public class AccountTreeBrowserDialog extends JDialog
 
 		setLayout(new BorderLayout());
 		setTitle(title);
+		setName("ACC_SELECTION_DLG");
 
 		Dimension minimumSize = new Dimension(100, 100);
 
@@ -47,6 +48,7 @@ public class AccountTreeBrowserDialog extends JDialog
 		JPanel buttonPanel = new JPanel();
 
 		button = new JButton("OK");
+		button.setName("OK_BUTTON");
 		buttonPanel.add(button);
 		button.addActionListener(new ActionListener()
 		{
@@ -60,6 +62,7 @@ public class AccountTreeBrowserDialog extends JDialog
 		});
 
 		button = new JButton("Cancel");
+		button.setName("CANCEL_BUTTON");
 		buttonPanel.add(button);
 		button.addActionListener(new ActionListener()
 		{
@@ -88,7 +91,7 @@ public class AccountTreeBrowserDialog extends JDialog
 	private JTree createTree(TreeNode rootNode)
 	{
 		JTree tree = new JTree(rootNode);
-		tree.setName("TREE_CTRL");
+		tree.setName("ACC_TREE");
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		tree.setRootVisible(false);
 		tree.setShowsRootHandles(true);

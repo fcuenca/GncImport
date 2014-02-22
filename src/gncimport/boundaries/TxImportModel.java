@@ -15,7 +15,7 @@ public interface TxImportModel
 
 	AccountData getDefaultTargetAccount();
 
-	AccountData getDefaultSourceAccount();
+	AccountData getSourceAccount();
 
 	List<Account> getAccounts();
 
@@ -27,5 +27,5 @@ public interface TxImportModel
 
 	AccountData getDefaultTargetHierarchyAccount();
 
-	void setTargetAccount(AccountData accountData);
+	void setTargetHierarchy(AccountData accountData);
 }

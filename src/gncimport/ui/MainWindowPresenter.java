@@ -71,8 +71,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 		try
 		{
 			_model.openGncFile(fileName);
-			_view.displaySourceAccount(_model.getDefaultSourceAccount().getName());
-			_view.displayTargetHierarchy(_model.getDefaultTargetHierarchyAccount().getName());
 		}
 		catch (Exception e)
 		{
@@ -107,7 +105,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 			AccountData selectedAccount = selectAccountFromTree();
 			if (selectedAccount != null)
 			{
-				_model.setTargetAccount(selectedAccount);
+				_model.setTargetHierarchy(selectedAccount);
 				_view.displayTargetHierarchy(selectedAccount.getName());
 				_view.updateCandidateTargetAccountList(buildTargetAccountList());
 			}

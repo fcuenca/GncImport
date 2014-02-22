@@ -110,7 +110,7 @@ public class PresenterRendersTargetAccounts
 
 		verify(_view).displayTargetHierarchy("New Acc");
 		verify(_view).updateCandidateTargetAccountList(expectedAccountList.capture());
-		verify(_model).setTargetAccount(selectedAccount);
+		verify(_model).setTargetHierarchy(selectedAccount);
 
 		assertThat(expectedAccountList.getValue(), hasItems(asArray(accountList)));
 		assertThat(expectedAccountList.getValue(), hasSize(accountList.size() + 1));

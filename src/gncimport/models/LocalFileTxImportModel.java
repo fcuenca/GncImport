@@ -14,8 +14,6 @@ import org.gnucash.xml.gnc.Account;
 
 public class LocalFileTxImportModel implements TxImportModel
 {
-	private static final String DEFAULT_TARGET_HIERARCHY = "Enero 2014";
-	private static final String DEFAULT_SOURCE_ACCOUNT = "Checking Account";
 	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
 
 	protected GncFile _gnc;
@@ -81,19 +79,11 @@ public class LocalFileTxImportModel implements TxImportModel
 			_gnc = new GncFile(fileName);
 
 			initializeAccountTree();
-			initializeTargetAccount(DEFAULT_TARGET_HIERARCHY, DEFAULT_TARGET_ACCOUNT);
-			initializeSourceAccount(DEFAULT_SOURCE_ACCOUNT);
 		}
 		catch (IOException e)
 		{
 			throw new RuntimeException(e);
 		}
-	}
-
-	private void initializeTargetAccount(String hierarchyName, String accountName)
-	{
-		_targetHierarcyParent = _gnc.findAccountByName(hierarchyName);
-		_targetAccount = findAccountUnderTargetHierarchy(accountName);
 	}
 
 	private void initializeAccountTree()
@@ -134,21 +124,6 @@ public class LocalFileTxImportModel implements TxImportModel
 		throw new RuntimeException("Account can't be found: " + accName);
 	}
 
-	private void initializeSourceAccount(String accountName)
-	{
-		Account account = _gnc.findAccountByName(accountName);
-
-		if (account != null)
-		{
-			_sourceAccount = new AccountData(account.getName(), account.getId().getValue());
-		}
-		else
-		{
-			throw new RuntimeException("Account can't be found: " + accountName);
-		}
-
-	}
-
 	@Override
 	public AccountData getDefaultTargetAccount()
 	{
@@ -156,7 +131,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	}
 
 	@Override
-	public AccountData getDefaultSourceAccount()
+	public AccountData getSourceAccount()
 	{
 		return _sourceAccount;
 	}
@@ -193,9 +168,10 @@ public class LocalFileTxImportModel implements TxImportModel
 	}
 
 	@Override
-	public void setTargetAccount(AccountData accountData)
+	public void setTargetHierarchy(AccountData accountData)
 	{
-		initializeTargetAccount(accountData.getName(), DEFAULT_TARGET_ACCOUNT);
+		_targetHierarcyParent = _gnc.findAccountByName(accountData.getName());
+		_targetAccount = findAccountUnderTargetHierarchy(DEFAULT_TARGET_ACCOUNT);
 
 		if (_txList != null)
 		{
