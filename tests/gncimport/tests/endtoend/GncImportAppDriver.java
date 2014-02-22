@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import gncimport.GncImportApp;
 import gncimport.boundaries.TxImportModel;
 import gncimport.models.LocalFileTxImportModel;
+import gncimport.tests.data.TestDataConfig;
 import gncimport.ui.GncImportMainWindow;
 
 import java.io.File;
@@ -24,14 +25,12 @@ import org.fest.swing.fixture.JTreeFixture;
 
 public class GncImportAppDriver
 {
-	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
-
 	private FrameFixture _mainWindow;
 	private TxImportModel _model;
 
 	public GncImportAppDriver(Robot robot, int expectedTxCount)
 	{
-		_model = new LocalFileTxImportModel(DEFAULT_TARGET_ACCOUNT);
+		_model = new LocalFileTxImportModel(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
 
 		JFrame frame = GuiActionRunner.execute(new GuiQuery<JFrame>()
 		{

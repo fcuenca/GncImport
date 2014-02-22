@@ -5,6 +5,7 @@ import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import gncimport.models.AccountData;
+import gncimport.tests.data.SampleTxData;
 import gncimport.ui.GncImportMainWindow;
 import gncimport.ui.TxTableModel;
 

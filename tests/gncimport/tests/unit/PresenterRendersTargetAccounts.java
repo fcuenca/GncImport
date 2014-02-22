@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 import gncimport.boundaries.TxImportModel;
 import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
+import gncimport.tests.data.SampleAccountData;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 

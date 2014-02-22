@@ -1,6 +1,6 @@
 package gncimport.tests.unit;
 
-import static gncimport.tests.unit.SampleAccountData.accountWith;
+import static gncimport.tests.data.SampleAccountData.accountWith;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.models.AccountData;

@@ -11,6 +11,7 @@ import gncimport.boundaries.TxImportModel;
 import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
+import gncimport.tests.data.SampleTxData;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 

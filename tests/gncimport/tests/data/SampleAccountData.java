@@ -1,4 +1,4 @@
-package gncimport.tests.unit;
+package gncimport.tests.data;
 
 import static gncimport.tests.unit.ListUtils.list_of;
 
