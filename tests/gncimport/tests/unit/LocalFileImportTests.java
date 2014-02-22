@@ -19,6 +19,8 @@ import org.junit.Test;
 
 public class LocalFileImportTests
 {
+	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
+
 	private static final String SUPPLIES_FEB_ID = "2c6be57ad1474692f6f569384668c4ac";
 	private static final String FEBRERO2014_ID = "882f951395a92f8ea103fe0e9dbfbda5";
 	private static final String ENERO2014_ID = "454018fbf408f8c3e607bd51f22c5373";
@@ -28,6 +30,11 @@ public class LocalFileImportTests
 
 	private class LocalFileTxImportModel_ForTesting extends LocalFileTxImportModel
 	{
+
+		public LocalFileTxImportModel_ForTesting(String defaultTargetAccName)
+		{
+			super(defaultTargetAccName);
+		}
 
 		public String detectedFileName;
 		public String detectedSourceAccId;
@@ -58,7 +65,7 @@ public class LocalFileImportTests
 	@Before
 	public void setUp()
 	{
-		_model = new LocalFileTxImportModel_ForTesting();
+		_model = new LocalFileTxImportModel_ForTesting(DEFAULT_TARGET_ACCOUNT);
 
 		_model.openGncFile(getClass().getResource("../data/checkbook.xml").getPath());
 		_model.setSourceAccount(new AccountData("Checking Account", CHECKINGACC_ID));

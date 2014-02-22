@@ -8,6 +8,9 @@ import javax.swing.JFrame;
 
 public class GncImportApp
 {
+	// TODO: replace this with a Config object
+	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
+
 	public static void main(String[] args)
 	{
 		javax.swing.SwingUtilities.invokeLater(new Runnable()
@@ -30,7 +33,7 @@ public class GncImportApp
 
 	public static JFrame createMainFrame()
 	{
-		return createMainFrame(new LocalFileTxImportModel());
+		return createMainFrame(new LocalFileTxImportModel(DEFAULT_TARGET_ACCOUNT));
 	}
 
 	public static JFrame createMainFrame(TxImportModel model)

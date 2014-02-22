@@ -14,14 +14,19 @@ import org.gnucash.xml.gnc.Account;
 
 public class LocalFileTxImportModel implements TxImportModel
 {
-	private static final String DEFAULT_TARGET_ACCOUNT = "Expenses";
-
 	protected GncFile _gnc;
 	private AccountData _targetAccount;
 	private AccountData _sourceAccount;
 	private Map<String, List<Account>> _accTree = new HashMap<String, List<Account>>();
 	private Account _targetHierarcyParent;
 	private List<TxData> _txList;
+
+	private final String _defaultTargetAccName;
+
+	public LocalFileTxImportModel(String defaultTargetAccName)
+	{
+		_defaultTargetAccName = defaultTargetAccName;
+	}
 
 	@Override
 	public List<TxData> fetchTransactionsFrom(String fileName)
@@ -171,7 +176,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	public void setTargetHierarchy(AccountData accountData)
 	{
 		_targetHierarcyParent = _gnc.findAccountByName(accountData.getName());
-		_targetAccount = findAccountUnderTargetHierarchy(DEFAULT_TARGET_ACCOUNT);
+		_targetAccount = findAccountUnderTargetHierarchy(_defaultTargetAccName);
 
 		if (_txList != null)
 		{
