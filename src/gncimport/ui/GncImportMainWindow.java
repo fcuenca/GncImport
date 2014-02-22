@@ -6,19 +6,23 @@ import gncimport.models.AccountData;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.logging.Level;
 
+import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -63,7 +67,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 		add(createControlBox(), BorderLayout.PAGE_START);
 		add(createGridPane(), BorderLayout.CENTER);
-		add(createStatusBar(), BorderLayout.PAGE_END);
+		add(createBottomBox(), BorderLayout.PAGE_END);
 
 	}
 
@@ -75,22 +79,65 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		_sourceAccLabel = new JLabel("Source Account: NOT SET");
 		_targetAccLabel = new JLabel("Target Account: NOT SET");
 
+		JButton openGncBtn = createButton(OPEN_GNC_BUTTON, "Open");
+		JButton openCsvBtn = createButton(OPEN_CSV_BUTTON, "Open");
+		JButton selectSrcBtn = createButton(SELECT_SRC_ACC_BUTTON, "Select");
+		JButton selectTargetBtn = createButton(SELECT_TARGET_ACC_BUTTON, "Select");
+
 		JPanel box = new JPanel();
-		box.setLayout(new GridLayout(0, 2));
+		box.setBorder(new EmptyBorder(5, 5, 5, 5));
+		box.setLayout(new GridBagLayout());
 
-		box.add(_gncFileLabel);
-		box.add(createButton(OPEN_GNC_BUTTON, "..."));
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
 
-		box.add(_csvFileLabel);
-		box.add(createButton(OPEN_CSV_BUTTON, "..."));
+		c.gridx = 0;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.LINE_START;
+		c.weightx = 1.0;
+		box.add(_gncFileLabel, c);
 
-		box.add(_sourceAccLabel);
-		box.add(createButton(SELECT_SRC_ACC_BUTTON, "..."));
+		c.gridx = 1;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.LINE_END;
+		c.weightx = 0;
+		box.add(openGncBtn, c);
 
-		box.add(_targetAccLabel);
-		box.add(createButton(SELECT_TARGET_ACC_BUTTON, "..."));
+		c.gridx = 0;
+		c.gridy = 1;
+		c.anchor = GridBagConstraints.LINE_START;
+		c.weightx = 1.0;
+		box.add(_csvFileLabel, c);
 
-		box.add(createButton(IMPORT_BUTTON, "Import"));
+		c.gridx = 1;
+		c.gridy = 1;
+		c.anchor = GridBagConstraints.LINE_END;
+		c.weightx = 0;
+		box.add(openCsvBtn, c);
+
+		c.gridx = 0;
+		c.gridy = 2;
+		c.anchor = GridBagConstraints.LINE_START;
+		c.weightx = 1.0;
+		box.add(_sourceAccLabel, c);
+
+		c.gridx = 1;
+		c.gridy = 2;
+		c.anchor = GridBagConstraints.LINE_END;
+		c.weightx = 0;
+		box.add(selectSrcBtn, c);
+
+		c.gridx = 0;
+		c.gridy = 3;
+		c.anchor = GridBagConstraints.LINE_START;
+		c.weightx = 1.0;
+		box.add(_targetAccLabel, c);
+
+		c.gridx = 1;
+		c.gridy = 3;
+		c.anchor = GridBagConstraints.LINE_END;
+		c.weightx = 0;
+		box.add(selectTargetBtn, c);
 
 		return box;
 	}
@@ -124,7 +171,18 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		return new JScrollPane(_table);
 	}
 
-	private JXStatusBar createStatusBar()
+	private JPanel createBottomBox()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+		panel.add(createStatusBar());
+		panel.add(createButton(IMPORT_BUTTON, "Import"));
+
+		return panel;
+	}
+
+	protected JXStatusBar createStatusBar()
 	{
 		JXStatusBar sb = new JXStatusBar();
 
@@ -132,7 +190,6 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		_statusLabel.setName("TX_COUNT");
 
 		sb.add(_statusLabel);
-
 		return sb;
 	}
 
@@ -243,15 +300,23 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	{
 		if (e.getActionCommand().equals(OPEN_GNC_BUTTON))
 		{
-			String fileName = getClass().getResource("../tests/data/checkbook.xml").getPath();
-			onLoadGncFile(fileName);
-			_gncFileLabel.setText(fileName);
+			String fileName = promptForFile();
+
+			if (fileName != null)
+			{
+				onLoadGncFile(fileName);
+				_gncFileLabel.setText(fileName);
+			}
 		}
 		else if (e.getActionCommand().equals(OPEN_CSV_BUTTON))
 		{
-			String fileName = getClass().getResource("../tests/data/rbc.csv").getPath();
-			onLoadCsvFile(fileName);
-			_csvFileLabel.setText(fileName);
+			String fileName = promptForFile();
+
+			if (fileName != null)
+			{
+				onLoadCsvFile(fileName);
+				_csvFileLabel.setText(fileName);
+			}
 		}
 		else if (e.getActionCommand().equals(IMPORT_BUTTON))
 		{
@@ -266,6 +331,19 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 			onSelectTargetHierarchyClick();
 		}
 
+	}
+
+	protected String promptForFile()
+	{
+		JFileChooser fc = new JFileChooser();
+		fc.setName("FILE_CHOOSER");
+
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			return fc.getSelectedFile().getAbsolutePath();
+		}
+
+		return null;
 	}
 
 	public void onSelectSourceAccClick()
