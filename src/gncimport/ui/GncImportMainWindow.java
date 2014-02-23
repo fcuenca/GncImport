@@ -386,9 +386,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public void onImportClick()
 	{
-		// TODO: this should be the original file -- what to do in the tests to
-		// avoid overriding the sample file??
-		_presenter.onSaveToGncFile("/tmp/checkbook-new.xml");
+		_presenter.onSaveToGncFile(_gncFileLabel.getText());
 	}
 
 	public void onSelectTargetHierarchyClick()

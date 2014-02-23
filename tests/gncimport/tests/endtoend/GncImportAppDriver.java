@@ -10,6 +10,7 @@ import gncimport.tests.data.TestDataConfig;
 import gncimport.ui.GncImportMainWindow;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 
@@ -25,12 +26,30 @@ import org.fest.swing.fixture.JTreeFixture;
 
 public class GncImportAppDriver
 {
+	private static final String TEST_OUTPUT_FILE = "/tmp/checkbook-new.xml";
+
 	private FrameFixture _mainWindow;
 	private TxImportModel _model;
 
+	class LocalFileTxImportModel_ForTesting extends LocalFileTxImportModel
+	{
+		public LocalFileTxImportModel_ForTesting(String defaultTargetAccName)
+		{
+			super(defaultTargetAccName);
+		}
+
+		@Override
+		protected void saveToGncFile(String fileName) throws IOException
+		{
+			// Prevent overriding the original test file, which is the app's
+			// normal behavior
+			super.saveToGncFile(TEST_OUTPUT_FILE);
+		}
+	}
+
 	public GncImportAppDriver(Robot robot, int expectedTxCount)
 	{
-		_model = new LocalFileTxImportModel(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
+		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
 
 		JFrame frame = GuiActionRunner.execute(new GuiQuery<JFrame>()
 		{
@@ -61,7 +80,7 @@ public class GncImportAppDriver
 
 	public void shouldSaveTransactionsToGncFile()
 	{
-		File output = new File("/tmp/checkbook-new.xml");
+		File output = new File(TEST_OUTPUT_FILE);
 
 		if (output.exists())
 		{

@@ -293,7 +293,7 @@ public class LocalFileImportTests
 
 	@SuppressWarnings("deprecation")
 	@Test
-	public void can_filter_transactions_to_import()
+	public void can_filter_transactions_to_import_using_inclusive_range()
 	{
 		_model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
 
@@ -302,10 +302,10 @@ public class LocalFileImportTests
 
 		List<TxData> txList = _model.filterTxList(fromDate, toDate);
 
-		assertThat(txList.size(), is(12));
+		assertThat(txList.size(), is(13));
 
 		assertThat(txList.get(0).date, is(new Date(2014 - 1900, 0, 10)));
-		assertThat(txList.get(11).date, is(new Date(2014 - 1900, 0, 29)));
+		assertThat(txList.get(12).date, is(new Date(2014 - 1900, 0, 30)));
 	}
 
 	@Test(expected = ProgrammerError.class)
@@ -328,10 +328,10 @@ public class LocalFileImportTests
 		fromDate = new Date(0, 0, 1);
 		List<TxData> txList = _model.filterTxList(fromDate, toDate);
 
-		assertThat(txList.size(), is(18));
+		assertThat(txList.size(), is(19));
 
 		assertThat(txList.get(0).date, is(new Date(2014 - 1900, 0, 2)));
-		assertThat(txList.get(17).date, is(new Date(2014 - 1900, 0, 29)));
+		assertThat(txList.get(18).date, is(new Date(2014 - 1900, 0, 30)));
 	}
 
 	@SuppressWarnings("deprecation")

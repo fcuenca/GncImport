@@ -2,6 +2,8 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -48,23 +50,59 @@ public class PresenterFiltersTxList
 	@Test
 	public void resets_table_mode_based_on_date_filter()
 	{
-		Date fromDate = new Date();
-		Date toDate = new Date();
 		List<TxData> txList = SampleTxData.txDataListWithAllAccounts();
 
 		List<AccountData> accountList = new ArrayList<AccountData>();
 		accountList.add(new AccountData("Expenses", "id"));
 
-		when(_model.filterTxList(fromDate, toDate)).thenReturn(txList);
+		when(_model.filterTxList(any(Date.class), any(Date.class))).thenReturn(txList);
 		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
 
-		_presenter.onFilterTxList(fromDate, toDate);
+		_presenter.onFilterTxList(new Date(), new Date());
 
 		verify(_view).displayTxData(expectedTxList.capture(), expectedAccountList.capture());
+		verify(_view).displayTxCount(txList.size());
 
 		assertThat(expectedTxList.getValue().getTransactions(), is(txList));
 
 		accountList.add(MainWindowPresenter.OTHER_ACC_PLACEHOLDER);
 		assertThat(expectedAccountList.getValue(), is(accountList));
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void adjusts_upper_bound_to_be_inclusive_of_the_last_day()
+	{
+		Date fromDate = new Date(2012 - 1900, 10, 14, 5, 30, 27);
+		Date toDate = new Date(2012 - 1900, 10, 16, 16, 33, 13);
+
+		Date adjustedToDate = (Date) toDate.clone();
+		adjustedToDate.setHours(23);
+		adjustedToDate.setMinutes(59);
+		adjustedToDate.setSeconds(59);
+
+		_presenter.onFilterTxList(fromDate, toDate);
+
+		verify(_model).filterTxList(fromDate, adjustedToDate);
+	}
+
+	@Test
+	public void lower_bound_can_be_open()
+	{
+		_presenter.onFilterTxList(null, new Date());
+
+		Date distantPast = new Date(Long.MIN_VALUE);
+
+		verify(_model).filterTxList(eq(distantPast), any(Date.class));
+	}
+
+	@Test
+	public void upper_bound_can_be_open()
+	{
+		_presenter.onFilterTxList(new Date(), null);
+
+		Date distantFuture = new Date(Long.MAX_VALUE);
+
+		verify(_model).filterTxList(any(Date.class), eq(distantFuture));
 	}
 }

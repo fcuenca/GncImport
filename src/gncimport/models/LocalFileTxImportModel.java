@@ -249,7 +249,7 @@ public class LocalFileTxImportModel implements TxImportModel
 
 		for (TxData tx : _txListOriginal)
 		{
-			if (tx.date.compareTo(fromDate) >= 0 && tx.date.compareTo(toDate) < 0)
+			if (tx.date.compareTo(fromDate) >= 0 && tx.date.compareTo(toDate) <= 0)
 			{
 				filteredList.add(tx);
 			}

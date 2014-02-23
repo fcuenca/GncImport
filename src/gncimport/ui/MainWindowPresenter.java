@@ -172,11 +172,29 @@ public class MainWindowPresenter implements MainWindowRenderer
 		return accountRoot;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onFilterTxList(Date fromDate, Date toDate)
 	{
-		_view.displayTxData(new TxTableModel(_model.filterTxList(fromDate, toDate)),
-				buildTargetAccountList());
+		Date lowerBound = fromDate != null ? fromDate : new Date(Long.MIN_VALUE);
+
+		Date upperBound = toDate;
+		if (upperBound != null)
+		{
+			upperBound = (Date) toDate.clone();
+			upperBound.setHours(23);
+			upperBound.setMinutes(59);
+			upperBound.setSeconds(59);
+		}
+		else
+		{
+			upperBound = new Date(Long.MAX_VALUE);
+		}
+
+		List<TxData> filteredTxList = _model.filterTxList(lowerBound, upperBound);
+
+		_view.displayTxData(new TxTableModel(filteredTxList), buildTargetAccountList());
+		_view.displayTxCount(filteredTxList.size());
 	}
 
 }
