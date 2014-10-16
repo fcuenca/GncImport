@@ -1,7 +1,7 @@
 package gncimport;
 
-import gncimport.boundaries.TxImportModel;
 import gncimport.models.LocalFileTxImportModel;
+import gncimport.models.TxImportModel;
 import gncimport.ui.GncImportMainWindow;
 
 import javax.swing.JFrame;

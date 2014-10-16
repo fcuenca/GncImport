@@ -1,9 +1,8 @@
 package gncimport.ui;
 
-import gncimport.boundaries.TxImportModel;
-import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
+import gncimport.models.TxImportModel;
 
 import java.util.ArrayList;
 import java.util.Date;

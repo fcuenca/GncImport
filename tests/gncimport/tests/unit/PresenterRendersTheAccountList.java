@@ -8,11 +8,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gncimport.boundaries.TxImportModel;
-import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
+import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleAccountData;
 import gncimport.ui.MainWindowPresenter;
+import gncimport.ui.TxView;
 
 import java.util.List;
 

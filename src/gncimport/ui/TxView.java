@@ -1,7 +1,6 @@
-package gncimport.boundaries;
+package gncimport.ui;
 
 import gncimport.models.AccountData;
-import gncimport.ui.TxTableModel;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package gncimport.models;
 
 import gncimport.adaptors.RbcExportParser;
-import gncimport.boundaries.TxImportModel;
 import gncimport.utils.ProgrammerError;
 import gnclib.GncFile;
 

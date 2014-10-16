@@ -42,8 +42,13 @@ Next Step: implement the idea of "target account hierarchy", rather than an indi
     - AHA!! I need to be able to select accounts OUTSIDE the target hierarchy (income, special expenses, etc.)
        => and this has implications in the reset target hierarchy scenario when deciding to revert account to default!
     
-    
-    
 ---++Sat Feb 22:
 
 Next Step: add date filtering for the transaction list (so that I don't have to edit the CSV file!)
+
+
+---++Thu Oct 16
+
+Created class diagrams. Analyzed package structure.
+
+

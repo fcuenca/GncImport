@@ -1,8 +1,7 @@
 package gncimport.ui;
 
-import gncimport.boundaries.TxImportModel;
-import gncimport.boundaries.TxView;
 import gncimport.models.AccountData;
+import gncimport.models.TxImportModel;
 
 import java.awt.BorderLayout;
 import java.awt.Component;

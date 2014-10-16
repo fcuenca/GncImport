@@ -4,8 +4,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 import gncimport.GncImportApp;
-import gncimport.boundaries.TxImportModel;
 import gncimport.models.LocalFileTxImportModel;
+import gncimport.models.TxImportModel;
 import gncimport.tests.data.TestDataConfig;
 import gncimport.ui.GncImportMainWindow;
 
@@ -47,7 +47,7 @@ public class GncImportAppDriver
 		}
 	}
 
-	public GncImportAppDriver(Robot robot, int expectedTxCount)
+	public GncImportAppDriver(Robot robot)
 	{
 		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
 
@@ -63,6 +63,12 @@ public class GncImportAppDriver
 		_mainWindow.show();
 	}
 
+	public void openTestInputFiles()
+	{
+		openGncFile();
+		openCsvFile();
+	}
+
 	public void shouldDisplayTransactionGridWithTransactionCount(int txCount)
 	{
 		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
@@ -71,9 +77,6 @@ public class GncImportAppDriver
 
 	public void shouldDisplayTransactionCountInStatusBar(int txCount)
 	{
-		openGncFile();
-		openCsvFile();
-
 		JLabelFixture label = _mainWindow.label("TX_COUNT");
 		assertThat(label.text(), containsString("" + txCount + " transaction"));
 	}
@@ -87,21 +90,18 @@ public class GncImportAppDriver
 			assertThat("Leftover file couldn't be deleted", output.delete(), is(true));
 		}
 
-		openGncFile();
-		openCsvFile();
-
 		_mainWindow.button(GncImportMainWindow.IMPORT_BUTTON).click();
 
 		assertThat("Output hasn't been created", output.exists(), is(true));
 	}
 
-	protected void openCsvFile()
+	private void openCsvFile()
 	{
 		_mainWindow.button(GncImportMainWindow.OPEN_CSV_BUTTON).click();
 		selectFileInChooser(getClass().getResource("../data/rbc.csv").getPath());
 	}
 
-	protected void openGncFile()
+	private void openGncFile()
 	{
 		_mainWindow.button(GncImportMainWindow.OPEN_GNC_BUTTON).click();
 		selectFileInChooser(getClass().getResource("../data/checkbook.xml").getPath());

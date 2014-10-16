@@ -1,7 +1,5 @@
-package gncimport.boundaries;
+package gncimport.models;
 
-import gncimport.models.AccountData;
-import gncimport.models.TxData;
 
 import java.util.Date;
 import java.util.List;
