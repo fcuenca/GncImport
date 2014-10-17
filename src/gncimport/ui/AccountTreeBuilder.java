@@ -7,39 +7,39 @@ import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.gnucash.xml.act.Id;
-import org.gnucash.xml.gnc.Account;
-
 public class AccountTreeBuilder
 {
 	private DefaultMutableTreeNode _rootNode;
 	private Map<String, DefaultMutableTreeNode> _map = new HashMap<String, DefaultMutableTreeNode>();
 
-	public void addNodeFor(final Account account)
+	public void addNodeFor(AccountData accountData)
 	{
-		checkAccountIsValid(account);
+		if (accountData == null)
+		{
+			throw new IllegalArgumentException("account shouldn't be null");
+		}
 
-		DefaultMutableTreeNode newNode = createNewNode(account);
+		DefaultMutableTreeNode newNode = createNewNode(accountData);
 
-		_map.put(account.getId().getValue(), newNode);
+		_map.put(accountData.getId(), newNode);
 	}
 
-	private DefaultMutableTreeNode createNewNode(final Account account)
+	private DefaultMutableTreeNode createNewNode(AccountData accountData)
 	{
 		DefaultMutableTreeNode newNode;
 
-		newNode = account.getParent() == null ? createRootNode(account) : createChildNode(account);
+		newNode = accountData.getParentId() == null ? createRootNode(accountData) : createChildNode(accountData);
 
-		newNode.setUserObject(new AccountData(account.getName(), account.getId().getValue()));
+		newNode.setUserObject(accountData);
 
 		return newNode;
 	}
 
-	private DefaultMutableTreeNode createChildNode(final Account account)
+	private DefaultMutableTreeNode createChildNode(AccountData accountData)
 	{
 		DefaultMutableTreeNode newNode = new DefaultMutableTreeNode();
 
-		DefaultMutableTreeNode parentNode = _map.get(account.getParent().getValue());
+		DefaultMutableTreeNode parentNode = _map.get(accountData.getParentId());
 
 		if (parentNode != null)
 		{
@@ -47,46 +47,22 @@ public class AccountTreeBuilder
 		}
 		else
 		{
-			throw new IllegalArgumentException("parent cannot be found for account: " + account.getName());
+			throw new IllegalArgumentException("parent cannot be found for account: " + accountData.getName());
 		}
 
 		return newNode;
 	}
 
-	private DefaultMutableTreeNode createRootNode(final Account account)
+	private DefaultMutableTreeNode createRootNode(AccountData accountData)
 	{
 		if (_rootNode != null)
 		{
-			throw new IllegalArgumentException("tree has more than one root: " + account.getName());
+			throw new IllegalArgumentException("tree has more than one root: " + accountData.getName());
 		}
 
 		_rootNode = new DefaultMutableTreeNode();
 
 		return _rootNode;
-	}
-
-	private void checkAccountIsValid(final Account account)
-	{
-		if (account == null)
-		{
-			throw new IllegalArgumentException("account shouldn't be null");
-		}
-		else
-		{
-			Id id = account.getId();
-
-			if (id != null)
-			{
-				if (id.getValue() == null || id.getValue().isEmpty())
-				{
-					throw new IllegalArgumentException("Account ID value is null or empty for: " + account.getName());
-				}
-			}
-			else
-			{
-				throw new IllegalArgumentException("Account ID is null for: " + account.getName());
-			}
-		}
 	}
 
 	public DefaultMutableTreeNode getRoot()

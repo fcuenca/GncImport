@@ -1,14 +1,29 @@
 package gncimport.models;
 
+import org.gnucash.xml.act.Id;
+import org.gnucash.xml.gnc.Account;
+
 public class AccountData
 {
 	private final String _accountName;
 	private final String _accountId;
+	private final String _parentId;
 
 	public AccountData(String accName, String accId)
 	{
+		this(accName, accId, null);
+	}
+
+	public AccountData(String accName, String accId, String parentId)
+	{
+		if (accId == null || accId.isEmpty())
+		{
+			throw new IllegalArgumentException("Account ID value is null or empty for: " + accName);
+		}
+
 		this._accountName = accName;
 		this._accountId = accId;
+		this._parentId = parentId;
 	}
 
 	@Override
@@ -27,6 +42,11 @@ public class AccountData
 		return _accountId;
 	}
 
+	public String getParentId()
+	{
+		return _parentId;
+	}
+
 	@Override
 	public int hashCode()
 	{
@@ -34,6 +54,7 @@ public class AccountData
 		int result = 1;
 		result = prime * result + ((_accountId == null) ? 0 : _accountId.hashCode());
 		result = prime * result + ((_accountName == null) ? 0 : _accountName.hashCode());
+		result = prime * result + ((_parentId == null) ? 0 : _parentId.hashCode());
 		return result;
 	}
 
@@ -61,7 +82,47 @@ public class AccountData
 		}
 		else if (!_accountName.equals(other._accountName))
 			return false;
+		if (_parentId == null)
+		{
+			if (other._parentId != null)
+				return false;
+		}
+		else if (!_parentId.equals(other._parentId))
+			return false;
 		return true;
+	}
+
+	public static AccountData fromAccount(final Account account)
+	{
+		checkAccountIsValid(account);
+
+		return new AccountData(
+				account.getName(), account.getId().getValue(),
+				account.getParent() != null ? account.getParent().getValue() : null);
+	}
+
+	private static void checkAccountIsValid(final Account account)
+	{
+		if (account == null)
+		{
+			throw new IllegalArgumentException("account shouldn't be null");
+		}
+		else
+		{
+			Id id = account.getId();
+
+			if (id != null)
+			{
+				if (id.getValue() == null || id.getValue().isEmpty())
+				{
+					throw new IllegalArgumentException("Account ID value is null or empty for: " + account.getName());
+				}
+			}
+			else
+			{
+				throw new IllegalArgumentException("Account ID is null for: " + account.getName());
+			}
+		}
 	}
 
 }

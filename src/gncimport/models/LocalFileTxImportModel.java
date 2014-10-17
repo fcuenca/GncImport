@@ -139,9 +139,17 @@ public class LocalFileTxImportModel implements TxImportModel
 	}
 
 	@Override
-	public List<Account> getAccounts()
+	public List<AccountData> getAccounts()
 	{
-		return _gnc.getAccounts();
+		List<Account> accounts = _gnc.getAccounts();
+
+		List<AccountData> accData = new ArrayList<AccountData>();
+		for (Account account : accounts)
+		{
+			accData.add(AccountData.fromAccount(account));
+		}
+
+		return accData;
 	}
 
 	@Override

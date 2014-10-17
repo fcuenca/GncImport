@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.gnucash.xml.gnc.Account;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -133,7 +132,7 @@ public class LocalFileImportTests
 	@Test
 	public void can_provide_list_of_accounts()
 	{
-		List<Account> accounts = _model.getAccounts();
+		List<AccountData> accounts = _model.getAccounts();
 
 		assertThat(accounts.size(), is(34));
 		assertThat(accounts.get(0).getName(), is("Root Account"));

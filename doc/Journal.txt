@@ -49,6 +49,9 @@ Next Step: add date filtering for the transaction list (so that I don't have to 
 
 ---++Thu Oct 16
 
-Created class diagrams. Analyzed package structure.
+Created class diagrams. Analyzed package structure. 
+Removed dependency from UI to underlying gnclib objects.
+Practiced refactoring.
+
 
 

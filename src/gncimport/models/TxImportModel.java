@@ -1,10 +1,7 @@
 package gncimport.models;
 
-
 import java.util.Date;
 import java.util.List;
-
-import org.gnucash.xml.gnc.Account;
 
 public interface TxImportModel
 {
@@ -16,7 +13,7 @@ public interface TxImportModel
 
 	AccountData getSourceAccount();
 
-	List<Account> getAccounts();
+	List<AccountData> getAccounts();
 
 	void setSourceAccount(AccountData accountData);
 

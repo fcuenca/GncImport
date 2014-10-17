@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.gnucash.xml.gnc.Account;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -84,7 +83,7 @@ public class PresenterRendersTargetAccounts
 	@Test
 	public void renders_the_target_account_tree()
 	{
-		List<Account> accountList = SampleAccountData.testAccountList();
+		List<AccountData> accountList = SampleAccountData.testAccountList();
 
 		when(_model.getAccounts()).thenReturn(accountList);
 
@@ -146,7 +145,7 @@ public class PresenterRendersTargetAccounts
 		AccountData originalAcc = new AccountData("Original", "id-1");
 		AccountData selectedAccount = new AccountData("New Acc", "acc-id");
 		DefaultMutableTreeNode selectedNode = new DefaultMutableTreeNode(selectedAccount);
-		List<Account> sampleAccounts = SampleAccountData.testAccountList();
+		List<AccountData> sampleAccounts = SampleAccountData.testAccountList();
 
 		when(_model.getAccounts()).thenReturn(sampleAccounts);
 		when(_view.displayAccountTree(expectedAccTree.capture())).thenReturn(selectedNode);

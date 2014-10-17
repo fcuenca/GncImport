@@ -18,7 +18,6 @@ import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.gnucash.xml.gnc.Account;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +54,7 @@ public class PresenterRendersTheAccountList
 	@Test
 	public void renders_the_source_account_tree()
 	{
-		List<Account> accountList = SampleAccountData.testAccountList();
+		List<AccountData> accountList = SampleAccountData.testAccountList();
 
 		when(_model.getAccounts()).thenReturn(accountList);
 

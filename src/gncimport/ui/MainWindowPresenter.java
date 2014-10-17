@@ -10,8 +10,6 @@ import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.gnucash.xml.gnc.Account;
-
 public class MainWindowPresenter implements MainWindowRenderer
 {
 	public static final AccountData OTHER_ACC_PLACEHOLDER = new AccountData("<< OTHER >>", "-1");
@@ -159,10 +157,10 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 	private DefaultMutableTreeNode getAccountTree()
 	{
-		List<Account> accounts = _model.getAccounts();
+		List<AccountData> accounts = _model.getAccounts();
 
 		AccountTreeBuilder builder = new AccountTreeBuilder();
-		for (Account account : accounts)
+		for (AccountData account : accounts)
 		{
 			builder.addNodeFor(account);
 		}
