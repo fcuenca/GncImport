@@ -55,4 +55,5 @@ Practiced refactoring.
 ---++Fri Oct 17
 
 Experimented with git/svn configurations.
+Created new git-based Eclipse workspace.
 
