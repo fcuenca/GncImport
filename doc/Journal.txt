@@ -46,12 +46,13 @@ Next Step: implement the idea of "target account hierarchy", rather than an indi
 
 Next Step: add date filtering for the transaction list (so that I don't have to edit the CSV file!)
 
-
 ---++Thu Oct 16
 
 Created class diagrams. Analyzed package structure. 
 Removed dependency from UI to underlying gnclib objects.
 Practiced refactoring.
 
+---++Fri Oct 17
 
+Experimented with git/svn configurations.
 
