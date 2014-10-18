@@ -38,12 +38,6 @@ public class GncImportAppDriver
 		_mainWindow.show();
 	}
 
-	public void openTestInputFiles(String gncFilePath, String csvFilePath)
-	{
-		openGncFile(gncFilePath);
-		openCsvFile(csvFilePath);
-	}
-
 	public void shouldDisplayTransactionGridWithTransactionCount(int txCount)
 	{
 		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
@@ -61,27 +55,24 @@ public class GncImportAppDriver
 		_mainWindow.button(GncImportMainWindow.IMPORT_BUTTON).click();
 	}
 
-	private void openCsvFile(String csvFilePath)
+	public void openCsvFile(String csvFilePath)
 	{
 		_mainWindow.button(GncImportMainWindow.OPEN_CSV_BUTTON).click();
 		selectFileInChooser(csvFilePath);
 	}
 
-	private void openGncFile(String gncFilePath)
+	public void openGncFile(String gncFilePath)
 	{
 		_mainWindow.button(GncImportMainWindow.OPEN_GNC_BUTTON).click();
-		selectFileInChooser(gncFilePath);
-	
-		selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
-		selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		selectFileInChooser(gncFilePath);	
 	}
 
-	protected void selectTargetAccount(String[] treeNodeSequence)
+	public void selectTargetAccount(String[] treeNodeSequence)
 	{
 		selectFromAccountTree(GncImportMainWindow.SELECT_TARGET_ACC_BUTTON, treeNodeSequence);
 	}
 
-	protected void selectSourceAccount(String[] treeNodeSequence)
+	public void selectSourceAccount(String[] treeNodeSequence)
 	{
 		selectFromAccountTree(GncImportMainWindow.SELECT_SRC_ACC_BUTTON, treeNodeSequence);
 	}
