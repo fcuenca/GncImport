@@ -15,7 +15,8 @@ import java.io.OutputStream;
 public class FileSystemDriver
 {
 	public final String TMP_CHECKBOOK_NEW_XML = "/tmp/checkbook-new.xml";	
-	public final String CSV_TEST_FILE = getClass().getResource("../data/rbc.csv").getPath();
+	public final String CSV_1_TEST_FILE = getClass().getResource("../data/rbc.csv").getPath();
+	public final String CSV_2_TEST_FILE = getClass().getResource("../data/rbc-visa.csv").getPath();
 	
 	private final String _gncFilePath = getClass().getResource("../data/checkbook.xml").getPath();
 	
