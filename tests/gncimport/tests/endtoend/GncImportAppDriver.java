@@ -72,35 +72,34 @@ public class GncImportAppDriver
 		_mainWindow.button(GncImportMainWindow.OPEN_GNC_BUTTON).click();
 		selectFileInChooser(gncFilePath);
 	
-		selectCheckingAccountFromTree();
-		selectFebreroAccountFromTree();
+		selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
+		selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
 	}
 
-	protected void selectFebreroAccountFromTree()
+	protected void selectTargetAccount(String[] treeNodeSequence)
 	{
-		_mainWindow.button(GncImportMainWindow.SELECT_TARGET_ACC_BUTTON).click();
+		selectFromAccountTree(GncImportMainWindow.SELECT_TARGET_ACC_BUTTON, treeNodeSequence);
+	}
+
+	protected void selectSourceAccount(String[] treeNodeSequence)
+	{
+		selectFromAccountTree(GncImportMainWindow.SELECT_SRC_ACC_BUTTON, treeNodeSequence);
+	}
+	
+	private void selectFromAccountTree(String selectionBtnName, String[] nodes)
+	{
+		_mainWindow.button(selectionBtnName).click();
 		
 		DialogFixture dialog = _mainWindow.dialog("ACC_SELECTION_DLG");
 		JTreeFixture tree = dialog.tree("ACC_TREE");
-
-		tree.node("Gastos Mensuales").expand();
-		tree.node("Gastos Mensuales/Year 2014").expand();
-		tree.node("Gastos Mensuales/Year 2014/Febrero 2014").expand();
-
-		dialog.button("OK_BUTTON").click();
-	}
-
-	protected void selectCheckingAccountFromTree()
-	{
-		_mainWindow.button(GncImportMainWindow.SELECT_SRC_ACC_BUTTON).click();
 		
-		DialogFixture dialog = _mainWindow.dialog("ACC_SELECTION_DLG");
-		JTreeFixture tree = dialog.tree("ACC_TREE");
-
-		tree.node("Assets").expand();
-		tree.node("Assets/Current Assets").expand();
-		tree.node("Assets/Current Assets/Checking Account").expand();
-
+		String path = "";
+		for (String n : nodes)
+		{
+			path += n + "/";
+			tree.node(path).expand();
+		}
+		
 		dialog.button("OK_BUTTON").click();
 	}
 
