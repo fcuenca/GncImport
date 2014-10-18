@@ -16,6 +16,7 @@ General improvements:
   Options:
    - force a particular order: 1st Gnc, then Csv
    - allow any order, but disallow Import button until both are loaded
+   - handle the problem more gratiously (abort load and show proper error message)
 - GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
 - handle double-click(?) and ESC in the acc tree dialog   
 - create build & test script  

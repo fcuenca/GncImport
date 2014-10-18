@@ -17,16 +17,20 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app = new GncImportAppDriver(robot());		
 		
 		_fs.prepareTestFiles();	
-		
-		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
-		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
-		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
-		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
 	}
 
 	@Test
 	public void browse_transactions_on_app_init()
 	{
+		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
+		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
+		
+		//TODO: without this step, loading the CSV file fails -> exposes temporal coupling bug
+		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		//---
+		
+		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
+
 		_app.shouldDisplayTransactionCountInStatusBar(20);
 		_app.shouldDisplayTransactionGridWithTransactionCount(20);
 	}
@@ -34,6 +38,11 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	@Test
 	public void save_imported_transactions() throws IOException
 	{
+		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
+		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
+		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		
+		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
 		_app.importTransactions();
 
 		_app.openCsvFile(_fs.CSV_2_TEST_FILE);
