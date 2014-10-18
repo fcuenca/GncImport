@@ -16,7 +16,8 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_fs = new FileSystemDriver();
 		_app = new GncImportAppDriver(robot());		
 		
-		_fs.prepareTestFiles();		
+		_fs.prepareTestFiles();	
+		
 		_app.openTestInputFiles(_fs.TMP_CHECKBOOK_NEW_XML, _fs.CSV_TEST_FILE);
 	}
 

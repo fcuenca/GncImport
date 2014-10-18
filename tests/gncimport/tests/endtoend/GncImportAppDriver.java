@@ -83,9 +83,9 @@ public class GncImportAppDriver
 		DialogFixture dialog = _mainWindow.dialog("ACC_SELECTION_DLG");
 		JTreeFixture tree = dialog.tree("ACC_TREE");
 
-		tree.node(3).expand();
-		tree.node(4).expand();
-		tree.node(6).select();
+		tree.node("Gastos Mensuales").expand();
+		tree.node("Gastos Mensuales/Year 2014").expand();
+		tree.node("Gastos Mensuales/Year 2014/Febrero 2014").expand();
 
 		dialog.button("OK_BUTTON").click();
 	}
@@ -97,9 +97,9 @@ public class GncImportAppDriver
 		DialogFixture dialog = _mainWindow.dialog("ACC_SELECTION_DLG");
 		JTreeFixture tree = dialog.tree("ACC_TREE");
 
-		tree.node(0).expand();
-		tree.node(1).expand();
-		tree.node(2).select();
+		tree.node("Assets").expand();
+		tree.node("Assets/Current Assets").expand();
+		tree.node("Assets/Current Assets/Checking Account").expand();
 
 		dialog.button("OK_BUTTON").click();
 	}
