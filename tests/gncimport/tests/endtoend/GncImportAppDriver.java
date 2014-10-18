@@ -24,7 +24,7 @@ public class GncImportAppDriver
 {
 	private FrameFixture _mainWindow;
 
-	public GncImportAppDriver(Robot robot, String outGncFilePath)
+	public GncImportAppDriver(Robot robot)
 	{	
 		JFrame frame = GuiActionRunner.execute(new GuiQuery<JFrame>()
 		{
