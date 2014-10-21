@@ -69,6 +69,7 @@ public class LocalFileImportTests
 	{
 		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
 
+		//TODO: fix temporal coupling (these are the preconditions to loading the CSV file -- specifically, setting the target hierarchy)
 		_model.openGncFile(getClass().getResource("../data/checkbook.xml").getPath());
 		_model.setSourceAccount(new AccountData("Checking Account", CHECKINGACC_ID));
 		_model.setTargetHierarchy(new AccountData("Enero 2014", "ignored-id"));
@@ -92,6 +93,20 @@ public class LocalFileImportTests
 		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_ENERO_ID));
 	}
+	
+	@Test
+	public void new_test()
+	{
+		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
+
+
+		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		
+//TODO: meaningful assertions
+//		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
+//		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_ENERO_ID));
+	}
+			
 
 	@Test
 	public void can_provide_default_source_account()

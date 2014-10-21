@@ -168,20 +168,23 @@ public class LocalFileTxImportModel implements TxImportModel
 	public List<AccountData> getCandidateTargetAccounts()
 	{
 		ArrayList<AccountData> accounts = new ArrayList<AccountData>();
-		List<Account> children = _accTree.get(_targetHierarcyParent.getId().getValue());
 
-		if (children != null)
+		if (_targetHierarcyParent != null)
 		{
-			for (Account a : children)
+			List<Account> children = _accTree.get(_targetHierarcyParent.getId().getValue());
+
+			if (children != null)
 			{
-				accounts.add(new AccountData(a.getName(), a.getId().getValue()));
+				for (Account a : children)
+				{
+					accounts.add(new AccountData(a.getName(), a.getId().getValue()));
+				}
+			}
+			else
+			{
+				accounts.add(new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getId().getValue()));
 			}
 		}
-		else
-		{
-			accounts.add(new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getId().getValue()));
-		}
-
 		return accounts;
 	}
 

@@ -20,15 +20,8 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	}
 
 	@Test
-	public void browse_transactions_on_app_init()
+	public void browse_transactions_from_csv_bank_export()
 	{
-		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
-		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
-		
-		//TODO: without this step, loading the CSV file fails -> exposes temporal coupling bug
-		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
-		//---
-		
 		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
 
 		_app.shouldDisplayTransactionCountInStatusBar(20);
