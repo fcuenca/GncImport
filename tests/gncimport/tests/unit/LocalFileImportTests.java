@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertNull;
 import gncimport.models.AccountData;
 import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxData;
@@ -94,17 +95,15 @@ public class LocalFileImportTests
 		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_ENERO_ID));
 	}
 	
+	//TODO: this test doesn't use the common fixture. Move to separate suite when addressing the rest of the temporal coupling issue.
 	@Test
-	public void new_test()
+	public void leaves_account_unasigned_if_csv_file_opened_before_gnc_file()
 	{
 		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
 
-
 		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
 		
-//TODO: meaningful assertions
-//		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
-//		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_ENERO_ID));
+		assertNull(txList.get(5).targetAccount);
 	}
 			
 
