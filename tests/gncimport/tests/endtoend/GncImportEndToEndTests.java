@@ -55,4 +55,20 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app.shouldAssociateAllTransactionsTo("Gastos Varios");
 		
 	}
+
+	@Test
+	public void matches_know_transaction_patterns_with_other_accounts()
+	{
+		_fs.setupConfigFile(_fs.CFG_WITH_MATCHING_RULES);
+		
+		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
+		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
+		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		
+		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
+		
+		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - IMH POOL I LP", "Departamento");
+		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - GOODLIFE CLUBS", "Salud");
+		
+	}
 }

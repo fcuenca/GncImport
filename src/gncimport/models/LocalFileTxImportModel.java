@@ -23,10 +23,24 @@ public class LocalFileTxImportModel implements TxImportModel
 	private List<TxData> _txListOriginal;
 
 	private final String _defaultTargetAccName;
+	
+	private TxMatcher _txMatcher = new TxMatcher()
+	{
+		@Override
+		public String findAccountOverride(String txDescription)
+		{
+			return null;
+		}
+	};
 
 	public LocalFileTxImportModel(String defaultTargetAccName)
 	{
 		_defaultTargetAccName = defaultTargetAccName;
+	}
+	
+	public void setTransactionMatchingRules(TxMatcher matcher)
+	{
+		this._txMatcher = matcher;		
 	}
 
 	@Override
@@ -213,14 +227,13 @@ public class LocalFileTxImportModel implements TxImportModel
 
 	private void resetTargetAccountInImportList()
 	{
-		AccountData defaultAcc = getDefaultTargetAccount();
 		List<AccountData> candidateTargetAccounts = getCandidateTargetAccounts();
 
 		for (TxData txData : _txListOriginal)
 		{
 			if (txData.targetAccount == null)
 			{
-				txData.targetAccount = defaultAcc;
+				txData.targetAccount = initialTargetAccount(txData.description, candidateTargetAccounts);
 			}
 			else
 			{
@@ -233,6 +246,23 @@ public class LocalFileTxImportModel implements TxImportModel
 			}
 		}
 	}
+
+	private AccountData initialTargetAccount(String txDescription, List<AccountData> candidateTargetAccounts)
+	{
+		String overrideAccName = _txMatcher.findAccountOverride(txDescription.trim());;
+				
+		return overrideAccName != null ? findAccountUnderTargetHierarchy(overrideAccName) : getDefaultTargetAccount();
+	}
+
+//TODO: move to matcher implementation
+//	private String findAccountOverride(String txDescription)
+//	{
+//		if(txDescription.trim().equals("PAYROLL DEPOSIT - WSIB"))
+//		{
+//			return "Entertainment";
+//		}
+//		return null;
+//	}
 
 	private AccountData findEquivalentInList(String accName, List<AccountData> candidateTargetAccounts)
 	{

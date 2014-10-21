@@ -3,11 +3,14 @@ package gncimport.tests.unit;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import gncimport.models.AccountData;
 import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxData;
+import gncimport.models.TxMatcher;
 import gncimport.tests.data.SampleTxData;
 import gncimport.tests.data.TestDataConfig;
 import gncimport.utils.ProgrammerError;
@@ -87,10 +90,13 @@ public class LocalFileImportTests
 	}
 
 	@Test
-	public void assigns_target_account_to_new_transactions()
+	public void assigns_default_target_account_to_new_transactions()
 	{
 		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
 
+		assertThat(txList.get(0).targetAccount.getName(), is("Expenses"));
+		assertThat(txList.get(0).targetAccount.getId(), is(EXPENSES_ENERO_ID));
+		
 		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_ENERO_ID));
 	}
@@ -104,8 +110,25 @@ public class LocalFileImportTests
 		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
 		
 		assertNull(txList.get(5).targetAccount);
+	}			
+
+	@Test
+	public void can_match_transactions_and_assigns_specific_accounts()
+	{
+		TxMatcher matcher = mock(TxMatcher.class);
+		
+		when(matcher.findAccountOverride("PAYROLL DEPOSIT - WSIB")).thenReturn("Entertainment");
+		
+		_model.setTransactionMatchingRules(matcher);
+		
+		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+
+		assertThat(txList.get(0).targetAccount.getName(), is("Expenses"));
+		assertThat(txList.get(0).targetAccount.getId(), is(EXPENSES_ENERO_ID));
+
+		assertThat(txList.get(5).targetAccount.getName(), is("Entertainment"));
+		assertThat(txList.get(5).targetAccount.getId(), is("243b25ad61f8f5c16335a8eae231a6dc"));
 	}
-			
 
 	@Test
 	public void can_provide_default_source_account()

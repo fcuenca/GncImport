@@ -17,6 +17,7 @@ public class FileSystemDriver
 	public final String TMP_CHECKBOOK_NEW_XML = "/tmp/checkbook-new.xml";	
 	public final String CSV_1_TEST_FILE = getClass().getResource("../data/rbc.csv").getPath();
 	public final String CSV_2_TEST_FILE = getClass().getResource("../data/rbc-visa.csv").getPath();
+	public final String CFG_WITH_MATCHING_RULES = getClass().getResource("../data/matching-rules.properties").getPath();
 	
 	private final String _gncFilePath = getClass().getResource("../data/checkbook.xml").getPath();
 	
@@ -30,6 +31,12 @@ public class FileSystemDriver
 		{
 			fail("Couldn't copy test file");
 		}
+	}
+	
+	public void setupConfigFile(String cfgFilePath)
+	{
+		// TODO copy file to tmp --> app needs to look for config files there (.gncimport)
+		// delete in prepareTestFiles (?)
 	}
 	
 	public void assertGncFileTxCountEquals(int expectedTxCount) throws IOException 
@@ -59,5 +66,4 @@ public class FileSystemDriver
 			os.close();
 		}
 	}
-
 }

@@ -1,8 +1,10 @@
 package gncimport.tests.endtoend;
 
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import gncimport.GncImportApp;
 import gncimport.ui.GncImportMainWindow;
 
@@ -19,6 +21,7 @@ import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.swing.fixture.JLabelFixture;
 import org.fest.swing.fixture.JTableFixture;
 import org.fest.swing.fixture.JTreeFixture;
+import org.hamcrest.core.IsNot;
 
 public class GncImportAppDriver
 {
@@ -58,6 +61,24 @@ public class GncImportAppDriver
 		{
 			assertThat("row: "+ i , grid.target.getValueAt(i, 3).toString(), is(accountName));
 		}
+	}
+	
+	public void shouldAssociateTransactionsToAccount(String txText, String accountName)
+	{
+		int matchesFound = 0;
+		
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		
+		for (int i = 0; i < grid.rowCount(); i++)
+		{
+			if(grid.target.getValueAt(i, 2).toString().trim().equals(txText))
+			{
+				matchesFound++;
+				assertThat("row: "+ i + ", '" + txText + "'" , grid.target.getValueAt(i, 3).toString(), is(accountName));
+			}
+		}
+		
+		assertThat("couldn't find any matches for: '" + txText + "'", matchesFound, not(is(0)));
 	}
 
 	public void importTransactions()

@@ -1,5 +1,7 @@
 TODO:
 
+- remove findEquivalentInList and replace with findAccountUnderTargetHierarchy (may simplify the temporal coupling problem!)
+
 Features:
 - I can import two files in a row
 - App remembers location of files
