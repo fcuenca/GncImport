@@ -49,6 +49,16 @@ public class GncImportAppDriver
 		JLabelFixture label = _mainWindow.label("TX_COUNT");
 		assertThat(label.text(), containsString("" + txCount + " transaction"));
 	}
+	
+	public void shouldAssociateAllTransactionsTo(String accountName)
+	{
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		
+		for (int i = 0; i < grid.rowCount(); i++)
+		{
+			assertThat("row: "+ i , grid.target.getValueAt(i, 3).toString(), is(accountName));
+		}
+	}
 
 	public void importTransactions()
 	{

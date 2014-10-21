@@ -43,4 +43,16 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 
 		_fs.assertGncFileTxCountEquals(93);
 	}
+	
+	@Test
+	public void new_transactions_associated_by_default_to_general_expenses()
+	{
+		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
+		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
+		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		
+		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
+		_app.shouldAssociateAllTransactionsTo("Gastos Varios");
+		
+	}
 }
