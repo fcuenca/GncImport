@@ -33,6 +33,8 @@ public class GncImportAppDriver
 		{
 			protected JFrame executeInEDT()
 			{
+				GncImportApp.HomeDir = "/tmp";
+				
 				return GncImportApp.createMainFrame();
 			}
 		});

@@ -14,6 +14,7 @@ import java.io.OutputStream;
 
 public class FileSystemDriver
 {
+	public final String TMP_GNCIMPORT = "/tmp/.gncimport";
 	public final String TMP_CHECKBOOK_NEW_XML = "/tmp/checkbook-new.xml";	
 	public final String CSV_1_TEST_FILE = getClass().getResource("../data/rbc.csv").getPath();
 	public final String CSV_2_TEST_FILE = getClass().getResource("../data/rbc-visa.csv").getPath();
@@ -26,6 +27,8 @@ public class FileSystemDriver
 		try 
 		{
 			copyFile(_gncFilePath, TMP_CHECKBOOK_NEW_XML);
+			
+			new File(TMP_GNCIMPORT).delete();
 		} 
 		catch (IOException e) 
 		{
@@ -33,10 +36,9 @@ public class FileSystemDriver
 		}
 	}
 	
-	public void setupConfigFile(String cfgFilePath)
+	public void setupConfigFile(String cfgFilePath) throws IOException
 	{
-		// TODO copy file to tmp --> app needs to look for config files there (.gncimport)
-		// delete in prepareTestFiles (?)
+		copyFile(CFG_WITH_MATCHING_RULES, TMP_GNCIMPORT);
 	}
 	
 	public void assertGncFileTxCountEquals(int expectedTxCount) throws IOException 
