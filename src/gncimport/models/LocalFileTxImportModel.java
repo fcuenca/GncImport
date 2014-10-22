@@ -227,17 +227,15 @@ public class LocalFileTxImportModel implements TxImportModel
 
 	private void resetTargetAccountInImportList()
 	{
-		List<AccountData> candidateTargetAccounts = getCandidateTargetAccounts();
-
 		for (TxData txData : _txListOriginal)
 		{
 			if (txData.targetAccount == null)
 			{
-				txData.targetAccount = initialTargetAccount(txData.description, candidateTargetAccounts);
+				txData.targetAccount = initialTargetAccount(txData.description);
 			}
 			else
 			{
-				AccountData equivalent = findEquivalentInList(txData.targetAccount.getName(), candidateTargetAccounts);
+				AccountData equivalent = findAccountUnderTargetHierarchy(txData.targetAccount.getName());
 
 				if (equivalent != null)
 				{
@@ -247,7 +245,7 @@ public class LocalFileTxImportModel implements TxImportModel
 		}
 	}
 
-	private AccountData initialTargetAccount(String txDescription, List<AccountData> candidateTargetAccounts)
+	private AccountData initialTargetAccount(String txDescription)
 	{
 		String overrideAccName = _txMatcher.findAccountOverride(txDescription.trim());;
 				
@@ -263,19 +261,6 @@ public class LocalFileTxImportModel implements TxImportModel
 //		}
 //		return null;
 //	}
-
-	private AccountData findEquivalentInList(String accName, List<AccountData> candidateTargetAccounts)
-	{
-		for (AccountData acc : candidateTargetAccounts)
-		{
-			if (acc.getName().equals(accName))
-			{
-				return acc;
-			}
-		}
-
-		return null;
-	}
 
 	@Override
 	public List<TxData> filterTxList(Date fromDate, Date toDate)
