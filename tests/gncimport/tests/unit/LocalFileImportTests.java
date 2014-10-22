@@ -117,7 +117,7 @@ public class LocalFileImportTests
 	{
 		TxMatcher matcher = mock(TxMatcher.class);
 		
-		when(matcher.findAccountOverride("PAYROLL DEPOSIT - WSIB")).thenReturn("Entertainment");
+		when(matcher.findAccountOverride("PAYROLL DEPOSIT - WSIB ")).thenReturn("Entertainment");
 		
 		_model.setTransactionMatchingRules(matcher);
 		

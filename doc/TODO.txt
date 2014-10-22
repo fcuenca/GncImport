@@ -18,6 +18,7 @@ General improvements:
 - handle double-click(?) and ESC in the acc tree dialog   
 - create build & test script  
 - getClass().getResource("../data/checkbook.xml").getPath() -> duplicated a lot => introduce helper TestData class w/static file(name) function 
+- replace assertNull() with harmcrest nullValue();
 
 ==================
 DONE:

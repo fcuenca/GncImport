@@ -247,20 +247,10 @@ public class LocalFileTxImportModel implements TxImportModel
 
 	private AccountData initialTargetAccount(String txDescription)
 	{
-		String overrideAccName = _txMatcher.findAccountOverride(txDescription.trim());;
+		String overrideAccName = _txMatcher.findAccountOverride(txDescription);
 				
 		return overrideAccName != null ? findAccountUnderTargetHierarchy(overrideAccName) : getDefaultTargetAccount();
 	}
-
-//TODO: move to matcher implementation
-//	private String findAccountOverride(String txDescription)
-//	{
-//		if(txDescription.trim().equals("PAYROLL DEPOSIT - WSIB"))
-//		{
-//			return "Entertainment";
-//		}
-//		return null;
-//	}
 
 	@Override
 	public List<TxData> filterTxList(Date fromDate, Date toDate)
