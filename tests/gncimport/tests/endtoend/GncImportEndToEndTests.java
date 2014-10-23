@@ -49,7 +49,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	}
 	
 	@Test
-	public void new_transactions_associated_by_default_to_general_expenses()
+	public void by_default_everything_is_imported_into_general_expenses()
 	{
 		_app = new GncImportAppDriver(robot());		
 
@@ -58,10 +58,11 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
 		
 		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
-		_app.shouldAssociateAllTransactionsTo("Gastos Varios");
 		
+		_app.shouldAssociateAllTransactionsTo("Gastos Varios");
+		_app.shouldNotIgnoreAnyTransaction();
 	}
-
+	
 	@Test
 	public void matches_know_transaction_patterns_with_other_accounts() throws IOException
 	{
@@ -77,6 +78,21 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		
 		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - IMH POOL I LP", "Departamento");
 		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - GOODLIFE CLUBS", "Salud");
+	}
+	
+	@Test
+	public void known_transactions_can_be_automatically_ignored() throws IOException
+	{
+		_fs.setupConfigFile(TestFiles.CFG_WITH_MATCHING_RULES);
 		
+		_app = new GncImportAppDriver(robot());		
+
+		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
+		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
+		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		
+		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
+		
+		_app.shouldIgnoreTransactionsLike("MISC PAYMENT - RBC CREDIT CARD.*");
 	}
 }

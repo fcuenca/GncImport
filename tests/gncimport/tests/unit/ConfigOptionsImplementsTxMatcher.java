@@ -21,6 +21,10 @@ public class ConfigOptionsImplementsTxMatcher
 		p.setProperty("match.1.account", "MISC PAYMENT - IMH POOL I LP|Departamento");
 		p.setProperty("match.2.account", "MISC PAYMENT - GOODLIFE CLUBS|Salud");
 		p.setProperty("match.99.account", "SAN CRISTOBAL SEG 1146ROSARIO.*|Casa Cordoba");
+
+		p.setProperty("match.1.ignore", "WEB TRANSFER");
+		p.setProperty("match.99.ignore", "MISC PAYMENT - RBC CREDIT CARD.*");
+
 		p.setProperty("some.other.property", "this will not be matched|dummy");
 		
 		return p;
@@ -77,5 +81,18 @@ public class ConfigOptionsImplementsTxMatcher
 		_options = new ConfigOptions(new Properties());
 		
 		assertThat(_options.findAccountOverride("no match"), is(nullValue()));
+	}
+	
+	@Test
+	public void ignore_flag_not_set_if_theres_no_match()
+	{
+		assertThat(_options.isToBeIgnored("this will not be matched"), is(false));
+	}
+	
+	@Test
+	public void ignore_flag_set_when_theres_a_match()
+	{
+		assertThat(_options.isToBeIgnored("WEB TRANSFER  "), is(true));
+		assertThat(_options.isToBeIgnored("MISC PAYMENT - RBC CREDIT CARD - TX123"), is(true));
 	}
 }

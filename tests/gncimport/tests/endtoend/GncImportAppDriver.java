@@ -2,8 +2,10 @@ package gncimport.tests.endtoend;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsInstanceOf.*;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
+
 import gncimport.GncImportApp;
 import gncimport.ui.GncImportMainWindow;
 
@@ -79,6 +81,48 @@ public class GncImportAppDriver
 		}
 		
 		assertThat("couldn't find any matches for: '" + txText + "'", matchesFound, not(is(0)));
+	}
+
+	public void shouldNotIgnoreAnyTransaction()
+	{
+		int importCount = 0;
+		
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		
+		for (int i = 0; i < grid.rowCount(); i++)
+		{
+			assertThat("unexpected data type in 'Ignore' column",
+					grid.target.getValueAt(i, 4), is(instanceOf(Boolean.class)));
+			
+			if(grid.target.getValueAt(i, 4).equals(false))
+			{
+				importCount++;
+			}
+		}
+		
+		assertThat("not all rows are flagged as imported", importCount, is(grid.rowCount()));
+	}
+
+	public void shouldIgnoreTransactionsLike(String txDesc)
+	{
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		
+		for (int i = 0; i < grid.rowCount(); i++)
+		{
+			assertThat("unexpected data type in 'Ignore' column",
+					grid.target.getValueAt(i, 4), is(instanceOf(Boolean.class)));
+			
+			if (grid.target.getValueAt(i, 2).toString().matches(txDesc))
+			{
+				assertThat("Unexpected ignore status for row " + i + ": " + grid.target.getValueAt(i, 2),
+						(Boolean)grid.target.getValueAt(i, 4), is(true));
+			}
+			else
+			{
+				assertThat("Unexpected ignore status for row " + i + ": " + grid.target.getValueAt(i, 2),
+						(Boolean)grid.target.getValueAt(i, 4), is(false));
+			}
+		}
 	}
 
 	public void importTransactions()

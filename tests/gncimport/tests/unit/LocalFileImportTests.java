@@ -24,7 +24,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class LocalFileImportTests
 {
 	private static final String SPECIAL_EXPENSES_ID = "1eb826d327e81be51e663430f5b7adb9";
@@ -130,7 +133,31 @@ public class LocalFileImportTests
 		assertThat(txList.get(5).targetAccount.getName(), is("Entertainment"));
 		assertThat(txList.get(5).targetAccount.getId(), is("243b25ad61f8f5c16335a8eae231a6dc"));
 	}
+	
+	@Test
+	public void can_automatically_ignore_some_transactions()
+	{
+		TxMatcher matcher = mock(TxMatcher.class);
+		
+		when(matcher.isToBeIgnored("MISC PAYMENT - RBC CREDIT CARD ")).thenReturn(true);
+		
+		_model.setTransactionMatchingRules(matcher);
+		
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
+		for (TxData txData : txList)
+		{
+			if(txData.description.equals("MISC PAYMENT - RBC CREDIT CARD "))
+			{
+				assertThat("unexpected ignore flag for: " + txData.description, txData.doNotImport, is(true));
+			}
+			else
+			{
+				assertThat("unexpected ignore flag for: " + txData.description, txData.doNotImport, is(false));
+			}
+		}
+	}
+	
 	@Test
 	public void can_provide_default_source_account()
 	{
@@ -387,8 +414,9 @@ public class LocalFileImportTests
 		assertThat(txList.get(txList.size() - 1).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
 	}
 
-	private AccountData[] asArray(List<AccountData> accountList)
+	private AccountData[] asArray(List<AccountData> list)
 	{
-		return accountList.toArray(new AccountData[accountList.size()]);
+		return list.toArray(new AccountData[list.size()]);
 	}
+
 }

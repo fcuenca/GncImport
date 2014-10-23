@@ -31,6 +31,12 @@ public class LocalFileTxImportModel implements TxImportModel
 		{
 			return null;
 		}
+
+		@Override
+		public boolean isToBeIgnored(String txDescription)
+		{
+			return false;
+		}
 	};
 
 	public LocalFileTxImportModel(String defaultTargetAccName)
@@ -49,8 +55,14 @@ public class LocalFileTxImportModel implements TxImportModel
 		try
 		{
 			_txListOriginal = new RbcExportParser(fileName).getTransactions();
-
-			resetTargetAccountInImportList();
+			
+			for (TxData txData : _txListOriginal)
+			{
+				String overrideAccName = _txMatcher.findAccountOverride(txData.description);
+				txData.targetAccount = overrideAccName != null ? findAccountUnderTargetHierarchy(overrideAccName) : getDefaultTargetAccount();	
+				
+				txData.doNotImport = _txMatcher.isToBeIgnored(txData.description);
+			}
 
 			return _txListOriginal;
 		}
@@ -229,27 +241,13 @@ public class LocalFileTxImportModel implements TxImportModel
 	{
 		for (TxData txData : _txListOriginal)
 		{
-			if (txData.targetAccount == null)
-			{
-				txData.targetAccount = initialTargetAccount(txData.description);
-			}
-			else
-			{
-				AccountData equivalent = findAccountUnderTargetHierarchy(txData.targetAccount.getName());
+			AccountData equivalent = findAccountUnderTargetHierarchy(txData.targetAccount.getName());
 
-				if (equivalent != null)
-				{
-					txData.targetAccount = equivalent;
-				}
+			if (equivalent != null)
+			{
+				txData.targetAccount = equivalent;
 			}
 		}
-	}
-
-	private AccountData initialTargetAccount(String txDescription)
-	{
-		String overrideAccName = _txMatcher.findAccountOverride(txDescription);
-				
-		return overrideAccName != null ? findAccountUnderTargetHierarchy(overrideAccName) : getDefaultTargetAccount();
 	}
 
 	@Override
