@@ -1,5 +1,7 @@
 package gncimport.tests.endtoend;
 
+import gncimport.tests.data.TestFiles;
+
 import java.io.IOException;
 
 import org.fest.swing.junit.testcase.FestSwingJUnitTestCase;
@@ -22,7 +24,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	{
 		_app = new GncImportAppDriver(robot());		
 
-		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
+		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 
 		_app.shouldDisplayTransactionCountInStatusBar(20);
 		_app.shouldDisplayTransactionGridWithTransactionCount(20);
@@ -37,10 +39,10 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
 		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
 		
-		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
+		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 		_app.importTransactions();
 
-		_app.openCsvFile(_fs.CSV_2_TEST_FILE);
+		_app.openCsvFile(TestFiles.CSV_2_TEST_FILE);
 		_app.importTransactions();
 
 		_fs.assertGncFileTxCountEquals(93);
@@ -55,7 +57,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
 		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
 		
-		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
+		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 		_app.shouldAssociateAllTransactionsTo("Gastos Varios");
 		
 	}
@@ -63,7 +65,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	@Test
 	public void matches_know_transaction_patterns_with_other_accounts() throws IOException
 	{
-		_fs.setupConfigFile(_fs.CFG_WITH_MATCHING_RULES);
+		_fs.setupConfigFile(TestFiles.CFG_WITH_MATCHING_RULES);
 		
 		_app = new GncImportAppDriver(robot());		
 
@@ -71,7 +73,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
 		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
 		
-		_app.openCsvFile(_fs.CSV_1_TEST_FILE);
+		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 		
 		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - IMH POOL I LP", "Departamento");
 		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - GOODLIFE CLUBS", "Salud");

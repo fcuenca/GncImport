@@ -13,6 +13,7 @@ import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
 import gncimport.tests.data.SampleTxData;
 import gncimport.tests.data.TestDataConfig;
+import gncimport.tests.data.TestFiles;
 import gncimport.utils.ProgrammerError;
 
 import java.io.IOException;
@@ -74,7 +75,7 @@ public class LocalFileImportTests
 		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
 
 		//TODO: fix temporal coupling (these are the preconditions to loading the CSV file -- specifically, setting the target hierarchy)
-		_model.openGncFile(getClass().getResource("../data/checkbook.xml").getPath());
+		_model.openGncFile(TestFiles.GNC_TEST_FILE);
 		_model.setSourceAccount(new AccountData("Checking Account", CHECKINGACC_ID));
 		_model.setTargetHierarchy(new AccountData("Enero 2014", "ignored-id"));
 	}
@@ -82,7 +83,7 @@ public class LocalFileImportTests
 	@Test
 	public void fetches_transactions_to_import_from_file()
 	{
-		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		assertThat(txList.size(), is(20));
 		assertThat(txList.get(0).description, is("MISC PAYMENT - IMH POOL I LP "));
@@ -92,7 +93,7 @@ public class LocalFileImportTests
 	@Test
 	public void assigns_default_target_account_to_new_transactions()
 	{
-		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		assertThat(txList.get(0).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(0).targetAccount.getId(), is(EXPENSES_ENERO_ID));
@@ -107,7 +108,7 @@ public class LocalFileImportTests
 	{
 		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
 
-		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 		
 		assertThat(txList.get(5).targetAccount, is(nullValue()));
 	}			
@@ -121,7 +122,7 @@ public class LocalFileImportTests
 		
 		_model.setTransactionMatchingRules(matcher);
 		
-		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		assertThat(txList.get(0).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(0).targetAccount.getId(), is(EXPENSES_ENERO_ID));
@@ -238,7 +239,7 @@ public class LocalFileImportTests
 	@Test
 	public void changing_target_account_changes_import_txList()
 	{
-		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
 
@@ -249,7 +250,7 @@ public class LocalFileImportTests
 	@Test
 	public void selects_equivalent_account_under_new_hierarchy_if_available()
 	{
-		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		txList.get(10).targetAccount = new AccountData("Supplies", "the-id");
 
@@ -262,7 +263,7 @@ public class LocalFileImportTests
 	@Test
 	public void preserves_target_account_selection_without_equivalent_under_new_hierarchy()
 	{
-		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		txList.get(10).targetAccount = new AccountData("Some Esoteric Account", "the-id");
 
@@ -275,7 +276,7 @@ public class LocalFileImportTests
 	@Test
 	public void changing_target_account_changes_candidate_account_list()
 	{
-		_model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		_model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		List<AccountData> initialCandidates = _model.getCandidateTargetAccounts();
 
@@ -300,7 +301,7 @@ public class LocalFileImportTests
 	{
 		LocalFileTxImportModel_ForTesting model = new LocalFileTxImportModel_ForTesting("doesn't exist");
 
-		model.openGncFile(getClass().getResource("../data/checkbook.xml").getPath());
+		model.openGncFile(TestFiles.GNC_TEST_FILE);
 		model.setSourceAccount(new AccountData("Checking Account", CHECKINGACC_ID));
 
 		model.setTargetHierarchy(new AccountData("Enero 2014", "irrelevant-id"));
@@ -331,7 +332,7 @@ public class LocalFileImportTests
 	@Test
 	public void can_filter_transactions_to_import_using_inclusive_range()
 	{
-		_model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		_model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		Date fromDate = new Date(2014 - 1900, 0, 10);
 		Date toDate = new Date(2014 - 1900, 0, 30);
@@ -354,7 +355,7 @@ public class LocalFileImportTests
 	@Test
 	public void filter_can_be_reset_to_re_include_filtered_out_transactions()
 	{
-		_model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		_model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		Date fromDate = new Date(2014 - 1900, 0, 10);
 		Date toDate = new Date(2014 - 1900, 0, 30);
@@ -374,7 +375,7 @@ public class LocalFileImportTests
 	@Test
 	public void resetting_target_hierarchy_also_affects_filtered_out_transactions()
 	{
-		_model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
+		_model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 		_model.filterTxList(new Date(2014 - 1900, 0, 10), new Date(2014 - 1900, 0, 30));
 
 		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));

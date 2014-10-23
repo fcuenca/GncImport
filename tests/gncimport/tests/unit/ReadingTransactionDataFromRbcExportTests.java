@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.models.TxData;
+import gncimport.tests.data.TestFiles;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -136,9 +137,7 @@ public class ReadingTransactionDataFromRbcExportTests
 	{
 		try
 		{
-			String fileName = getClass().getResource("../data/rbc.csv").getPath();
-
-			RbcExportParser parser = new RbcExportParser(fileName);
+			RbcExportParser parser = new RbcExportParser(TestFiles.CSV_1_TEST_FILE);
 
 			List<TxData> txs;
 			txs = parser.getTransactions();

@@ -3,6 +3,7 @@ package gncimport.tests.endtoend;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import gncimport.tests.data.TestFiles;
 import gnclib.GncFile;
 
 import java.io.File;
@@ -16,17 +17,12 @@ public class FileSystemDriver
 {
 	public final String TMP_GNCIMPORT = "/tmp/.gncimport";
 	public final String TMP_CHECKBOOK_NEW_XML = "/tmp/checkbook-new.xml";	
-	public final String CSV_1_TEST_FILE = getClass().getResource("../data/rbc.csv").getPath();
-	public final String CSV_2_TEST_FILE = getClass().getResource("../data/rbc-visa.csv").getPath();
-	public final String CFG_WITH_MATCHING_RULES = getClass().getResource("../data/matching-rules.properties").getPath();
-	
-	private final String _gncFilePath = getClass().getResource("../data/checkbook.xml").getPath();
 	
 	public void prepareTestFiles() 
 	{
 		try 
 		{
-			copyFile(_gncFilePath, TMP_CHECKBOOK_NEW_XML);
+			copyFile(TestFiles.GNC_TEST_FILE, TMP_CHECKBOOK_NEW_XML);
 			
 			new File(TMP_GNCIMPORT).delete();
 		} 
@@ -38,7 +34,7 @@ public class FileSystemDriver
 	
 	public void setupConfigFile(String cfgFilePath) throws IOException
 	{
-		copyFile(CFG_WITH_MATCHING_RULES, TMP_GNCIMPORT);
+		copyFile(TestFiles.CFG_WITH_MATCHING_RULES, TMP_GNCIMPORT);
 	}
 	
 	public void assertGncFileTxCountEquals(int expectedTxCount) throws IOException 
