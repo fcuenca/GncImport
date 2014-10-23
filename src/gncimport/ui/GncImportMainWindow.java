@@ -1,5 +1,6 @@
 package gncimport.ui;
 
+import gncimport.GncImportApp;
 import gncimport.models.AccountData;
 import gncimport.models.TxImportModel;
 
@@ -11,7 +12,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.logging.Level;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
@@ -28,9 +28,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.jdesktop.swingx.JXDatePicker;
-import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXStatusBar;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 @SuppressWarnings("serial")
 public class GncImportMainWindow extends JPanel implements TxView, ActionListener
@@ -279,19 +277,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	@Override
 	public void handleException(Exception e)
 	{
-		String stackTrace = "";
-
-		for (StackTraceElement se : e.getStackTrace())
-		{
-			stackTrace += se.toString() + "\n";
-		}
-
-		JXErrorPane.showDialog(this,
-				new ErrorInfo("Critical Error",
-						e.getMessage(),
-						stackTrace,
-						null,
-						e, Level.SEVERE, null));
+		GncImportApp.displayError(this, e);
 	}
 
 	@Override

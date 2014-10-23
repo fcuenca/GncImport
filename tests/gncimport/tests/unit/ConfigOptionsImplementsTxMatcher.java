@@ -7,11 +7,8 @@ import gncimport.ConfigOptions;
 import gncimport.utils.InvalidConfigOption;
 
 import java.util.Properties;
-import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.CORBA.portable.ApplicationException;
 
 public class ConfigOptionsImplementsTxMatcher
 {

@@ -1,15 +1,19 @@
 package gncimport;
 
+import java.awt.Component;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxImportModel;
 import gncimport.ui.GncImportMainWindow;
 
 import javax.swing.JFrame;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 public class GncImportApp
 {
@@ -60,7 +64,7 @@ public class GncImportApp
 		}
 		catch (IOException e)
 		{
-			// TODO report exception properly and continue
+			GncImportApp.displayError(null, e);
 		}
 		
 		return p;
@@ -77,6 +81,23 @@ public class GncImportApp
 		mainFrame.setContentPane(newContentPane);
 
 		return mainFrame;
+	}
+
+	public static void displayError(Component dlgOwner, Exception e)
+	{
+		String stackTrace = "";
+	
+		for (StackTraceElement se : e.getStackTrace())
+		{
+			stackTrace += se.toString() + "\n";
+		}
+	
+		JXErrorPane.showDialog(dlgOwner,
+				new ErrorInfo("Critical Error",
+						e.getMessage(),
+						stackTrace,
+						null,
+						e, Level.SEVERE, null));
 	}
 
 }
