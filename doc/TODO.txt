@@ -1,11 +1,9 @@
 TODO:
 
-
 Features:
-- I can import two files in a row
 - App remembers location of files
-- App automatically recognizes transactions by description and assigns them to a category
 - Change the UI to a wizard (with steps) 
+- matching rules to ignore transactions
 
 end-to-end test improvements:
 - extract window driver from app driver
@@ -15,8 +13,8 @@ General improvements:
 - better handle the two states of the model class, depending on which file has been loaded first
 - check that Target Account & Source accounts are different
 - GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
-- handle double-click(?) and ESC in the acc tree dialog   
-- getClass().getResource("../data/checkbook.xml").getPath() -> duplicated a lot => introduce helper TestData class w/static file(name) function 
+- handle double-click(?) and ESC in the acc tree dialog  
+- script the generation of the jar app 
 
 ==================
 DONE:
@@ -36,5 +34,6 @@ DONE:
 - remove findEquivalentInList and replace with findAccountUnderTargetHierarchy (may simplify the temporal coupling problem!)
 - create build & test script  
 - replace assertNull() with harmcrest nullValue();
-
- 
+- getClass().getResource("../data/checkbook.xml").getPath() -> duplicated a lot => introduce helper TestData class w/static file(name) function 
+- App automatically recognizes transactions by description and assigns them to a category
+- I can import two files in a row
