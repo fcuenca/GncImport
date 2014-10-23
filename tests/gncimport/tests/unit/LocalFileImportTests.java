@@ -3,7 +3,7 @@ package gncimport.tests.unit;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNull;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -109,7 +109,7 @@ public class LocalFileImportTests
 
 		List<TxData> txList = _model.fetchTransactionsFrom(getClass().getResource("../data/rbc.csv").getPath());
 		
-		assertNull(txList.get(5).targetAccount);
+		assertThat(txList.get(5).targetAccount, is(nullValue()));
 	}			
 
 	@Test

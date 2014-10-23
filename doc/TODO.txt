@@ -16,9 +16,7 @@ General improvements:
 - check that Target Account & Source accounts are different
 - GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
 - handle double-click(?) and ESC in the acc tree dialog   
-- create build & test script  
 - getClass().getResource("../data/checkbook.xml").getPath() -> duplicated a lot => introduce helper TestData class w/static file(name) function 
-- replace assertNull() with harmcrest nullValue();
 
 ==================
 DONE:
@@ -36,5 +34,7 @@ DONE:
 - gnc::Account class leaks outside the Model - use AccountData instead?
 - (PARTIAL) Resolve temporal coupling in loading the input files through enable/disable controls in the UI
 - remove findEquivalentInList and replace with findAccountUnderTargetHierarchy (may simplify the temporal coupling problem!)
+- create build & test script  
+- replace assertNull() with harmcrest nullValue();
 
  
