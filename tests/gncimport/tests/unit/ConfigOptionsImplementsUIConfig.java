@@ -17,6 +17,7 @@ public class ConfigOptionsImplementsUIConfig
 		ConfigOptions options = new ConfigOptions(new Properties());
 		
 		assertThat(options.getLastGncDirectory(), is(""));
+		assertThat(options.getLastCsvDirectory(), is(""));
 	}
 
 	
@@ -24,11 +25,13 @@ public class ConfigOptionsImplementsUIConfig
 	public void last_file_locations_can_be_retrieved_from_properties()
 	{
 		Properties properties = new Properties();
-		properties.setProperty("last.gnc", "/path/to/file");
+		properties.setProperty("last.gnc", "/path/to/gnc");
+		properties.setProperty("last.csv", "/path/to/csv");
 		
 		ConfigOptions options = new ConfigOptions(properties);
 		
-		assertThat(options.getLastGncDirectory(), is("/path/to/file"));
+		assertThat(options.getLastGncDirectory(), is("/path/to/gnc"));
+		assertThat(options.getLastCsvDirectory(), is("/path/to/csv"));
 	}
 	
 	@Test
@@ -36,23 +39,28 @@ public class ConfigOptionsImplementsUIConfig
 	{
 		Properties properties = new Properties();
 		properties.setProperty("last.gnc", " ");
+		properties.setProperty("last.csv", " ");
 		
 		ConfigOptions options = new ConfigOptions(properties);
 		
 		assertThat(options.getLastGncDirectory(), is(""));
+		assertThat(options.getLastCsvDirectory(), is(""));
 	}
 	
 	@Test
 	public void last_file_location_can_be_changed()
 	{
 		Properties properties = new Properties();
-		properties.setProperty("last.gnc", "/path/to/file");
+		properties.setProperty("last.gnc", "/path/to/gnc");
+		properties.setProperty("last.csv", "/path/to/csv");
 		
 		ConfigOptions options = new ConfigOptions(properties);
 		
-		options.setLastGncDirectory("/new/path");
+		options.setLastGncDirectory("/new/path/gnc");
+		options.setLastCsvDirectory("/new/path/csv");
 		
-		assertThat(options.getProperties().getProperty("last.gnc"), is("/new/path"));
+		assertThat(options.getProperties().getProperty("last.gnc"), is("/new/path/gnc"));
+		assertThat(options.getProperties().getProperty("last.csv"), is("/new/path/csv"));
 	}
 
 	@Test
@@ -61,8 +69,10 @@ public class ConfigOptionsImplementsUIConfig
 		ConfigOptions options = new ConfigOptions(new Properties());
 		
 		options.setLastGncDirectory("   ");
+		options.setLastCsvDirectory("   ");
 		
 		assertThat(options.getProperties().getProperty("last.gnc"), is(""));
+		assertThat(options.getProperties().getProperty("last.csv"), is(""));
 	}
 
 
@@ -72,6 +82,14 @@ public class ConfigOptionsImplementsUIConfig
 		ConfigOptions options = new ConfigOptions(new Properties());
 		
 		options.setLastGncDirectory(null);
+	}
+	
+	@Test(expected = ProgrammerError.class)
+	public void last_csv_file_location_shouldnt_be_set_to_null()
+	{
+		ConfigOptions options = new ConfigOptions(new Properties());
+		
+		options.setLastCsvDirectory(null);
 	}
 	
 	@Test(expected = ProgrammerError.class)

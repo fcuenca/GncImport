@@ -116,14 +116,16 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	@Override
 	public String getLastCsvDirectory()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		String value = _properties.getProperty("last.csv");
+		
+		return value == null? "" : value.trim();
 	}
 
 	@Override
 	public void setLastCsvDirectory(String path)
 	{
-		// TODO Auto-generated method stub
-		
+		if (path == null) throw new ProgrammerError("Last CSV file location can't be null!!");
+
+		_properties.setProperty("last.csv", path.trim());
 	}
 }
