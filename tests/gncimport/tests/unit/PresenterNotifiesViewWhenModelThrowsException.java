@@ -47,7 +47,9 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	@Test
 	public void when_loading_csv_file()
 	{
-		_presenter.onReadFromCsvFile("/path/to/file.csv");
+		when(_view.promptForFile(anyString())).thenReturn("/some/file.csv");
+
+		_presenter.onReadFromCsvFile();
 
 		verify(_view).handleException(_expectedException);
 	}

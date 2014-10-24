@@ -17,6 +17,7 @@ import gncimport.tests.data.SampleAccountData;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
+import gncimport.ui.UIConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,23 +43,29 @@ public class PresenterRendersTargetAccounts
 	private TxImportModel _model;
 	private MainWindowPresenter _presenter;
 	private TxView _view;
+	private UIConfig _config;
+
 
 	@Before
 	public void SetUp()
 	{
 		_model = mock(TxImportModel.class);
 		_view = mock(TxView.class);
-		_presenter = new MainWindowPresenter(_model, _view, null);
+		_config = mock(UIConfig.class);
+
+		when(_view.promptForFile(anyString())).thenReturn("/some/file.csv");
+
+		_presenter = new MainWindowPresenter(_model, _view, _config);
 	}
 
 	@Test
 	public void sets_list_of_available_target_accounts()
 	{
 		List<AccountData> accountList = sampleAccounts();
-
+		
 		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
 
-		_presenter.onReadFromCsvFile("/path/to/file.csv");
+		_presenter.onReadFromCsvFile();
 
 		verify(_view).displayTxData(any(TxTableModel.class), expectedAccountList.capture());
 
@@ -72,7 +79,7 @@ public class PresenterRendersTargetAccounts
 
 		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
 
-		_presenter.onReadFromCsvFile("/path/to/file.csv");
+		_presenter.onReadFromCsvFile();
 
 		verify(_view).displayTxData(any(TxTableModel.class), expectedAccountList.capture());
 

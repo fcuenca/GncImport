@@ -27,4 +27,6 @@ public interface TxView
 	String promptForFile(String initialDirectory);
 
 	void updateGncFileLabel(String text);
+
+	void updateCsvFileLabel(String text);
 }

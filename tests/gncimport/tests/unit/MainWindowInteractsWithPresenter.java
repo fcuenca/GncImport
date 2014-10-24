@@ -34,7 +34,7 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 			}
 		});
 
-		verify(_presenter).onReadFromCsvFile("/path/to/file.csv");
+		verify(_presenter).onReadFromCsvFile();
 	}
 
 	@Test

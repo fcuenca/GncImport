@@ -347,7 +347,8 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		}
 	}
 
-	private void updateCsvFileLabel(String fileName)
+	@Override
+	public void updateCsvFileLabel(String fileName)
 	{
 		_csvFileLabel.setText(fileName);
 		_csvFileLabel.setToolTipText(fileName);
@@ -390,7 +391,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public void onLoadCsvFile(String fileName)
 	{
-		_presenter.onReadFromCsvFile(fileName);
+		_presenter.onReadFromCsvFile();
 	}
 
 	public void onLoadGncFile()

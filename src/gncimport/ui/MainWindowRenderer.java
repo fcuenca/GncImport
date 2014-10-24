@@ -7,7 +7,7 @@ import java.util.Date;
 public interface MainWindowRenderer
 {
 
-	public abstract void onReadFromCsvFile(String fileName);
+	public abstract void onReadFromCsvFile();
 
 	public abstract void onSaveToGncFile(String fileName);
 

@@ -112,4 +112,18 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	{
 		return _properties;
 	}
+
+	@Override
+	public String getLastCsvDirectory()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLastCsvDirectory(String path)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

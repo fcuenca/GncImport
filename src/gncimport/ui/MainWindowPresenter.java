@@ -27,15 +27,29 @@ public class MainWindowPresenter implements MainWindowRenderer
 	}
 
 	@Override
-	public void onReadFromCsvFile(String fileName)
+	public void onReadFromCsvFile()
 	{
 		List<TxData> newTransactionData;
 		try
 		{
-			newTransactionData = _model.fetchTransactionsFrom(fileName);
-
-			_view.displayTxData(new TxTableModel(newTransactionData), buildTargetAccountList());
-			_view.displayTxCount(newTransactionData.size());
+			String lastDir = _config.getLastCsvDirectory();
+			
+			if(lastDir == null || lastDir.isEmpty())
+			{
+				lastDir = System.getProperty("user.home");
+			}
+			
+			String fileName = _view.promptForFile(lastDir);
+			
+			if (fileName != null)
+			{
+				newTransactionData = _model.fetchTransactionsFrom(fileName);
+				
+				_view.displayTxData(new TxTableModel(newTransactionData), buildTargetAccountList());
+				_view.displayTxCount(newTransactionData.size());
+				_config.setLastCsvDirectory(new File(fileName).getParent());
+				_view.updateCsvFileLabel(fileName);
+			}
 		}
 		catch (Exception e)
 		{
