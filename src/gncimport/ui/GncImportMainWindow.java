@@ -318,16 +318,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		}
 		else if (e.getActionCommand().equals(OPEN_CSV_BUTTON))
 		{
-			String fileName = promptForFile(/*startingDirectoryFromConfig*/);
-
-			if (fileName != null)
-			{
-				onLoadCsvFile(fileName);
-				updateCsvFileLabel(fileName);
-				
-				//updateProperty("last.gnc", fileName);
-				
-			}
+			onLoadCsvFile();
 		}
 		else if (e.getActionCommand().equals(IMPORT_BUTTON))
 		{
@@ -389,7 +380,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		_presenter.onSelectTargetHierarchy();
 	}
 
-	public void onLoadCsvFile(String fileName)
+	public void onLoadCsvFile()
 	{
 		_presenter.onReadFromCsvFile();
 	}

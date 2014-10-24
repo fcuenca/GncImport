@@ -30,7 +30,7 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 		{
 			protected void doActionsOnView(GncImportMainWindow v)
 			{
-				v.onLoadCsvFile("/path/to/file.csv");
+				v.onLoadCsvFile();
 			}
 		});
 
