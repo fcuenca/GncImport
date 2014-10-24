@@ -58,10 +58,7 @@ public class LocalFileTxImportModel implements TxImportModel
 			
 			for (TxData txData : _txListOriginal)
 			{
-				String overrideAccName = _txMatcher.findAccountOverride(txData.description);
-				txData.targetAccount = overrideAccName != null ? findAccountUnderTargetHierarchy(overrideAccName) : getDefaultTargetAccount();	
-				
-				txData.doNotImport = _txMatcher.isToBeIgnored(txData.description);
+				applyRules(txData);
 			}
 
 			return _txListOriginal;
@@ -70,6 +67,25 @@ public class LocalFileTxImportModel implements TxImportModel
 		{
 			throw new RuntimeException(e);
 		}
+	}
+
+	//TODO: this is a separate class wanting to emerge. 
+	private void applyRules(TxData txData)
+	{
+		applyRule_overrideAcc(txData); 
+		applyRule_setIgnore(txData);
+	}
+
+	private void applyRule_setIgnore(TxData txData)
+	{
+		txData.doNotImport = _txMatcher.isToBeIgnored(txData.description);
+	}
+
+	private void applyRule_overrideAcc(TxData txData)
+	{
+		//This is the problem: it depends on the acc Tree
+		String overrideAccName = _txMatcher.findAccountOverride(txData.description);
+		txData.targetAccount = overrideAccName != null ? findAccountUnderTargetHierarchy(overrideAccName) : getDefaultTargetAccount();
 	}
 
 	@Override
