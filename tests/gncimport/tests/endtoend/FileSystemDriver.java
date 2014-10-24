@@ -35,7 +35,7 @@ public class FileSystemDriver
 	
 	public void setupConfigFile(String cfgFilePath) throws IOException
 	{
-		copyFile(TestFiles.CFG_WITH_MATCHING_RULES, TMP_GNCIMPORT);
+		copyFile(cfgFilePath, TMP_GNCIMPORT);
 	}
 	
 	public void assertGncFileTxCountEquals(int expectedTxCount) throws IOException 

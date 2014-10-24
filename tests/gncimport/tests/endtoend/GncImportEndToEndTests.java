@@ -103,9 +103,27 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app = new GncImportAppDriver(robot());	
 		_app.shouldLookForFilesInFolder(System.getProperty("user.home"));
 	}
-	
+
 	@Test
-	public void location_of_last_opened_files_is_stored_in_config_file() throws IOException
+	public void uses_last_known_location_to_open_files() throws IOException
+	{
+		_fs.setupConfigFile(TestFiles.CFG_WITH_LAST_LOCATIONS);
+
+		_app = new GncImportAppDriver(robot());	
+		_app.shouldLookForFilesInFolder("/tmp");
+	}
+
+	@Test
+	public void falls_back_to_homeDir_if_last_known_locations_are_invalid() throws IOException
+	{
+		_fs.setupConfigFile(TestFiles.CFG_WITH_INVALID_LOCATIONS);
+
+		_app = new GncImportAppDriver(robot());	
+		_app.shouldLookForFilesInFolder(System.getProperty("user.home"));
+	}
+
+	@Test
+	public void remembers_where_files_were_opened_the_last_time() throws IOException
 	{
 		_app = new GncImportAppDriver(robot());	
 
@@ -118,7 +136,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_fs.assertConfigPropertyEquals("last.csv", new File(TestFiles.CSV_1_TEST_FILE).getParent());
 
 	}
-
+	
 	private void forceAppShutdown()
 	{
 		_app.shutdown();
