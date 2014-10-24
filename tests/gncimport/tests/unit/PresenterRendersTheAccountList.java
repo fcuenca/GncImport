@@ -13,6 +13,7 @@ import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleAccountData;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxView;
+import gncimport.ui.UIConfig;
 
 import java.util.List;
 
@@ -34,21 +35,56 @@ public class PresenterRendersTheAccountList
 	private MainWindowPresenter _presenter;
 	private TxView _view;
 	private TxImportModel _model;
+	private UIConfig _config;
 
 	@Before
 	public void SetUp()
 	{
 		_model = mock(TxImportModel.class);
 		_view = mock(TxView.class);
-		_presenter = new MainWindowPresenter(_model, _view);
+		_config = mock(UIConfig.class);
+		
+		_presenter = new MainWindowPresenter(_model, _view, _config);
 	}
 
 	@Test
-	public void initilizes_gnc_file()
+	public void prompts_for_opening_gnc_file_at_the_last_known_location()
 	{
-		_presenter.onLoadGncFile("/path/to/gnc.xml");
+		when(_config.getLastGncDirectory()).thenReturn("/path/to/input");
+		when(_view.promptForFile("/path/to/input")).thenReturn("/path/to/input/gnc.xml");
+		
+		_presenter.onLoadGncFile();
 
-		verify(_model).openGncFile("/path/to/gnc.xml");
+		verify(_model).openGncFile("/path/to/input/gnc.xml");
+		verify(_config).setLastGncDirectory("/path/to/input");
+		verify(_view).updateGncFileLabel("/path/to/input/gnc.xml");
+	}
+	
+	@Test
+	public void defaults_to_homeDir_if_there_is_no_last_known_location()
+	{
+		String homeDir = System.getProperty("user.home");
+		
+		when(_config.getLastGncDirectory()).thenReturn("");
+		when(_view.promptForFile(homeDir)).thenReturn(homeDir + "/gnc.xml");
+		
+		_presenter.onLoadGncFile();
+
+		verify(_model).openGncFile(homeDir + "/gnc.xml");
+		verify(_config).setLastGncDirectory(homeDir);
+		verify(_view).updateGncFileLabel(homeDir + "/gnc.xml");
+	}
+	
+	@Test
+	public void can_handle_cancel_open_file_operation()
+	{
+		when(_view.promptForFile(anyString())).thenReturn(null);
+		
+		_presenter.onLoadGncFile();
+
+		verify(_model, never()).openGncFile(anyString());
+		verify(_config, never()).setLastGncDirectory(anyString());
+		verify(_view, never()).updateGncFileLabel(anyString());
 	}
 
 	@Test

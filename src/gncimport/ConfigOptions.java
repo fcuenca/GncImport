@@ -1,13 +1,15 @@
 package gncimport;
 
 import gncimport.models.TxMatcher;
+import gncimport.ui.UIConfig;
 import gncimport.utils.InvalidConfigOption;
+import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class ConfigOptions implements TxMatcher
+public class ConfigOptions implements TxMatcher, UIConfig
 {
 	private class TxAccountOverrideRule
 	{
@@ -23,9 +25,14 @@ public class ConfigOptions implements TxMatcher
 
 	private List<TxAccountOverrideRule> _accountOverrideRules = new ArrayList<TxAccountOverrideRule>();
 	private List<String> _ignoreRules = new ArrayList<String>();
+	private Properties _properties;
 
 	public ConfigOptions(Properties properties)
 	{
+		if (properties == null) throw new ProgrammerError("Properties can't be null!!");
+		
+		_properties = properties;
+		
 		for (String key : properties.stringPropertyNames())
 		{
 			String value = properties.getProperty(key);
@@ -83,5 +90,26 @@ public class ConfigOptions implements TxMatcher
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public String getLastGncDirectory()
+	{
+		String value = _properties.getProperty("last.gnc");
+		
+		return value == null? "" : value.trim();
+	}
+
+	@Override
+	public void setLastGncDirectory(String path)
+	{
+		if (path == null) throw new ProgrammerError("Last GNC file location can't be null!!");
+
+		_properties.setProperty("last.gnc", path.trim());
+	}
+
+	public Properties getProperties()
+	{
+		return _properties;
 	}
 }

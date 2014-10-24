@@ -46,7 +46,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	{
 		_model = mock(TxImportModel.class);
 		_view = mock(TxView.class);
-		_presenter = new MainWindowPresenter(_model, _view);
+		_presenter = new MainWindowPresenter(_model, _view, null);
 	}
 
 	@Test

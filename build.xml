@@ -129,6 +129,7 @@
             <test name="gncimport.tests.unit.ReadingTransactionDataFromRbcExportTests" todir="${junit.output.dir}"/>
             <test name="gncimport.tests.unit.TxTableModelTests" todir="${junit.output.dir}"/>
             <test name="gncimport.tests.unit.ConfigOptionsImplementsTxMatcher" todir="${junit.output.dir}"/>
+            <test name="gncimport.tests.unit.ConfigOptionsImplementsUIConfig" todir="${junit.output.dir}"/>
             <classpath refid="GncImport.classpath"/>
         </junit>
     </target>

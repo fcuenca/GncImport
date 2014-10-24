@@ -11,6 +11,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -51,9 +52,9 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JXDatePicker _fromDatePicker;
 	private JXDatePicker _toDatePicker;
 
-	public GncImportMainWindow(TxImportModel model)
+	public GncImportMainWindow(TxImportModel model, UIConfig config)
 	{
-		this._presenter = new MainWindowPresenter(model, this);
+		this._presenter = new MainWindowPresenter(model, this, config);
 		initialize();
 	}
 
@@ -313,24 +314,19 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	{
 		if (e.getActionCommand().equals(OPEN_GNC_BUTTON))
 		{
-			String fileName = promptForFile();
-
-			if (fileName != null)
-			{
-				onLoadGncFile(fileName);
-				_gncFileLabel.setText(fileName);
-				_gncFileLabel.setToolTipText(fileName);
-			}
+			onLoadGncFile();
 		}
 		else if (e.getActionCommand().equals(OPEN_CSV_BUTTON))
 		{
-			String fileName = promptForFile();
+			String fileName = promptForFile(/*startingDirectoryFromConfig*/);
 
 			if (fileName != null)
 			{
 				onLoadCsvFile(fileName);
-				_csvFileLabel.setText(fileName);
-				_csvFileLabel.setToolTipText(fileName);
+				updateCsvFileLabel(fileName);
+				
+				//updateProperty("last.gnc", fileName);
+				
 			}
 		}
 		else if (e.getActionCommand().equals(IMPORT_BUTTON))
@@ -349,6 +345,19 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		{
 			onFilterTxList();
 		}
+	}
+
+	private void updateCsvFileLabel(String fileName)
+	{
+		_csvFileLabel.setText(fileName);
+		_csvFileLabel.setToolTipText(fileName);
+	}
+
+	@Override
+	public void updateGncFileLabel(String fileName)
+	{
+		_gncFileLabel.setText(fileName);
+		_gncFileLabel.setToolTipText(fileName);
 	}
 
 	protected String promptForFile()
@@ -384,13 +393,28 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		_presenter.onReadFromCsvFile(fileName);
 	}
 
-	public void onLoadGncFile(String fileName)
+	public void onLoadGncFile()
 	{
-		_presenter.onLoadGncFile(fileName);
+		_presenter.onLoadGncFile();
 	}
 
 	private void onFilterTxList()
 	{
 		_presenter.onFilterTxList(_fromDatePicker.getDate(), _toDatePicker.getDate());
+	}
+
+	@Override
+	public String promptForFile(String initialDirectory)
+	{
+		JFileChooser fc = new JFileChooser();
+		fc.setName("FILE_CHOOSER");
+		fc.setCurrentDirectory(new File(initialDirectory));
+
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			return fc.getSelectedFile().getAbsolutePath();
+		}
+
+		return null;
 	}
 }

@@ -4,6 +4,7 @@ import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,11 +17,13 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 	private final TxImportModel _model;
 	private final TxView _view;
+	private final UIConfig _config;
 
-	public MainWindowPresenter(TxImportModel model, TxView view)
+	public MainWindowPresenter(TxImportModel model, TxView view, UIConfig config)
 	{
 		this._model = model;
 		this._view = view;
+		this._config = config;
 	}
 
 	@Override
@@ -64,11 +67,25 @@ public class MainWindowPresenter implements MainWindowRenderer
 	}
 
 	@Override
-	public void onLoadGncFile(String fileName)
+	public void onLoadGncFile()
 	{
 		try
 		{
-			_model.openGncFile(fileName);
+			String lastGncDirectory = _config.getLastGncDirectory();
+			
+			if(lastGncDirectory == null || lastGncDirectory.isEmpty())
+			{
+				lastGncDirectory = System.getProperty("user.home");
+			}
+			
+			String fileName = _view.promptForFile(lastGncDirectory);
+			
+			if (fileName != null)
+			{
+				_model.openGncFile(fileName);
+				_view.updateGncFileLabel(fileName);
+				_config.setLastGncDirectory(new File(fileName).getParent());
+			}
 		}
 		catch (Exception e)
 		{

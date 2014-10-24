@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Properties;
 
 public class FileSystemDriver
 {
@@ -41,6 +42,18 @@ public class FileSystemDriver
 	{
 		GncFile gnc = new GncFile(TMP_CHECKBOOK_NEW_XML);
 		assertThat(gnc.getTransactionCount(), is(expectedTxCount));
+	}
+	
+	public void assertConfigPropertyEquals(String propertyName, String expectedValue) throws IOException
+	{
+		File cfg = new File(TMP_GNCIMPORT);
+		
+		assertThat("expected config file doesn't exist", cfg.exists(), is(true));
+		
+		Properties p = new Properties();
+		p.load(new FileInputStream(cfg));
+		
+		assertThat(p.getProperty(propertyName), is(expectedValue));
 	}
 
 	private static void copyFile(String source, String dest) throws IOException

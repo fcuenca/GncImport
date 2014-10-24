@@ -16,11 +16,11 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 		{
 			protected void doActionsOnView(GncImportMainWindow v)
 			{
-				v.onLoadGncFile("/path/to/file.gnc");
+				v.onLoadGncFile();
 			}
 		});
 
-		verify(_presenter).onLoadGncFile("/path/to/file.gnc");
+		verify(_presenter).onLoadGncFile();
 	}
 
 	@Test

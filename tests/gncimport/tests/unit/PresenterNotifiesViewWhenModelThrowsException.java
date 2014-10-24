@@ -5,12 +5,14 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
 import gncimport.models.AccountData;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleTxData;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
+import gncimport.ui.UIConfig;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +41,7 @@ public class PresenterNotifiesViewWhenModelThrowsException
 		});
 
 		_view = mock(TxView.class);
-		_presenter = new MainWindowPresenter(_model, _view);
+		_presenter = new MainWindowPresenter(_model, _view, mock(UIConfig.class));
 	}
 
 	@Test
@@ -53,7 +55,9 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	@Test
 	public void when_loading_gnc_file()
 	{
-		_presenter.onLoadGncFile("/path/to/gnc.xml");
+		when(_view.promptForFile(anyString())).thenReturn("/some/path");
+		
+		_presenter.onLoadGncFile();
 
 		verify(_view).handleException(_expectedException);
 	}

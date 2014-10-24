@@ -2,6 +2,7 @@ package gncimport.tests.endtoend;
 
 import gncimport.tests.data.TestFiles;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.fest.swing.junit.testcase.FestSwingJUnitTestCase;
@@ -18,7 +19,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_fs = new FileSystemDriver();
 		_fs.prepareTestFiles();	
 	}
-
+	
 	@Test
 	public void browse_transactions_from_csv_bank_export()
 	{
@@ -94,5 +95,34 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 		
 		_app.shouldIgnoreTransactionsLike("MISC PAYMENT - RBC CREDIT CARD.*");
+	}
+	
+	@Test
+	public void by_default_looks_for_files_in_user_home_directory()
+	{
+		_app = new GncImportAppDriver(robot());	
+		_app.shouldLookForFilesInFolder(System.getProperty("user.home"));
+	}
+	
+	@Test
+	public void location_of_last_opened_files_is_stored_in_config_file() throws IOException
+	{
+		_app = new GncImportAppDriver(robot());	
+
+		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
+		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
+		
+		forceAppShutdown();
+
+		_fs.assertConfigPropertyEquals("last.gnc", new File(_fs.TMP_CHECKBOOK_NEW_XML).getParent());
+		_fs.assertConfigPropertyEquals("last.csv", new File(TestFiles.CSV_1_TEST_FILE).getParent());
+
+	}
+
+	private void forceAppShutdown()
+	{
+		_app.shutdown();
+		_app = null;
+		robot().cleanUp();
 	}
 }

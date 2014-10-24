@@ -42,7 +42,12 @@ public class GncImportAppDriver
 		_mainWindow = new FrameFixture(robot, frame);
 		_mainWindow.show();
 	}
-
+	
+	public void shutdown()
+	{
+		_mainWindow.cleanUp();
+	}
+	
 	public void shouldDisplayTransactionGridWithTransactionCount(int txCount)
 	{
 		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
@@ -181,5 +186,21 @@ public class GncImportAppDriver
 		fileChooser.click(); // without this, the "Open button" is not enabled!
 		fileChooser.selectFile(testFile);
 		fileChooser.approveButton().click(); // this forces the dialog to close!
+	}
+
+	public void shouldLookForFilesInFolder(String path)
+	{
+		_mainWindow.button(GncImportMainWindow.OPEN_CSV_BUTTON).click();
+		assertFileChooserDirectoryEquals(path);
+		
+		_mainWindow.button(GncImportMainWindow.OPEN_GNC_BUTTON).click();
+		assertFileChooserDirectoryEquals(path);
+	}
+
+	private void assertFileChooserDirectoryEquals(String path)
+	{
+		JFileChooserFixture fileChooser = _mainWindow.fileChooser("FILE_CHOOSER");
+		assertThat(fileChooser.target.getCurrentDirectory().getPath(), is(path));
+		fileChooser.cancel();
 	}
 }

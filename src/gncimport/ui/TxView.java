@@ -23,4 +23,8 @@ public interface TxView
 	void displayTargetHierarchy(String accountName);
 
 	void updateCandidateTargetAccountList(List<AccountData> accountList);
+
+	String promptForFile(String initialDirectory);
+
+	void updateGncFileLabel(String text);
 }
