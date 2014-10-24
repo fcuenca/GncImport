@@ -295,7 +295,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	@Override
 	public DefaultMutableTreeNode displayAccountTree(DefaultMutableTreeNode rootNode)
 	{
-		AccountTreeBrowserDialog dlg = new AccountTreeBrowserDialog(null, "Source Account", rootNode);
+		AccountTreeBrowserDialog dlg = new AccountTreeBrowserDialog(null, "Select Account", rootNode);
 
 		dlg.setVisible(true);
 

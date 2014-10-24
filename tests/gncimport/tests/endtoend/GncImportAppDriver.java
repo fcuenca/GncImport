@@ -160,11 +160,15 @@ public class GncImportAppDriver
 		JTreeFixture tree = dialog.tree("ACC_TREE");
 		
 		String path = "";
-		for (String n : nodes)
+		
+		for (int i = 0; i < nodes.length - 1; i++)
 		{
-			path += n + "/";
+			path += nodes[i] + "/";
 			tree.node(path).expand();
 		}
+		
+		path += nodes[nodes.length - 1];
+		tree.node(path).click();
 		
 		dialog.button("OK_BUTTON").click();
 	}
