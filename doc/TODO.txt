@@ -3,7 +3,6 @@ TODO:
 Features:
 - App remembers location of files
 - Change the UI to a wizard (with steps) 
-- matching rules to ignore transactions
 
 end-to-end test improvements:
 - extract window driver from app driver
@@ -37,3 +36,4 @@ DONE:
 - getClass().getResource("../data/checkbook.xml").getPath() -> duplicated a lot => introduce helper TestData class w/static file(name) function 
 - App automatically recognizes transactions by description and assigns them to a category
 - I can import two files in a row
+- matching rules to ignore transactions

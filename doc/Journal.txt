@@ -57,3 +57,8 @@ Practiced refactoring.
 Experimented with git/svn configurations.
 Created new git-based Eclipse workspace.
 
+---++Wed Oct 22
+
+Finished implementing transaction matching & ignore feature.
+Refactored the design around that in the Model class to explore a better design. Decided to leave the refactoring in, 
+but postpone further redesign (there's a nasty dependency I don't want to deal with now.)
