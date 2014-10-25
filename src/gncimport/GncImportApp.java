@@ -48,6 +48,9 @@ public class GncImportApp
 
 	public static void main(String[] args)
 	{
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "GncImport");
+		
 		javax.swing.SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
@@ -59,8 +62,6 @@ public class GncImportApp
 
 	private static void createAndShowGUI()
 	{
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-
 		JFrame frame = createMainFrame();
 		frame.pack();
 		frame.setVisible(true);
