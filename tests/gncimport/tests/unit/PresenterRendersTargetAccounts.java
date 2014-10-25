@@ -96,7 +96,7 @@ public class PresenterRendersTargetAccounts
 
 		_presenter.onSelectTargetHierarchy();
 
-		verify(_view).displayAccountTree(expectedAccTree.capture());
+		verify(_view).promptForAccount(expectedAccTree.capture());
 
 		assertThat(expectedAccTree.getValue().toString(), is("Root Account"));
 		assertThat(expectedAccTree.getValue().getChildCount(), is(2));
@@ -111,7 +111,7 @@ public class PresenterRendersTargetAccounts
 		List<AccountData> accountList = sampleAccounts();
 
 		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
-		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(selectedNode);
+		when(_view.promptForAccount(any(DefaultMutableTreeNode.class))).thenReturn(selectedNode);
 
 		_presenter.onSelectTargetHierarchy();
 
@@ -128,7 +128,7 @@ public class PresenterRendersTargetAccounts
 	@Test
 	public void keeps_target_hierarchy_if_no_selection_is_made()
 	{
-		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(null);
+		when(_view.promptForAccount(any(DefaultMutableTreeNode.class))).thenReturn(null);
 
 		_presenter.onSelectTargetHierarchy();
 
@@ -155,7 +155,7 @@ public class PresenterRendersTargetAccounts
 		List<AccountData> sampleAccounts = SampleAccountData.testAccountList();
 
 		when(_model.getAccounts()).thenReturn(sampleAccounts);
-		when(_view.displayAccountTree(expectedAccTree.capture())).thenReturn(selectedNode);
+		when(_view.promptForAccount(expectedAccTree.capture())).thenReturn(selectedNode);
 
 		AccountData returnedAcc = _presenter.onTargetAccountSelected(
 				MainWindowPresenter.OTHER_ACC_PLACEHOLDER, originalAcc);
@@ -173,7 +173,7 @@ public class PresenterRendersTargetAccounts
 		AccountData originalAcc = new AccountData("Original", "id-1");
 
 		when(_model.getAccounts()).thenReturn(SampleAccountData.testAccountList());
-		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(null);
+		when(_view.promptForAccount(any(DefaultMutableTreeNode.class))).thenReturn(null);
 
 		AccountData returnedAcc = _presenter.onTargetAccountSelected(
 				MainWindowPresenter.OTHER_ACC_PLACEHOLDER, originalAcc);

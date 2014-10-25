@@ -11,6 +11,7 @@ General improvements:
 - check that Target Account & Source accounts are different
 - GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
 - Change the UI to a wizard (with steps) 
+- Presenter exception handling tests: find a way to generalize the test (using reflection?)
 
 ==================
 DONE:

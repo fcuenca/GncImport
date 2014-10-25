@@ -101,4 +101,13 @@ public class PresenterNotifiesViewWhenModelThrowsException
 		verify(_view).handleException(_expectedException);
 		assertThat(selectedAcc, is(originalAcc));
 	}
+
+	@Test
+	public void when_creating_new_account_hierarchy()
+	{
+		_presenter.onCreateNewAccHierarchy();
+
+		verify(_view).handleException(_expectedException);
+	}
+
 }

@@ -26,4 +26,6 @@ public interface TxImportModel
 	void setTargetHierarchy(AccountData accountData);
 
 	List<TxData> filterTxList(Date fromDate, Date toDate);
+
+	void createNewAccountHierarchy(AccountData parentAccount, String hierarchyRoot);
 }

@@ -39,6 +39,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public static final String SELECT_SRC_ACC_BUTTON = "SELECT_SRC_ACC_BUTTON";
 	public static final String OPEN_CSV_BUTTON = "OPEN_CSV_BUTTON";
 	public static final String OPEN_GNC_BUTTON = "OPEN_GNC_BUTTON";
+	public static final String NEW_ACC_HIERARCHY_MENU = "NEW_ACC_HIERARCHY";
 
 	private final MainWindowRenderer _presenter;
 
@@ -294,13 +295,38 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 
 	@Override
-	public DefaultMutableTreeNode displayAccountTree(DefaultMutableTreeNode rootNode)
+	public DefaultMutableTreeNode promptForAccount(DefaultMutableTreeNode rootNode)
 	{
 		AccountTreeBrowserDialog dlg = new AccountTreeBrowserDialog(null, "Select Account", rootNode);
 
 		dlg.setVisible(true);
 
 		return (DefaultMutableTreeNode) dlg.getSelectedNode();
+	}
+	
+	@Override
+	public String promptForFile(String initialDirectory)
+	{
+		JFileChooser fc = new JFileChooser();
+		fc.setName("FILE_CHOOSER");
+		fc.setCurrentDirectory(new File(initialDirectory));
+
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			return fc.getSelectedFile().getAbsolutePath();
+		}
+
+		return null;
+	}
+
+	@Override
+	public NewHierarchyParams promptForNewHierarchy(DefaultMutableTreeNode rootNode)
+	{		
+		NewAccHierarchyDialog dlg = new NewAccHierarchyDialog(null, "New Account Hierarchy", rootNode);
+		
+		dlg.setVisible(true);	
+		
+		return dlg.getNewHierarchyParams();		
 	}
 
 	@Override
@@ -336,6 +362,10 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		{
 			onFilterTxList();
 		}
+		else if(e.getActionCommand().equals(NEW_ACC_HIERARCHY_MENU))
+		{
+			onNewAccHierarchy();
+		}
 	}
 
 	@Override
@@ -352,19 +382,6 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		_gncFileLabel.setToolTipText(fileName);
 	}
 
-	protected String promptForFile()
-	{
-		JFileChooser fc = new JFileChooser();
-		fc.setName("FILE_CHOOSER");
-
-		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-		{
-			return fc.getSelectedFile().getAbsolutePath();
-		}
-
-		return null;
-	}
-
 	public void onSelectSourceAccClick()
 	{
 		_presenter.onSelectSourceAccount();
@@ -378,6 +395,11 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public void onSelectTargetHierarchyClick()
 	{
 		_presenter.onSelectTargetHierarchy();
+	}
+	
+	public void onNewAccHierarchy()
+	{
+		_presenter.onCreateNewAccHierarchy();
 	}
 
 	public void onLoadCsvFile()
@@ -393,20 +415,5 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private void onFilterTxList()
 	{
 		_presenter.onFilterTxList(_fromDatePicker.getDate(), _toDatePicker.getDate());
-	}
-
-	@Override
-	public String promptForFile(String initialDirectory)
-	{
-		JFileChooser fc = new JFileChooser();
-		fc.setName("FILE_CHOOSER");
-		fc.setCurrentDirectory(new File(initialDirectory));
-
-		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-		{
-			return fc.getSelectedFile().getAbsolutePath();
-		}
-
-		return null;
 	}
 }

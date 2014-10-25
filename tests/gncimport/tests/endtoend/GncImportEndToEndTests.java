@@ -144,7 +144,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		robot().cleanUp();
 	}
 	
-	//@Test
+	@Test
 	public void creates_standardized_account_hierarchies()
 	{
 		_app = new GncImportAppDriver(robot());	

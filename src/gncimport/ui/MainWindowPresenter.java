@@ -3,6 +3,8 @@ package gncimport.ui;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
+import gncimport.ui.TxView.NewHierarchyParams;
+import gncimport.utils.ProgrammerError;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -146,6 +148,30 @@ public class MainWindowPresenter implements MainWindowRenderer
 	}
 
 	@Override
+	public void onCreateNewAccHierarchy()
+	{
+		try
+		{
+			DefaultMutableTreeNode accountRoot = getAccountTree();
+			NewHierarchyParams params = _view.promptForNewHierarchy(accountRoot);
+			if (params != null)
+			{
+				if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
+				{
+					throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
+				}
+				
+				AccountData selectedAccount = (AccountData) params.parentNode.getUserObject();
+				_model.createNewAccountHierarchy(selectedAccount, params.rootAccName);
+			}
+		}
+		catch (Exception e)
+		{
+			_view.handleException(e);
+		}
+	}
+
+	@Override
 	public AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc)
 	{
 		if (!newAcc.equals(OTHER_ACC_PLACEHOLDER))
@@ -175,7 +201,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	private AccountData selectAccountFromTree()
 	{
 		DefaultMutableTreeNode accountRoot = getAccountTree();
-		DefaultMutableTreeNode selectedNode = _view.displayAccountTree(accountRoot);
+		DefaultMutableTreeNode selectedNode = _view.promptForAccount(accountRoot);
 
 		if (selectedNode != null)
 		{

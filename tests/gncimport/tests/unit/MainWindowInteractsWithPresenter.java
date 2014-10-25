@@ -78,5 +78,19 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 
 		verify(_presenter).onSelectTargetHierarchy();
 	}
+	
+	@Test
+	public void triggers_new_acc_hierarchy_creation()
+	{
+		GuiActionRunner.execute(new ViewDriver()
+		{
+			protected void doActionsOnView(GncImportMainWindow v)
+			{
+				v.onNewAccHierarchy();
+			}
+		});
+
+		verify(_presenter).onCreateNewAccHierarchy();
+	}
 
 }

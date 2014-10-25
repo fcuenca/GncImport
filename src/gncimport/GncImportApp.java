@@ -6,6 +6,7 @@ import gncimport.ui.GncImportMainWindow;
 import gncimport.ui.UIConfig;
 
 import java.awt.Component;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -72,27 +73,29 @@ public class GncImportApp
 
 	public static JFrame createMainFrame()
 	{
-		LocalFileTxImportModel model = new LocalFileTxImportModel(DEFAULT_TARGET_ACCOUNT);
-				
+		final LocalFileTxImportModel model = new LocalFileTxImportModel(DEFAULT_TARGET_ACCOUNT);	
 		final ConfigOptions config = new ConfigOptions(readPropertiesFromFile());
 		
 		model.setTransactionMatchingRules(config);
 		
-		JFrame frame = createMainFrame(model, config);
+		final JFrame frame = createMainFrame(model, config);
 									
-		frame.setJMenuBar(createMenuBar());
 		setupAppShutdown(frame, config);
-				
+		
+		frame.setJMenuBar(createMenuBar((ActionListener) frame.getContentPane()));
+		
 		return frame;
 	}
 
-	private static JMenuBar createMenuBar()
+	private static JMenuBar createMenuBar(ActionListener listener)
 	{
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Tools");
 		JMenuItem menuItem = new JMenuItem("Create new Account Hierarchy");
 		
-		menuItem.setName("NEW_ACC_HIERARCHY");
+		menuItem.addActionListener(listener);
+		menuItem.setName(GncImportMainWindow.NEW_ACC_HIERARCHY_MENU);
+		menuItem.setActionCommand(GncImportMainWindow.NEW_ACC_HIERARCHY_MENU);
 		menu.add(menuItem);
 		menuBar.add(menu);
 		

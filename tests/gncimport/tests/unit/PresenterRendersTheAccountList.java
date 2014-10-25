@@ -96,7 +96,7 @@ public class PresenterRendersTheAccountList
 
 		_presenter.onSelectSourceAccount();
 
-		verify(_view).displayAccountTree(expectedAccTree.capture());
+		verify(_view).promptForAccount(expectedAccTree.capture());
 
 		assertThat(expectedAccTree.getValue().toString(), is("Root Account"));
 		assertThat(expectedAccTree.getValue().getChildCount(), is(2));
@@ -106,7 +106,7 @@ public class PresenterRendersTheAccountList
 	@Test
 	public void keeps_source_account_if_no_selection_is_made()
 	{
-		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(null);
+		when(_view.promptForAccount(any(DefaultMutableTreeNode.class))).thenReturn(null);
 
 		_presenter.onSelectSourceAccount();
 
@@ -119,7 +119,7 @@ public class PresenterRendersTheAccountList
 		AccountData selectedAccount = new AccountData("New Acc", "acc-id");
 		DefaultMutableTreeNode selectedNode = new DefaultMutableTreeNode(selectedAccount);
 
-		when(_view.displayAccountTree(any(DefaultMutableTreeNode.class))).thenReturn(selectedNode);
+		when(_view.promptForAccount(any(DefaultMutableTreeNode.class))).thenReturn(selectedNode);
 
 		_presenter.onSelectSourceAccount();
 

@@ -18,7 +18,7 @@ public interface TxView
 
 	void displaySourceAccount(String accountName);
 
-	DefaultMutableTreeNode displayAccountTree(DefaultMutableTreeNode rootNode);
+	DefaultMutableTreeNode promptForAccount(DefaultMutableTreeNode rootNode);
 
 	void displayTargetHierarchy(String accountName);
 
@@ -29,4 +29,12 @@ public interface TxView
 	void updateGncFileLabel(String text);
 
 	void updateCsvFileLabel(String text);
+	
+	public class NewHierarchyParams
+	{
+		public DefaultMutableTreeNode parentNode;
+		public String rootAccName;
+	}
+
+	NewHierarchyParams promptForNewHierarchy(DefaultMutableTreeNode rootNode);
 }

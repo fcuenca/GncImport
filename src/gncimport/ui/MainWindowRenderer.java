@@ -15,10 +15,11 @@ public interface MainWindowRenderer
 
 	public abstract void onSelectSourceAccount();
 
+	public void onCreateNewAccHierarchy();
+
 	public abstract void onSelectTargetHierarchy();
 
-	AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc);
+	public AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc);
 
-	void onFilterTxList(Date fromDate, Date toDate);
-
+	public void onFilterTxList(Date fromDate, Date toDate);
 }

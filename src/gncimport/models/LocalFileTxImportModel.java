@@ -286,4 +286,14 @@ public class LocalFileTxImportModel implements TxImportModel
 
 		return filteredList;
 	}
+
+	@Override
+	public void createNewAccountHierarchy(AccountData parentAccount, String rootAccountName)
+	{
+		// TODO Auto-generated method stub	
+		
+		//remember to check that this method is called AFTER opening the GNC file (more temporal coupling :-( )
+		
+		//System.out.println("new hierarcy: " + parentAccount + ", " + rootAccountName);
+	}
 }

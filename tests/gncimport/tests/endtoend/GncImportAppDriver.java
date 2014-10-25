@@ -163,8 +163,19 @@ public class GncImportAppDriver
 
 		DialogFixture dialog = _mainWindow.dialog("NEW_HIERARCHY_DLG");
 		
-		//JTreeFixture tree = dialog.tree("ACC_TREE");
-
+		JTreeFixture tree = dialog.tree("ACC_TREE");
+		String path = "";
+		for (int i = 0; i < nodesToParent.length - 1; i++)
+		{
+			path += nodesToParent[i] + "/";
+			tree.node(path).expand();
+		}
+		path += nodesToParent[nodesToParent.length - 1];
+		tree.node(path).click();
+		
+		dialog.textBox("ROOT_ACC_FIELD").setText(rootAccount);
+		
+		dialog.button("OK_BUTTON").click();
 	}
 
 	private void selectFromAccountTree(String selectionBtnName, String[] nodes)
