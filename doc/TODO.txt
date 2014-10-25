@@ -10,7 +10,6 @@ General improvements:
 - better handle the two states of the model class, depending on which file has been loaded first
 - check that Target Account & Source accounts are different
 - GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
-- script the generation of the jar app 
 - Change the UI to a wizard (with steps) 
 
 ==================
@@ -38,4 +37,5 @@ DONE:
 - handle double-click(?) and ESC in the acc tree dialog  
 - App remembers location of files
 - add more e-to-e tests for all other high-level features
+- (DECIDED NOT TO) script the generation of the jar app 
 

@@ -33,6 +33,13 @@ import com.apple.eawt.QuitStrategy;
  */
 
 
+/*
+ * TO GENERATE THE APP, create a Runnable Jar:
+ * - File|Export
+ * - Java/Runnable Jar
+ * - Package required libs into JAR file 
+ */
+
 public class GncImportApp
 {
 	public static String HomeDir = System.getProperty("user.home");
