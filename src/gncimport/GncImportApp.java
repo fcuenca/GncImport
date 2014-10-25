@@ -15,6 +15,9 @@ import java.util.Properties;
 import java.util.logging.Level;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -77,9 +80,23 @@ public class GncImportApp
 		
 		JFrame frame = createMainFrame(model, config);
 									
+		frame.setJMenuBar(createMenuBar());
 		setupAppShutdown(frame, config);
-		
+				
 		return frame;
+	}
+
+	private static JMenuBar createMenuBar()
+	{
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("Tools");
+		JMenuItem menuItem = new JMenuItem("Create new Account Hierarchy");
+		
+		menuItem.setName("NEW_ACC_HIERARCHY");
+		menu.add(menuItem);
+		menuBar.add(menu);
+		
+		return menuBar;
 	}
 
 	private static void setupAppShutdown(JFrame frame, final ConfigOptions config)

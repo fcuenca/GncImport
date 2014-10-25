@@ -157,6 +157,16 @@ public class GncImportAppDriver
 		selectFromAccountTree(GncImportMainWindow.SELECT_SRC_ACC_BUTTON, treeNodeSequence);
 	}
 	
+	public void createAccountHierarchy(String[] nodesToParent, String rootAccount)
+	{		
+		_mainWindow.menuItem("NEW_ACC_HIERARCHY").click();
+
+		DialogFixture dialog = _mainWindow.dialog("NEW_HIERARCHY_DLG");
+		
+		//JTreeFixture tree = dialog.tree("ACC_TREE");
+
+	}
+
 	private void selectFromAccountTree(String selectionBtnName, String[] nodes)
 	{
 		_mainWindow.button(selectionBtnName).click();
