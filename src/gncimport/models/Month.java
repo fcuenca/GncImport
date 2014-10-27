@@ -50,7 +50,9 @@ public class Month
 	{
 		return "Month [" + month + "]";
 	}
-	
-	
 
+	public static String[] allMonths()
+	{
+		return new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+	}
 }

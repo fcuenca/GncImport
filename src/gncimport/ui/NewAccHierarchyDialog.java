@@ -1,15 +1,21 @@
 package gncimport.ui;
 
+import gncimport.models.Month;
 import gncimport.ui.TxView.NewHierarchyParams;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -26,6 +32,7 @@ public class NewAccHierarchyDialog extends JDialog
 	private AccountTreeView _accTreeView;
 	private NewHierarchyParams _params;
 	private JTextField _rootAccName;
+	private JComboBox _months;
 
 	public NewAccHierarchyDialog(Frame aFrame, String title, TreeNode rootNode)
 	{
@@ -46,18 +53,37 @@ public class NewAccHierarchyDialog extends JDialog
 		pack();
 	}
 
+	@SuppressWarnings("deprecation")
 	private JPanel createAccountNamePanel()
-	{
-		JPanel panel = new JPanel();
+	{			
 		_rootAccName = new JTextField(20);
 		_rootAccName.setName("ROOT_ACC_FIELD");
 		
-		panel.add(new JLabel("Root Account Name: "));		
-		panel.add(_rootAccName);
+		_months = new JComboBox(Month.allMonths());
+		_months.setName("MONTHS_CB");
+		_months.setSelectedIndex(new Date().getMonth());
 		
+		JPanel panel = new JPanel(new GridBagLayout());
+		
+        addComponentRowToPanel(panel, new JLabel("Root Account Name: "), _rootAccName);  
+        addComponentRowToPanel(panel, new JLabel("Month: "), _months); 
+
 		return panel;
 	}
 
+	private void addComponentRowToPanel(JPanel panel, JLabel label, JComponent component)
+	{
+		GridBagConstraints constraints = new GridBagConstraints();  
+		constraints.insets = new Insets(2,2,2,2);  
+		
+		constraints.anchor = GridBagConstraints.EAST;
+		constraints.gridwidth = GridBagConstraints.RELATIVE;
+		panel.add(label, constraints);
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		panel.add(component, constraints);
+	}
+	
 	private  AccountTreeView createTreeView(Dimension minimumSize, TreeNode rootNode)
 	{				
 		_accTreeView = new AccountTreeView(rootNode, minimumSize, new AccountTreeView.Listener()
@@ -127,6 +153,7 @@ public class NewAccHierarchyDialog extends JDialog
 		_params = new NewHierarchyParams();
 		_params.parentNode = (DefaultMutableTreeNode) _accTreeView.selectedNode();
 		_params.rootAccName = _rootAccName.getText();
+		_params.month = new Month(_months.getSelectedIndex() + 1);
 		
 		setVisible(false);
 		dispose();
