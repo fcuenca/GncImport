@@ -1,12 +1,6 @@
 TODO:
-- what about the acc codes?
-	- Year  4yyyy0000
-	- Month 4yyyymm00 
-	- Acc:  4yyyymm99
-
 
 Features:
-- generate monthly account hierarchy (from menu option?)
 
 end-to-end test improvements:
 - extract window driver from app driver
@@ -44,4 +38,5 @@ DONE:
 - App remembers location of files
 - add more e-to-e tests for all other high-level features
 - (DECIDED NOT TO) script the generation of the jar app 
+- generate monthly account hierarchy (from menu option?)
 
