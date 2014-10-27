@@ -1,6 +1,5 @@
 package gncimport.tests.unit;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import gncimport.ui.GncImportMainWindow;
 

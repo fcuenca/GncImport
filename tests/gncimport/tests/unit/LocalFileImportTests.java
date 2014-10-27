@@ -8,7 +8,6 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gncimport.models.AccountData;
-import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
 import gncimport.tests.data.SampleTxData;
@@ -16,7 +15,6 @@ import gncimport.tests.data.TestDataConfig;
 import gncimport.tests.data.TestFiles;
 import gncimport.utils.ProgrammerError;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,51 +28,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class LocalFileImportTests
 {
-	private static final String SPECIAL_EXPENSES_ID = "1eb826d327e81be51e663430f5b7adb9";
-	private static final String SUPPLIES_FEB_ID = "2c6be57ad1474692f6f569384668c4ac";
-	private static final String FEBRERO2014_ID = "882f951395a92f8ea103fe0e9dbfbda5";
-	private static final String ENERO2014_ID = "454018fbf408f8c3e607bd51f22c5373";
-	private static final String CHECKINGACC_ID = "64833494284bad5fb390e84d38c65a54";
-	private static final String EXPENSES_FEBRERO_ID = "1edf8498fcda9b8a677160b0b6357287";
-	private static final String EXPENSES_ENERO_ID = "e31486ad3b2c6cdedccf135d13538b29";
-
-	private class LocalFileTxImportModel_ForTesting extends LocalFileTxImportModel
-	{
-
-		public LocalFileTxImportModel_ForTesting(String defaultTargetAccName)
-		{
-			super(defaultTargetAccName);
-		}
-
-		public String detectedFileName;
-		public String detectedSourceAccId;
-		public List<TxData> detectedTransactions;
-
-		@Override
-		protected void saveToGncFile(String fileName) throws IOException
-		{
-			detectedFileName = fileName;
-		}
-
-		@Override
-		protected void addNewTransactions(List<TxData> transactions, String sourceAccId)
-		{
-			detectedTransactions = transactions;
-			detectedSourceAccId = sourceAccId;
-			super.addNewTransactions(transactions, sourceAccId);
-		}
-
-		public int getTxCount()
-		{
-			return _gnc.getTransactionCount();
-		}
-		
-		public int getAccountCount()
-		{
-			return _gnc.getAccountCount();
-		}
-	}
-
 	private LocalFileTxImportModel_ForTesting _model;
 
 	@Before
@@ -84,7 +37,7 @@ public class LocalFileImportTests
 
 		//TODO: fix temporal coupling (these are the preconditions to loading the CSV file -- specifically, setting the target hierarchy)
 		_model.openGncFile(TestFiles.GNC_TEST_FILE);
-		_model.setSourceAccount(new AccountData("Checking Account", CHECKINGACC_ID));
+		_model.setSourceAccount(new AccountData("Checking Account", TestFiles.CHECKINGACC_ID));
 		_model.setTargetHierarchy(new AccountData("Enero 2014", "ignored-id"));
 	}
 
@@ -104,10 +57,10 @@ public class LocalFileImportTests
 		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		assertThat(txList.get(0).targetAccount.getName(), is("Expenses"));
-		assertThat(txList.get(0).targetAccount.getId(), is(EXPENSES_ENERO_ID));
+		assertThat(txList.get(0).targetAccount.getId(), is(TestFiles.EXPENSES_ENERO_ID));
 		
 		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
-		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_ENERO_ID));
+		assertThat(txList.get(5).targetAccount.getId(), is(TestFiles.EXPENSES_ENERO_ID));
 	}
 	
 	//TODO: this test doesn't use the common fixture. Move to separate suite when addressing the rest of the temporal coupling issue.
@@ -133,7 +86,7 @@ public class LocalFileImportTests
 		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		assertThat(txList.get(0).targetAccount.getName(), is("Expenses"));
-		assertThat(txList.get(0).targetAccount.getId(), is(EXPENSES_ENERO_ID));
+		assertThat(txList.get(0).targetAccount.getId(), is(TestFiles.EXPENSES_ENERO_ID));
 
 		assertThat(txList.get(5).targetAccount.getName(), is("Entertainment"));
 		assertThat(txList.get(5).targetAccount.getId(), is("243b25ad61f8f5c16335a8eae231a6dc"));
@@ -169,7 +122,7 @@ public class LocalFileImportTests
 		AccountData account = _model.getSourceAccount();
 
 		assertThat(account.getName(), is("Checking Account"));
-		assertThat(account.getId(), is(CHECKINGACC_ID));
+		assertThat(account.getId(), is(TestFiles.CHECKINGACC_ID));
 	}
 
 	@Test
@@ -178,7 +131,7 @@ public class LocalFileImportTests
 		AccountData account = _model.getDefaultTargetAccount();
 
 		assertThat(account.getName(), is("Expenses"));
-		assertThat(account.getId(), is(EXPENSES_ENERO_ID));
+		assertThat(account.getId(), is(TestFiles.EXPENSES_ENERO_ID));
 	}
 
 	@Test
@@ -196,7 +149,7 @@ public class LocalFileImportTests
 		AccountData account = _model.getDefaultTargetHierarchyAccount();
 
 		assertThat(account.getName(), is("Enero 2014"));
-		assertThat(account.getId(), is(ENERO2014_ID));
+		assertThat(account.getId(), is(TestFiles.ENERO2014_ID));
 	}
 
 	@Test
@@ -221,7 +174,7 @@ public class LocalFileImportTests
 
 		assertThat(_model.detectedFileName, is("new-file.xml"));
 		assertThat(_model.detectedTransactions, is(txList));
-		assertThat(_model.detectedSourceAccId, is(CHECKINGACC_ID));
+		assertThat(_model.detectedSourceAccId, is(TestFiles.CHECKINGACC_ID));
 
 		assertThat(_model.getTxCount(), is(initialTxCount + txList.size()));
 	}
@@ -262,10 +215,10 @@ public class LocalFileImportTests
 		_model.setTargetHierarchy(newAccount);
 
 		assertThat(_model.getDefaultTargetHierarchyAccount().getName(), is("Febrero 2014"));
-		assertThat(_model.getDefaultTargetHierarchyAccount().getId(), is(FEBRERO2014_ID));
+		assertThat(_model.getDefaultTargetHierarchyAccount().getId(), is(TestFiles.FEBRERO2014_ID));
 
 		assertThat(_model.getDefaultTargetAccount().getName(), is("Expenses"));
-		assertThat(_model.getDefaultTargetAccount().getId(), is(EXPENSES_FEBRERO_ID));
+		assertThat(_model.getDefaultTargetAccount().getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
 	}
 
 	@Test
@@ -276,7 +229,7 @@ public class LocalFileImportTests
 		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
 
 		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
-		assertThat(txList.get(5).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
+		assertThat(txList.get(5).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
 	}
 
 	@Test
@@ -289,7 +242,7 @@ public class LocalFileImportTests
 		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
 
 		assertThat(txList.get(10).targetAccount.getName(), is("Supplies"));
-		assertThat(txList.get(10).targetAccount.getId(), is(SUPPLIES_FEB_ID));
+		assertThat(txList.get(10).targetAccount.getId(), is(TestFiles.SUPPLIES_FEB_ID));
 	}
 
 	@Test
@@ -334,11 +287,11 @@ public class LocalFileImportTests
 		LocalFileTxImportModel_ForTesting model = new LocalFileTxImportModel_ForTesting("doesn't exist");
 
 		model.openGncFile(TestFiles.GNC_TEST_FILE);
-		model.setSourceAccount(new AccountData("Checking Account", CHECKINGACC_ID));
+		model.setSourceAccount(new AccountData("Checking Account", TestFiles.CHECKINGACC_ID));
 
 		model.setTargetHierarchy(new AccountData("Enero 2014", "irrelevant-id"));
 
-		assertThat(model.getDefaultTargetAccount(), is(new AccountData("Enero 2014", ENERO2014_ID)));
+		assertThat(model.getDefaultTargetAccount(), is(new AccountData("Enero 2014", TestFiles.ENERO2014_ID)));
 	}
 
 	@Test
@@ -346,7 +299,7 @@ public class LocalFileImportTests
 	{
 		_model.setTargetHierarchy(new AccountData("Special Expenses", "irrelevant-id"));
 
-		assertThat(_model.getDefaultTargetAccount(), is(new AccountData("Special Expenses", SPECIAL_EXPENSES_ID)));
+		assertThat(_model.getDefaultTargetAccount(), is(new AccountData("Special Expenses", TestFiles.SPECIAL_EXPENSES_ID)));
 	}
 
 	@Test
@@ -357,7 +310,7 @@ public class LocalFileImportTests
 		List<AccountData> list = _model.getCandidateTargetAccounts();
 
 		assertThat(list.size(), is(1));
-		assertThat(list.get(0), is(new AccountData("Special Expenses", SPECIAL_EXPENSES_ID)));
+		assertThat(list.get(0), is(new AccountData("Special Expenses", TestFiles.SPECIAL_EXPENSES_ID)));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -414,20 +367,9 @@ public class LocalFileImportTests
 
 		List<TxData> txList = _model.filterTxList(new Date(0, 0, 1), new Date(3000 - 1900, 0, 1));
 
-		assertThat(txList.get(0).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
-		assertThat(txList.get(10).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
-		assertThat(txList.get(txList.size() - 1).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
-	}
-
-	@Test
-	public void creates_new_account_hierarchies()
-	{
-		int initialCount = _model.getAccountCount();
-		
-		_model.createNewAccountHierarchy(new AccountData("Year 2014", "irrelevant-id"), "This Month", "filename.gnc");
-		
-		assertThat(_model.detectedFileName, is("filename.gnc"));
-		assertThat(_model.getAccountCount(), is(initialCount + 1));
+		assertThat(txList.get(0).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
+		assertThat(txList.get(10).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
+		assertThat(txList.get(txList.size() - 1).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
 	}
 
 	private AccountData[] asArray(List<AccountData> list)
