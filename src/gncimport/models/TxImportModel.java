@@ -27,5 +27,6 @@ public interface TxImportModel
 
 	List<TxData> filterTxList(Date fromDate, Date toDate);
 
-	void createNewAccountHierarchy(AccountData parentAccount, String hierarchyRoot, List<MonthlyAccountParam> subAccList, String fileNameToSave);
+	void createNewAccountHierarchy(AccountData parentAccount, String hierarchyRoot, Month month, 
+			List<MonthlyAccountParam> subAccList, String fileNameToSave);
 }

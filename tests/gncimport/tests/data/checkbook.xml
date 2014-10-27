@@ -169,6 +169,7 @@
     <cmdty:id>CAD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:code>420140000</act:code>
   <act:parent type="guid">19a25f730c009d062e93cbaf742111a9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

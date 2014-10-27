@@ -3,13 +3,14 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.models.AccountData;
+import gncimport.models.Month;
 import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleAccountData;
@@ -59,7 +60,7 @@ public class PresenterCreatesNewAccountHierarchies
 		
 		verify(_view).displayErrorMessage(anyString());
 		verify(_model, never()).createNewAccountHierarchy(
-				any(AccountData.class), anyString(), anyListOf(MonthlyAccountParam.class), anyString());
+				any(AccountData.class), anyString(), any(Month.class), anyListOf(MonthlyAccountParam.class), anyString());
 	}
 
 	@Test
@@ -86,7 +87,7 @@ public class PresenterCreatesNewAccountHierarchies
 		_presenter.onCreateNewAccHierarchy("filename");
 
 		verify(_model, never()).createNewAccountHierarchy(
-				any(AccountData.class), anyString(), anyListOf(MonthlyAccountParam.class), anyString());
+				any(AccountData.class), anyString(), any(Month.class), anyListOf(MonthlyAccountParam.class), anyString());
 	}
 	
 	@Test
@@ -139,6 +140,7 @@ public class PresenterCreatesNewAccountHierarchies
 		NewHierarchyParams hierarchyParams = new  NewHierarchyParams(); 
 		hierarchyParams.parentNode = new DefaultMutableTreeNode(selectedAccount);
 		hierarchyParams.rootAccName  ="New Hierarchy Root";
+		hierarchyParams.month = new Month(10);
 		
 		List<MonthlyAccountParam> subAccList = new ArrayList<MonthlyAccountParam>();
 		
@@ -147,7 +149,8 @@ public class PresenterCreatesNewAccountHierarchies
 
 		_presenter.onCreateNewAccHierarchy("filename");
 
-		verify(_model).createNewAccountHierarchy(selectedAccount, "New Hierarchy Root", subAccList, "filename");
+		verify(_model).createNewAccountHierarchy(selectedAccount, "New Hierarchy Root", new Month(10),
+				subAccList, "filename");
 	}
 
 }

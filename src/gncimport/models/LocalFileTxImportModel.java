@@ -288,15 +288,21 @@ public class LocalFileTxImportModel implements TxImportModel
 	}
 
 	@Override
-	public void createNewAccountHierarchy(AccountData parentAccount, String rootAccountName, List<MonthlyAccountParam> subAccList, String fileToSave)
+	public void createNewAccountHierarchy(AccountData parentAccount, String rootAccountName, Month month, List<MonthlyAccountParam> subAccList, String fileToSave)
 	{
 		try
-		{
-			Account root = _gnc.addSubAccount(rootAccountName, "4999999", _gnc.findAccountByName(parentAccount.getName()));
+		{			
+			Account parent = _gnc.findAccountByName(parentAccount.getName());
+									
+			String parentCode = parent.getCode();
+			
+			String code = generateSubAccountCode(parentCode, month, 0);
+			
+			Account root = _gnc.addSubAccount(rootAccountName, code, parent);
 			
 			for (MonthlyAccountParam p : subAccList)
 			{
-				_gnc.addSubAccount(p.accName, Integer.toString(p.code), root);
+				_gnc.addSubAccount(p.accName, generateSubAccountCode(parentCode, month, p.sequenceNo), 	root);
 			}
 			
 			saveToGncFile(fileToSave);
@@ -305,5 +311,13 @@ public class LocalFileTxImportModel implements TxImportModel
 		{
 			throw new RuntimeException(e);
 		}
+	}
+
+	private String generateSubAccountCode(String parentCode, Month month, int sequenceNo)
+	{
+		return parentCode.replaceAll("4(\\d\\d\\d\\d)(\\d\\d)00", 
+				"4$1" +
+				month.toNumericString() + 
+				String.format("%02d", sequenceNo));
 	}
 }

@@ -50,9 +50,8 @@ public class LocalFileTxImportModel_ForTesting extends LocalFileTxImportModel
 		return _gnc.getAccountCount();
 	}
 	
-	public AccountData findAccountByName(String accName)
+	public Account findAccountByName(String accName)
 	{
-		Account acc = _gnc.findAccountByName(accName);
-		return acc != null ? AccountData.fromAccount(acc) : null;
+		return _gnc.findAccountByName(accName);
 	}
 }

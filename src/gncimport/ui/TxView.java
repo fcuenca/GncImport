@@ -1,6 +1,7 @@
 package gncimport.ui;
 
 import gncimport.models.AccountData;
+import gncimport.models.Month;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public interface TxView
 	{
 		public DefaultMutableTreeNode parentNode;
 		public String rootAccName;
+		public Month month;
 	}
 
 	NewHierarchyParams promptForNewHierarchy(DefaultMutableTreeNode rootNode);

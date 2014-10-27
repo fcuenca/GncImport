@@ -1,7 +1,9 @@
 TODO:
-- passing in the account names? => from UIConfig -> need a data structure
 - what about the acc codes?
-	- Code: 4yyyymm99
+	- Year  4yyyy0000
+	- Month 4yyyymm00 
+	- Acc:  4yyyymm99
+
 
 Features:
 - generate monthly account hierarchy (from menu option?)

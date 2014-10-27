@@ -2,12 +2,12 @@ package gncimport.models;
 
 public class MonthlyAccountParam
 {
-	public final int code;
+	public final int sequenceNo;
 	public final String accName;
 
 	public MonthlyAccountParam(int code, String accName)
 	{
-		this.code = code;
+		this.sequenceNo = code;
 		this.accName = accName;		
 	}
 
@@ -17,7 +17,7 @@ public class MonthlyAccountParam
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((accName == null) ? 0 : accName.hashCode());
-		result = prime * result + code;
+		result = prime * result + sequenceNo;
 		return result;
 	}
 
@@ -38,7 +38,7 @@ public class MonthlyAccountParam
 		}
 		else if (!accName.equals(other.accName))
 			return false;
-		if (code != other.code)
+		if (sequenceNo != other.sequenceNo)
 			return false;
 		return true;
 	}
@@ -46,7 +46,7 @@ public class MonthlyAccountParam
 	@Override
 	public String toString()
 	{
-		return "MonthlyAccountParam(" + code + ", " + accName + ")";
+		return "MonthlyAccountParam(" + sequenceNo + ", " + accName + ")";
 	}
 	
 	
