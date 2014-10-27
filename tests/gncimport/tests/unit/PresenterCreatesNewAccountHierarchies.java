@@ -4,11 +4,13 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.models.AccountData;
+import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleAccountData;
 import gncimport.ui.MainWindowPresenter;
@@ -17,6 +19,7 @@ import gncimport.ui.TxView.NewHierarchyParams;
 import gncimport.ui.UIConfig;
 import gncimport.utils.ProgrammerError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -55,7 +58,8 @@ public class PresenterCreatesNewAccountHierarchies
 		_presenter.onCreateNewAccHierarchy("");
 		
 		verify(_view).displayErrorMessage(anyString());
-		verify(_model, never()).createNewAccountHierarchy(any(AccountData.class), anyString(), anyString());
+		verify(_model, never()).createNewAccountHierarchy(
+				any(AccountData.class), anyString(), anyListOf(MonthlyAccountParam.class), anyString());
 	}
 
 	@Test
@@ -81,17 +85,18 @@ public class PresenterCreatesNewAccountHierarchies
 
 		_presenter.onCreateNewAccHierarchy("filename");
 
-		verify(_model, never()).createNewAccountHierarchy(any(AccountData.class), anyString(), anyString());
+		verify(_model, never()).createNewAccountHierarchy(
+				any(AccountData.class), anyString(), anyListOf(MonthlyAccountParam.class), anyString());
 	}
 	
 	@Test
 	public void parent_account_cannot_be_null()
 	{
-		NewHierarchyParams newAccParams = new  NewHierarchyParams(); 
-		newAccParams.parentNode = null;
-		newAccParams.rootAccName = "New Hierarchy Root";
+		NewHierarchyParams hierarchyParams = new  NewHierarchyParams(); 
+		hierarchyParams.parentNode = null;
+		hierarchyParams.rootAccName = "New Hierarchy Root";
 		
-		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(newAccParams);
+		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(hierarchyParams);
 
 		_presenter.onCreateNewAccHierarchy("filename");
 		
@@ -101,11 +106,11 @@ public class PresenterCreatesNewAccountHierarchies
 	@Test
 	public void root_acc_name_cannot_be_null()
 	{
-		NewHierarchyParams newAccParams = new  NewHierarchyParams(); 
-		newAccParams.parentNode = new DefaultMutableTreeNode();
-		newAccParams.rootAccName = null;
+		NewHierarchyParams hierarchyParams = new  NewHierarchyParams(); 
+		hierarchyParams.parentNode = new DefaultMutableTreeNode();
+		hierarchyParams.rootAccName = null;
 		
-		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(newAccParams);
+		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(hierarchyParams);
 
 		_presenter.onCreateNewAccHierarchy("filename");
 		
@@ -115,11 +120,11 @@ public class PresenterCreatesNewAccountHierarchies
 	@Test
 	public void root_acc_name_cannot_be_blank()
 	{
-		NewHierarchyParams newAccParams = new  NewHierarchyParams(); 
-		newAccParams.parentNode = new DefaultMutableTreeNode();
-		newAccParams.rootAccName = "   ";
+		NewHierarchyParams hierarchyParams = new  NewHierarchyParams(); 
+		hierarchyParams.parentNode = new DefaultMutableTreeNode();
+		hierarchyParams.rootAccName = "   ";
 		
-		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(newAccParams);
+		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(hierarchyParams);
 
 		_presenter.onCreateNewAccHierarchy("filename");
 		
@@ -131,15 +136,18 @@ public class PresenterCreatesNewAccountHierarchies
 	{
 		AccountData selectedAccount = new AccountData("Parent Account", "acc-id");
 		
-		NewHierarchyParams newAccParams = new  NewHierarchyParams(); 
-		newAccParams.parentNode = new DefaultMutableTreeNode(selectedAccount);
-		newAccParams.rootAccName  ="New Hierarchy Root";
+		NewHierarchyParams hierarchyParams = new  NewHierarchyParams(); 
+		hierarchyParams.parentNode = new DefaultMutableTreeNode(selectedAccount);
+		hierarchyParams.rootAccName  ="New Hierarchy Root";
 		
-		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(newAccParams);
+		List<MonthlyAccountParam> subAccList = new ArrayList<MonthlyAccountParam>();
+		
+		when(_config.getMonthlyAccounts()).thenReturn(subAccList);
+		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(hierarchyParams);
 
 		_presenter.onCreateNewAccHierarchy("filename");
 
-		verify(_model).createNewAccountHierarchy(selectedAccount, "New Hierarchy Root", "filename");
+		verify(_model).createNewAccountHierarchy(selectedAccount, "New Hierarchy Root", subAccList, "filename");
 	}
 
 }

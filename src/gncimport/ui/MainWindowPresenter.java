@@ -169,7 +169,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 				}
 				
 				AccountData selectedAccount = (AccountData) params.parentNode.getUserObject();
-				_model.createNewAccountHierarchy(selectedAccount, params.rootAccName, fileNameToSave);
+				_model.createNewAccountHierarchy(selectedAccount, params.rootAccName, 
+						_config.getMonthlyAccounts(), fileNameToSave);
 			}
 		}
 		catch (Exception e)

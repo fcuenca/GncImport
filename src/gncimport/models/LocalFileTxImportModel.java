@@ -288,11 +288,17 @@ public class LocalFileTxImportModel implements TxImportModel
 	}
 
 	@Override
-	public void createNewAccountHierarchy(AccountData parentAccount, String rootAccountName, String fileToSave)
+	public void createNewAccountHierarchy(AccountData parentAccount, String rootAccountName, List<MonthlyAccountParam> subAccList, String fileToSave)
 	{
 		try
 		{
-			_gnc.addSubAccount(rootAccountName, "4999999", _gnc.findAccountByName(parentAccount.getName()));
+			Account root = _gnc.addSubAccount(rootAccountName, "4999999", _gnc.findAccountByName(parentAccount.getName()));
+			
+			for (MonthlyAccountParam p : subAccList)
+			{
+				_gnc.addSubAccount(p.accName, Integer.toString(p.code), root);
+			}
+			
 			saveToGncFile(fileToSave);
 		}
 		catch (IOException e)

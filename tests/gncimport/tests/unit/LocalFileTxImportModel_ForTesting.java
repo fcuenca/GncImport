@@ -7,6 +7,8 @@ import gncimport.models.TxData;
 import java.io.IOException;
 import java.util.List;
 
+import org.gnucash.xml.gnc.Account;
+
 /*
  * This class is used to intercept calls into the model at specific seams,
  * to avoid having to mock the GncFile class and at the same time
@@ -50,6 +52,7 @@ public class LocalFileTxImportModel_ForTesting extends LocalFileTxImportModel
 	
 	public AccountData findAccountByName(String accName)
 	{
-		return AccountData.fromAccount(_gnc.findAccountByName(accName));
+		Account acc = _gnc.findAccountByName(accName);
+		return acc != null ? AccountData.fromAccount(acc) : null;
 	}
 }
