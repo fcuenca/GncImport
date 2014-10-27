@@ -317,7 +317,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	{
 		return parentCode.replaceAll("4(\\d\\d\\d\\d)(\\d\\d)00", 
 				"4$1" +
-				month.toNumericString() + 
+				month.toNumericString() +
 				String.format("%02d", sequenceNo));
 	}
 }

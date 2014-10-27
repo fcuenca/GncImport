@@ -20,9 +20,10 @@ import org.junit.Test;
 
 public class LocalModelCreatesNewAccountHierarchies
 {
+	private static final int SOME_MONTH = 5;
 	private static final Month IRRELEVANT_MONTH = new Month(1);
 	private LocalFileTxImportModel_ForTesting _model;
-	private AccountData _parent;
+	private Account _parent;
 
 	@Before
 	public void setUp()
@@ -30,7 +31,7 @@ public class LocalModelCreatesNewAccountHierarchies
 		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
 
 		_model.openGncFile(TestFiles.GNC_TEST_FILE);
-		_parent = AccountData.fromAccount(_model.findAccountByName("Year 2014"));	
+		_parent = _model.findAccountByName("Year 2014");	
 	}
 	
 	@Test
@@ -41,39 +42,38 @@ public class LocalModelCreatesNewAccountHierarchies
 		subAccounts.add(new MonthlyAccountParam(2, "New Entertainment"));
 		subAccounts.add(new MonthlyAccountParam(3, "New Auto"));
 
-		Month month = new Month(5);
+		Month month = new Month(SOME_MONTH);
 		
-		_model.createNewAccountHierarchy(_parent, "This Month", month, subAccounts, "filename.gnc");
+		_model.createNewAccountHierarchy(AccountData.fromAccount(_parent), "This Month", month, subAccounts, "filename.gnc");
 
 		Account root = _model.findAccountByName("This Month");
 		
-		assertThat("root shouldn't be null", root, is(notNullValue()));
-		assertThat("root should point to its parent", root.getParent().getValue(), is(_parent.getId()));
-		assertThat("root's code should be based on parent, with month number", root.getCode(), is("420140500"));
-		
-		assertSubaccountsMatch(subAccounts, root, month);
+		assertAccountWasCorrectlyLinked(root, _parent, "42014", month, 0);
+		assertEachSubAccountWasCorrectlyLinked(subAccounts, root, "42014", month);
 	}
 
-	private void assertSubaccountsMatch(ArrayList<MonthlyAccountParam> expectedSubAccounts, Account root, Month month)
+	private void assertAccountWasCorrectlyLinked(Account account, Account parent, String prefix, Month month, int sequenceNo)
+	{
+		assertThat("account wasn't found (seq=" + sequenceNo + ")", account, is(notNullValue()));
+		assertThat("account should point to its parent", account.getParent().getValue(), is(parent.getId().getValue()));
+		assertThat("account's code should be based on parent, with month number", account.getCode(), is(validAccountCode(prefix, month, sequenceNo)));
+	}
+
+	private void assertEachSubAccountWasCorrectlyLinked(ArrayList<MonthlyAccountParam> expectedSubAccounts, Account root, String prefix, Month month)
 	{
 		for (MonthlyAccountParam p : expectedSubAccounts)
 		{
 			Account acc = _model.findAccountByName(p.accName);
 			
-			assertThat(p.accName + " not found", acc, is(notNullValue()));
-			assertThat(p.accName + " has wrong parent: " + acc.getParent().getValue(), 
-					acc.getParent().getValue(), is(root.getId().getValue()));
-			
-			assertThat(p.accName + " has wrong code: " + acc.getCode(), 
-					acc.getCode(), is(validAccountCode(month, p.sequenceNo)));
+			assertAccountWasCorrectlyLinked(acc, root, prefix, month, p.sequenceNo);
 		}
 	}
 
-	private Matcher<String> validAccountCode(final Month month, final int sequenceNo)
+	private Matcher<String> validAccountCode(final String prefix, final Month month, final int sequenceNo)
 	{
 		return new TypeSafeMatcher<String>()
 		{
-			private String expected = "42014" + month.toNumericString() + String.format("%02d", sequenceNo);;
+			private String expected = prefix + month.toNumericString() + String.format("%02d", sequenceNo);;
 
 			@Override
 			public void describeTo(Description description)
@@ -92,7 +92,7 @@ public class LocalModelCreatesNewAccountHierarchies
 	@Test
 	public void saves_new_accounts_to_file()
 	{	
-		_model.createNewAccountHierarchy(_parent, "This Month", IRRELEVANT_MONTH, new ArrayList<MonthlyAccountParam>(), "filename.gnc");
+		_model.createNewAccountHierarchy(AccountData.fromAccount(_parent), "This Month", IRRELEVANT_MONTH, new ArrayList<MonthlyAccountParam>(), "filename.gnc");
 		
 		assertThat(_model.detectedFileName, is("filename.gnc"));	
 	}

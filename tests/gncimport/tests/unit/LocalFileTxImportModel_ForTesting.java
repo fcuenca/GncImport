@@ -1,6 +1,5 @@
 package gncimport.tests.unit;
 
-import gncimport.models.AccountData;
 import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxData;
 
