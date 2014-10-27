@@ -1,5 +1,6 @@
 package gncimport;
 
+import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxMatcher;
 import gncimport.ui.UIConfig;
 import gncimport.utils.InvalidConfigOption;
@@ -8,6 +9,8 @@ import gncimport.utils.ProgrammerError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConfigOptions implements TxMatcher, UIConfig
 {
@@ -26,6 +29,7 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	private List<TxAccountOverrideRule> _accountOverrideRules = new ArrayList<TxAccountOverrideRule>();
 	private List<String> _ignoreRules = new ArrayList<String>();
 	private Properties _properties;
+	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
 
 	public ConfigOptions(Properties properties)
 	{
@@ -39,6 +43,20 @@ public class ConfigOptions implements TxMatcher, UIConfig
 			
 			createAccountOverrideRule(key, value);
 			createIgnoreRule(key, value);
+			collectMonhtlyAccounts(key, value);
+		}
+	}
+
+	private void collectMonhtlyAccounts(String key, String value)
+	{
+		Pattern pattern = Pattern.compile("monthly\\.([0-9]+)");
+		Matcher matcher = pattern.matcher(key);
+		
+		if (matcher.matches())
+		{
+			MonthlyAccountParam p = new MonthlyAccountParam(Integer.parseInt(matcher.group(1)), value);
+			
+			_monthlyAccounts.add(p);
 		}
 	}
 
@@ -127,5 +145,10 @@ public class ConfigOptions implements TxMatcher, UIConfig
 		if (path == null) throw new ProgrammerError("Last CSV file location can't be null!!");
 
 		_properties.setProperty("last.csv", path.trim());
+	}
+
+	public List<MonthlyAccountParam> getMonthlyAccounts()
+	{
+		return _monthlyAccounts;
 	}
 }

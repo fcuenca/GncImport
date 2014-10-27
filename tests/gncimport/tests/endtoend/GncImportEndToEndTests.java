@@ -145,12 +145,14 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	}
 	
 	@Test
-	public void creates_standardized_account_hierarchies()
+	public void creates_standardized_account_hierarchies() throws IOException
 	{
+		_fs.setupConfigFile(TestFiles.CFG_WITH_MONTHLY_ACCOUNTS);
+
 		_app = new GncImportAppDriver(robot());	
 
 		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
 		_app.createAccountHierarchy(new String[] {"Gastos Mensuales", "Year 2014"}, "Marzo 2014");
-		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Marzo 2014"});
+		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Marzo 2014", "Gastos Varios"});
 	}
 }

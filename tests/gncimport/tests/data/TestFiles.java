@@ -8,6 +8,7 @@ public class TestFiles
 	public static final String GNC_TEST_FILE = getFilePath("checkbook.xml");
 	public static final String CFG_WITH_LAST_LOCATIONS = getFilePath("last-location.properties");
 	public static final String CFG_WITH_INVALID_LOCATIONS = getFilePath("invalid-location.properties");
+	public static final String CFG_WITH_MONTHLY_ACCOUNTS = getFilePath("monthly-accounts.properties");
 
 	public static final String SPECIAL_EXPENSES_ID = "1eb826d327e81be51e663430f5b7adb9";
 	public static final String SUPPLIES_FEB_ID = "2c6be57ad1474692f6f569384668c4ac";

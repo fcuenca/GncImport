@@ -1,5 +1,4 @@
 TODO:
-- save immediately or later?
 - passing in the account names? => from UIConfig -> need a data structure
 - what about the acc codes?
 	- Code: 4yyyymm99

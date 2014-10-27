@@ -11,6 +11,7 @@ import java.util.List;
  * This class is used to intercept calls into the model at specific seams,
  * to avoid having to mock the GncFile class and at the same time
  * avoid overwriting the gnc test file.
+ * It also provides some helper methods to access the underlying gncfile object in the tests.
  */
 public class LocalFileTxImportModel_ForTesting extends LocalFileTxImportModel
 {

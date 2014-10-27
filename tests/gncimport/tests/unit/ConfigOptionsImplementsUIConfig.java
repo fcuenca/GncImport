@@ -1,7 +1,10 @@
 package gncimport.tests.unit;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
+import gncimport.models.MonthlyAccountParam;
 import gncimport.utils.ProgrammerError;
 
 import java.util.Properties;
@@ -98,4 +101,20 @@ public class ConfigOptionsImplementsUIConfig
 		new ConfigOptions(null);
 	}
 	
+	@Test
+	public void provides_standard_hierarchy_account_names()
+	{
+		Properties properties = new Properties();
+		properties.setProperty("monthly.1", "Gastos Varios");
+		properties.setProperty("monthly.2", "Departamento");
+		properties.setProperty("monthly.3", "Salud");
+		
+		ConfigOptions options = new ConfigOptions(properties);
+
+		assertThat(options.getMonthlyAccounts(), hasSize(3));
+		assertThat(options.getMonthlyAccounts(), hasItems(
+				new MonthlyAccountParam(1, "Gastos Varios"),
+				new MonthlyAccountParam(2, "Departamento"),
+				new MonthlyAccountParam(3, "Salud")));
+	}	
 }
