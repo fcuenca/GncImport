@@ -37,4 +37,6 @@ public interface TxView
 	}
 
 	NewHierarchyParams promptForNewHierarchy(DefaultMutableTreeNode rootNode);
+
+	void displayErrorMessage(String message);
 }

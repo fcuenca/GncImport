@@ -105,7 +105,7 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	@Test
 	public void when_creating_new_account_hierarchy()
 	{
-		_presenter.onCreateNewAccHierarchy();
+		_presenter.onCreateNewAccHierarchy("filename");
 
 		verify(_view).handleException(_expectedException);
 	}

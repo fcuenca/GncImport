@@ -148,12 +148,19 @@ public class MainWindowPresenter implements MainWindowRenderer
 	}
 
 	@Override
-	public void onCreateNewAccHierarchy()
-	{
+	public void onCreateNewAccHierarchy(String fileNameToSave)
+	{	
+		if (fileNameToSave == null || fileNameToSave.trim().isEmpty())
+		{
+			_view.displayErrorMessage("GNC file must be opened first!");
+			return;
+		}
+	
 		try
 		{
 			DefaultMutableTreeNode accountRoot = getAccountTree();
 			NewHierarchyParams params = _view.promptForNewHierarchy(accountRoot);
+			
 			if (params != null)
 			{
 				if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
@@ -162,7 +169,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 				}
 				
 				AccountData selectedAccount = (AccountData) params.parentNode.getUserObject();
-				_model.createNewAccountHierarchy(selectedAccount, params.rootAccName);
+				_model.createNewAccountHierarchy(selectedAccount, params.rootAccName, fileNameToSave);
 			}
 		}
 		catch (Exception e)

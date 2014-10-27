@@ -288,12 +288,16 @@ public class LocalFileTxImportModel implements TxImportModel
 	}
 
 	@Override
-	public void createNewAccountHierarchy(AccountData parentAccount, String rootAccountName)
+	public void createNewAccountHierarchy(AccountData parentAccount, String rootAccountName, String fileToSave)
 	{
-		// TODO Auto-generated method stub	
-		
-		//remember to check that this method is called AFTER opening the GNC file (more temporal coupling :-( )
-		
-		//System.out.println("new hierarcy: " + parentAccount + ", " + rootAccountName);
+		try
+		{
+			_gnc.addSubAccount(rootAccountName, "4999999", _gnc.findAccountByName(parentAccount.getName()));
+			saveToGncFile(fileToSave);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 }

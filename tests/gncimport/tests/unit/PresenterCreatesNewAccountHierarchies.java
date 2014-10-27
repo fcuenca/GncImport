@@ -48,6 +48,15 @@ public class PresenterCreatesNewAccountHierarchies
 		
 		_presenter = new MainWindowPresenter(_model, _view, _config);
 	}
+	
+	@Test
+	public void allowed_only_after_opening_gnc_file()
+	{
+		_presenter.onCreateNewAccHierarchy("");
+		
+		verify(_view).displayErrorMessage(anyString());
+		verify(_model, never()).createNewAccountHierarchy(any(AccountData.class), anyString(), anyString());
+	}
 
 	@Test
 	public void renders_the_account_tree()
@@ -56,7 +65,7 @@ public class PresenterCreatesNewAccountHierarchies
 
 		when(_model.getAccounts()).thenReturn(accountList);
 
-		_presenter.onCreateNewAccHierarchy();
+		_presenter.onCreateNewAccHierarchy("filename");
 
 		verify(_view).promptForNewHierarchy(expectedAccTree.capture());
 
@@ -70,9 +79,9 @@ public class PresenterCreatesNewAccountHierarchies
 	{
 		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(null);
 
-		_presenter.onCreateNewAccHierarchy();
+		_presenter.onCreateNewAccHierarchy("filename");
 
-		verify(_model, never()).createNewAccountHierarchy(any(AccountData.class), anyString());
+		verify(_model, never()).createNewAccountHierarchy(any(AccountData.class), anyString(), anyString());
 	}
 	
 	@Test
@@ -84,7 +93,7 @@ public class PresenterCreatesNewAccountHierarchies
 		
 		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(newAccParams);
 
-		_presenter.onCreateNewAccHierarchy();
+		_presenter.onCreateNewAccHierarchy("filename");
 		
 		verify(_view).handleException(any(ProgrammerError.class));
 	}
@@ -98,7 +107,7 @@ public class PresenterCreatesNewAccountHierarchies
 		
 		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(newAccParams);
 
-		_presenter.onCreateNewAccHierarchy();
+		_presenter.onCreateNewAccHierarchy("filename");
 		
 		verify(_view).handleException(any(ProgrammerError.class));
 	}
@@ -112,7 +121,7 @@ public class PresenterCreatesNewAccountHierarchies
 		
 		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(newAccParams);
 
-		_presenter.onCreateNewAccHierarchy();
+		_presenter.onCreateNewAccHierarchy("filename");
 		
 		verify(_view).handleException(any(ProgrammerError.class));
 	}
@@ -128,9 +137,9 @@ public class PresenterCreatesNewAccountHierarchies
 		
 		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(newAccParams);
 
-		_presenter.onCreateNewAccHierarchy();
+		_presenter.onCreateNewAccHierarchy("filename");
 
-		verify(_model).createNewAccountHierarchy(selectedAccount, "New Hierarchy Root");
+		verify(_model).createNewAccountHierarchy(selectedAccount, "New Hierarchy Root", "filename");
 	}
 
 }

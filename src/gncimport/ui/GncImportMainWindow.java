@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -42,6 +43,8 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public static final String NEW_ACC_HIERARCHY_MENU = "NEW_ACC_HIERARCHY";
 
 	private final MainWindowRenderer _presenter;
+	
+	private String _gncFileName = "";
 
 	private JLabel _statusLabel;
 	private JTable _table;
@@ -378,6 +381,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	@Override
 	public void updateGncFileLabel(String fileName)
 	{
+		_gncFileName = fileName;
 		_gncFileLabel.setText(fileName);
 		_gncFileLabel.setToolTipText(fileName);
 	}
@@ -389,7 +393,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public void onImportClick()
 	{
-		_presenter.onSaveToGncFile(_gncFileLabel.getText());
+		_presenter.onSaveToGncFile(_gncFileName);
 	}
 
 	public void onSelectTargetHierarchyClick()
@@ -399,7 +403,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	
 	public void onNewAccHierarchy()
 	{
-		_presenter.onCreateNewAccHierarchy();
+		_presenter.onCreateNewAccHierarchy(_gncFileName);
 	}
 
 	public void onLoadCsvFile()
@@ -415,5 +419,11 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private void onFilterTxList()
 	{
 		_presenter.onFilterTxList(_fromDatePicker.getDate(), _toDatePicker.getDate());
+	}
+
+	@Override
+	public void displayErrorMessage(String message)
+	{
+		JOptionPane.showMessageDialog(this, message);
 	}
 }

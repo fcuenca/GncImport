@@ -44,11 +44,12 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 		{
 			protected void doActionsOnView(GncImportMainWindow v)
 			{
+				v.updateGncFileLabel("file.gnc");
 				v.onImportClick();
 			}
 		});
 
-		verify(_presenter).onSaveToGncFile(anyString());
+		verify(_presenter).onSaveToGncFile("file.gnc");
 	}
 
 	@Test
@@ -86,11 +87,12 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 		{
 			protected void doActionsOnView(GncImportMainWindow v)
 			{
+				v.updateGncFileLabel("file.gnc");
 				v.onNewAccHierarchy();
 			}
 		});
 
-		verify(_presenter).onCreateNewAccHierarchy();
+		verify(_presenter).onCreateNewAccHierarchy("file.gnc");
 	}
 
 }

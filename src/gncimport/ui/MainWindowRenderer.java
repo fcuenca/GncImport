@@ -15,7 +15,7 @@ public interface MainWindowRenderer
 
 	public abstract void onSelectSourceAccount();
 
-	public void onCreateNewAccHierarchy();
+	public void onCreateNewAccHierarchy(String saveToFile);
 
 	public abstract void onSelectTargetHierarchy();
 

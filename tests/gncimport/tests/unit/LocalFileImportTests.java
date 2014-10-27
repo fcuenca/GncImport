@@ -68,6 +68,11 @@ public class LocalFileImportTests
 		{
 			return _gnc.getTransactionCount();
 		}
+		
+		public int getAccountCount()
+		{
+			return _gnc.getAccountCount();
+		}
 	}
 
 	private LocalFileTxImportModel_ForTesting _model;
@@ -412,6 +417,17 @@ public class LocalFileImportTests
 		assertThat(txList.get(0).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
 		assertThat(txList.get(10).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
 		assertThat(txList.get(txList.size() - 1).targetAccount.getId(), is(EXPENSES_FEBRERO_ID));
+	}
+
+	@Test
+	public void creates_new_account_hierarchies()
+	{
+		int initialCount = _model.getAccountCount();
+		
+		_model.createNewAccountHierarchy(new AccountData("Year 2014", "irrelevant-id"), "This Month", "filename.gnc");
+		
+		assertThat(_model.detectedFileName, is("filename.gnc"));
+		assertThat(_model.getAccountCount(), is(initialCount + 1));
 	}
 
 	private AccountData[] asArray(List<AccountData> list)
