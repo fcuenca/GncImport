@@ -31,7 +31,7 @@ public class LocalModelCreatesNewAccountHierarchies
 		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
 
 		_model.openGncFile(TestFiles.GNC_TEST_FILE);
-		_parent = _model.findAccountByName("Year 2014");	
+		_parent = _model.findAccountById(TestFiles.YEAR2014_ID);	
 	}
 	
 	@Test

@@ -161,7 +161,7 @@ public class LocalFileTxImportModel implements TxImportModel
 			{
 				if (a.getName().equals(accName))
 				{
-					return new AccountData(a.getName(), a.getId().getValue());
+					return AccountData.fromAccount(a); 
 				}
 			}
 		}
@@ -203,7 +203,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	@Override
 	public AccountData getDefaultTargetHierarchyAccount()
 	{
-		return new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getId().getValue());
+		return AccountData.fromAccount(_targetHierarcyParent); 
 	}
 
 	@Override
@@ -219,12 +219,12 @@ public class LocalFileTxImportModel implements TxImportModel
 			{
 				for (Account a : children)
 				{
-					accounts.add(new AccountData(a.getName(), a.getId().getValue()));
+					accounts.add(AccountData.fromAccount(a));
 				}
 			}
 			else
 			{
-				accounts.add(new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getId().getValue()));
+				accounts.add(AccountData.fromAccount(_targetHierarcyParent));
 			}
 		}
 		return accounts;
@@ -244,7 +244,7 @@ public class LocalFileTxImportModel implements TxImportModel
 
 		if (_targetAccount == null)
 		{
-			_targetAccount = new AccountData(_targetHierarcyParent.getName(), _targetHierarcyParent.getId().getValue());
+			_targetAccount = AccountData.fromAccount(_targetHierarcyParent); 
 		}
 
 		if (_txListOriginal != null)
@@ -292,7 +292,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	{
 		try
 		{			
-			Account parent = _gnc.findAccountByName(parentAccount.getName());
+			Account parent = _gnc.findAccountById(parentAccount.getId());
 									
 			String parentCode = parent.getCode();
 			

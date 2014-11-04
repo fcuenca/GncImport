@@ -53,4 +53,9 @@ public class LocalFileTxImportModel_ForTesting extends LocalFileTxImportModel
 	{
 		return _gnc.findAccountByName(accName);
 	}
+
+	public Account findAccountById(String accId)
+	{
+		return _gnc.findAccountById(accId);
+	}
 }

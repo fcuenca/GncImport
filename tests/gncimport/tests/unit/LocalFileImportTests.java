@@ -157,10 +157,10 @@ public class LocalFileImportTests
 	{
 		List<AccountData> accounts = _model.getAccounts();
 
-		assertThat(accounts.size(), is(34));
+		assertThat(accounts.size(), is(35));
 		assertThat(accounts.get(0).getName(), is("Root Account"));
-		assertThat(accounts.get(7).getName(), is("Gastos Mensuales"));
-		assertThat(accounts.get(20).getName(), is("Expenses"));
+		assertThat(accounts.get(8).getName(), is("Gastos Mensuales"));
+		assertThat(accounts.get(21).getName(), is("Expenses"));
 	}
 
 	@Test
@@ -291,7 +291,8 @@ public class LocalFileImportTests
 
 		model.setTargetHierarchy(new AccountData("Enero 2014", "irrelevant-id"));
 
-		assertThat(model.getDefaultTargetAccount(), is(new AccountData("Enero 2014", TestFiles.ENERO2014_ID)));
+		assertThat(model.getDefaultTargetAccount().getName(), is("Enero 2014"));
+		assertThat(model.getDefaultTargetAccount().getId(), is(TestFiles.ENERO2014_ID));
 	}
 
 	@Test
@@ -299,7 +300,8 @@ public class LocalFileImportTests
 	{
 		_model.setTargetHierarchy(new AccountData("Special Expenses", "irrelevant-id"));
 
-		assertThat(_model.getDefaultTargetAccount(), is(new AccountData("Special Expenses", TestFiles.SPECIAL_EXPENSES_ID)));
+		assertThat(_model.getDefaultTargetAccount().getName(), is("Special Expenses"));
+		assertThat(_model.getDefaultTargetAccount().getId(), is(TestFiles.SPECIAL_EXPENSES_ID));
 	}
 
 	@Test
@@ -310,7 +312,8 @@ public class LocalFileImportTests
 		List<AccountData> list = _model.getCandidateTargetAccounts();
 
 		assertThat(list.size(), is(1));
-		assertThat(list.get(0), is(new AccountData("Special Expenses", TestFiles.SPECIAL_EXPENSES_ID)));
+		assertThat(list.get(0).getName(), is("Special Expenses"));
+		assertThat(list.get(0).getId(), is(TestFiles.SPECIAL_EXPENSES_ID));
 	}
 
 	@SuppressWarnings("deprecation")

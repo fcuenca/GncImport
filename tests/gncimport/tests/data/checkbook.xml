@@ -33,7 +33,7 @@
 <gnc:book version="2.0.0">
 <book:id type="guid">29acd6a1355154dcf2575a030fe5327a</book:id>
 <gnc:count-data cd:type="commodity">1</gnc:count-data>
-<gnc:count-data cd:type="account">34</gnc:count-data>
+<gnc:count-data cd:type="account">35</gnc:count-data>
 <gnc:count-data cd:type="transaction">2</gnc:count-data>
 <gnc:commodity version="2.0.0">
   <cmdty:space>ISO4217</cmdty:space>
@@ -118,6 +118,24 @@
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Income</act:description>
   <act:parent type="guid">8e693fb622651b04911b05e2186525e9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Year 2014</act:name>
+  <act:id type="guid">55fbf20d53484b986bb9d37be59d3639</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>CAD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>color</slot:key>
+      <slot:value type="string">Not Set</slot:value>
+    </slot>
+  </act:slots>
+  <act:code>320140000</act:code>
+  <act:parent type="guid">a08675c9677028faefb8c932f5220718</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Equity</act:name>
