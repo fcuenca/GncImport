@@ -41,38 +41,45 @@ public class RbcExportParser
 
 		CsvListReader csv = new CsvListReader(_txFileReader, CsvPreference.STANDARD_PREFERENCE);
 
-		csv.getHeader(true); // skip past the header
-
-		final CellProcessor[] processors = new CellProcessor[] {
-				null, // [0] Account Type
-				null, // [1] Account Number
-				new NotNull(), // [2] Date
-				null, // [3] Cheque Number
-				new ConvertNullTo(""), // [4] Description 1
-				new ConvertNullTo(""), // [5] Description 2
-				new NotNull(), // [6] CAD$
-				null, // [7] USD$
-				null }; // [8] n/a
-
-		while (csv.read() != null)
+		try
 		{
-			if (csv.length() > 1)
+			csv.getHeader(true); // skip past the header
+	
+			final CellProcessor[] processors = new CellProcessor[] {
+					null, // [0] Account Type
+					null, // [1] Account Number
+					new NotNull(), // [2] Date
+					null, // [3] Cheque Number
+					new ConvertNullTo(""), // [4] Description 1
+					new ConvertNullTo(""), // [5] Description 2
+					new NotNull(), // [6] CAD$
+					null, // [7] USD$
+					null }; // [8] n/a
+	
+			while (csv.read() != null)
 			{
-				List<Object> values = csv.executeProcessors(processors);
-				try
+				if (csv.length() > 1)
 				{
-					result.add(new TxData(
-							dateFormatter.parse(values.get(2).toString()),
-							new BigDecimal(values.get(6).toString()),
-							values.get(4) + " - " + values.get(5)));
-				}
-				catch (ParseException e)
-				{
-					throw new RuntimeException("Date cannot be parsed: " + values.get(2).toString(), e);
+					List<Object> values = csv.executeProcessors(processors);
+					try
+					{
+						result.add(new TxData(
+								dateFormatter.parse(values.get(2).toString()),
+								new BigDecimal(values.get(6).toString()),
+								values.get(4) + " - " + values.get(5)));
+					}
+					catch (ParseException e)
+					{
+						throw new RuntimeException("Date cannot be parsed: " + values.get(2).toString(), e);
+					}
 				}
 			}
 		}
-
+		finally
+		{
+			csv.close();
+		}
+		
 		return result;
 	}
 }
