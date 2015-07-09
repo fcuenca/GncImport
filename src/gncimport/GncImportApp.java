@@ -2,6 +2,7 @@ package gncimport;
 
 import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxImportModel;
+import gncimport.models.TxMatcher;
 import gncimport.ui.GncImportMainWindow;
 import gncimport.ui.UIConfig;
 
@@ -73,10 +74,9 @@ public class GncImportApp
 
 	public static JFrame createMainFrame()
 	{
-		final LocalFileTxImportModel model = new LocalFileTxImportModel(DEFAULT_TARGET_ACCOUNT);	
 		final ConfigOptions config = new ConfigOptions(readPropertiesFromFile());
 		
-		model.setTransactionMatchingRules(config);
+		final TxImportModel model = createAppModel(config);
 		
 		final JFrame frame = createMainFrame(model, config);
 									
@@ -85,6 +85,14 @@ public class GncImportApp
 		frame.setJMenuBar(createMenuBar((ActionListener) frame.getContentPane()));
 		
 		return frame;
+	}
+
+	public static TxImportModel createAppModel(final TxMatcher matchingRules) 
+	{
+		final LocalFileTxImportModel model = new LocalFileTxImportModel(DEFAULT_TARGET_ACCOUNT);	
+		model.setTransactionMatchingRules(matchingRules);
+	
+		return model;
 	}
 
 	private static JMenuBar createMenuBar(ActionListener listener)

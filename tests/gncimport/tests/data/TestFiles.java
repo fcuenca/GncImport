@@ -19,7 +19,7 @@ public class TestFiles
 	public static final String EXPENSES_ENERO_ID = "e31486ad3b2c6cdedccf135d13538b29";
 	public static final String YEAR2014_ID = "eeab2d12582428bbc3e10da3a12520fc";
 
-	private static String getFilePath(String fileName)
+	public static String getFilePath(String fileName)
 	{
 		return TestFiles.class.getResource(fileName).getPath();
 	}
