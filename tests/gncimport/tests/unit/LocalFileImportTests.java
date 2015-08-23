@@ -38,7 +38,7 @@ public class LocalFileImportTests
 		//TODO: fix temporal coupling (these are the preconditions to loading the CSV file -- specifically, setting the target hierarchy)
 		_model.openGncFile(TestFiles.GNC_TEST_FILE);
 		_model.setSourceAccount(new AccountData("Checking Account", TestFiles.CHECKINGACC_ID));
-		_model.setTargetHierarchy(new AccountData("Enero 2014", "ignored-id"));
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
 	}
 
 	@Test
@@ -148,7 +148,7 @@ public class LocalFileImportTests
 	{
 		AccountData account = _model.getDefaultTargetHierarchyAccount();
 
-		assertThat(account.getName(), is("Enero 2014"));
+		assertThat(account.getName(), is("January 2014"));
 		assertThat(account.getId(), is(TestFiles.ENERO2014_ID));
 	}
 
@@ -159,7 +159,7 @@ public class LocalFileImportTests
 
 		assertThat(accounts.size(), is(35));
 		assertThat(accounts.get(0).getName(), is("Root Account"));
-		assertThat(accounts.get(8).getName(), is("Gastos Mensuales"));
+		assertThat(accounts.get(8).getName(), is("Monthly Expenses"));
 		assertThat(accounts.get(21).getName(), is("Expenses"));
 	}
 
@@ -210,11 +210,11 @@ public class LocalFileImportTests
 	@Test
 	public void default_target_account_can_be_overriden()
 	{
-		AccountData newAccount = new AccountData("Febrero 2014", "irrelevant-id");
+		AccountData newAccount = new AccountData("February 2014", "irrelevant-id");
 
 		_model.setTargetHierarchy(newAccount);
 
-		assertThat(_model.getDefaultTargetHierarchyAccount().getName(), is("Febrero 2014"));
+		assertThat(_model.getDefaultTargetHierarchyAccount().getName(), is("February 2014"));
 		assertThat(_model.getDefaultTargetHierarchyAccount().getId(), is(TestFiles.FEBRERO2014_ID));
 
 		assertThat(_model.getDefaultTargetAccount().getName(), is("Expenses"));
@@ -226,7 +226,7 @@ public class LocalFileImportTests
 	{
 		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
-		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
+		_model.setTargetHierarchy(new AccountData("February 2014", "irrelevant-id"));
 
 		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(5).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
@@ -239,7 +239,7 @@ public class LocalFileImportTests
 
 		txList.get(10).targetAccount = new AccountData("Supplies", "the-id");
 
-		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
+		_model.setTargetHierarchy(new AccountData("February 2014", "irrelevant-id"));
 
 		assertThat(txList.get(10).targetAccount.getName(), is("Supplies"));
 		assertThat(txList.get(10).targetAccount.getId(), is(TestFiles.SUPPLIES_FEB_ID));
@@ -252,7 +252,7 @@ public class LocalFileImportTests
 
 		txList.get(10).targetAccount = new AccountData("Some Esoteric Account", "the-id");
 
-		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
+		_model.setTargetHierarchy(new AccountData("February 2014", "irrelevant-id"));
 
 		assertThat(txList.get(10).targetAccount.getName(), is("Some Esoteric Account"));
 		assertThat(txList.get(10).targetAccount.getId(), is("the-id"));
@@ -265,7 +265,7 @@ public class LocalFileImportTests
 
 		List<AccountData> initialCandidates = _model.getCandidateTargetAccounts();
 
-		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
+		_model.setTargetHierarchy(new AccountData("February 2014", "irrelevant-id"));
 
 		List<AccountData> newCandidates = _model.getCandidateTargetAccounts();
 
@@ -289,9 +289,9 @@ public class LocalFileImportTests
 		model.openGncFile(TestFiles.GNC_TEST_FILE);
 		model.setSourceAccount(new AccountData("Checking Account", TestFiles.CHECKINGACC_ID));
 
-		model.setTargetHierarchy(new AccountData("Enero 2014", "irrelevant-id"));
+		model.setTargetHierarchy(new AccountData("January 2014", "irrelevant-id"));
 
-		assertThat(model.getDefaultTargetAccount().getName(), is("Enero 2014"));
+		assertThat(model.getDefaultTargetAccount().getName(), is("January 2014"));
 		assertThat(model.getDefaultTargetAccount().getId(), is(TestFiles.ENERO2014_ID));
 	}
 
@@ -366,7 +366,7 @@ public class LocalFileImportTests
 		_model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 		_model.filterTxList(new Date(2014 - 1900, 0, 10), new Date(2014 - 1900, 0, 30));
 
-		_model.setTargetHierarchy(new AccountData("Febrero 2014", "irrelevant-id"));
+		_model.setTargetHierarchy(new AccountData("February 2014", "irrelevant-id"));
 
 		List<TxData> txList = _model.filterTxList(new Date(0, 0, 1), new Date(3000 - 1900, 0, 1));
 

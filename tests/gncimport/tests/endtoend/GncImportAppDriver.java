@@ -34,6 +34,7 @@ public class GncImportAppDriver
 			protected JFrame executeInEDT()
 			{
 				GncImportApp.HomeDir = "/tmp";
+				GncImportApp.DEFAULT_TARGET_ACCOUNT = "Miscelaneous";
 				
 				return GncImportApp.createMainFrame();
 			}

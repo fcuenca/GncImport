@@ -168,7 +168,7 @@
   <act:parent type="guid">40420b857c66beae16d45016ba81b7c9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gastos Mensuales</act:name>
+  <act:name>Monthly Expenses</act:name>
   <act:id type="guid">19a25f730c009d062e93cbaf742111a9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -191,7 +191,7 @@
   <act:parent type="guid">19a25f730c009d062e93cbaf742111a9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Enero 2014</act:name>
+  <act:name>January 2014</act:name>
   <act:id type="guid">454018fbf408f8c3e607bd51f22c5373</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -203,7 +203,7 @@
   <act:parent type="guid">eeab2d12582428bbc3e10da3a12520fc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gastos Varios</act:name>
+  <act:name>Miscelaneous</act:name>
   <act:id type="guid">5941d588994782c4d5f22072f2e3d20f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -215,7 +215,7 @@
   <act:parent type="guid">454018fbf408f8c3e607bd51f22c5373</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Departamento</act:name>
+  <act:name>Housing</act:name>
   <act:id type="guid">a9dbc5872b1e99db0e8985bfab327631</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -239,7 +239,7 @@
   <act:parent type="guid">454018fbf408f8c3e607bd51f22c5373</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vestimentas</act:name>
+  <act:name>Clothing</act:name>
   <act:id type="guid">e5bacf469ecd0373a2d1dc1996cebde3</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -287,7 +287,7 @@
   <act:parent type="guid">454018fbf408f8c3e607bd51f22c5373</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Libros y Revistas</act:name>
+  <act:name>Books</act:name>
   <act:id type="guid">682cfd895042c5895d6731ffa885060b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -299,7 +299,7 @@
   <act:parent type="guid">454018fbf408f8c3e607bd51f22c5373</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Salud</act:name>
+  <act:name>Health</act:name>
   <act:id type="guid">bba59a3250650040d922a2fbce621a1c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -311,7 +311,7 @@
   <act:parent type="guid">454018fbf408f8c3e607bd51f22c5373</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Auto</act:name>
+  <act:name>Car</act:name>
   <act:id type="guid">625cfcf88ec91041e6305154952b453e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -341,7 +341,7 @@
   <act:parent type="guid">454018fbf408f8c3e607bd51f22c5373</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Febrero 2014</act:name>
+  <act:name>February 2014</act:name>
   <act:id type="guid">882f951395a92f8ea103fe0e9dbfbda5</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -353,7 +353,7 @@
   <act:parent type="guid">eeab2d12582428bbc3e10da3a12520fc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gastos Varios</act:name>
+  <act:name>Miscelaneous</act:name>
   <act:id type="guid">67f1d879c3e177c05ac346b44ebdeec1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -365,7 +365,7 @@
   <act:parent type="guid">882f951395a92f8ea103fe0e9dbfbda5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Departamento</act:name>
+  <act:name>Housing</act:name>
   <act:id type="guid">a4ca3acbb8e3d1ee46e42befd6cc0e27</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -389,7 +389,7 @@
   <act:parent type="guid">882f951395a92f8ea103fe0e9dbfbda5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vestimentas</act:name>
+  <act:name>Clothing</act:name>
   <act:id type="guid">1fea161452ef515e65035762937c4bf7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -437,7 +437,7 @@
   <act:parent type="guid">882f951395a92f8ea103fe0e9dbfbda5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Libros y Revistas</act:name>
+  <act:name>Books</act:name>
   <act:id type="guid">4cf5d28ebf36d77d3ac99a35ad0eb98a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -449,7 +449,7 @@
   <act:parent type="guid">882f951395a92f8ea103fe0e9dbfbda5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Salud</act:name>
+  <act:name>Health</act:name>
   <act:id type="guid">765c369dbdc85ce4681b2bb7151a1522</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -461,7 +461,7 @@
   <act:parent type="guid">882f951395a92f8ea103fe0e9dbfbda5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Auto</act:name>
+  <act:name>Car</act:name>
   <act:id type="guid">ed6e19e482bad96da66839f2a28ab61b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>

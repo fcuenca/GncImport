@@ -48,8 +48,7 @@ import com.apple.eawt.QuitStrategy;
 public class GncImportApp
 {
 	public static String HomeDir = System.getProperty("user.home");
-	
-	private static final String DEFAULT_TARGET_ACCOUNT = "Gastos Varios";
+	public static String DEFAULT_TARGET_ACCOUNT = "Gastos Varios";
 
 	public static void main(String[] args)
 	{

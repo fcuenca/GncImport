@@ -38,7 +38,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 
 		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
 		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
-		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		_app.selectTargetAccount(new String[] {"Monthly Expenses", "Year 2014", "February 2014"});
 		
 		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 		_app.importTransactions();
@@ -50,22 +50,22 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	}
 	
 	@Test
-	public void by_default_everything_is_imported_into_general_expenses()
+	public void by_default_everything_is_imported_into_miscelaneous_account()
 	{
 		_app = new GncImportAppDriver(robot());		
 
 		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
 		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
-		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		_app.selectTargetAccount(new String[] {"Monthly Expenses", "Year 2014", "February 2014"});
 		
 		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 		
-		_app.shouldAssociateAllTransactionsTo("Gastos Varios");
+		_app.shouldAssociateAllTransactionsTo("Miscelaneous");
 		_app.shouldNotIgnoreAnyTransaction();
 	}
 	
 	@Test
-	public void matches_know_transaction_patterns_with_other_accounts() throws IOException
+	public void matches_known_transaction_patterns_with_other_accounts() throws IOException
 	{
 		_fs.setupConfigFile(TestFiles.CFG_WITH_MATCHING_RULES);
 		
@@ -73,12 +73,12 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 
 		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
 		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
-		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		_app.selectTargetAccount(new String[] {"Monthly Expenses", "Year 2014", "February 2014"});
 		
 		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 		
-		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - IMH POOL I LP", "Departamento");
-		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - GOODLIFE CLUBS", "Salud");
+		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - IMH POOL I LP", "Housing");
+		_app.shouldAssociateTransactionsToAccount("MISC PAYMENT - GOODLIFE CLUBS", "Health");
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 
 		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
 		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
-		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Febrero 2014"});
+		_app.selectTargetAccount(new String[] {"Monthly Expenses", "Year 2014", "February 2014"});
 		
 		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 		
@@ -152,7 +152,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app = new GncImportAppDriver(robot());	
 
 		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
-		_app.createAccountHierarchy(new String[] {"Gastos Mensuales", "Year 2014"}, "Marzo 2014");
-		_app.selectTargetAccount(new String[] {"Gastos Mensuales", "Year 2014", "Marzo 2014", "Gastos Varios"});
+		_app.createAccountHierarchy(new String[] {"Monthly Expenses", "Year 2014"}, "Marzo 2014");
+		_app.selectTargetAccount(new String[] {"Monthly Expenses", "Year 2014", "Marzo 2014", "Miscelaneous"});
 	}
 }
