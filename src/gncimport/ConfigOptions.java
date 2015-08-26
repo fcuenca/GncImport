@@ -30,6 +30,7 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	private List<String> _ignoreRules = new ArrayList<String>();
 	private Properties _properties;
 	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
+	private TxAccountOverrideRule _rewriteRule;
 
 	public ConfigOptions(Properties properties)
 	{
@@ -44,6 +45,13 @@ public class ConfigOptions implements TxMatcher, UIConfig
 			createAccountOverrideRule(key, value);
 			createIgnoreRule(key, value);
 			collectMonhtlyAccounts(key, value);
+			
+			if(key.equals("match.1.rewrite"))
+			{
+				String[] parts = value.split("\\|");
+				
+				_rewriteRule = new TxAccountOverrideRule(parts[0], parts[1]);
+			}
 		}
 	}
 
@@ -155,6 +163,10 @@ public class ConfigOptions implements TxMatcher, UIConfig
 
 	public String rewriteDescription(String txDescription)
 	{
+		if(txDescription.equals(_rewriteRule.desc))
+		{
+			return _rewriteRule.account;
+		}
 		return txDescription;
 	}
 }
