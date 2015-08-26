@@ -14,23 +14,23 @@ import java.util.regex.Pattern;
 
 public class ConfigOptions implements TxMatcher, UIConfig
 {
-	private class TxAccountOverrideRule
+	private class TxOverrideRule
 	{
 		public final String desc;
-		public final String account;
+		public final String override;
 
-		public TxAccountOverrideRule(String desc, String account)
+		public TxOverrideRule(String desc, String account)
 		{
 			this.desc = desc;
-			this.account = account;
+			this.override = account;
 		}
 	}
 
-	private List<TxAccountOverrideRule> _accountOverrideRules = new ArrayList<TxAccountOverrideRule>();
+	private List<TxOverrideRule> _accountOverrideRules = new ArrayList<TxOverrideRule>();
 	private List<String> _ignoreRules = new ArrayList<String>();
 	private Properties _properties;
 	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
-	private TxAccountOverrideRule _rewriteRule;
+	private TxOverrideRule _rewriteRule;
 
 	public ConfigOptions(Properties properties)
 	{
@@ -42,16 +42,9 @@ public class ConfigOptions implements TxMatcher, UIConfig
 		{
 			String value = properties.getProperty(key);
 			
-			createAccountOverrideRule(key, value);
+			createTxOverrideRule(key, value);
 			createIgnoreRule(key, value);
-			collectMonhtlyAccounts(key, value);
-			
-			if(key.equals("match.1.rewrite"))
-			{
-				String[] parts = value.split("\\|");
-				
-				_rewriteRule = new TxAccountOverrideRule(parts[0], parts[1]);
-			}
+			collectMonhtlyAccounts(key, value);			
 		}
 	}
 
@@ -76,29 +69,33 @@ public class ConfigOptions implements TxMatcher, UIConfig
 		}
 	}
 
-	private void createAccountOverrideRule(String key, String value)
+	private void createTxOverrideRule(String key, String value)
 	{
+		String[] parts = value.split("\\|");
+		
 		if (key.matches("match\\.[0-9]+\\.account"))
 		{
-			String[] parts = value.split("\\|");
-
 			if (parts.length != 2)
 			{
 				throw new InvalidConfigOption("Invalid property format: " + value);
 			}
 
-			_accountOverrideRules.add(new TxAccountOverrideRule(parts[0], parts[1]));
+			_accountOverrideRules.add(new TxOverrideRule(parts[0], parts[1]));
+		}
+		else if(key.equals("match.1.rewrite"))
+		{
+			_rewriteRule = new TxOverrideRule(parts[0], parts[1]);
 		}
 	}
 
 	@Override
 	public String findAccountOverride(String txDescription)
 	{
-		for (TxAccountOverrideRule rule : _accountOverrideRules)
+		for (TxOverrideRule rule : _accountOverrideRules)
 		{
 			if (txDescription.trim().matches(rule.desc))
 			{
-				return rule.account;
+				return rule.override;
 			}
 		}
 
@@ -165,7 +162,7 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	{
 		if(txDescription.equals(_rewriteRule.desc))
 		{
-			return _rewriteRule.account;
+			return _rewriteRule.override;
 		}
 		return txDescription;
 	}
