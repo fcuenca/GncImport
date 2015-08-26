@@ -132,4 +132,15 @@ public class ConfigOptionsImplementsTxMatcher
 		assertThat(_options.rewriteDescription("MISC PAYMENT - GOODLIFE CLUBS    "), is("Gym membership"));
 		assertThat(_options.rewriteDescription("SAN CRISTOBAL 123456     "), is("Home Insurance"));
 	}
+	
+	@Test(expected = InvalidConfigOption.class)
+	public void invalid_rewrite_rules_are_rejected()
+	{
+		Properties p = new Properties();
+		p.setProperty("match.1.rewrite", "missing rewrite text");
+		
+		new ConfigOptions(p); // this should throw
+	}
+
+
 }

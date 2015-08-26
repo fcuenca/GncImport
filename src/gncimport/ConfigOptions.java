@@ -84,6 +84,11 @@ public class ConfigOptions implements TxMatcher, UIConfig
 		}
 		else if(key.matches("match\\.[0-9]+\\.rewrite"))
 		{
+			if (parts.length != 2)
+			{
+				throw new InvalidConfigOption("Invalid property format: " + value);
+			}
+
 			_rewriteRule.add(new TxOverrideRule(parts[0], parts[1]));
 		}
 	}
@@ -162,9 +167,11 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	{
 		for (TxOverrideRule rule : _rewriteRule)
 		{
-			if(txDescription.trim().matches(rule.desc))
+			String timmedTxDesc = txDescription.trim();
+			
+			if(timmedTxDesc.matches(rule.desc))
 			{
-				return txDescription.trim().replaceAll(rule.desc, rule.override);
+				return timmedTxDesc.replaceAll(rule.desc, rule.override);
 			}
 		}
 		return txDescription;
