@@ -109,6 +109,6 @@ public class ConfigOptionsImplementsTxMatcher
 	public void rewrites_when_there_is_an_exact_match()
 	{
 		assertThat(_options.rewriteDescription("MISC PAYMENT - GOODLIFE CLUBS"), is("Gym membership"));
-		//assertThat(_options.rewriteDescription("MISC PAYMENT - IMH POOL I LP"), is("Apartment Rent"));
+		assertThat(_options.rewriteDescription("MISC PAYMENT - IMH POOL I LP"), is("Apartment Rent"));
 	}
 }

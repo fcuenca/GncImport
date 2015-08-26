@@ -82,7 +82,7 @@ public class ConfigOptions implements TxMatcher, UIConfig
 
 			_accountOverrideRules.add(new TxOverrideRule(parts[0], parts[1]));
 		}
-		else if(key.equals("match.1.rewrite"))
+		else if(key.matches("match\\.[0-9]+\\.rewrite"))
 		{
 			_rewriteRule.add(new TxOverrideRule(parts[0], parts[1]));
 		}
@@ -160,9 +160,12 @@ public class ConfigOptions implements TxMatcher, UIConfig
 
 	public String rewriteDescription(String txDescription)
 	{
-		if(txDescription.equals(_rewriteRule.get(0).desc))
+		for (TxOverrideRule rule : _rewriteRule)
 		{
-			return _rewriteRule.get(0).override;
+			if(txDescription.equals(rule.desc))
+			{
+				return rule.override;
+			}
 		}
 		return txDescription;
 	}
