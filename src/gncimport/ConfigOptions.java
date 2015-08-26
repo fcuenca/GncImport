@@ -70,26 +70,23 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	}
 
 	private void createTxOverrideRule(String key, String value)
+	{		
+		captureOverrideRuleIfApplicable(key, value, "match\\.[0-9]+\\.account", _accountOverrideRules);
+		captureOverrideRuleIfApplicable(key, value, "match\\.[0-9]+\\.rewrite", _rewriteRule);
+	}
+
+	private void captureOverrideRuleIfApplicable(String key, String value, String propertyName, List<TxOverrideRule> ruleCollection)
 	{
 		String[] parts = value.split("\\|");
-		
-		if (key.matches("match\\.[0-9]+\\.account"))
+
+		if (key.matches(propertyName))
 		{
 			if (parts.length != 2)
 			{
 				throw new InvalidConfigOption("Invalid property format: " + value);
 			}
 
-			_accountOverrideRules.add(new TxOverrideRule(parts[0], parts[1]));
-		}
-		else if(key.matches("match\\.[0-9]+\\.rewrite"))
-		{
-			if (parts.length != 2)
-			{
-				throw new InvalidConfigOption("Invalid property format: " + value);
-			}
-
-			_rewriteRule.add(new TxOverrideRule(parts[0], parts[1]));
+			ruleCollection.add(new TxOverrideRule(parts[0], parts[1]));
 		}
 	}
 
