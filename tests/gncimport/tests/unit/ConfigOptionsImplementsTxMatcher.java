@@ -24,6 +24,7 @@ public class ConfigOptionsImplementsTxMatcher
 
 		p.setProperty("match.1.rewrite", "MISC PAYMENT - GOODLIFE CLUBS|Gym membership");
 		p.setProperty("match.2.rewrite", "MISC PAYMENT - IMH POOL I LP|Apartment Rent");
+		p.setProperty("match.3.rewrite", "SAN CRISTOBAL.*|Home Insurance");
 
 		p.setProperty("match.1.ignore", "WEB TRANSFER");
 		p.setProperty("match.99.ignore", "MISC PAYMENT - RBC CREDIT CARD.*");
@@ -111,4 +112,12 @@ public class ConfigOptionsImplementsTxMatcher
 		assertThat(_options.rewriteDescription("MISC PAYMENT - GOODLIFE CLUBS"), is("Gym membership"));
 		assertThat(_options.rewriteDescription("MISC PAYMENT - IMH POOL I LP"), is("Apartment Rent"));
 	}
+	
+	@Test
+	public void rewrite_rules_can_be_regex()
+	{
+		assertThat(_options.rewriteDescription("SAN CRISTOBAL 123456"), is("Home Insurance"));
+	}
+
+
 }
