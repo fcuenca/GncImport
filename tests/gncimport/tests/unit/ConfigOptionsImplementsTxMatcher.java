@@ -23,6 +23,7 @@ public class ConfigOptionsImplementsTxMatcher
 		p.setProperty("match.99.account", "SAN CRISTOBAL SEG 1146ROSARIO.*|Casa Cordoba");
 
 		p.setProperty("match.1.rewrite", "MISC PAYMENT - GOODLIFE CLUBS|Gym membership");
+		p.setProperty("match.2.rewrite", "MISC PAYMENT - IMH POOL I LP|Apartment Rent");
 
 		p.setProperty("match.1.ignore", "WEB TRANSFER");
 		p.setProperty("match.99.ignore", "MISC PAYMENT - RBC CREDIT CARD.*");
@@ -108,5 +109,6 @@ public class ConfigOptionsImplementsTxMatcher
 	public void rewrites_when_there_is_an_exact_match()
 	{
 		assertThat(_options.rewriteDescription("MISC PAYMENT - GOODLIFE CLUBS"), is("Gym membership"));
+		//assertThat(_options.rewriteDescription("MISC PAYMENT - IMH POOL I LP"), is("Apartment Rent"));
 	}
 }

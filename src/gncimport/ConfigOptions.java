@@ -27,10 +27,10 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	}
 
 	private List<TxOverrideRule> _accountOverrideRules = new ArrayList<TxOverrideRule>();
+	private List<TxOverrideRule> _rewriteRule = new ArrayList<TxOverrideRule>();
 	private List<String> _ignoreRules = new ArrayList<String>();
 	private Properties _properties;
 	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
-	private TxOverrideRule _rewriteRule;
 
 	public ConfigOptions(Properties properties)
 	{
@@ -84,7 +84,7 @@ public class ConfigOptions implements TxMatcher, UIConfig
 		}
 		else if(key.equals("match.1.rewrite"))
 		{
-			_rewriteRule = new TxOverrideRule(parts[0], parts[1]);
+			_rewriteRule.add(new TxOverrideRule(parts[0], parts[1]));
 		}
 	}
 
@@ -160,9 +160,9 @@ public class ConfigOptions implements TxMatcher, UIConfig
 
 	public String rewriteDescription(String txDescription)
 	{
-		if(txDescription.equals(_rewriteRule.desc))
+		if(txDescription.equals(_rewriteRule.get(0).desc))
 		{
-			return _rewriteRule.override;
+			return _rewriteRule.get(0).override;
 		}
 		return txDescription;
 	}
