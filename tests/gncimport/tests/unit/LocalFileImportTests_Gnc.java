@@ -3,7 +3,6 @@ package gncimport.tests.unit;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,9 +12,7 @@ import gncimport.models.TxMatcher;
 import gncimport.tests.data.SampleTxData;
 import gncimport.tests.data.TestDataConfig;
 import gncimport.tests.data.TestFiles;
-import gncimport.utils.ProgrammerError;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +23,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class LocalFileImportTests
+public class LocalFileImportTests_Gnc
 {
 	private LocalFileTxImportModel_ForTesting _model;
 
@@ -34,26 +31,14 @@ public class LocalFileImportTests
 	public void setUp()
 	{
 		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
-
-		//TODO: fix temporal coupling (these are the preconditions to loading the CSV file -- specifically, setting the target hierarchy)
 		_model.openGncFile(TestFiles.GNC_TEST_FILE);
-		_model.setSourceAccount(new AccountData("Checking Account", TestFiles.CHECKINGACC_ID));
-		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
-	}
-
-	@Test
-	public void fetches_transactions_to_import_from_file()
-	{
-		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
-
-		assertThat(txList.size(), is(20));
-		assertThat(txList.get(0).description, is("MISC PAYMENT - IMH POOL I LP "));
-		assertThat(txList.get(0).amount, is(new BigDecimal("-1635.00")));
 	}
 
 	@Test
 	public void assigns_default_target_account_to_new_transactions()
 	{
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		assertThat(txList.get(0).targetAccount.getName(), is("Expenses"));
@@ -63,20 +48,36 @@ public class LocalFileImportTests
 		assertThat(txList.get(5).targetAccount.getId(), is(TestFiles.EXPENSES_ENERO_ID));
 	}
 	
-	//TODO: this test doesn't use the common fixture. Move to separate suite when addressing the rest of the temporal coupling issue.
 	@Test
-	public void leaves_account_unasigned_if_csv_file_opened_before_gnc_file()
+	public void changing_target_account_changes_import_txList()
 	{
-		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
 
 		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
-		
-		assertThat(txList.get(5).targetAccount, is(nullValue()));
-	}			
+
+		_model.setTargetHierarchy(new AccountData("February 2014", "irrelevant-id"));
+
+		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
+		assertThat(txList.get(5).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
+	}
+	
+	@Test
+	public void default_target_account_can_be_overriden()
+	{
+		_model.setTargetHierarchy(new AccountData("February 2014", "irrelevant-id"));
+
+		assertThat(_model.getDefaultTargetHierarchyAccount().getName(), is("February 2014"));
+		assertThat(_model.getDefaultTargetHierarchyAccount().getId(), is(TestFiles.FEBRERO2014_ID));
+
+		assertThat(_model.getDefaultTargetAccount().getName(), is("Expenses"));
+		assertThat(_model.getDefaultTargetAccount().getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
+	}
 
 	@Test
 	public void can_match_transactions_and_assigns_specific_accounts()
 	{
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		TxMatcher matcher = mock(TxMatcher.class);
 		
 		when(matcher.findAccountOverride("PAYROLL DEPOSIT - WSIB ")).thenReturn("Entertainment");
@@ -93,32 +94,10 @@ public class LocalFileImportTests
 	}
 	
 	@Test
-	public void can_automatically_ignore_some_transactions()
-	{
-		TxMatcher matcher = mock(TxMatcher.class);
-		
-		when(matcher.isToBeIgnored("MISC PAYMENT - RBC CREDIT CARD ")).thenReturn(true);
-		
-		_model.setTransactionMatchingRules(matcher);
-		
-		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
-
-		for (TxData txData : txList)
-		{
-			if(txData.description.equals("MISC PAYMENT - RBC CREDIT CARD "))
-			{
-				assertThat("unexpected ignore flag for: " + txData.description, txData.doNotImport, is(true));
-			}
-			else
-			{
-				assertThat("unexpected ignore flag for: " + txData.description, txData.doNotImport, is(false));
-			}
-		}
-	}
-	
-	@Test
 	public void can_provide_default_source_account()
 	{
+		_model.setSourceAccount(new AccountData("Checking Account", TestFiles.CHECKINGACC_ID));
+
 		AccountData account = _model.getSourceAccount();
 
 		assertThat(account.getName(), is("Checking Account"));
@@ -126,8 +105,22 @@ public class LocalFileImportTests
 	}
 
 	@Test
+	public void default_source_account_can_be_overriden()
+	{
+		List<TxData> txList = new ArrayList<TxData>();
+		AccountData newAccount = new AccountData("new Account", "new-id");
+
+		_model.setSourceAccount(newAccount);
+		_model.saveTxTo(txList, "new-file.xml");
+
+		assertThat(_model.detectedSourceAccId, is("new-id"));
+	}
+
+	@Test
 	public void can_provide_default_target_account()
 	{
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		AccountData account = _model.getDefaultTargetAccount();
 
 		assertThat(account.getName(), is("Expenses"));
@@ -137,6 +130,8 @@ public class LocalFileImportTests
 	@Test
 	public void can_provide_default_candidate_target_account_list()
 	{
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		List<AccountData> list = _model.getCandidateTargetAccounts();
 
 		assertThat(list.size(), is(11));
@@ -146,6 +141,8 @@ public class LocalFileImportTests
 	@Test
 	public void can_provide_default_target_hierarchy_parent()
 	{
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		AccountData account = _model.getDefaultTargetHierarchyAccount();
 
 		assertThat(account.getName(), is("January 2014"));
@@ -166,6 +163,9 @@ public class LocalFileImportTests
 	@Test
 	public void can_save_to_new_file()
 	{
+		_model.setSourceAccount(new AccountData("Checking Account", TestFiles.CHECKINGACC_ID));
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		List<TxData> txList = SampleTxData.txDataListWithAllAccounts();
 
 		int initialTxCount = _model.getTxCount();
@@ -182,6 +182,9 @@ public class LocalFileImportTests
 	@Test
 	public void some_transactions_can_be_ignored_while_saving()
 	{
+		_model.setSourceAccount(new AccountData("Checking Account", TestFiles.CHECKINGACC_ID));
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		List<TxData> txList = SampleTxData.txDataListWithAllAccounts();
 
 		txList.get(1).doNotImport = true;
@@ -196,45 +199,10 @@ public class LocalFileImportTests
 	}
 
 	@Test
-	public void default_source_account_can_be_overriden()
-	{
-		List<TxData> txList = new ArrayList<TxData>();
-		AccountData newAccount = new AccountData("new Account", "new-id");
-
-		_model.setSourceAccount(newAccount);
-		_model.saveTxTo(txList, "new-file.xml");
-
-		assertThat(_model.detectedSourceAccId, is("new-id"));
-	}
-
-	@Test
-	public void default_target_account_can_be_overriden()
-	{
-		AccountData newAccount = new AccountData("February 2014", "irrelevant-id");
-
-		_model.setTargetHierarchy(newAccount);
-
-		assertThat(_model.getDefaultTargetHierarchyAccount().getName(), is("February 2014"));
-		assertThat(_model.getDefaultTargetHierarchyAccount().getId(), is(TestFiles.FEBRERO2014_ID));
-
-		assertThat(_model.getDefaultTargetAccount().getName(), is("Expenses"));
-		assertThat(_model.getDefaultTargetAccount().getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
-	}
-
-	@Test
-	public void changing_target_account_changes_import_txList()
-	{
-		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
-
-		_model.setTargetHierarchy(new AccountData("February 2014", "irrelevant-id"));
-
-		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
-		assertThat(txList.get(5).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
-	}
-
-	@Test
 	public void selects_equivalent_account_under_new_hierarchy_if_available()
 	{
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		txList.get(10).targetAccount = new AccountData("Supplies", "the-id");
@@ -248,6 +216,8 @@ public class LocalFileImportTests
 	@Test
 	public void preserves_target_account_selection_without_equivalent_under_new_hierarchy()
 	{
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		txList.get(10).targetAccount = new AccountData("Some Esoteric Account", "the-id");
@@ -261,6 +231,8 @@ public class LocalFileImportTests
 	@Test
 	public void changing_target_account_changes_candidate_account_list()
 	{
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		_model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		List<AccountData> initialCandidates = _model.getCandidateTargetAccounts();
@@ -318,51 +290,10 @@ public class LocalFileImportTests
 
 	@SuppressWarnings("deprecation")
 	@Test
-	public void can_filter_transactions_to_import_using_inclusive_range()
-	{
-		_model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
-
-		Date fromDate = new Date(2014 - 1900, 0, 10);
-		Date toDate = new Date(2014 - 1900, 0, 30);
-
-		List<TxData> txList = _model.filterTxList(fromDate, toDate);
-
-		assertThat(txList.size(), is(13));
-
-		assertThat(txList.get(0).date, is(new Date(2014 - 1900, 0, 10)));
-		assertThat(txList.get(12).date, is(new Date(2014 - 1900, 0, 30)));
-	}
-
-	@Test(expected = ProgrammerError.class)
-	public void filtering_is_valid_only_after_fetching()
-	{
-		_model.filterTxList(new Date(), new Date());
-	}
-
-	@SuppressWarnings("deprecation")
-	@Test
-	public void filter_can_be_reset_to_re_include_filtered_out_transactions()
-	{
-		_model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
-
-		Date fromDate = new Date(2014 - 1900, 0, 10);
-		Date toDate = new Date(2014 - 1900, 0, 30);
-
-		_model.filterTxList(fromDate, toDate);
-
-		fromDate = new Date(0, 0, 1);
-		List<TxData> txList = _model.filterTxList(fromDate, toDate);
-
-		assertThat(txList.size(), is(19));
-
-		assertThat(txList.get(0).date, is(new Date(2014 - 1900, 0, 2)));
-		assertThat(txList.get(18).date, is(new Date(2014 - 1900, 0, 30)));
-	}
-
-	@SuppressWarnings("deprecation")
-	@Test
 	public void resetting_target_hierarchy_also_affects_filtered_out_transactions()
 	{
+		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
+
 		_model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 		_model.filterTxList(new Date(2014 - 1900, 0, 10), new Date(2014 - 1900, 0, 30));
 
@@ -379,5 +310,4 @@ public class LocalFileImportTests
 	{
 		return list.toArray(new AccountData[list.size()]);
 	}
-
 }
