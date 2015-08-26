@@ -164,7 +164,7 @@ public class ConfigOptions implements TxMatcher, UIConfig
 		{
 			if(txDescription.matches(rule.desc))
 			{
-				return rule.override;
+				return txDescription.replaceAll(rule.desc, rule.override);
 			}
 		}
 		return txDescription;
