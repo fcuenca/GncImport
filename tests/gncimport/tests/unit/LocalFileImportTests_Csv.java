@@ -49,7 +49,22 @@ public class LocalFileImportTests_Csv
 		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 		
 		assertThat(txList.get(5).targetAccount, is(nullValue()));
-	}			
+	}	
+	
+	@Test
+	public void matching_rules_are_ignored_when_csv_opened_before_gnc()
+	{
+		TxMatcher matcher = mock(TxMatcher.class);
+		
+		when(matcher.findAccountOverride("PAYROLL DEPOSIT - WSIB ")).thenReturn("Entertainment");
+		
+		_model.setTransactionMatchingRules(matcher);
+		
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
+
+		assertThat(txList.get(0).targetAccount, is(nullValue()));
+		assertThat(txList.get(5).targetAccount, is(nullValue()));
+	}
 	
 	@Test
 	public void can_automatically_ignore_some_transactions()

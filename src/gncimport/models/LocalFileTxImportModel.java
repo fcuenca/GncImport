@@ -83,9 +83,13 @@ public class LocalFileTxImportModel implements TxImportModel
 
 	private void applyRule_overrideAcc(TxData txData)
 	{
-		//This is the problem: it depends on the acc Tree
-		String overrideAccName = _txMatcher.findAccountOverride(txData.description);
-		txData.targetAccount = overrideAccName != null ? findAccountUnderTargetHierarchy(overrideAccName) : getDefaultTargetAccount();
+		if (_targetHierarcyParent != null)
+		{
+			//This is the problem: it depends on the acc Tree
+			String overrideAccName = _txMatcher.findAccountOverride(txData.description);
+			txData.targetAccount = overrideAccName != null ? findAccountUnderTargetHierarchy(overrideAccName)
+					: getDefaultTargetAccount();
+		}
 	}
 
 	@Override
@@ -233,6 +237,11 @@ public class LocalFileTxImportModel implements TxImportModel
 	@Override
 	public void setTargetHierarchy(AccountData accountData)
 	{
+		if(_gnc == null) 
+		{
+			throw new IllegalStateException("Can't set target hierarchy before opening GNC file!");
+		}
+		
 		_targetHierarcyParent = _gnc.findAccountByName(accountData.getName());
 
 		if (_targetHierarcyParent == null)

@@ -6,6 +6,7 @@ end-to-end test improvements:
 - extract window driver from app driver
 
 General improvements:
+- LocalFileTxImportModel could be implemented using the State Pattern 
 - better handle the two states of the model class, depending on which file has been loaded first
 - check that Target Account & Source accounts are different
 - GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 

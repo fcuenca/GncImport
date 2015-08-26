@@ -43,11 +43,11 @@ public class LocalFileImportTests_Gnc
 
 		assertThat(txList.get(0).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(0).targetAccount.getId(), is(TestFiles.EXPENSES_ENERO_ID));
-		
+
 		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(5).targetAccount.getId(), is(TestFiles.EXPENSES_ENERO_ID));
 	}
-	
+
 	@Test
 	public void changing_target_account_changes_import_txList()
 	{
@@ -60,7 +60,7 @@ public class LocalFileImportTests_Gnc
 		assertThat(txList.get(5).targetAccount.getName(), is("Expenses"));
 		assertThat(txList.get(5).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
 	}
-	
+
 	@Test
 	public void default_target_account_can_be_overriden()
 	{
@@ -79,11 +79,11 @@ public class LocalFileImportTests_Gnc
 		_model.setTargetHierarchy(new AccountData("January 2014", "ignored-id"));
 
 		TxMatcher matcher = mock(TxMatcher.class);
-		
+
 		when(matcher.findAccountOverride("PAYROLL DEPOSIT - WSIB ")).thenReturn("Entertainment");
-		
+
 		_model.setTransactionMatchingRules(matcher);
-		
+
 		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
 
 		assertThat(txList.get(0).targetAccount.getName(), is("Expenses"));
@@ -92,7 +92,7 @@ public class LocalFileImportTests_Gnc
 		assertThat(txList.get(5).targetAccount.getName(), is("Entertainment"));
 		assertThat(txList.get(5).targetAccount.getId(), is("243b25ad61f8f5c16335a8eae231a6dc"));
 	}
-	
+
 	@Test
 	public void can_provide_default_source_account()
 	{
@@ -226,6 +226,13 @@ public class LocalFileImportTests_Gnc
 
 		assertThat(txList.get(10).targetAccount.getName(), is("Some Esoteric Account"));
 		assertThat(txList.get(10).targetAccount.getId(), is("the-id"));
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void changing_target_hierarcy_before_opening_gnc_causes_error()
+	{
+		_model = new LocalFileTxImportModel_ForTesting(TestDataConfig.DEFAULT_TARGET_ACCOUNT);
+		_model.setTargetHierarchy(new AccountData("February 2014", "irrelevant-id"));
 	}
 
 	@Test
