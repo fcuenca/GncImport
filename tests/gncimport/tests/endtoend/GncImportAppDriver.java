@@ -60,9 +60,21 @@ public class GncImportAppDriver
 		assertThat(label.text(), containsString("" + txCount + " transaction"));
 	}
 	
-	public void shouldDisplayTransactionWithDescription(String string)
+	public void shouldDisplayTransactionWithDescription(String txText)
 	{
-		fail("niy");		
+		int matchesFound = 0;
+		
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		
+		for (int i = 0; i < grid.rowCount(); i++)
+		{
+			if(grid.target.getValueAt(i, 2).toString().trim().matches(txText))
+			{
+				matchesFound++;
+			}
+		}
+		
+		assertThat("couldn't find any matches for: '" + txText + "'", matchesFound, not(is(0)));
 	}
 
 	public void shouldAssociateAllTransactionsTo(String accountName)
