@@ -152,4 +152,9 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	{
 		return _monthlyAccounts;
 	}
+
+	public String rewriteDescription(String txDescription)
+	{
+		return txDescription;
+	}
 }

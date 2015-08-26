@@ -95,4 +95,10 @@ public class ConfigOptionsImplementsTxMatcher
 		assertThat(_options.isToBeIgnored("WEB TRANSFER  "), is(true));
 		assertThat(_options.isToBeIgnored("MISC PAYMENT - RBC CREDIT CARD - TX123"), is(true));
 	}
+
+	@Test
+	public void returns_description_as_is_when_theres_no_rewrite_rule()
+	{
+		assertThat(_options.rewriteDescription("TX DESCRIPTION"), is("TX DESCRIPTION"));
+	}
 }
