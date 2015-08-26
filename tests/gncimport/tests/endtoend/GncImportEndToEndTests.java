@@ -98,6 +98,21 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	}
 	
 	@Test
+	public void rewrites_descriptions_for_well_known_transactions() throws IOException
+	{
+		_fs.setupConfigFile(TestFiles.CFG_WITH_REWRITE_RULES);
+		
+		_app = new GncImportAppDriver(robot());		
+		
+		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
+		
+		_app.shouldDisplayTransactionWithDescription("Monthly Rent");
+		_app.shouldDisplayTransactionWithDescription("Laundry - IDP PURCHASE - .*");
+	}
+
+
+	
+	@Test
 	public void by_default_looks_for_files_in_user_home_directory()
 	{
 		_app = new GncImportAppDriver(robot());	

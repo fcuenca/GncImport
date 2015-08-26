@@ -5,7 +5,6 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsInstanceOf.*;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.*;
-
 import gncimport.GncImportApp;
 import gncimport.ui.GncImportMainWindow;
 
@@ -61,6 +60,11 @@ public class GncImportAppDriver
 		assertThat(label.text(), containsString("" + txCount + " transaction"));
 	}
 	
+	public void shouldDisplayTransactionWithDescription(String string)
+	{
+		fail("niy");		
+	}
+
 	public void shouldAssociateAllTransactionsTo(String accountName)
 	{
 		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
