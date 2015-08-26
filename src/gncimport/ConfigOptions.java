@@ -162,9 +162,9 @@ public class ConfigOptions implements TxMatcher, UIConfig
 	{
 		for (TxOverrideRule rule : _rewriteRule)
 		{
-			if(txDescription.matches(rule.desc))
+			if(txDescription.trim().matches(rule.desc))
 			{
-				return txDescription.replaceAll(rule.desc, rule.override);
+				return txDescription.trim().replaceAll(rule.desc, rule.override);
 			}
 		}
 		return txDescription;

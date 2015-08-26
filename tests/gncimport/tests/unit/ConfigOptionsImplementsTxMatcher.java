@@ -125,4 +125,11 @@ public class ConfigOptionsImplementsTxMatcher
 	{
 		assertThat(_options.rewriteDescription("Withdrawal - PTB WD --- TZ12345"), is("Cash withdrawal (12345)"));
 	}
+	
+	@Test
+	public void trailing_whitespace_ignored_in_rewrite_rules()
+	{
+		assertThat(_options.rewriteDescription("MISC PAYMENT - GOODLIFE CLUBS    "), is("Gym membership"));
+		assertThat(_options.rewriteDescription("SAN CRISTOBAL 123456     "), is("Home Insurance"));
+	}
 }
