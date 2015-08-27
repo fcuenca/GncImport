@@ -3,9 +3,10 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
 import gncimport.tests.data.TestDataConfig;
@@ -13,7 +14,6 @@ import gncimport.tests.data.TestFiles;
 import gncimport.utils.ProgrammerError;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +72,7 @@ public class LocalFileImportTests_Csv
 		TxMatcher matcher = mock(TxMatcher.class);
 		
 		when(matcher.isToBeIgnored("MISC PAYMENT - RBC CREDIT CARD ")).thenReturn(true);
+		when(matcher.rewriteDescription(anyString())).then(returnsFirstArg());
 		
 		_model.setTransactionMatchingRules(matcher);
 		
@@ -132,4 +133,20 @@ public class LocalFileImportTests_Csv
 		assertThat(txList.get(0).date, is(new Date(2014 - 1900, 0, 2)));
 		assertThat(txList.get(18).date, is(new Date(2014 - 1900, 0, 30)));
 	}
+	
+	@Test
+	public void rewrites_transaction_descriptions_according_to_matching_rules()
+	{
+		TxMatcher matcher = mock(TxMatcher.class);
+		
+		when(matcher.rewriteDescription("MONTHLY FEE - ")).thenReturn("Bank Fee");
+		
+		_model.setTransactionMatchingRules(matcher);
+		
+		List<TxData> txList = _model.fetchTransactionsFrom(TestFiles.CSV_1_TEST_FILE);
+
+		assertThat(txList.get(3).description, is("Bank Fee"));
+	}
+
+
 }

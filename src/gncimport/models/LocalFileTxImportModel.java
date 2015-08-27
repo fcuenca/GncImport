@@ -37,6 +37,12 @@ public class LocalFileTxImportModel implements TxImportModel
 		{
 			return false;
 		}
+
+		@Override
+		public String rewriteDescription(String txDescription)
+		{
+			return txDescription;
+		}
 	};
 
 	public LocalFileTxImportModel(String defaultTargetAccName)
@@ -74,6 +80,8 @@ public class LocalFileTxImportModel implements TxImportModel
 	{
 		applyRule_overrideAcc(txData); 
 		applyRule_setIgnore(txData);
+		
+		txData.description = _txMatcher.rewriteDescription(txData.description);
 	}
 
 	private void applyRule_setIgnore(TxData txData)
