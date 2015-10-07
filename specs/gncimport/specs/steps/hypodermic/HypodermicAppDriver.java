@@ -25,6 +25,9 @@ public class HypodermicAppDriver
 	public HypodermicAppDriver()
 	{
 		_config = new ConfigOptions(new Properties());
+		
+		GncImportApp.DEFAULT_TARGET_ACCOUNT = "Miscelaneous";
+		
 		_model = GncImportApp.createAppModel(_config);
 		_view = new FakeView();
 
@@ -33,10 +36,16 @@ public class HypodermicAppDriver
 	
 	public void openCsvFile(String fileName)
 	{
-		_view.FileName = TestFiles.getFilePath(fileName);
+		_view.FileNameToOpen = TestFiles.getFilePath(fileName);
 		_presenter.onReadFromCsvFile();
 	}
 	
+	public void openGncFile(String fileName)
+	{	
+		_view.FileNameToOpen = TestFiles.getFilePath(fileName);
+		_presenter.onLoadGncFile();
+	}
+
 	public int observedTxCount()
 	{
 		return _view.TxCount;
@@ -44,7 +53,7 @@ public class HypodermicAppDriver
 	
 	public String loadedCvsFile()
 	{
-		return _view.FileName;
+		return _view.FileNameToOpen;
 	}
 	
 	public int observedGridSize() throws Exception
@@ -55,6 +64,17 @@ public class HypodermicAppDriver
 	public String observedTxAtRow(int i)
 	{
 		return _view.TableModel.getValueAt(i, TxTableModel.DESCRIPTION_COLUMN).toString();
+	}
+
+	public String observedAccountAtRow(int i)
+	{
+		return _view.TableModel.getValueAt(i, TxTableModel.ACCOUNT_COLUMN).toString();
+	}
+
+	public void selectTargetAccHierarchy(String accountName)
+	{
+		_view.AccountToSelect = accountName;
+		_presenter.onSelectTargetHierarchy();
 	}
 
 }

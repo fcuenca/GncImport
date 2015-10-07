@@ -4,19 +4,24 @@ import gncimport.models.AccountData;
 import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
 
+import java.io.Console;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 
 public class FakeView implements TxView
 {
 
-	public String FileName = "";
+	public String FileNameToOpen = "";
 	public int TxCount = -1;
 	public TxTableModel TableModel;
 	public List<AccountData> TargetAccounts;
 	public String CsvFileLabel;
+	private String GncFileLabel;
+	public String AccountToSelect;
 
 	@Override
 	public void displayTxCount(int count)
@@ -52,31 +57,40 @@ public class FakeView implements TxView
 	@Override
 	public DefaultMutableTreeNode promptForAccount(DefaultMutableTreeNode rootNode)
 	{
-		throw new RuntimeException("NIY");
+		Enumeration<TreeNode> e = rootNode.preorderEnumeration();
+	    while(e.hasMoreElements())
+	    {
+	    	TreeNode node = e.nextElement();
+	    	if(node.toString().equals(AccountToSelect))
+	    	{
+	    		return (DefaultMutableTreeNode) node;
+	    	}
+	        
+	    }
+	    
+	    throw new RuntimeException("couldn't find account in tree!");
 	}
 
 	@Override
 	public void displayTargetHierarchy(String accountName)
 	{
-		throw new RuntimeException("NIY");
 	}
 
 	@Override
 	public void updateCandidateTargetAccountList(List<AccountData> accountList)
 	{
-		throw new RuntimeException("NIY");
 	}
 
 	@Override
 	public String promptForFile(String initialDirectory)
 	{
-		return FileName;
+		return FileNameToOpen;
 	}
 
 	@Override
 	public void updateGncFileLabel(String text)
 	{
-		throw new RuntimeException("NIY");
+		GncFileLabel = text;
 	}
 
 	@Override

@@ -35,10 +35,22 @@ public class MainWindowSteps
 	{
 	}
 
-	@Given("^the sample file \"([^\"]*)\" has been loaded$")
-	public void the_sample_file_has_been_loaded(String fileName) throws Throwable 
+	@Given("^the sample CSV file \"([^\"]*)\" has been loaded$")
+	public void the_sample_CSV_file_has_been_loaded(String fileName) throws Throwable 
 	{
 		_app.openCsvFile(fileName);
+	}
+	
+	@Given("^the sample GNC file \"([^\"]*)\" has been loaded$")
+	public void the_sample_GNC_file_has_been_loaded(String fileName) throws Throwable 
+	{
+		_app.openGncFile(fileName);
+	}
+	
+	@Given("^the target account hierarchy has been set to \"([^\"]*)\"$")
+	public void the_target_account_hierarchy_has_been_set_to(String accountName) throws Throwable 
+	{
+		_app.selectTargetAccHierarchy(accountName);
 	}
 
 	@Then("^the status bar shows a count of (\\d+) transactions$")
@@ -69,5 +81,18 @@ public class MainWindowSteps
 			assertThat("mismatch detected at row: ", row, is(txDesc));		
 		}
 	}
+	
+
+	@Then("^all transactions are associated with \"([^\"]*)\"$")
+	public void all_transactions_are_associated_with(String expectedAccountName) throws Throwable 
+	{
+		for (int i = 0; i < _app.observedGridSize(); i++)
+		{
+			String account = _app.observedAccountAtRow(i);
+			
+			assertThat("mismatch detected at row: ", account, is(expectedAccountName));		
+		}
+	}
+
 
 }
