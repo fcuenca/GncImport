@@ -6,9 +6,11 @@ import static org.hamcrest.core.IsInstanceOf.*;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.*;
 import gncimport.GncImportApp;
+import gncimport.models.TxData;
 import gncimport.ui.GncImportMainWindow;
 
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -240,5 +242,19 @@ public class GncImportAppDriver
 		JFileChooserFixture fileChooser = _mainWindow.fileChooser("FILE_CHOOSER");
 		assertThat(fileChooser.target.getCurrentDirectory().getPath(), is(path));
 		fileChooser.cancel();
+	}
+
+	public void shouldDisplayTransactions(List<TxData> list)
+	{
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		assertThat(grid.rowCount(), is(list.size()));
+
+		for (int i = 0; i < grid.rowCount(); i++)
+		{
+			String txDescription = list.get(i).description;
+			
+			assertThat("Mismatch found at row: " + i,
+					grid.target.getValueAt(i, 2).toString(), is(txDescription));
+		}
 	}
 }

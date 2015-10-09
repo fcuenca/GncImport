@@ -1,5 +1,9 @@
 package gncimport.specs.steps.ui;
 
+import java.util.List;
+
+import gncimport.adaptors.RbcExportParser;
+import gncimport.models.TxData;
 import gncimport.tests.data.TestFiles;
 import gncimport.tests.endtoend.FileSystemDriver;
 import gncimport.tests.endtoend.GncImportAppDriver;
@@ -12,6 +16,7 @@ import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.runtime.PendingException;
 
 public class MainWindowSteps 
 {
@@ -39,8 +44,8 @@ public class MainWindowSteps
 	    robot.cleanUp();
 	}
 	
-	@Given("^the sample file \"([^\"]*)\" has been loaded$")
-	public void the_sample_file_has_been_loaded(String fileName) throws Throwable 
+	@Given("^the sample CSV file \"([^\"]*)\" has been loaded$")
+	public void the_sample_csv_file_has_been_loaded(String fileName) throws Throwable 
 	{
 		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 	}
@@ -55,6 +60,15 @@ public class MainWindowSteps
 	public void the_transction_grid_shows_rows(int txCount) throws Throwable 
 	{
 		_app.shouldDisplayTransactionGridWithTransactionCount(txCount);
+	}
+	
+	@Then("^displayed transactions match those in loaded file$")
+	public void displayed_transactions_match_those_in_loaded_file() throws Throwable 
+	{
+		RbcExportParser parser = new RbcExportParser(TestFiles.CSV_1_TEST_FILE);
+		List<TxData> list = parser.getTransactions();
+		
+		_app.shouldDisplayTransactions(list);
 	}
 
 }
