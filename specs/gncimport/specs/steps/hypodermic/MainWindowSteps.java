@@ -18,7 +18,7 @@ import cucumber.runtime.PendingException;
 
 public class MainWindowSteps 
 {
-	private HypodermicAppDriver _app;
+	private HypodermicAppDriver2 _app;
 	private FileSystemDriver _fs;
 	
 	@Before
@@ -27,7 +27,7 @@ public class MainWindowSteps
 		_fs = new FileSystemDriver();
 		_fs.prepareTestFiles();			
 
-		_app = new HypodermicAppDriver();
+		_app = new HypodermicAppDriver2();
 	}
 	
 	@After
@@ -53,22 +53,16 @@ public class MainWindowSteps
 		_app.selectTargetAccHierarchy(accountName);
 	}
 
-	@Then("^the status bar shows a count of (\\d+) transactions$")
-	public void the_status_bar_shows_a_count_of_transactions(int txCount) throws Throwable 
+	@Then("^the app displays (\\d+) transactions$")
+	public void the_app_displays_count_transactions(int txCount) throws Throwable 
 	{
 		assertThat(_app.observedTxCount(), is(txCount));
-	}
-
-	@Then("^the transction grid shows (\\d+) rows$")
-	public void the_transction_grid_shows_rows(int txCount) throws Throwable 
-	{
-		assertThat(_app.observedGridSize(), is(txCount));
 	}
 	
 	@Then("^displayed transactions match those in loaded file$")
 	public void displayed_transactions_match_those_in_loaded_file() throws Throwable 
 	{
-		RbcExportParser parser = new RbcExportParser(_app.loadedCvsFile());
+		RbcExportParser parser = new RbcExportParser(_app.loadedCsvFile());
 		List<TxData> list = parser.getTransactions();
 		
 		assertThat("Not enough transactions found", list.size(), is(_app.observedGridSize()));

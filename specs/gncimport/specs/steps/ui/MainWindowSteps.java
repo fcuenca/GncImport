@@ -50,8 +50,8 @@ public class MainWindowSteps
 		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
 	}
 
-	@Then("^the status bar shows a count of (\\d+) transactions$")
-	public void the_status_bar_shows_a_count_of_transactions(int txCount) throws Throwable 
+	@Then("^the app displays (\\d+) transactions$")
+	public void the_app_displays_transactions(int txCount) throws Throwable 
 	{
 		_app.shouldDisplayTransactionCountInStatusBar(txCount);
 	}
@@ -70,5 +70,27 @@ public class MainWindowSteps
 		
 		_app.shouldDisplayTransactions(list);
 	}
+	
+	@Given("^the sample GNC file \"([^\"]*)\" has been loaded$")
+	public void the_sample_GNC_file_has_been_loaded(String arg1) throws Throwable 
+	{
+	    // Express the Regexp above with the code you wish you had
+	    throw new PendingException();
+	}
+
+	@Given("^the target account hierarchy has been set to \"([^\"]*)\"$")
+	public void the_target_account_hierarchy_has_been_set_to(String arg1) throws Throwable 
+	{
+	    // Express the Regexp above with the code you wish you had
+	    throw new PendingException();
+	}
+
+	@Then("^all transactions are associated with \"([^\"]*)\"$")
+	public void all_transactions_are_associated_with(String arg1) throws Throwable 
+	{
+	    // Express the Regexp above with the code you wish you had
+	    throw new PendingException();
+	}
+
 
 }

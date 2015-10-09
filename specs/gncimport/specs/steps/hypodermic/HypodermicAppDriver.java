@@ -2,16 +2,11 @@ package gncimport.specs.steps.hypodermic;
 
 import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
-import gncimport.adaptors.RbcExportParser;
-import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.TestFiles;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 
 public class HypodermicAppDriver
@@ -51,7 +46,7 @@ public class HypodermicAppDriver
 		return _view.TxCount;
 	}
 	
-	public String loadedCvsFile()
+	public String loadedCsvFile()
 	{
 		return _view.FileNameToOpen;
 	}

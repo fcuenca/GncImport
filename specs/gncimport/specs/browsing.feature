@@ -3,7 +3,6 @@ Feature: Browsing Transactions
 
   Scenario: transactions were exported from RBC Online Banking site
     Given the sample CSV file "rbc.csv" has been loaded
-    Then the status bar shows a count of 20 transactions
-    And the transction grid shows 20 rows
+    Then the app displays 20 transactions
     And displayed transactions match those in loaded file
 

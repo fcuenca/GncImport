@@ -4,7 +4,6 @@ import gncimport.models.AccountData;
 import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
 
-import java.io.Console;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -20,7 +19,6 @@ public class FakeView implements TxView
 	public TxTableModel TableModel;
 	public List<AccountData> TargetAccounts;
 	public String CsvFileLabel;
-	private String GncFileLabel;
 	public String AccountToSelect;
 
 	@Override
@@ -90,7 +88,6 @@ public class FakeView implements TxView
 	@Override
 	public void updateGncFileLabel(String text)
 	{
-		GncFileLabel = text;
 	}
 
 	@Override
