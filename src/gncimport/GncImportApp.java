@@ -75,7 +75,7 @@ public class GncImportApp
 	{
 		final ConfigOptions config = new ConfigOptions(readPropertiesFromFile());
 		
-		final TxImportModel model = createAppModel(config);
+		final TxImportModel model = createAppModel(DEFAULT_TARGET_ACCOUNT, config);
 		
 		final JFrame frame = createMainFrame(model, config);
 									
@@ -86,9 +86,9 @@ public class GncImportApp
 		return frame;
 	}
 
-	public static TxImportModel createAppModel(final TxMatcher matchingRules) 
+	public static TxImportModel createAppModel(String defaultAccName, final TxMatcher matchingRules) 
 	{
-		final LocalFileTxImportModel model = new LocalFileTxImportModel(DEFAULT_TARGET_ACCOUNT);	
+		final LocalFileTxImportModel model = new LocalFileTxImportModel(defaultAccName);	
 		model.setTransactionMatchingRules(matchingRules);
 	
 		return model;

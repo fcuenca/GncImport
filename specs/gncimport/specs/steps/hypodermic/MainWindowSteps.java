@@ -2,17 +2,23 @@ package gncimport.specs.steps.hypodermic;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.models.TxData;
 import gncimport.tests.endtoend.FileSystemDriver;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
+import cucumber.api.DataTable;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.runtime.PendingException;
 
 
 public class MainWindowSteps 
@@ -21,13 +27,30 @@ public class MainWindowSteps
 	private FileSystemDriver _fs;
 	private String _defaultAccName = GncImportApp.DEFAULT_TARGET_ACCOUNT;
 	
+	class MatchingRule
+	{
+		public MatchingRule(String txDesc, String account)
+		{
+			this.txDescription = txDesc;
+			this.account = account;
+		}
+		
+		public String txDescription;
+		public String account;
+	}
+	
+	private List<MatchingRule> _matchingRules;
+	
 	@Before
 	public void beforeScenario()
 	{
 		_fs = new FileSystemDriver();
-		_fs.prepareTestFiles();			
-
-		_app = new HypodermicAppDriver2(_defaultAccName);
+		_fs.prepareTestFiles();	
+		
+		ConfigOptions config = new ConfigOptions(new Properties());				
+		_app = new HypodermicAppDriver2(_defaultAccName, config);
+		
+		_matchingRules = new ArrayList<MatchingRule>();
 	}
 	
 	@After
@@ -39,7 +62,10 @@ public class MainWindowSteps
 	public void the_default_account_is(String defaultAccName) throws Throwable 
 	{
 		//UGLY: this step needs to be called *before* any other step in the Scenario
-		_app = new HypodermicAppDriver2(defaultAccName);
+		_defaultAccName = defaultAccName;
+		
+		ConfigOptions config = new ConfigOptions(new Properties());		
+		_app = new HypodermicAppDriver2(_defaultAccName, config);
 	}
 
 	@Given("^the sample CSV file \"([^\"]*)\" has been loaded$")
@@ -91,7 +117,68 @@ public class MainWindowSteps
 		{
 			String account = _app.observedAccountAtRow(i);
 			
-			assertThat("mismatch detected at row: ", account, is(expectedAccountName));		
+			assertThat("mismatch detected at row: " + i, account, is(expectedAccountName));		
+		}
+	}
+
+	@Given("^transaction matching rules are defined:$")
+	public void transaction_matching_rules_are_defined(List<MatchingRule> matchingRules) throws Throwable 
+	{
+		Properties properties = new Properties();
+		int i = 1;
+		for (MatchingRule rule : matchingRules)
+		{
+			properties.setProperty("match." + i +".account", rule.txDescription + "|" + rule.account);
+			i++;
+		}
+		
+		ConfigOptions config = new ConfigOptions(properties);				
+		_app = new HypodermicAppDriver2(_defaultAccName, config);
+	}
+	
+	@Then("^all transactions matching \"([^\"]*)\" are associated with the account \"([^\"]*)\"$")
+	public void all_transactions_matching_are_associated_with_the_account(String description, String accName) throws Throwable 
+	{
+		_matchingRules.add(new MatchingRule(description, accName));
+		
+		Boolean found = false;
+		
+		for (int i = 0; i < _app.observedGridSize(); i++)
+		{
+			String txDesc = _app.observedTxAtRow(i).trim();
+			String account = _app.observedAccountAtRow(i).trim();
+						
+			if(txDesc.matches(description))
+			{
+				found = true;
+				assertThat("mismatch detected at row: " + i, account, is(accName));		
+			}
+		}
+		
+		assertThat("No transaction matching: " + description + " was found.", found, is(true));
+	}
+
+	@Then("^all unmatched transactions are associated with \"([^\"]*)\"$")
+	public void all_unmatched_transactions_are_associated_with(String accName) throws Throwable 
+	{		
+		for (int i = 0; i < _app.observedGridSize(); i++)
+		{
+			String txDesc = _app.observedTxAtRow(i).trim();
+						
+			Boolean unmatched = true;
+			for (MatchingRule rule : _matchingRules)
+			{
+				if(txDesc.matches(rule.txDescription))
+				{
+					unmatched = false;
+				}				
+			}
+			
+			if(unmatched)
+			{
+				String account = _app.observedAccountAtRow(i).trim();			
+				assertThat("mismatch detected at row: " + i, account, is(accName));		
+			}
 		}
 	}
 

@@ -23,7 +23,7 @@ public class HypodermicAppDriver
 		
 		GncImportApp.DEFAULT_TARGET_ACCOUNT = "Miscelaneous";
 		
-		_model = GncImportApp.createAppModel(_config);
+		_model = GncImportApp.createAppModel(GncImportApp.DEFAULT_TARGET_ACCOUNT, _config);
 		_view = new FakeView();
 
 		_presenter = new MainWindowPresenter(_model, _view, _config);
