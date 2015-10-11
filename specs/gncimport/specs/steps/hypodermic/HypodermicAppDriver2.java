@@ -14,9 +14,9 @@ public class HypodermicAppDriver2
 	private List<TxData> _txList;
 	private String _loadedCsvFile;
 		
-	public HypodermicAppDriver2()
+	public HypodermicAppDriver2(String defaultAccName)
 	{
-		_model = new LocalFileTxImportModel("Miscelaneous");	
+		_model = new LocalFileTxImportModel(defaultAccName);	
 	}
 	
 	public void openCsvFile(String fileName)

@@ -2,24 +2,24 @@ package gncimport.specs.steps.hypodermic;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-
-import java.util.List;
-
+import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.models.TxData;
 import gncimport.tests.endtoend.FileSystemDriver;
+
+import java.util.List;
+
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.PendingException;
 
 
 public class MainWindowSteps 
 {
 	private HypodermicAppDriver2 _app;
 	private FileSystemDriver _fs;
+	private String _defaultAccName = GncImportApp.DEFAULT_TARGET_ACCOUNT;
 	
 	@Before
 	public void beforeScenario()
@@ -27,12 +27,19 @@ public class MainWindowSteps
 		_fs = new FileSystemDriver();
 		_fs.prepareTestFiles();			
 
-		_app = new HypodermicAppDriver2();
+		_app = new HypodermicAppDriver2(_defaultAccName);
 	}
 	
 	@After
 	public void afterScenario()
 	{
+	}
+	
+	@Given("^the default account is \"([^\"]*)\"$")
+	public void the_default_account_is(String defaultAccName) throws Throwable 
+	{
+		//UGLY: this step needs to be called *before* any other step in the Scenario
+		_app = new HypodermicAppDriver2(defaultAccName);
 	}
 
 	@Given("^the sample CSV file \"([^\"]*)\" has been loaded$")
