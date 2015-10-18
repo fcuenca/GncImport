@@ -35,14 +35,14 @@ public class MainWindowSteps
 		public String override;
 	}
 	
-	class ScenarioContext
+	class AppContext
 	{
 		public Properties properties;		
 		public String csvFileName;
 		public String gncFileName;
 		public String defaultAccName;
 		
-		public ScenarioContext()
+		public AppContext()
 		{
 			properties = new Properties();
 			csvFileName = "";
@@ -51,7 +51,7 @@ public class MainWindowSteps
 		}
 	}
 	
-	private ScenarioContext _context;
+	private AppContext _context;
 	private List<MatchingRule> _knownMatchingRules;
 	
 	private HypodermicAppDriver2 app()
@@ -72,7 +72,7 @@ public class MainWindowSteps
 				
 		_knownMatchingRules = new ArrayList<MatchingRule>();
 
-		_context = new ScenarioContext();
+		_context = new AppContext();
 	}
 	
 	@After
@@ -96,13 +96,7 @@ public class MainWindowSteps
 	@Given("^the following account override rules have been defined:$")
 	public void the_following_account_override_rules_have_been_defined(List<MatchingRule> matchingRules) throws Throwable 
 	{
-		int i = 1;
-		for (MatchingRule rule : matchingRules)
-		{
-			//TODO: remove duplication of property format
-			_context.properties.setProperty("match." + i + ".account", rule.desc + "|" + rule.override);
-			i++;
-		}		
+		createPropertiesFor(matchingRules);		
 	}
 	
 	@When("^the accounting file is loaded$")
@@ -134,19 +128,9 @@ public class MainWindowSteps
 	public void displayed_transactions_match_those_in_loaded_file() throws Throwable 
 	{
 		RbcExportParser parser = new RbcExportParser(app().loadedCsvFile());
-		List<TxData> list = parser.getTransactions();
-		
-		assertThat("Not enough transactions found", list.size(), is(app().observedGridSize()));
-		
-		for (int i = 0; i < app().observedGridSize(); i++)
-		{
-			String row = app().observedTxAtRow(i);
-			String txDesc = list.get(i).description;
-			
-			assertThat("mismatch detected at row: ", row, is(txDesc));		
-		}
+		assertThatObservedTransactionsAreEqualTo(parser.getTransactions());
 	}
-	
+
 	@Then("^all transactions are associated with \"([^\"]*)\"$")
 	public void all_transactions_are_associated_with(String expectedAccountName) throws Throwable 
 	{
@@ -199,4 +183,29 @@ public class MainWindowSteps
 		
 		assertThat("No transaction matching: " + expectedDescRegEx + " was found.", found, is(true));
 	}
+	
+	private void assertThatObservedTransactionsAreEqualTo(List<TxData> expectedTxs) throws Exception
+	{
+		assertThat("Not enough transactions found", expectedTxs.size(), is(app().observedGridSize()));
+		
+		for (int i = 0; i < app().observedGridSize(); i++)
+		{
+			String actualDesc = app().observedTxAtRow(i);
+			String expectedDesc = expectedTxs.get(i).description;
+			
+			assertThat("mismatch detected at row: ", actualDesc, is(expectedDesc));		
+		}
+	}
+	
+	private void createPropertiesFor(List<MatchingRule> matchingRules)
+	{
+		int i = 1;
+		for (MatchingRule rule : matchingRules)
+		{
+			//TODO: remove duplication of property format
+			_context.properties.setProperty("match." + i + ".account", rule.desc + "|" + rule.override);
+			i++;
+		}
+	}
+
 }
