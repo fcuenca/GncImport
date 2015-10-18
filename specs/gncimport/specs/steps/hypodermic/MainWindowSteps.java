@@ -18,7 +18,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-
 public class MainWindowSteps 
 {
 	private HypodermicAppDriver2 _app;
@@ -36,19 +35,31 @@ public class MainWindowSteps
 		public String override;
 	}
 	
-	private Properties _properties;
-	private String _csvFileName;
-	private String _gncFileName;
-	private String _defaultAccName;
+	class ScenarioContext
+	{
+		public Properties properties;		
+		public String csvFileName;
+		public String gncFileName;
+		public String defaultAccName;
+		
+		public ScenarioContext()
+		{
+			properties = new Properties();
+			csvFileName = "";
+			gncFileName = "";
+			defaultAccName = GncImportApp.DEFAULT_TARGET_ACCOUNT;
+		}
+	}
 	
+	private ScenarioContext _context;
 	private List<MatchingRule> _matchingRules;
 	
 	private HypodermicAppDriver2 app()
 	{
 		if(_app == null)
 		{
-			ConfigOptions config = new ConfigOptions(_properties);				
-			_app = new HypodermicAppDriver2(_defaultAccName, config);
+			ConfigOptions config = new ConfigOptions(_context.properties);				
+			_app = new HypodermicAppDriver2(_context.defaultAccName, config);
 		}
 		return _app;
 	}
@@ -61,10 +72,7 @@ public class MainWindowSteps
 				
 		_matchingRules = new ArrayList<MatchingRule>();
 
-		_properties = new Properties();
-		_csvFileName = "";
-		_gncFileName = "";
-		_defaultAccName = GncImportApp.DEFAULT_TARGET_ACCOUNT;
+		_context = new ScenarioContext();
 	}
 	
 	@After
@@ -75,44 +83,45 @@ public class MainWindowSteps
 	@Given("^transactions have been exported into \"([^\"]*)\"$")
 	public void transactions_have_been_exported_into(String csvFileName) throws Throwable
 	{
-		_csvFileName = csvFileName;
+		_context.csvFileName = csvFileName;
 	}
 
 	@Given("^accounting data file \"([^\"]*)\" with default account \"([^\"]*)\"$")
 	public void accounting_data_file_with_default_account(String gncFileName, String defaultAccName) throws Throwable
 	{
-		_gncFileName = gncFileName;
-		_defaultAccName = defaultAccName;
+		_context.gncFileName = gncFileName;
+		_context.defaultAccName = defaultAccName;
 	}
 	
-	@When("^the accounting file is loaded$")
-	public void the_accounting_file_is_loaded() throws Throwable
-	{
-		//TODO: move path resolution out of the app driver (?)
-		app().openGncFile(_gncFileName);
-	}
-	
-	@When("^the transaction file is loaded$")
-	public void the_transaction_file_is_loaded() throws Throwable 
-	{
-		app().openCsvFile(_csvFileName);
-	}
-
-	@When("^the target account hierarchy is set to \"([^\"]*)\"$")
-	public void the_target_account_hierarchy_is_set_to(String accountName) throws Throwable
-	{
-		app().selectTargetAccHierarchy(accountName);
-	}
-
 	@Given("^the following account override rules have been defined:$")
 	public void the_following_account_override_rules_have_been_defined(List<MatchingRule> matchingRules) throws Throwable 
 	{
 		int i = 1;
 		for (MatchingRule rule : matchingRules)
 		{
-			_properties.setProperty("match." + i +".account", rule.desc + "|" + rule.override);
+			//TODO: remove duplication of property format
+			_context.properties.setProperty("match." + i + ".account", rule.desc + "|" + rule.override);
 			i++;
 		}		
+	}
+	
+	@When("^the accounting file is loaded$")
+	public void the_accounting_file_is_loaded() throws Throwable
+	{
+		//TODO: move path resolution out of the app driver (?)
+		app().openGncFile(_context.gncFileName);
+	}
+	
+	@When("^the transaction file is loaded$")
+	public void the_transaction_file_is_loaded() throws Throwable 
+	{
+		app().openCsvFile(_context.csvFileName);
+	}
+
+	@When("^the target account hierarchy is set to \"([^\"]*)\"$")
+	public void the_target_account_hierarchy_is_set_to(String accountName) throws Throwable
+	{
+		app().selectTargetAccHierarchy(accountName);
 	}
 
 	@Then("^all other transactions are associated with \"([^\"]*)\"$")
