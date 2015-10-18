@@ -52,7 +52,7 @@ public class MainWindowSteps
 	}
 	
 	private ScenarioContext _context;
-	private List<MatchingRule> _matchingRules;
+	private List<MatchingRule> _knownMatchingRules;
 	
 	private HypodermicAppDriver2 app()
 	{
@@ -70,7 +70,7 @@ public class MainWindowSteps
 		_fs = new FileSystemDriver();
 		_fs.prepareTestFiles();	
 				
-		_matchingRules = new ArrayList<MatchingRule>();
+		_knownMatchingRules = new ArrayList<MatchingRule>();
 
 		_context = new ScenarioContext();
 	}
@@ -124,30 +124,6 @@ public class MainWindowSteps
 		app().selectTargetAccHierarchy(accountName);
 	}
 
-	@Then("^all other transactions are associated with \"([^\"]*)\"$")
-	public void all_other_transactions_are_associated_with(String expectedAccName) throws Throwable
-	{
-		for (int i = 0; i < app().observedGridSize(); i++)
-		{
-			String txDesc = app().observedTxAtRow(i).trim();
-						
-			Boolean unmatched = true;
-			for (MatchingRule rule : _matchingRules)
-			{
-				if(txDesc.matches(rule.desc))
-				{
-					unmatched = false;
-				}				
-			}
-			
-			if(unmatched)
-			{
-				String account = app().observedAccountAtRow(i).trim();			
-				assertThat("mismatch detected at row: " + i, account, is(expectedAccName));		
-			}
-		}
-	}
-
 	@Then("^the app displays (\\d+) transactions$")
 	public void the_app_displays_count_transactions(int txCount) throws Throwable 
 	{
@@ -171,37 +147,56 @@ public class MainWindowSteps
 		}
 	}
 	
-
 	@Then("^all transactions are associated with \"([^\"]*)\"$")
 	public void all_transactions_are_associated_with(String expectedAccountName) throws Throwable 
 	{
-		for (int i = 0; i < app().observedGridSize(); i++)
-		{
-			String account = app().observedAccountAtRow(i);
-			
-			assertThat("mismatch detected at row: " + i, account, is(expectedAccountName));		
-		}
+		final String ALL_TRANSACTIONS = ".*";
+		assertThatTransactionsAreAssociatedWithAcc(ALL_TRANSACTIONS, expectedAccountName);
 	}
 	
 	@Then("^all transactions matching \"([^\"]*)\" are associated with the account \"([^\"]*)\"$")
-	public void all_transactions_matching_are_associated_with_the_account(String description, String accName) throws Throwable 
+	public void all_transactions_matching_are_associated_with_the_account(String expectedDesc, String expectedAccName) throws Throwable 
 	{
-		_matchingRules.add(new MatchingRule(description, accName));
+		_knownMatchingRules.add(new MatchingRule(expectedDesc, expectedAccName));	
+		assertThatTransactionsAreAssociatedWithAcc(expectedDesc, expectedAccName);
+	}
+
+	@Then("^all other transactions are associated with \"([^\"]*)\"$")
+	public void all_other_transactions_are_associated_with(String expectedAccName) throws Throwable
+	{
+		final String ALL_OTHER_TRANSACTIONS = buildRegexForNonMatchingTransactionDesc();
+		assertThatTransactionsAreAssociatedWithAcc(ALL_OTHER_TRANSACTIONS, expectedAccName);
+	}
+
+	private String buildRegexForNonMatchingTransactionDesc()
+	{
+		//Builds a negative look-ahead regex: (?!one|two|three).+
 		
+		String regex = "(?!";
+		for (MatchingRule rule : _knownMatchingRules)
+		{
+			regex += rule.desc + "|";
+		}
+		regex = regex.substring(0, regex.length()-1) + ").+";
+		
+		return regex;
+	}
+
+	private void assertThatTransactionsAreAssociatedWithAcc(String expectedDescRegEx, String expectedAcc) throws Exception
+	{
 		Boolean found = false;
-		
 		for (int i = 0; i < app().observedGridSize(); i++)
 		{
-			String txDesc = app().observedTxAtRow(i).trim();
-			String account = app().observedAccountAtRow(i).trim();
+			String observedDesc = app().observedTxAtRow(i).trim();
+			String observedAcc = app().observedAccountAtRow(i).trim();
 						
-			if(txDesc.matches(description))
+			if(observedDesc.matches(expectedDescRegEx))
 			{
 				found = true;
-				assertThat("mismatch detected at row: " + i, account, is(accName));		
+				assertThat("mismatch detected at row: " + i, observedAcc, is(expectedAcc));		
 			}
 		}
 		
-		assertThat("No transaction matching: " + description + " was found.", found, is(true));
+		assertThat("No transaction matching: " + expectedDescRegEx + " was found.", found, is(true));
 	}
 }
