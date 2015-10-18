@@ -7,21 +7,25 @@ import gncimport.ConfigOptions;
 import gncimport.utils.InvalidConfigOption;
 
 import java.util.Properties;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class ConfigOptionsImplementsTxMatcher
 {
 	private ConfigOptions _options;
-
+	
 	private Properties sampleProperties()
 	{
-		Properties p = new Properties();
+		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
 		
-		p.setProperty("match.1.account", "MISC PAYMENT - IMH POOL I LP|Departamento");
-		p.setProperty("match.2.account", "MISC PAYMENT - GOODLIFE CLUBS|Salud");
-		p.setProperty("match.99.account", "SAN CRISTOBAL SEG 1146ROSARIO.*|Casa Cordoba");
+		builder.addAccountMatchRule(1, "MISC PAYMENT - IMH POOL I LP", "Departamento");
+		builder.addAccountMatchRule(2, "MISC PAYMENT - GOODLIFE CLUBS", "Salud");
+		builder.addAccountMatchRule(99, "SAN CRISTOBAL SEG 1146ROSARIO.*", "Casa Cordoba");
 
+		Properties p = builder.build();
+
+		//TODO: move this functionality to the builder once needed in the specs
 		p.setProperty("match.1.rewrite", "MISC PAYMENT - GOODLIFE CLUBS|Gym membership");
 		p.setProperty("match.2.rewrite", "MISC PAYMENT - IMH POOL I LP|Apartment Rent");
 		p.setProperty("match.3.rewrite", "SAN CRISTOBAL.*|Home Insurance");
@@ -34,6 +38,7 @@ public class ConfigOptionsImplementsTxMatcher
 		
 		return p;
 	}
+
 	
 	@Before
 	public void Setup()

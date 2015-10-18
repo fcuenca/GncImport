@@ -8,6 +8,7 @@ import gncimport.adaptors.RbcExportParser;
 import gncimport.models.TxData;
 import gncimport.tests.data.TestFiles;
 import gncimport.tests.endtoend.FileSystemDriver;
+import gncimport.tests.unit.ConfigPropertyBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -199,13 +200,16 @@ public class MainWindowSteps
 	
 	private void createPropertiesFor(List<MatchingRule> matchingRules)
 	{
-		int i = 1;
+		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
+		
+		int index = 1;
 		for (MatchingRule rule : matchingRules)
 		{
-			//TODO: remove duplication of property format
-			_context.properties.setProperty("match." + i + ".account", rule.desc + "|" + rule.override);
-			i++;
+			builder.addAccountMatchRule(index, rule.desc, rule.override);
+			index++;
 		}
+		
+		_context.properties = builder.build();
 	}
 
 }
