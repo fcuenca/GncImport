@@ -12,7 +12,6 @@ public class HypodermicAppDriver2
 {
 	private TxImportModel _model;
 	private List<TxData> _txList;
-	private String _loadedCsvFile;
 		
 	public HypodermicAppDriver2(String defaultAccName, TxMatcher config)
 	{
@@ -21,8 +20,7 @@ public class HypodermicAppDriver2
 	
 	public void openCsvFile(String fileName)
 	{
-		_loadedCsvFile = fileName;
-		_txList = _model.fetchTransactionsFrom(_loadedCsvFile);
+		_txList = _model.fetchTransactionsFrom(fileName);
 	}
 	
 	public void openGncFile(String fileName)
@@ -35,17 +33,6 @@ public class HypodermicAppDriver2
 		return _txList.size();
 	}
 	
-	public String loadedCsvFile()
-	{
-		return _loadedCsvFile;
-	}
-	
-	//TODO: in this version, this function is redundant. Remove!
-	public int observedGridSize() throws Exception
-	{
-		return observedTxCount();  
-	}
-
 	public String observedTxAtRow(int i)
 	{
 		return _txList.get(i).description;

@@ -127,7 +127,7 @@ public class MainWindowSteps
 	@Then("^displayed transactions match those in loaded file$")
 	public void displayed_transactions_match_those_in_loaded_file() throws Throwable 
 	{
-		RbcExportParser parser = new RbcExportParser(app().loadedCsvFile());
+		RbcExportParser parser = new RbcExportParser(_context.csvFileName);
 		assertThatObservedTransactionsAreEqualTo(parser.getTransactions());
 	}
 
@@ -169,7 +169,7 @@ public class MainWindowSteps
 	private void assertThatTransactionsAreAssociatedWithAcc(String expectedDescRegEx, String expectedAcc) throws Exception
 	{
 		Boolean found = false;
-		for (int i = 0; i < app().observedGridSize(); i++)
+		for (int i = 0; i < app().observedTxCount(); i++)
 		{
 			String observedDesc = app().observedTxAtRow(i).trim();
 			String observedAcc = app().observedAccountAtRow(i).trim();
@@ -186,9 +186,9 @@ public class MainWindowSteps
 	
 	private void assertThatObservedTransactionsAreEqualTo(List<TxData> expectedTxs) throws Exception
 	{
-		assertThat("Not enough transactions found", expectedTxs.size(), is(app().observedGridSize()));
+		assertThat("Not enough transactions found", expectedTxs.size(), is(app().observedTxCount()));
 		
-		for (int i = 0; i < app().observedGridSize(); i++)
+		for (int i = 0; i < app().observedTxCount(); i++)
 		{
 			String actualDesc = app().observedTxAtRow(i);
 			String expectedDesc = expectedTxs.get(i).description;
