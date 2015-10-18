@@ -6,6 +6,7 @@ import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.models.TxData;
+import gncimport.tests.data.TestFiles;
 import gncimport.tests.endtoend.FileSystemDriver;
 
 import java.util.ArrayList;
@@ -83,13 +84,13 @@ public class MainWindowSteps
 	@Given("^transactions have been exported into \"([^\"]*)\"$")
 	public void transactions_have_been_exported_into(String csvFileName) throws Throwable
 	{
-		_context.csvFileName = csvFileName;
+		_context.csvFileName = TestFiles.getFilePath(csvFileName);
 	}
 
 	@Given("^accounting data file \"([^\"]*)\" with default account \"([^\"]*)\"$")
 	public void accounting_data_file_with_default_account(String gncFileName, String defaultAccName) throws Throwable
 	{
-		_context.gncFileName = gncFileName;
+		_context.gncFileName = TestFiles.getFilePath(gncFileName);
 		_context.defaultAccName = defaultAccName;
 	}
 	
@@ -102,7 +103,6 @@ public class MainWindowSteps
 	@When("^the accounting file is loaded$")
 	public void the_accounting_file_is_loaded() throws Throwable
 	{
-		//TODO: move path resolution out of the app driver (?)
 		app().openGncFile(_context.gncFileName);
 	}
 	
