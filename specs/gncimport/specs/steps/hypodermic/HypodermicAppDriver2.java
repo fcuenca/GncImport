@@ -109,4 +109,16 @@ public class HypodermicAppDriver2
 			throw new RuntimeException("Target hierarchy hasn't been set yet!");
 		}
 	}
+
+	public List<String> observedAccountList()
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		
+		for (AccountData accountData : _model.getAccounts())
+		{
+			result.add(accountData.getName());
+		}
+		
+		return result;
+	}
 }

@@ -173,6 +173,19 @@ public class MainWindowSteps
 			assertThat("mismatch at row: " + i, parentIds.get(i), is(rootId));
 		}
 	}
+	
+
+	@Then("^transactions can be associated with accounts outside the target hierarchy:$")
+	public void transactions_can_be_associated_with_accounts_outside_the_target_hierarchy(List<String> expecteAccNames)
+			throws Throwable
+	{
+		List<String> actualAccNames = app().observedAccountList();
+
+		for (String accName : expecteAccNames)
+		{
+			assertThat("could't find: " + accName, actualAccNames.contains(accName), is(true));
+		}
+	}
 
 	private List<List<String>> buildObservedAccountList(List<String> tableHeaders)
 	{

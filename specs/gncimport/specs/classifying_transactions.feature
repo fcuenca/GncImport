@@ -30,7 +30,7 @@ Feature: Classifying Transactions
 			| order | account 		|
 			| 1 	| Miscelaneous	|
 			| 2		| Housing	 	|
-			| 3		| Groceries 	|
+			| 3		| Groceries 	| 
 			| 4		| Clothing		|
 			| 5		| Supplies		|
 			| 6		| Entertainment	|
@@ -40,3 +40,13 @@ Feature: Classifying Transactions
 			| 10	| Car			|
 			| 11	| Expenses		|
 		And all accounts offered belong to the selected target account hierarchy
+
+	Scenario: Manual reclassification outside the target account hierarchy
+		When the accounting file is loaded
+		And the target account hierarchy is set to "February 2014"
+		Then transactions can be associated with accounts outside the target hierarchy:
+			| Special Expenses 	|
+			| Checking Account 	|
+			| January 2014 		|
+		
+				
