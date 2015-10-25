@@ -1,5 +1,5 @@
-Feature: Classifying Transactions
-	I want transactions classified in different spending accounts
+Feature: Classifying Transactions 
+	I want transactions classified in different spending accounts 
 	
 	Background:
 	    Given transactions have been exported into "rbc.csv" 
@@ -23,4 +23,20 @@ Feature: Classifying Transactions
 		And all transactions matching "MISC PAYMENT - IMH POOL I LP" are associated with the account "Housing"
 		And all other transactions are associated with "Miscelaneous"
 	
-	Scenario: Manual reclassification
+	Scenario: Manual reclassification within target account hierarchy
+		When the accounting file is loaded
+		And the target account hierarchy is set to "February 2014"
+		Then transactions can be associated with sub-accounts:
+			| order | account 		|
+			| 1 	| Miscelaneous	|
+			| 2		| Housing	 	|
+			| 3		| Groceries 	|
+			| 4		| Clothing		|
+			| 5		| Supplies		|
+			| 6		| Entertainment	|
+			| 7		| Casa Cordoba	|
+			| 8		| Books			|
+			| 9		| Health		|
+			| 10	| Car			|
+			| 11	| Expenses		|
+		And all accounts offered belong to the selected target account hierarchy

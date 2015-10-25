@@ -11,9 +11,11 @@ import gncimport.tests.endtoend.FileSystemDriver;
 import gncimport.tests.unit.ConfigPropertyBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import cucumber.api.DataTable;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
@@ -151,6 +153,42 @@ public class MainWindowSteps
 	{
 		final String ALL_OTHER_TRANSACTIONS = buildRegexForNonMatchingTransactionDesc();
 		assertThatTransactionsAreAssociatedWithAcc(ALL_OTHER_TRANSACTIONS, expectedAccName);
+	}
+	
+	@Then("^transactions can be associated with sub-accounts:$")
+	public void transactions_can_be_associated_with_sub_accounts(DataTable expectedAccounts) throws Throwable
+	{
+		List<List<String>> actual = buildObservedAccountList(expectedAccounts.topCells());
+		expectedAccounts.diff(actual);
+	}
+
+	@Then("^all accounts offered belong to the selected target account hierarchy$")
+	public void all_accounts_offered_belong_to_the_selected_target_account_hierarchy() throws Throwable
+	{
+		String rootId = app().observedIdForTargetHierarchyRoot();
+		List<String> parentIds = app().observedParentsForTargetHierarchyAccounts();
+		
+		for (int i = 0; i < parentIds.size(); i++)
+		{
+			assertThat("mismatch at row: " + i, parentIds.get(i), is(rootId));
+		}
+	}
+
+	private List<List<String>> buildObservedAccountList(List<String> tableHeaders)
+	{
+		List<List<String>> actual = new ArrayList<List<String>>();
+		
+		actual.add(tableHeaders);
+		
+		List<String> accounts = app().observedTagetHierarchyAccounts(); 
+		
+		int i = 1;
+		for (String accName : accounts)
+		{
+			actual.add(Arrays.asList(Integer.toString(i), accName));
+			i++;
+		}
+		return actual;
 	}
 
 	private String buildRegexForNonMatchingTransactionDesc()

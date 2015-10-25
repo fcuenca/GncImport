@@ -6,12 +6,14 @@ import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
 import gncimport.models.TxMatcher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HypodermicAppDriver2
 {
 	private TxImportModel _model;
 	private List<TxData> _txList;
+	private AccountData _targetHierarchyRoot;
 		
 	public HypodermicAppDriver2(String defaultAccName, TxMatcher config)
 	{
@@ -47,13 +49,64 @@ public class HypodermicAppDriver2
 	{
 		List<AccountData> accounts = _model.getAccounts();
 		
+		_targetHierarchyRoot = null;
+		
 		for (AccountData acc : accounts)
 		{
 			if(acc.getName().equals(accountName))
 			{
-				_model.setTargetHierarchy(acc);				
+				_targetHierarchyRoot = acc;
+				break;
 			}
+		}
+		
+		if(_targetHierarchyRoot != null)
+		{
+			_model.setTargetHierarchy(_targetHierarchyRoot);							
+		}
+		else
+		{
+			throw new RuntimeException("Target Hierarchy not found: " + accountName);
 		}
 	}
 
+	public List<String> observedTagetHierarchyAccounts()
+	{
+		List<String> accNames = new ArrayList<String>();
+		
+		List<AccountData> acounts = _model.getCandidateTargetAccounts();
+		
+		for (AccountData accountData : acounts)
+		{
+			accNames.add(accountData.getName());
+		}
+		
+		return accNames;
+	}
+
+	public List<String> observedParentsForTargetHierarchyAccounts()
+	{
+		List<String> accNames = new ArrayList<String>();
+		
+		List<AccountData> acounts = _model.getCandidateTargetAccounts();
+		
+		for (AccountData accountData : acounts)
+		{
+			accNames.add(accountData.getParentId());
+		}
+		
+		return accNames;
+	}
+
+	public String observedIdForTargetHierarchyRoot()
+	{
+		if(_targetHierarchyRoot != null)
+		{
+			return _targetHierarchyRoot.getId();
+		}
+		else
+		{
+			throw new RuntimeException("Target hierarchy hasn't been set yet!");
+		}
+	}
 }
