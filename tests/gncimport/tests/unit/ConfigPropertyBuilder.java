@@ -18,4 +18,9 @@ public class ConfigPropertyBuilder
 	{
 		_props.setProperty("match." + index + ".account", txDescPattern + "|" + overrideAccName);
 	}
+
+	public void addTransactionIgnoreRule(int index, String txDescPattern)
+	{
+		_props.setProperty("match." + index + ".ignore", txDescPattern);
+	}
 }

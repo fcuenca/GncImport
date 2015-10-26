@@ -23,6 +23,9 @@ public class ConfigOptionsImplementsTxMatcher
 		builder.addAccountMatchRule(2, "MISC PAYMENT - GOODLIFE CLUBS", "Salud");
 		builder.addAccountMatchRule(99, "SAN CRISTOBAL SEG 1146ROSARIO.*", "Casa Cordoba");
 
+		builder.addTransactionIgnoreRule(1, "WEB TRANSFER");
+		builder.addTransactionIgnoreRule(99, "MISC PAYMENT - RBC CREDIT CARD.*");
+		
 		Properties p = builder.build();
 
 		//TODO: move this functionality to the builder once needed in the specs
@@ -30,9 +33,6 @@ public class ConfigOptionsImplementsTxMatcher
 		p.setProperty("match.2.rewrite", "MISC PAYMENT - IMH POOL I LP|Apartment Rent");
 		p.setProperty("match.3.rewrite", "SAN CRISTOBAL.*|Home Insurance");
 		p.setProperty("match.4.rewrite", "Withdrawal - PTB WD --- TZ(\\d*)|Cash withdrawal ($1)");
-
-		p.setProperty("match.1.ignore", "WEB TRANSFER");
-		p.setProperty("match.99.ignore", "MISC PAYMENT - RBC CREDIT CARD.*");
 
 		p.setProperty("some.other.property", "this will not be matched|dummy");
 		

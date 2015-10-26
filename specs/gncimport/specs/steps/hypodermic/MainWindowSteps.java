@@ -100,7 +100,7 @@ public class MainWindowSteps
 	@Given("^the following account override rules have been defined:$")
 	public void the_following_account_override_rules_have_been_defined(List<MatchingRule> matchingRules) throws Throwable 
 	{
-		createPropertiesFor(matchingRules);		
+		createMatchingRules(matchingRules);		
 	}
 	
 	@When("^the accounting file is loaded$")
@@ -186,6 +186,19 @@ public class MainWindowSteps
 			assertThat("could't find: " + accName, actualAccNames.contains(accName), is(true));
 		}
 	}
+	
+
+	@Given("^the following ignore rules have been defined:$")
+	public void the_following_ignore_rules_have_been_defined(List<String> rules) throws Throwable
+	{
+		createIgnoreRules(rules);
+	}
+
+	@Then("^the number of ignored transactions is (\\d+)$")
+	public void the_number_of_ignored_transactions_is(int count) throws Throwable
+	{
+		assertThat(app().observedIgnoreCount(), is(count));
+	}
 
 	private List<List<String>> buildObservedAccountList(List<String> tableHeaders)
 	{
@@ -249,7 +262,20 @@ public class MainWindowSteps
 		}
 	}
 	
-	private void createPropertiesFor(List<MatchingRule> matchingRules)
+	private void createIgnoreRules(List<String> rules)
+	{
+		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
+		
+		int i = 1;
+		for (String rule : rules)
+		{
+			builder.addTransactionIgnoreRule(i, rule);
+		}
+		
+		_context.properties.putAll(builder.build());
+	}
+	
+	private void createMatchingRules(List<MatchingRule> matchingRules)
 	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
 		
@@ -260,7 +286,7 @@ public class MainWindowSteps
 			index++;
 		}
 		
-		_context.properties = builder.build();
+		_context.properties.putAll(builder.build());
 	}
 
 }

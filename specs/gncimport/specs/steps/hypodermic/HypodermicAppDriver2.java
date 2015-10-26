@@ -121,4 +121,19 @@ public class HypodermicAppDriver2
 		
 		return result;
 	}
+
+	public int observedIgnoreCount()
+	{
+		int count = 0;
+		
+		for (TxData tx : _txList)
+		{
+			if(tx.doNotImport)
+			{
+				count++;
+			}
+		}
+		
+		return count;
+	}
 }
