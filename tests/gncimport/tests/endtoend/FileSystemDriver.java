@@ -55,8 +55,19 @@ public class FileSystemDriver
 		
 		assertThat(p.getProperty(propertyName), is(expectedValue));
 	}
+	
+	public String createTempCopyForTestFile(String testFileName) throws IOException
+	{
+		String source = TestFiles.getFilePath(testFileName);		
+		File f = new File(source);
+		String dest = "/tmp/TMP_" + f.getName();
+		
+		copyFile(source, dest);
+		
+		return dest;
+	}
 
-	private static void copyFile(String source, String dest) throws IOException
+	private void copyFile(String source, String dest) throws IOException
 	{
 		InputStream is = null;
 		OutputStream os = null;

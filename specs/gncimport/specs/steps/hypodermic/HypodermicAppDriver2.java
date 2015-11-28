@@ -14,6 +14,7 @@ public class HypodermicAppDriver2
 	private TxImportModel _model;
 	private List<TxData> _txList;
 	private AccountData _targetHierarchyRoot;
+	private AccountData _sourceAccount;
 		
 	public HypodermicAppDriver2(String defaultAccName, TxMatcher config)
 	{
@@ -69,6 +70,33 @@ public class HypodermicAppDriver2
 			throw new RuntimeException("Target Hierarchy not found: " + accountName);
 		}
 	}
+	
+	//TODO: remove this duplication
+	public void selectSourceAccount(String accountName)
+	{
+		List<AccountData> accounts = _model.getAccounts();
+		
+		_sourceAccount = null;
+		
+		for (AccountData acc : accounts)
+		{
+			if(acc.getName().equals(accountName))
+			{
+				_sourceAccount = acc;
+				break;
+			}
+		}
+		
+		if(_sourceAccount != null)
+		{
+			_model.setSourceAccount(_sourceAccount);							
+		}
+		else
+		{
+			throw new RuntimeException("Source Hierarchy not found: " + accountName);
+		}		
+	}
+
 
 	public List<String> observedTagetHierarchyAccounts()
 	{
@@ -135,5 +163,10 @@ public class HypodermicAppDriver2
 		}
 		
 		return count;
+	}
+
+	public void importTransactionsTo(String gncFileName)
+	{
+		_model.saveTxTo(_txList, gncFileName);
 	}
 }
