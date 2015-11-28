@@ -8,6 +8,7 @@ import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.models.TxData;
+import gncimport.specs.steps.hypodermic.MainWindowSteps.MatchingRule;
 import gncimport.tests.data.TestFiles;
 import gncimport.tests.unit.ConfigPropertyBuilder;
 import gnclib.GncFile;
@@ -116,7 +117,7 @@ public class MainWindowSteps
 	public void the_following_account_override_rules_have_been_defined(List<MatchingRule> matchingRules)
 			throws Throwable
 	{
-		createMatchingRules(matchingRules);
+		_context.properties.putAll(createMatchingRules(matchingRules));
 	}
 
 	@When("^the accounting file is loaded$")
@@ -236,15 +237,29 @@ public class MainWindowSteps
 		app().selectSourceAccount(accName);
 	}
 	
+	private Properties createMatchingRules(List<MatchingRule> matchingRules)
+	{
+		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
+		
+		int index = 1;
+		for (MatchingRule rule : matchingRules)
+		{
+			builder.addAccountMatchRule(index, rule.desc, rule.override);
+			index++;
+		}
+		
+		return builder.build();
+	}
+	
 	private Properties createIgnoreRules(List<String> rules)
 	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
 		
-		int i = 1;
+		int index = 1;
 		for (String rule : rules)
 		{
-			builder.addTransactionIgnoreRule(i, rule);
-			i++;
+			builder.addTransactionIgnoreRule(index, rule);
+			index++;
 		}
 		
 		return builder.build();
@@ -313,20 +328,6 @@ public class MainWindowSteps
 		}
 	}
 
-	private void createMatchingRules(List<MatchingRule> matchingRules)
-	{
-		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
-
-		int index = 1;
-		for (MatchingRule rule : matchingRules)
-		{
-			builder.addAccountMatchRule(index, rule.desc, rule.override);
-			index++;
-		}
-
-		_context.properties.putAll(builder.build());
-	}
-	
 	private int countTransactionsForSubAccount(final String gncFilePath, String subAcc, String parentAcc)
 			throws IOException
 	{
