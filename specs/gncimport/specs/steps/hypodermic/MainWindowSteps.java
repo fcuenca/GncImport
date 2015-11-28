@@ -8,7 +8,6 @@ import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.models.TxData;
-import gncimport.specs.steps.hypodermic.MainWindowSteps.MatchingRule;
 import gncimport.tests.data.TestFiles;
 import gncimport.tests.unit.ConfigPropertyBuilder;
 import gnclib.GncFile;
@@ -30,7 +29,7 @@ import cucumber.api.java.en.When;
 
 public class MainWindowSteps
 {
-	private HypodermicAppDriver2 _app;
+	private HypodermicAppDriver3 _app;
 
 	class MatchingRule
 	{
@@ -78,12 +77,12 @@ public class MainWindowSteps
 	private AppContext _context;
 	private List<MatchingRule> _knownMatchingRules;
 
-	private HypodermicAppDriver2 app()
+	private HypodermicAppDriver3 app()
 	{
 		if (_app == null)
 		{
 			ConfigOptions config = new ConfigOptions(_context.properties);
-			_app = new HypodermicAppDriver2(_context.defaultAccName, config);
+			_app = new HypodermicAppDriver3(_context.defaultAccName, config);
 		}
 		return _app;
 	}
