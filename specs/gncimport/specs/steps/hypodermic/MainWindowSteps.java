@@ -244,7 +244,7 @@ public class MainWindowSteps
 		for (String rule : rules)
 		{
 			builder.addTransactionIgnoreRule(i, rule);
-			//TODO: bug in test!! i++;
+			i++;
 		}
 		
 		return builder.build();

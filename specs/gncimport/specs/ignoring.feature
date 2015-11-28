@@ -12,5 +12,5 @@ Feature: Ignoring transactions
 	    	|MISC PAYMENT - RBC CREDIT CARD |
 	    	|PAYROLL DEPOSIT.* 				|   
     	When the transaction file is loaded
-    	Then the number of ignored transactions is 3
+    	Then the number of ignored transactions is 4
 	
