@@ -1,5 +1,9 @@
 package gncimport.ui;
 
+import gncimport.interactors.AccSelectionInteractor;
+import gncimport.interactors.InteractorFactory;
+import gncimport.interactors.TxClassificationInteractor;
+import gncimport.interactors.TxFileLoadInteractor;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
@@ -20,9 +24,12 @@ public class MainWindowPresenter implements MainWindowRenderer
 	private final TxImportModel _model;
 	private final TxView _view;
 	private final UIConfig _config;
+	
+	private final InteractorFactory _interactors;
 
 	public MainWindowPresenter(TxImportModel model, TxView view, UIConfig config)
 	{
+		this._interactors = new InteractorFactory(model);
 		this._model = model;
 		this._view = view;
 		this._config = config;
@@ -31,7 +38,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onReadFromCsvFile()
 	{
-		List<TxData> newTransactionData;
 		try
 		{
 			String lastDir = _config.getLastCsvDirectory();
@@ -41,16 +47,23 @@ public class MainWindowPresenter implements MainWindowRenderer
 				lastDir = System.getProperty("user.home");
 			}
 			
-			String fileName = _view.promptForFile(lastDir);
+			final String fileName = _view.promptForFile(lastDir);
 			
 			if (fileName != null)
 			{
-				newTransactionData = _model.fetchTransactionsFrom(fileName);
-				
-				_view.displayTxData(new TxTableModel(newTransactionData), buildTargetAccountList());
-				_view.displayTxCount(newTransactionData.size());
-				_config.setLastCsvDirectory(new File(fileName).getParent());
-				_view.updateCsvFileLabel(fileName);
+				TxFileLoadInteractor.OutPort boundary = new TxFileLoadInteractor.OutPort() 
+				{
+					@Override
+					public void accept(List<TxData> newTransactionData)
+					{
+						_view.displayTxData(new TxTableModel(newTransactionData), buildTargetAccountList());
+						_view.displayTxCount(newTransactionData.size());
+						_config.setLastCsvDirectory(new File(fileName).getParent());
+						_view.updateCsvFileLabel(fileName);
+					}
+				};
+					
+				_interactors.txFileLoad(boundary).fetchTransactions(fileName);				
 			}
 		}
 		catch (Exception e)
@@ -61,9 +74,20 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 	private List<AccountData> buildTargetAccountList()
 	{
-		List<AccountData> candidates = new ArrayList<AccountData>(_model.getCandidateTargetAccounts());
-		candidates.add(OTHER_ACC_PLACEHOLDER);
+		final ArrayList<AccountData> candidates = new ArrayList<AccountData>();
 
+		TxClassificationInteractor.OutPort boundary = new TxClassificationInteractor.OutPort()
+		{
+			@Override
+			public void accept(List<AccountData> accounts)
+			{
+				candidates.addAll(accounts);
+				candidates.add(OTHER_ACC_PLACEHOLDER);
+			}
+		};
+		
+		_interactors.txClassification(boundary).getCandidateTargetAccounts();;
+		
 		return candidates;
 	}
 
@@ -72,9 +96,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		try
 		{
-			List<TxData> txData = _view.getTxTableModel().getTransactions();
-
-			_model.saveTxTo(txData, fileName);
+			_interactors.txImport().saveTxTo(_view.getTxTableModel().getTransactions(), fileName);
 		}
 		catch (Exception e)
 		{
@@ -98,7 +120,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 			
 			if (fileName != null)
 			{
-				_model.openGncFile(fileName);
+				_interactors.accFileLoad().openGncFile(fileName);
+
 				_view.updateGncFileLabel(fileName);
 				_config.setLastGncDirectory(new File(fileName).getParent());
 			}
@@ -118,7 +141,17 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 			if (selectedAccount != null)
 			{
-				_model.setSourceAccount(selectedAccount);
+				AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort () 
+				{
+					@Override
+					public void accept(List<AccountData> accounts)
+					{
+						throw new ProgrammerError("nothing to do for now");
+					}
+				};
+				
+				_interactors.accSelection(boundary).setSourceAccount(selectedAccount);;
+				
 				_view.displaySourceAccount(selectedAccount.getName());
 			}
 		}
@@ -136,7 +169,17 @@ public class MainWindowPresenter implements MainWindowRenderer
 			AccountData selectedAccount = selectAccountFromTree();
 			if (selectedAccount != null)
 			{
-				_model.setTargetHierarchy(selectedAccount);
+				AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort () 
+				{
+					@Override
+					public void accept(List<AccountData> accounts)
+					{
+						throw new ProgrammerError("nothing to do for now");
+					}
+				};				
+
+				_interactors.accSelection(boundary).setTargetHierarchy(selectedAccount);
+
 				_view.displayTargetHierarchy(selectedAccount.getName());
 				_view.updateCandidateTargetAccountList(buildTargetAccountList());
 			}
@@ -222,16 +265,23 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 	private DefaultMutableTreeNode getAccountTree()
 	{
-		List<AccountData> accounts = _model.getAccounts();
-
-		AccountTreeBuilder builder = new AccountTreeBuilder();
-		for (AccountData account : accounts)
+		final AccountTreeBuilder builder = new AccountTreeBuilder();
+		
+		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort()
 		{
-			builder.addNodeFor(account);
-		}
+			@Override
+			public void accept(List<AccountData> accounts)
+			{
+				for (AccountData account : accounts)
+				{
+					builder.addNodeFor(account);
+				}
+			}
+		};
 
-		DefaultMutableTreeNode accountRoot = builder.getRoot();
-		return accountRoot;
+		_interactors.accSelection(boundary).getAccounts();;
+
+		return builder.getRoot();
 	}
 
 	@SuppressWarnings("deprecation")

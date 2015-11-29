@@ -1,4 +1,4 @@
-package gncimport.specs.steps.hypodermic;
+package gncimport.interactors;
 
 import gncimport.models.AccountData;
 import gncimport.models.TxImportModel;
@@ -21,7 +21,7 @@ public class AccSelectionInteractor
 		_output = output;
 	}
 
-	public void selectAccount()
+	public void getAccounts()
 	{
 		List<AccountData> accounts = _model.getAccounts();
 		_output.accept(accounts);

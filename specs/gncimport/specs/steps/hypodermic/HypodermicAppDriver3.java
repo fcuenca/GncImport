@@ -1,6 +1,10 @@
 package gncimport.specs.steps.hypodermic;
 
 import gncimport.GncImportApp;
+import gncimport.interactors.AccSelectionInteractor;
+import gncimport.interactors.InteractorFactory;
+import gncimport.interactors.TxClassificationInteractor;
+import gncimport.interactors.TxFileLoadInteractor;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
@@ -76,7 +80,7 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_interactors.accSelection(boundary).selectAccount();	
+		_interactors.accSelection(boundary).getAccounts();	
 	}
 
 	public void selectSourceAccount(final String accountName)
@@ -99,7 +103,7 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_interactors.accSelection(boundary).selectAccount();
+		_interactors.accSelection(boundary).getAccounts();
 	}
 
 	public List<String> observedTagetHierarchyAccounts()
@@ -151,7 +155,7 @@ public class HypodermicAppDriver3
 			}
 		};
 
-		_interactors.accSelection(boundary).selectAccount();
+		_interactors.accSelection(boundary).getAccounts();
 
 		return accNames;
 	}

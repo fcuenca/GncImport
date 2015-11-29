@@ -1,8 +1,8 @@
-package gncimport.specs.steps.hypodermic;
+package gncimport.interactors;
 
 import gncimport.models.TxImportModel;
 
-class InteractorFactory
+public class InteractorFactory
 {
 	private TxImportModel _model;
 	

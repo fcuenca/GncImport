@@ -1,4 +1,4 @@
-package gncimport.specs.steps.hypodermic;
+package gncimport.interactors;
 
 import java.util.List;
 
