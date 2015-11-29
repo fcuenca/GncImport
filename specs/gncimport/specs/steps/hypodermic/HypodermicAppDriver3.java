@@ -3,7 +3,6 @@ package gncimport.specs.steps.hypodermic;
 import gncimport.GncImportApp;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
-import gncimport.models.TxImportModel;
 import gncimport.models.TxMatcher;
 
 import java.util.ArrayList;
@@ -11,45 +10,12 @@ import java.util.List;
 
 public class HypodermicAppDriver3 
 {
+	private InteractorFactory _interactors;
+	
 	private List<TxData> _txList;
 	private AccountData _targetHierarchyRoot;
 	private AccountData _sourceAccount;
 	
-	class InteractorFactory
-	{
-		private TxImportModel _model;
-		
-		public InteractorFactory(TxImportModel model)
-		{
-			_model = model;
-		}
-		
-		public TxFileLoadInteractor txFileLoad(TxFileLoadInteractor.OutPort boundary)
-		{
-			return new TxFileLoadInteractor(boundary, _model);		
-		}
-
-		public AccFileLoadInteractor accFileLoad()
-		{
-			return new AccFileLoadInteractor(_model);
-		}
-
-		public AccSelectionInteractor accSelection(AccSelectionInteractor.OutPort boundary)
-		{
-			return new AccSelectionInteractor(boundary, _model);
-		}
-
-		public TxClassificationInteractor txClassification(TxClassificationInteractor.OutPort boundary)
-		{
-			return new TxClassificationInteractor(boundary, _model);
-		}
-
-		public TxImportInteractor txImport()
-		{
-			return new TxImportInteractor(_model);
-		}
-	}
-	private InteractorFactory _interactors;
 		
 	public HypodermicAppDriver3(String defaultAccName, TxMatcher config)
 	{
@@ -97,7 +63,7 @@ public class HypodermicAppDriver3
 			@Override
 			public void accept(List<AccountData> accounts)
 			{
-				_targetHierarchyRoot = findAccontInList(accountName, accounts);
+				_targetHierarchyRoot = findAccountInList(accountName, accounts);
 				
 				if(_targetHierarchyRoot != null)
 				{
@@ -120,7 +86,7 @@ public class HypodermicAppDriver3
 			@Override
 			public void accept(List<AccountData> accounts)
 			{				
-				_sourceAccount = findAccontInList(accountName, accounts);
+				_sourceAccount = findAccountInList(accountName, accounts);
 
 				if(_sourceAccount != null)
 				{
@@ -145,10 +111,7 @@ public class HypodermicAppDriver3
 			@Override
 			public void accept(List<AccountData> accounts)
 			{								
-				for (AccountData accountData : accounts)
-				{
-					accNames.add(accountData.getName());
-				}
+				addAccNamesToList(accounts, accNames);
 			}
 		};
 		
@@ -159,21 +122,36 @@ public class HypodermicAppDriver3
 
 	public List<String> observedParentsForTargetHierarchyAccounts()
 	{
-		final List<String> accNames = new ArrayList<String>();
+		final List<String> parentIds = new ArrayList<String>();
 				
 		TxClassificationInteractor.OutPort boundary = new TxClassificationInteractor.OutPort() 
 		{
 			@Override
 			public void accept(List<AccountData> accounts)
 			{								
-				for (AccountData accountData : accounts)
-				{
-					accNames.add(accountData.getParentId());
-				}
+				addParentIdsToList(accounts, parentIds);
 			}
 		};
 		
 		_interactors.txClassification(boundary).getCandidateTargetAccounts();
+
+		return parentIds;
+	}
+
+	public List<String> observedAccountList()
+	{
+		final ArrayList<String> accNames = new ArrayList<String>();
+
+		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
+		{
+			@Override
+			public void accept(List<AccountData> accounts)
+			{			
+				addAccNamesToList(accounts, accNames);
+			}
+		};
+
+		_interactors.accSelection(boundary).selectAccount();
 
 		return accNames;
 	}
@@ -188,27 +166,6 @@ public class HypodermicAppDriver3
 		{
 			throw new RuntimeException("Target hierarchy hasn't been set yet!");
 		}
-	}
-
-	public List<String> observedAccountList()
-	{
-		final ArrayList<String> result = new ArrayList<String>();
-
-		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
-		{
-			@Override
-			public void accept(List<AccountData> accounts)
-			{				
-				for (AccountData accountData : accounts)
-				{
-					result.add(accountData.getName());
-				}				
-			}
-		};
-
-		_interactors.accSelection(boundary).selectAccount();
-
-		return result;
 	}
 
 	public int observedIgnoreCount()
@@ -232,7 +189,7 @@ public class HypodermicAppDriver3
 	}
 	
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
-	private AccountData findAccontInList(String accountName, List<AccountData> accounts)
+	private AccountData findAccountInList(String accountName, List<AccountData> accounts)
 	{
 		for (AccountData acc : accounts)
 		{
@@ -242,5 +199,21 @@ public class HypodermicAppDriver3
 			}
 		}
 		return null;
+	}
+
+	private void addAccNamesToList(List<AccountData> accounts, final List<String> result)
+	{
+		for (AccountData accountData : accounts)
+		{
+			result.add(accountData.getName());
+		}
+	}
+
+	private void addParentIdsToList(List<AccountData> accounts, final List<String> result)
+	{
+		for (AccountData accountData : accounts)
+		{
+			result.add(accountData.getParentId());
+		}
 	}
 }

@@ -11,7 +11,6 @@ public class AccFileLoadInteractor
 		_model = model;
 	}
 
-
 	public void openGncFile(String fileName)
 	{
 		_model.openGncFile(fileName);		
