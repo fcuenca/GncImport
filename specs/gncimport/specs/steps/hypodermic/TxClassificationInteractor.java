@@ -5,12 +5,17 @@ import gncimport.models.TxImportModel;
 
 import java.util.List;
 
-public class TxClassifyingInteractor
+public class TxClassificationInteractor
 {
-	private TxClassifyingOutputBoundary _output;
+	public interface OutPort
+	{
+		void accept(List<AccountData> accounts);
+	}
+
+	private OutPort _output;
 	private TxImportModel _model;
 
-	public TxClassifyingInteractor(TxClassifyingOutputBoundary output, TxImportModel model)
+	public TxClassificationInteractor(OutPort output, TxImportModel model)
 	{
 		_output = output;
 		_model = model;
@@ -19,7 +24,7 @@ public class TxClassifyingInteractor
 	public void getCandidateTargetAccounts()
 	{
 		List<AccountData> accounts = _model.getCandidateTargetAccounts();
-		_output.setResponse(accounts);	
+		_output.accept(accounts);	
 	}
 
 }

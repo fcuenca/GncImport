@@ -5,11 +5,11 @@ import gncimport.models.TxImportModel;
 
 import java.util.List;
 
-public class TxImportingInteractor
+public class TxImportInteractor
 {
 	private TxImportModel _model;
 
-	public TxImportingInteractor(TxImportModel model)
+	public TxImportInteractor(TxImportModel model)
 	{
 		_model = model;
 	}

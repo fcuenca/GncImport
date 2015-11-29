@@ -7,10 +7,15 @@ import java.util.List;
 
 public class AccSelectionInteractor
 {
-	private TxImportModel _model;
-	private AccSelectionOutputBoundary _output;
+	public interface OutPort
+	{
+		void accept(List<AccountData> accounts);
+	}
 
-	public AccSelectionInteractor(AccSelectionOutputBoundary output, TxImportModel model)
+	private TxImportModel _model;
+	private OutPort _output;
+
+	public AccSelectionInteractor(OutPort output, TxImportModel model)
 	{
 		_model = model;
 		_output = output;
@@ -19,7 +24,7 @@ public class AccSelectionInteractor
 	public void selectAccount()
 	{
 		List<AccountData> accounts = _model.getAccounts();
-		_output.setResponse(accounts);
+		_output.accept(accounts);
 	}
 
 	public void setTargetHierarchy(AccountData acc)

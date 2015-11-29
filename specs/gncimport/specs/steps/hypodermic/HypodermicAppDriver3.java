@@ -15,64 +15,64 @@ public class HypodermicAppDriver3
 	private AccountData _targetHierarchyRoot;
 	private AccountData _sourceAccount;
 	
-	class UseCaseFactory
+	class InteractorFactory
 	{
 		private TxImportModel _model;
 		
-		public UseCaseFactory(TxImportModel model)
+		public InteractorFactory(TxImportModel model)
 		{
 			_model = model;
 		}
 		
-		public TxLoadingInteractor startTxLoading(TxLoadingOutputBoundary boundary)
+		public TxFileLoadInteractor txFileLoad(TxFileLoadInteractor.OutPort boundary)
 		{
-			return new TxLoadingInteractor(boundary, _model);		
+			return new TxFileLoadInteractor(boundary, _model);		
 		}
 
-		public AccFileLoadingInteractor startAccLoading()
+		public AccFileLoadInteractor accFileLoad()
 		{
-			return new AccFileLoadingInteractor(_model);
+			return new AccFileLoadInteractor(_model);
 		}
 
-		public AccSelectionInteractor startAccSelection(AccSelectionOutputBoundary boundary)
+		public AccSelectionInteractor accSelection(AccSelectionInteractor.OutPort boundary)
 		{
 			return new AccSelectionInteractor(boundary, _model);
 		}
 
-		public TxClassifyingInteractor startTxClassifying(TxClassifyingOutputBoundary boundary)
+		public TxClassificationInteractor txClassification(TxClassificationInteractor.OutPort boundary)
 		{
-			return new TxClassifyingInteractor(boundary, _model);
+			return new TxClassificationInteractor(boundary, _model);
 		}
 
-		public TxImportingInteractor startImporting()
+		public TxImportInteractor txImport()
 		{
-			return new TxImportingInteractor(_model);
+			return new TxImportInteractor(_model);
 		}
 	}
-	private UseCaseFactory _useCases;
+	private InteractorFactory _interactors;
 		
 	public HypodermicAppDriver3(String defaultAccName, TxMatcher config)
 	{
-		_useCases = new UseCaseFactory(GncImportApp.createAppModel(defaultAccName, config));
+		_interactors = new InteractorFactory(GncImportApp.createAppModel(defaultAccName, config));
 	}
 	
 	public void openCsvFile(String fileName)
 	{
-		TxLoadingOutputBoundary boundary = new TxLoadingOutputBoundary()
+		TxFileLoadInteractor.OutPort boundary = new TxFileLoadInteractor.OutPort()
 		{	
 			@Override
-			public void setResponse(List<TxData> txList)
+			public void accept(List<TxData> txList)
 			{
 				_txList = txList;
 			}
 		};
 		
-		_useCases.startTxLoading(boundary).fetchTransactions(fileName);
+		_interactors.txFileLoad(boundary).fetchTransactions(fileName);
 	}
 	
 	public void openGncFile(String fileName)
 	{	
-		_useCases.startAccLoading().openGncFile(fileName); 
+		_interactors.accFileLoad().openGncFile(fileName); 
 	}
 
 	public int observedTxCount()
@@ -92,16 +92,16 @@ public class HypodermicAppDriver3
 
 	public void selectTargetAccHierarchy(final String accountName)
 	{		
-		AccSelectionOutputBoundary boundary = new AccSelectionOutputBoundary() 
+		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
 		{
 			@Override
-			public void setResponse(List<AccountData> accounts)
+			public void accept(List<AccountData> accounts)
 			{
 				_targetHierarchyRoot = findAccontInList(accountName, accounts);
 				
 				if(_targetHierarchyRoot != null)
 				{
-					_useCases.startAccSelection(this).setTargetHierarchy(_targetHierarchyRoot);
+					_interactors.accSelection(this).setTargetHierarchy(_targetHierarchyRoot);
 				}
 				else
 				{
@@ -110,21 +110,21 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_useCases.startAccSelection(boundary).selectAccount();	
+		_interactors.accSelection(boundary).selectAccount();	
 	}
 
 	public void selectSourceAccount(final String accountName)
 	{
-		AccSelectionOutputBoundary boundary = new AccSelectionOutputBoundary() 
+		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
 		{
 			@Override
-			public void setResponse(List<AccountData> accounts)
+			public void accept(List<AccountData> accounts)
 			{				
 				_sourceAccount = findAccontInList(accountName, accounts);
 
 				if(_sourceAccount != null)
 				{
-					_useCases.startAccSelection(this).setSourceAccount(_sourceAccount);
+					_interactors.accSelection(this).setSourceAccount(_sourceAccount);
 				}
 				else
 				{
@@ -133,17 +133,17 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_useCases.startAccSelection(boundary).selectAccount();
+		_interactors.accSelection(boundary).selectAccount();
 	}
 
 	public List<String> observedTagetHierarchyAccounts()
 	{
 		final List<String> accNames = new ArrayList<String>();
 		
-		TxClassifyingOutputBoundary boundary = new TxClassifyingOutputBoundary() 
+		TxClassificationInteractor.OutPort boundary = new TxClassificationInteractor.OutPort() 
 		{
 			@Override
-			public void setResponse(List<AccountData> accounts)
+			public void accept(List<AccountData> accounts)
 			{								
 				for (AccountData accountData : accounts)
 				{
@@ -152,7 +152,7 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_useCases.startTxClassifying(boundary).getCandidateTargetAccounts();
+		_interactors.txClassification(boundary).getCandidateTargetAccounts();
 		
 		return accNames;
 	}
@@ -161,10 +161,10 @@ public class HypodermicAppDriver3
 	{
 		final List<String> accNames = new ArrayList<String>();
 				
-		TxClassifyingOutputBoundary boundary = new TxClassifyingOutputBoundary() 
+		TxClassificationInteractor.OutPort boundary = new TxClassificationInteractor.OutPort() 
 		{
 			@Override
-			public void setResponse(List<AccountData> accounts)
+			public void accept(List<AccountData> accounts)
 			{								
 				for (AccountData accountData : accounts)
 				{
@@ -173,7 +173,7 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_useCases.startTxClassifying(boundary).getCandidateTargetAccounts();
+		_interactors.txClassification(boundary).getCandidateTargetAccounts();
 
 		return accNames;
 	}
@@ -194,10 +194,10 @@ public class HypodermicAppDriver3
 	{
 		final ArrayList<String> result = new ArrayList<String>();
 
-		AccSelectionOutputBoundary boundary = new AccSelectionOutputBoundary() 
+		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
 		{
 			@Override
-			public void setResponse(List<AccountData> accounts)
+			public void accept(List<AccountData> accounts)
 			{				
 				for (AccountData accountData : accounts)
 				{
@@ -206,7 +206,7 @@ public class HypodermicAppDriver3
 			}
 		};
 
-		_useCases.startAccSelection(boundary).selectAccount();
+		_interactors.accSelection(boundary).selectAccount();
 
 		return result;
 	}
@@ -228,7 +228,7 @@ public class HypodermicAppDriver3
 
 	public void importTransactionsTo(String gncFileName)
 	{
-		_useCases.startImporting().saveTxTo(_txList, gncFileName);
+		_interactors.txImport().saveTxTo(_txList, gncFileName);
 	}
 	
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
