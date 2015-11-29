@@ -11,7 +11,6 @@ import java.util.List;
 
 public class HypodermicAppDriver3 
 {
-	private TxImportModel _model;
 	private List<TxData> _txList;
 	private AccountData _targetHierarchyRoot;
 	private AccountData _sourceAccount;
@@ -39,13 +38,22 @@ public class HypodermicAppDriver3
 		{
 			return new AccSelectionInteractor(boundary, _model);
 		}
+
+		public TxClassifyingInteractor startTxClassifying(TxClassifyingOutputBoundary boundary)
+		{
+			return new TxClassifyingInteractor(boundary, _model);
+		}
+
+		public TxImportingInteractor startImporting()
+		{
+			return new TxImportingInteractor(_model);
+		}
 	}
 	private UseCaseFactory _useCases;
 		
 	public HypodermicAppDriver3(String defaultAccName, TxMatcher config)
 	{
-		_model = GncImportApp.createAppModel(defaultAccName, config);
-		_useCases = new UseCaseFactory(_model);
+		_useCases = new UseCaseFactory(GncImportApp.createAppModel(defaultAccName, config));
 	}
 	
 	public void openCsvFile(String fileName)
@@ -64,7 +72,7 @@ public class HypodermicAppDriver3
 	
 	public void openGncFile(String fileName)
 	{	
-		_useCases.startAccLoading().openGncFile(fileName);
+		_useCases.startAccLoading().openGncFile(fileName); 
 	}
 
 	public int observedTxCount()
@@ -86,20 +94,10 @@ public class HypodermicAppDriver3
 	{		
 		AccSelectionOutputBoundary boundary = new AccSelectionOutputBoundary() 
 		{
-
 			@Override
 			public void setResponse(List<AccountData> accounts)
 			{
-				_targetHierarchyRoot = null;
-				
-				for (AccountData acc : accounts)
-				{
-					if(acc.getName().equals(accountName))
-					{
-						_targetHierarchyRoot = acc;
-						break;
-					}
-				}
+				_targetHierarchyRoot = findAccontInList(accountName, accounts);
 				
 				if(_targetHierarchyRoot != null)
 				{
@@ -108,34 +106,22 @@ public class HypodermicAppDriver3
 				else
 				{
 					throw new RuntimeException("Target Hierarchy not found: " + accountName);
-				}
-				
+				}	
 			}
 		};
 		
-		_useCases.startAccSelection(boundary).selectAccount();
-		
+		_useCases.startAccSelection(boundary).selectAccount();	
 	}
-	
-	//TODO: remove this duplication
+
 	public void selectSourceAccount(final String accountName)
 	{
 		AccSelectionOutputBoundary boundary = new AccSelectionOutputBoundary() 
 		{
 			@Override
 			public void setResponse(List<AccountData> accounts)
-			{
-				_sourceAccount = null;
-				
-				for (AccountData acc : accounts)
-				{
-					if(acc.getName().equals(accountName))
-					{
-						_sourceAccount = acc;
-						break;
-					}
-				}
-				
+			{				
+				_sourceAccount = findAccontInList(accountName, accounts);
+
 				if(_sourceAccount != null)
 				{
 					_useCases.startAccSelection(this).setSourceAccount(_sourceAccount);
@@ -143,40 +129,52 @@ public class HypodermicAppDriver3
 				else
 				{
 					throw new RuntimeException("Source Hierarchy not found: " + accountName);
-				}	
-				
+				}		
 			}
 		};
 		
 		_useCases.startAccSelection(boundary).selectAccount();
 	}
 
-
 	public List<String> observedTagetHierarchyAccounts()
 	{
-		List<String> accNames = new ArrayList<String>();
+		final List<String> accNames = new ArrayList<String>();
 		
-		List<AccountData> acounts = _model.getCandidateTargetAccounts();
-		
-		for (AccountData accountData : acounts)
+		TxClassifyingOutputBoundary boundary = new TxClassifyingOutputBoundary() 
 		{
-			accNames.add(accountData.getName());
-		}
+			@Override
+			public void setResponse(List<AccountData> accounts)
+			{								
+				for (AccountData accountData : accounts)
+				{
+					accNames.add(accountData.getName());
+				}
+			}
+		};
+		
+		_useCases.startTxClassifying(boundary).getCandidateTargetAccounts();
 		
 		return accNames;
 	}
 
 	public List<String> observedParentsForTargetHierarchyAccounts()
 	{
-		List<String> accNames = new ArrayList<String>();
-		
-		List<AccountData> acounts = _model.getCandidateTargetAccounts();
-		
-		for (AccountData accountData : acounts)
+		final List<String> accNames = new ArrayList<String>();
+				
+		TxClassifyingOutputBoundary boundary = new TxClassifyingOutputBoundary() 
 		{
-			accNames.add(accountData.getParentId());
-		}
+			@Override
+			public void setResponse(List<AccountData> accounts)
+			{								
+				for (AccountData accountData : accounts)
+				{
+					accNames.add(accountData.getParentId());
+				}
+			}
+		};
 		
+		_useCases.startTxClassifying(boundary).getCandidateTargetAccounts();
+
 		return accNames;
 	}
 
@@ -194,13 +192,22 @@ public class HypodermicAppDriver3
 
 	public List<String> observedAccountList()
 	{
-		ArrayList<String> result = new ArrayList<String>();
-		
-		for (AccountData accountData : _model.getAccounts())
+		final ArrayList<String> result = new ArrayList<String>();
+
+		AccSelectionOutputBoundary boundary = new AccSelectionOutputBoundary() 
 		{
-			result.add(accountData.getName());
-		}
-		
+			@Override
+			public void setResponse(List<AccountData> accounts)
+			{				
+				for (AccountData accountData : accounts)
+				{
+					result.add(accountData.getName());
+				}				
+			}
+		};
+
+		_useCases.startAccSelection(boundary).selectAccount();
+
 		return result;
 	}
 
@@ -221,6 +228,19 @@ public class HypodermicAppDriver3
 
 	public void importTransactionsTo(String gncFileName)
 	{
-		_model.saveTxTo(_txList, gncFileName);
+		_useCases.startImporting().saveTxTo(_txList, gncFileName);
+	}
+	
+	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
+	private AccountData findAccontInList(String accountName, List<AccountData> accounts)
+	{
+		for (AccountData acc : accounts)
+		{
+			if(acc.getName().equals(accountName))
+			{
+				return acc;
+			}
+		}
+		return null;
 	}
 }

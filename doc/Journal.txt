@@ -62,3 +62,9 @@ Created new git-based Eclipse workspace.
 Finished implementing transaction matching & ignore feature.
 Refactored the design around that in the Model class to explore a better design. Decided to leave the refactoring in, 
 but postpone further redesign (there's a nasty dependency I don't want to deal with now.)
+
+---++Sun Nov 29
+
+Refactoring towards interactors & boundaries (Uncle Bob's Clean Architecture)
+Open questions: granularity of interactors? Relation between Features, Use Cases/Stories and Interactors? 
+
