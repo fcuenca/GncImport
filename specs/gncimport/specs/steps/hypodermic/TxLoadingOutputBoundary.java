@@ -4,7 +4,7 @@ import gncimport.models.TxData;
 
 import java.util.List;
 
-public interface ImportOutputBoundary
+public interface TxLoadingOutputBoundary
 {
 	void setResponse(List<TxData> txList);
 }

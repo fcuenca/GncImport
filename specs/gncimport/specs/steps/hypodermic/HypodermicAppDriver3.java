@@ -9,27 +9,62 @@ import gncimport.models.TxMatcher;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HypodermicAppDriver3 implements ImportOutputBoundary
+public class HypodermicAppDriver3 
 {
 	private TxImportModel _model;
 	private List<TxData> _txList;
 	private AccountData _targetHierarchyRoot;
 	private AccountData _sourceAccount;
+	
+	class UseCaseFactory
+	{
+		private TxImportModel _model;
+		
+		public UseCaseFactory(TxImportModel model)
+		{
+			_model = model;
+		}
+		
+		public TxLoadingInteractor startTxLoading(TxLoadingOutputBoundary boundary)
+		{
+			return new TxLoadingInteractor(boundary, _model);		
+		}
+
+		public AccFileLoadingInteractor startAccLoading()
+		{
+			return new AccFileLoadingInteractor(_model);
+		}
+
+		public AccSelectionInteractor startAccSelection(AccSelectionOutputBoundary boundary)
+		{
+			return new AccSelectionInteractor(boundary, _model);
+		}
+	}
+	private UseCaseFactory _useCases;
 		
 	public HypodermicAppDriver3(String defaultAccName, TxMatcher config)
 	{
 		_model = GncImportApp.createAppModel(defaultAccName, config);
+		_useCases = new UseCaseFactory(_model);
 	}
 	
 	public void openCsvFile(String fileName)
 	{
-		ImportInteractor interactor = new ImportInteractor(this, _model);		
-		interactor.fetchTransactions(fileName);
+		TxLoadingOutputBoundary boundary = new TxLoadingOutputBoundary()
+		{	
+			@Override
+			public void setResponse(List<TxData> txList)
+			{
+				_txList = txList;
+			}
+		};
+		
+		_useCases.startTxLoading(boundary).fetchTransactions(fileName);
 	}
 	
 	public void openGncFile(String fileName)
 	{	
-		_model.openGncFile(fileName);
+		_useCases.startAccLoading().openGncFile(fileName);
 	}
 
 	public int observedTxCount()
@@ -47,55 +82,73 @@ public class HypodermicAppDriver3 implements ImportOutputBoundary
 		return _txList.get(i).targetAccount.getName();
 	}
 
-	public void selectTargetAccHierarchy(String accountName)
-	{
-		List<AccountData> accounts = _model.getAccounts();
-		
-		_targetHierarchyRoot = null;
-		
-		for (AccountData acc : accounts)
+	public void selectTargetAccHierarchy(final String accountName)
+	{		
+		AccSelectionOutputBoundary boundary = new AccSelectionOutputBoundary() 
 		{
-			if(acc.getName().equals(accountName))
+
+			@Override
+			public void setResponse(List<AccountData> accounts)
 			{
-				_targetHierarchyRoot = acc;
-				break;
+				_targetHierarchyRoot = null;
+				
+				for (AccountData acc : accounts)
+				{
+					if(acc.getName().equals(accountName))
+					{
+						_targetHierarchyRoot = acc;
+						break;
+					}
+				}
+				
+				if(_targetHierarchyRoot != null)
+				{
+					_useCases.startAccSelection(this).setTargetHierarchy(_targetHierarchyRoot);
+				}
+				else
+				{
+					throw new RuntimeException("Target Hierarchy not found: " + accountName);
+				}
+				
 			}
-		}
+		};
 		
-		if(_targetHierarchyRoot != null)
-		{
-			_model.setTargetHierarchy(_targetHierarchyRoot);							
-		}
-		else
-		{
-			throw new RuntimeException("Target Hierarchy not found: " + accountName);
-		}
+		_useCases.startAccSelection(boundary).selectAccount();
+		
 	}
 	
 	//TODO: remove this duplication
-	public void selectSourceAccount(String accountName)
+	public void selectSourceAccount(final String accountName)
 	{
-		List<AccountData> accounts = _model.getAccounts();
-		
-		_sourceAccount = null;
-		
-		for (AccountData acc : accounts)
+		AccSelectionOutputBoundary boundary = new AccSelectionOutputBoundary() 
 		{
-			if(acc.getName().equals(accountName))
+			@Override
+			public void setResponse(List<AccountData> accounts)
 			{
-				_sourceAccount = acc;
-				break;
+				_sourceAccount = null;
+				
+				for (AccountData acc : accounts)
+				{
+					if(acc.getName().equals(accountName))
+					{
+						_sourceAccount = acc;
+						break;
+					}
+				}
+				
+				if(_sourceAccount != null)
+				{
+					_useCases.startAccSelection(this).setSourceAccount(_sourceAccount);
+				}
+				else
+				{
+					throw new RuntimeException("Source Hierarchy not found: " + accountName);
+				}	
+				
 			}
-		}
+		};
 		
-		if(_sourceAccount != null)
-		{
-			_model.setSourceAccount(_sourceAccount);							
-		}
-		else
-		{
-			throw new RuntimeException("Source Hierarchy not found: " + accountName);
-		}		
+		_useCases.startAccSelection(boundary).selectAccount();
 	}
 
 
@@ -169,11 +222,5 @@ public class HypodermicAppDriver3 implements ImportOutputBoundary
 	public void importTransactionsTo(String gncFileName)
 	{
 		_model.saveTxTo(_txList, gncFileName);
-	}
-
-	@Override
-	public void setResponse(List<TxData> txList)
-	{
-		_txList = txList;
 	}
 }

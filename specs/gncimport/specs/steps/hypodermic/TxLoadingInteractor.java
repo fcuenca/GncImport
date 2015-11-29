@@ -2,12 +2,12 @@ package gncimport.specs.steps.hypodermic;
 
 import gncimport.models.TxImportModel;
 
-public class ImportInteractor
+public class TxLoadingInteractor
 {
 	private TxImportModel _model;
-	private ImportOutputBoundary _output;
+	private TxLoadingOutputBoundary _output;
 
-	public ImportInteractor(ImportOutputBoundary output, TxImportModel model)
+	public TxLoadingInteractor(TxLoadingOutputBoundary output, TxImportModel model)
 	{
 		_model = model;
 		_output = output;
