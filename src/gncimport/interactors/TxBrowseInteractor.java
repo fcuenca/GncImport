@@ -11,6 +11,8 @@ public class TxBrowseInteractor
 	public interface OutPort
 	{
 		void accept(List<TxData> txList);
+		void fileWasOpened(String fileName);
+
 	}
 	
 	private TxImportModel _model;
@@ -25,6 +27,7 @@ public class TxBrowseInteractor
 	public void fetchTransactions(String fileName)
 	{
 		_output.accept(_model.fetchTransactionsFrom(fileName));
+		_output.fileWasOpened(fileName);
 	}
 
 	public void filterTxList(Date lowerBound, Date upperBound)

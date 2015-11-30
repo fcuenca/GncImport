@@ -11,14 +11,14 @@ public class InteractorFactory
 		_model = model;
 	}
 	
-	public TxBrowseInteractor txFileLoad(TxBrowseInteractor.OutPort boundary)
+	public TxBrowseInteractor txBrowse(TxBrowseInteractor.OutPort boundary)
 	{
 		return new TxBrowseInteractor(boundary, _model);		
 	}
 
-	public AccFileLoadInteractor accFileLoad()
+	public AccFileLoadInteractor accFileLoad(AccFileLoadInteractor.OutPort boundary)
 	{
-		return new AccFileLoadInteractor(_model);
+		return new AccFileLoadInteractor(boundary, _model);
 	}
 
 	public AccSelectionInteractor accSelection(AccSelectionInteractor.OutPort boundary)

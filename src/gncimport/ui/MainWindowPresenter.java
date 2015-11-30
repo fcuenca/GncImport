@@ -1,5 +1,6 @@
 package gncimport.ui;
 
+import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxClassificationInteractor;
@@ -33,6 +34,34 @@ public class MainWindowPresenter implements MainWindowRenderer
 		this._view = view;
 		this._config = config;
 	}
+	
+	TxBrowseInteractor.OutPort txBrowseResponse = new TxBrowseInteractor.OutPort() 
+	{
+		@Override
+		public void accept(List<TxData> txList)
+		{
+			_view.displayTxData(new TxTableModel(txList), buildTargetAccountList());
+			_view.displayTxCount(txList.size());
+		}
+
+		@Override
+		public void fileWasOpened(String fileName)
+		{
+			_config.setLastCsvDirectory(new File(fileName).getParent());
+			_view.updateCsvFileLabel(fileName);
+		}
+	};
+
+	AccFileLoadInteractor.OutPort accFileLoadReponse = new AccFileLoadInteractor.OutPort ()
+	{
+		@Override
+		public void fileWasOpened(String fileName)
+		{
+			_view.updateGncFileLabel(fileName);
+			_config.setLastGncDirectory(new File(fileName).getParent());						
+		}
+	};
+	
 
 	@Override
 	public void onReadFromCsvFile()
@@ -49,20 +78,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 			final String fileName = _view.promptForFile(lastDir);
 			
 			if (fileName != null)
-			{
-				TxBrowseInteractor.OutPort boundary = new TxBrowseInteractor.OutPort() 
-				{
-					@Override
-					public void accept(List<TxData> newTransactionData)
-					{
-						_view.displayTxData(new TxTableModel(newTransactionData), buildTargetAccountList());
-						_view.displayTxCount(newTransactionData.size());
-						_config.setLastCsvDirectory(new File(fileName).getParent());
-						_view.updateCsvFileLabel(fileName);
-					}
-				};
-					
-				_interactors.txFileLoad(boundary).fetchTransactions(fileName);				
+			{					
+				_interactors.txBrowse(txBrowseResponse).fetchTransactions(fileName);				
 			}
 		}
 		catch (Exception e)
@@ -119,10 +136,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 			
 			if (fileName != null)
 			{
-				_interactors.accFileLoad().openGncFile(fileName);
-
-				_view.updateGncFileLabel(fileName);
-				_config.setLastGncDirectory(new File(fileName).getParent());
+				_interactors.accFileLoad(accFileLoadReponse).openGncFile(fileName);
 			}
 		}
 		catch (Exception e)
@@ -305,17 +319,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 			upperBound = new Date(Long.MAX_VALUE);
 		}
 
-		TxBrowseInteractor.OutPort boundary = new TxBrowseInteractor.OutPort() 
-		{
-			@Override
-			public void accept(List<TxData> txList)
-			{
-				_view.displayTxData(new TxTableModel(txList), buildTargetAccountList());
-				_view.displayTxCount(txList.size());
-			}
-		};
-			
-		_interactors.txFileLoad(boundary).filterTxList(lowerBound, upperBound);;				
+		_interactors.txBrowse(txBrowseResponse).filterTxList(lowerBound, upperBound);;				
 	}
 
 }

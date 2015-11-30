@@ -1,6 +1,7 @@
 package gncimport.specs.steps.hypodermic;
 
 import gncimport.GncImportApp;
+import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxClassificationInteractor;
@@ -35,14 +36,28 @@ public class HypodermicAppDriver3
 			{
 				_txList = txList;
 			}
+
+			@Override
+			public void fileWasOpened(String fileName)
+			{
+				//do nothing here
+			}
 		};
 		
-		_interactors.txFileLoad(boundary).fetchTransactions(fileName);
+		_interactors.txBrowse(boundary).fetchTransactions(fileName);
 	}
 	
 	public void openGncFile(String fileName)
 	{	
-		_interactors.accFileLoad().openGncFile(fileName); 
+		AccFileLoadInteractor.OutPort boundary = new AccFileLoadInteractor.OutPort() 
+		{
+			@Override
+			public void fileWasOpened(String fileName)
+			{
+				// do nothing for now
+			}
+		};
+		_interactors.accFileLoad(boundary).openGncFile(fileName); 
 	}
 
 	public int observedTxCount()
