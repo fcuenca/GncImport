@@ -4,7 +4,7 @@ import gncimport.GncImportApp;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxClassificationInteractor;
-import gncimport.interactors.TxFileLoadInteractor;
+import gncimport.interactors.TxBrowseInteractor;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
@@ -28,7 +28,7 @@ public class HypodermicAppDriver3
 	
 	public void openCsvFile(String fileName)
 	{
-		TxFileLoadInteractor.OutPort boundary = new TxFileLoadInteractor.OutPort()
+		TxBrowseInteractor.OutPort boundary = new TxBrowseInteractor.OutPort()
 		{	
 			@Override
 			public void accept(List<TxData> txList)

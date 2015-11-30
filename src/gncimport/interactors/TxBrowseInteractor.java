@@ -1,11 +1,12 @@
 package gncimport.interactors;
 
+import java.util.Date;
 import java.util.List;
 
 import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
 
-public class TxFileLoadInteractor
+public class TxBrowseInteractor
 {
 	public interface OutPort
 	{
@@ -15,7 +16,7 @@ public class TxFileLoadInteractor
 	private TxImportModel _model;
 	private OutPort _output;
 	
-	public TxFileLoadInteractor(OutPort output, TxImportModel model)
+	public TxBrowseInteractor(OutPort output, TxImportModel model)
 	{
 		_model = model;
 		_output = output;
@@ -24,6 +25,11 @@ public class TxFileLoadInteractor
 	public void fetchTransactions(String fileName)
 	{
 		_output.accept(_model.fetchTransactionsFrom(fileName));
+	}
+
+	public void filterTxList(Date lowerBound, Date upperBound)
+	{
+		_output.accept(_model.filterTxList(lowerBound, upperBound));
 	}
 
 }

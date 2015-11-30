@@ -3,7 +3,7 @@ package gncimport.ui;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxClassificationInteractor;
-import gncimport.interactors.TxFileLoadInteractor;
+import gncimport.interactors.TxBrowseInteractor;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
@@ -21,7 +21,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 {
 	public static final AccountData OTHER_ACC_PLACEHOLDER = new AccountData("<< OTHER >>", "-1");
 
-	private final TxImportModel _model;
 	private final TxView _view;
 	private final UIConfig _config;
 	
@@ -30,7 +29,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	public MainWindowPresenter(TxImportModel model, TxView view, UIConfig config)
 	{
 		this._interactors = new InteractorFactory(model);
-		this._model = model;
+
 		this._view = view;
 		this._config = config;
 	}
@@ -51,7 +50,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 			
 			if (fileName != null)
 			{
-				TxFileLoadInteractor.OutPort boundary = new TxFileLoadInteractor.OutPort() 
+				TxBrowseInteractor.OutPort boundary = new TxBrowseInteractor.OutPort() 
 				{
 					@Override
 					public void accept(List<TxData> newTransactionData)
@@ -212,8 +211,11 @@ public class MainWindowPresenter implements MainWindowRenderer
 				}
 				
 				AccountData selectedAccount = (AccountData) params.parentNode.getUserObject();
-				_model.createNewAccountHierarchy(selectedAccount, params.rootAccName, params.month,
+				
+				_interactors.accHierarchyCreation().createNewAccountHierarchy(
+						selectedAccount, params.rootAccName, params.month,
 						_config.getMonthlyAccounts(), fileNameToSave);
+				
 			}
 		}
 		catch (Exception e)
@@ -303,10 +305,17 @@ public class MainWindowPresenter implements MainWindowRenderer
 			upperBound = new Date(Long.MAX_VALUE);
 		}
 
-		List<TxData> filteredTxList = _model.filterTxList(lowerBound, upperBound);
-
-		_view.displayTxData(new TxTableModel(filteredTxList), buildTargetAccountList());
-		_view.displayTxCount(filteredTxList.size());
+		TxBrowseInteractor.OutPort boundary = new TxBrowseInteractor.OutPort() 
+		{
+			@Override
+			public void accept(List<TxData> txList)
+			{
+				_view.displayTxData(new TxTableModel(txList), buildTargetAccountList());
+				_view.displayTxCount(txList.size());
+			}
+		};
+			
+		_interactors.txFileLoad(boundary).filterTxList(lowerBound, upperBound);;				
 	}
 
 }

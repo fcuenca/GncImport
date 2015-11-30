@@ -11,9 +11,9 @@ public class InteractorFactory
 		_model = model;
 	}
 	
-	public TxFileLoadInteractor txFileLoad(TxFileLoadInteractor.OutPort boundary)
+	public TxBrowseInteractor txFileLoad(TxBrowseInteractor.OutPort boundary)
 	{
-		return new TxFileLoadInteractor(boundary, _model);		
+		return new TxBrowseInteractor(boundary, _model);		
 	}
 
 	public AccFileLoadInteractor accFileLoad()
@@ -34,5 +34,10 @@ public class InteractorFactory
 	public TxImportInteractor txImport()
 	{
 		return new TxImportInteractor(_model);
+	}
+
+	public AccHierarchyCreationInteractor accHierarchyCreation()
+	{
+		return new AccHierarchyCreationInteractor(_model);
 	}
 }
