@@ -284,6 +284,12 @@ public class MainWindowSteps
 		app().setAccountForTransactionsMatching(accName, ".*" + txDesc + ".*");
 	}
 	
+	@When("^transactions matching \"([^\"]*)\" are set to be ignored$")
+	public void transactions_matching_are_set_to_be_ignored(String txDesc) throws Throwable
+	{
+		app().ignoreTransactionsMatching(txDesc + ".*");
+	}
+	
 	private Properties createMatchingRules(List<MatchingRule> matchingRules)
 	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();

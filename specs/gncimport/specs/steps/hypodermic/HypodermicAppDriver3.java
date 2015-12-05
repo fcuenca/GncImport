@@ -74,6 +74,11 @@ public class HypodermicAppDriver3
 	{
 		return _txList.get(i).targetAccount.getName();
 	}
+	
+	public List<TxData> observedTxData()
+	{
+		return _txList;
+	}
 
 	public void selectTargetAccHierarchy(final String accountName)
 	{		
@@ -248,6 +253,18 @@ public class HypodermicAppDriver3
 			}
 		}
 	}
+	
+	public void ignoreTransactionsMatching(String txDescRegex)
+	{
+		for (TxData txData : _txList)
+		{
+			if(txData.description.matches(txDescRegex))
+			{
+				txData.doNotImport = true;
+			}
+		}
+	}
+
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
 	private AccountData findAccountInList(String accountName, List<AccountData> accounts)
@@ -278,8 +295,4 @@ public class HypodermicAppDriver3
 		}
 	}
 
-	public List<TxData> observedTxData()
-	{
-		return _txList;
-	}
 }

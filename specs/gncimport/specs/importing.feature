@@ -25,3 +25,9 @@ Feature: Importing transactions
 		Then the "Miscelaneous" subaccount of "February 2014" receives 18 new transactions with "Checking Account" as source account
 		And the "Health" subaccount of "February 2014" receives 2 new transactions with "Checking Account" as source account
 		
+	Scenario: manually ignoring transactions before import
+		When transactions matching "MISC PAYMENT" are set to be ignored
+		And transactions are imported
+	    Then the "Miscelaneous" subaccount of "February 2014" receives 15 new transactions with "Checking Account" as source account
+		And no transaction has the description "MISC PAYMENT"
+		
