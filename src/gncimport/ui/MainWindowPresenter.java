@@ -35,6 +35,15 @@ public class MainWindowPresenter implements MainWindowRenderer
 		this._config = config;
 	}
 	
+	AccSelectionInteractor.OutPort doNothingAccSelectionResponse = new AccSelectionInteractor.OutPort () 
+	{
+		@Override
+		public void accept(List<AccountData> accounts)
+		{
+			throw new ProgrammerError("nothing to do for now");
+		}
+	};				
+	
 	TxBrowseInteractor.OutPort txBrowseResponse = new TxBrowseInteractor.OutPort() 
 	{
 		@Override
@@ -61,7 +70,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 			_config.setLastGncDirectory(new File(fileName).getParent());						
 		}
 	};
-	
 
 	@Override
 	public void onReadFromCsvFile()
@@ -154,16 +162,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 			if (selectedAccount != null)
 			{
-				AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort () 
-				{
-					@Override
-					public void accept(List<AccountData> accounts)
-					{
-						throw new ProgrammerError("nothing to do for now");
-					}
-				};
-				
-				_interactors.accSelection(boundary).setSourceAccount(selectedAccount);;
+				_interactors.accSelection(doNothingAccSelectionResponse).setSourceAccount(selectedAccount);;
 				
 				_view.displaySourceAccount(selectedAccount.getName());
 			}
@@ -182,16 +181,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 			AccountData selectedAccount = selectAccountFromTree();
 			if (selectedAccount != null)
 			{
-				AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort () 
-				{
-					@Override
-					public void accept(List<AccountData> accounts)
-					{
-						throw new ProgrammerError("nothing to do for now");
-					}
-				};				
-
-				_interactors.accSelection(boundary).setTargetHierarchy(selectedAccount);
+				_interactors.accSelection(doNothingAccSelectionResponse).setTargetHierarchy(selectedAccount);
 
 				_view.displayTargetHierarchy(selectedAccount.getName());
 				_view.updateCandidateTargetAccountList(buildTargetAccountList());
