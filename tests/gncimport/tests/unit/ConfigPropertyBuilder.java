@@ -23,4 +23,9 @@ public class ConfigPropertyBuilder
 	{
 		_props.setProperty("match." + index + ".ignore", txDescPattern);
 	}
+
+	public void addDescRewriteRule(int index, String txDescPattern, String override)
+	{
+		_props.setProperty("match." + index + ".rewrite", txDescPattern + "|" + override);
+	}
 }

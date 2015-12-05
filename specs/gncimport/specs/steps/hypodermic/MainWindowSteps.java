@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.gnucash.xml.gnc.Account;
@@ -120,6 +121,12 @@ public class MainWindowSteps
 			throws Throwable
 	{
 		_context.properties.putAll(createMatchingRules(matchingRules));
+	}
+	
+	@Given("^the following description rewrite rules have been defined:$")
+	public void the_following_description_rewrite_rules_have_been_defined(List<MatchingRule> rewriteRules) throws Throwable
+	{
+		_context.properties.putAll(createRewriteRules(rewriteRules));
 	}
 
 	@When("^the accounting file is loaded$")
@@ -303,6 +310,22 @@ public class MainWindowSteps
 		
 		return builder.build();
 	}
+	
+	private Properties createRewriteRules(List<MatchingRule> rewriteRules)
+	{
+		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
+		
+		int index = 1;
+		for (MatchingRule rule : rewriteRules)
+		{
+			builder.addDescRewriteRule(index, rule.desc, rule.override);
+			index++;
+		}
+		
+		return builder.build();
+	}
+
+
 	
 	private Properties createIgnoreRules(List<String> rules)
 	{
