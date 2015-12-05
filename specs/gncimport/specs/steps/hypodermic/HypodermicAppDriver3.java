@@ -11,6 +11,7 @@ import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class HypodermicAppDriver3 
@@ -20,6 +21,21 @@ public class HypodermicAppDriver3
 	private List<TxData> _txList;
 	private AccountData _targetHierarchyRoot;
 	private AccountData _sourceAccount;
+
+	private TxBrowseInteractor.OutPort 	txBrowseOutput = new TxBrowseInteractor.OutPort()
+	{	
+		@Override
+		public void accept(List<TxData> txList)
+		{
+			_txList = txList;
+		}
+
+		@Override
+		public void fileWasOpened(String fileName)
+		{
+			//do nothing here
+		}
+	};
 	
 		
 	public HypodermicAppDriver3(String defaultAccName, TxMatcher config)
@@ -28,23 +44,8 @@ public class HypodermicAppDriver3
 	}
 	
 	public void openCsvFile(String fileName)
-	{
-		TxBrowseInteractor.OutPort boundary = new TxBrowseInteractor.OutPort()
-		{	
-			@Override
-			public void accept(List<TxData> txList)
-			{
-				_txList = txList;
-			}
-
-			@Override
-			public void fileWasOpened(String fileName)
-			{
-				//do nothing here
-			}
-		};
-		
-		_interactors.txBrowse(boundary).fetchTransactions(fileName);
+	{		
+		_interactors.txBrowse(txBrowseOutput).fetchTransactions(fileName);
 	}
 	
 	public void openGncFile(String fileName)
@@ -265,6 +266,10 @@ public class HypodermicAppDriver3
 		}
 	}
 
+	public void filterTransactions(Date start, Date end)
+	{
+		_interactors.txBrowse(txBrowseOutput).filterTxList(start, end);
+	}
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
 	private AccountData findAccountInList(String accountName, List<AccountData> accounts)
@@ -294,5 +299,4 @@ public class HypodermicAppDriver3
 			result.add(accountData.getParentId());
 		}
 	}
-
 }

@@ -1,6 +1,7 @@
 package gncimport.specs.steps.hypodermic;
 
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -297,6 +298,21 @@ public class MainWindowSteps
 		app().ignoreTransactionsMatching(txDesc + ".*");
 	}
 	
+	@When("^a date filter from \"([^\"]*)\" to \"([^\"]*)\" is applied$")
+	public void a_date_filter_from_to_is_applied(Date start, Date end) throws Throwable
+	{
+		app().filterTransactions(start, end);
+	}
+
+	@Then("^all transactions fall after \"([^\"]*)\" and before \"([^\"]*)\"$")
+	public void all_transactions_fall_after_and_before(Date start, Date end) throws Throwable
+	{
+		for(TxData tx : app().observedTxData())
+		{
+			assertThat(tx.date, is(both(greaterThanOrEqualTo(start)).and(lessThanOrEqualTo(end))));		
+		}
+	}
+	
 	private Properties createMatchingRules(List<MatchingRule> matchingRules)
 	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
@@ -325,8 +341,6 @@ public class MainWindowSteps
 		return builder.build();
 	}
 
-
-	
 	private Properties createIgnoreRules(List<String> rules)
 	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();

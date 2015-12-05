@@ -26,5 +26,10 @@ Feature: Browsing Transactions
     		| 1/7/2014 	| Laundry - 8079	| -20.00	|
     		| 1/27/2014 | Laundry - 3748	| -20.00	|
 
-    	
+    Scenario: filtering transactions with a date range	
+	   	Given transactions have been exported into "rbc.csv"
+	   	When the transaction file is loaded
+	   	And a date filter from "1/14/2014" to "1/23/2014" is applied
+    	Then the app displays 7 transactions
+    	And all transactions fall after "1/14/2014" and before "1/23/2014"
 	
