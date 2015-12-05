@@ -1,6 +1,7 @@
 package gncimport.specs.steps.hypodermic;
 
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -234,6 +235,28 @@ public class MainWindowSteps
 	public void the_source_account_is_set_to(String accName) throws Throwable
 	{
 		app().selectSourceAccount(accName);
+	}
+	
+	@When("^the description for transaction reading \"([^\"]*)\" is changed to \"([^\"]*)\"$")
+	public void the_description_for_transaction_reading_is_changed_to(String originalDesc, String editedDesc) throws Throwable
+	{
+		app().editTxDescription(originalDesc + ".*", editedDesc);
+	}
+
+	@Then("^a transaction with description \"([^\"]*)\" is imported$")
+	public void a_transaction_with_description_is_imported(String txDesc) throws Throwable
+	{
+		GncFile gnc = new GncFile(_context.tmpGncFullPath());
+		
+		assertThat(gnc.findTransactionsMatching(txDesc).size(), is(not(0)));
+	}
+
+	@Then("^no transaction has the description \"([^\"]*)\"$")
+	public void no_transaction_has_the_description(String txDesc) throws Throwable
+	{
+		GncFile gnc = new GncFile(_context.tmpGncFullPath());
+		
+		assertThat(gnc.findTransactionsMatching(txDesc).size(), is(0));
 	}
 	
 	private Properties createMatchingRules(List<MatchingRule> matchingRules)

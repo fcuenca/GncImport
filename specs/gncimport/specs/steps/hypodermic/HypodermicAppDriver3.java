@@ -207,6 +207,17 @@ public class HypodermicAppDriver3
 		_interactors.txImport().saveTxTo(_txList, gncFileName);
 	}
 	
+	public void editTxDescription(String originalDesc, String editedDesc)
+	{
+		for (TxData txData : _txList)
+		{
+			if(txData.description.matches(originalDesc))
+			{
+				txData.description = editedDesc;
+			}
+		}
+	}
+	
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
 	private AccountData findAccountInList(String accountName, List<AccountData> accounts)
 	{
@@ -235,4 +246,5 @@ public class HypodermicAppDriver3
 			result.add(accountData.getParentId());
 		}
 	}
+
 }
