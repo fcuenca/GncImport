@@ -218,6 +218,37 @@ public class HypodermicAppDriver3
 		}
 	}
 	
+	public void setAccountForTransactionsMatching(final String accName, final String txDesc)
+	{
+		final ArrayList<AccountData> newAccount = new ArrayList<AccountData>();
+		
+		TxClassificationInteractor.OutPort boundary = new TxClassificationInteractor.OutPort() 
+		{
+			@Override
+			public void accept(List<AccountData> accounts)
+			{	
+				for (AccountData acc : accounts)
+				{
+					if(acc.getName().equals(accName))
+					{
+						newAccount.add(acc);
+						break;
+					}
+				}
+			}
+		};
+		
+		_interactors.txClassification(boundary).getCandidateTargetAccounts();
+		
+		for (TxData txData : _txList)
+		{
+			if(txData.description.matches(txDesc))
+			{
+				txData.targetAccount = newAccount.get(0);
+			}
+		}
+	}
+
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
 	private AccountData findAccountInList(String accountName, List<AccountData> accounts)
 	{
@@ -246,5 +277,4 @@ public class HypodermicAppDriver3
 			result.add(accountData.getParentId());
 		}
 	}
-
 }

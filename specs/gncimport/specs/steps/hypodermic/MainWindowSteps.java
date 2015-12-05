@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.gnucash.xml.gnc.Account;
+import org.gnucash.xml.gnc.Transaction;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.After;
@@ -222,12 +223,12 @@ public class MainWindowSteps
 		app().importTransactionsTo(_context.tmpGncFullPath());
 	}
 
-	@Then("^the \"([^\"]*)\" subaccount of \"([^\"]*)\"  receives (\\d+) new transactions$")
-	public void the_subaccount_of_receives_new_transactions(String subAcc, String parentAcc, int txCount) throws Throwable 
+	@Then("^the \"([^\"]*)\" subaccount of \"([^\"]*)\" receives (\\d+) new transactions with \"([^\"]*)\" as source account$")
+	public void the_subaccount_of_receives_new_transactions_with_as_source_account(String subAcc, String parentAcc, int txCount, String sourceAccName) throws Throwable 
 	{
-		int beforeCount = countTransactionsForSubAccount(_context.gncFullPath(), subAcc, parentAcc);
-		int afterCount = countTransactionsForSubAccount(_context.tmpGncFullPath(), subAcc, parentAcc);
-		
+		int beforeCount = countTransactionsForSubAccount(_context.gncFullPath(), subAcc, parentAcc, sourceAccName);
+		int afterCount = countTransactionsForSubAccount(_context.tmpGncFullPath(), subAcc, parentAcc, sourceAccName);
+			
 		assertThat(afterCount - beforeCount, is(txCount));
 	}
 
@@ -256,7 +257,13 @@ public class MainWindowSteps
 	{
 		GncFile gnc = new GncFile(_context.tmpGncFullPath());
 		
-		assertThat(gnc.findTransactionsMatching(txDesc).size(), is(0));
+		assertThat(gnc.findTransactionsMatching(txDesc + ".*").size(), is(0));
+	}
+	
+	@When("^account for transactions matching \"([^\"]*)\" is set to \"([^\"]*)\"$")
+	public void account_for_transactions_matching_is_set_to(String txDesc, String accName) throws Throwable
+	{
+		app().setAccountForTransactionsMatching(accName, ".*" + txDesc + ".*");
 	}
 	
 	private Properties createMatchingRules(List<MatchingRule> matchingRules)
@@ -350,15 +357,28 @@ public class MainWindowSteps
 		}
 	}
 
-	private int countTransactionsForSubAccount(final String gncFilePath, String subAcc, String parentAcc)
+	private int countTransactionsForSubAccount(final String gncFilePath, String subAcc, String parentAcc, String sourceAccName)
 			throws IOException
 	{
 		GncFile gnc = new GncFile(gncFilePath);
-		Account subAccount = findAccountByName(gnc, subAcc, parentAcc);
-		return gnc.findTransactionsForTargetAccount(subAccount.getId().getValue()).size();
+		Account subAccount = findSubAccountByName(gnc, subAcc, parentAcc);
+		Account sourceAcc = gnc.findAccountByName(sourceAccName);
+		
+		List<Transaction> txs = gnc.findTransactionsForTargetAccount(subAccount.getId().getValue());
+		int count = 0;
+		
+		for (Transaction transaction : txs)
+		{
+			if(transaction.getSplits().getSplit().get(1).getAccount().getValue().equals(sourceAcc.getId().getValue()))
+			{
+				count++;
+			}
+		}
+		
+		return count;
 	}
 	
-	private Account findAccountByName(GncFile gnc, String accName, String parentAccName)
+	private Account findSubAccountByName(GncFile gnc, String accName, String parentAccName)
 	{		
 		Account parent = gnc.findAccountByName(parentAccName);
 		
@@ -367,7 +387,10 @@ public class MainWindowSteps
 		for (Account acc : gnc.getAccounts())
 		{
 			if(acc.getParent() != null && acc.getParent().getValue().equals(parent.getId().getValue()))
-				return acc;
+			{
+				if(acc.getName().equals(accName))
+					return acc;				
+			}
 		}
 		
 		fail("Cannot find account " + accName + " under " + parentAccName);
