@@ -277,4 +277,9 @@ public class HypodermicAppDriver3
 			result.add(accountData.getParentId());
 		}
 	}
+
+	public List<TxData> observedTxData()
+	{
+		return _txList;
+	}
 }

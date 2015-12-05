@@ -1,7 +1,7 @@
 package gncimport.specs.steps.hypodermic;
 
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -16,6 +16,7 @@ import gnclib.GncFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -150,6 +151,23 @@ public class MainWindowSteps
 	{
 		RbcExportParser parser = new RbcExportParser(_context.csvFullPath());
 		assertThatObservedTransactionsAreEqualTo(parser.getTransactions());
+	}
+	
+	class ExpectedTxFields
+	{
+		public Date date;
+		public String description;
+		public float amount;
+	}
+	
+	@Then("^transaction data displayed includes:$")
+	public void transaction_data_displayed_includes(List<ExpectedTxFields> expectedFields) throws Throwable
+	{		
+		for (ExpectedTxFields fields : expectedFields)
+		{
+			assertThat("Not found: " + fields.date + " " + fields.description + " " + fields.amount,
+					observedTxListContains(fields), is(true));
+		}
 	}
 
 	@Then("^all transactions are associated with \"([^\"]*)\"$")
@@ -396,5 +414,19 @@ public class MainWindowSteps
 		fail("Cannot find account " + accName + " under " + parentAccName);
 		
 		return null;
+	}
+	
+	private boolean observedTxListContains(ExpectedTxFields f)
+	{
+		boolean found = false;
+		for(TxData tx : app().observedTxData())
+		{
+			if(tx.date.equals(f.date) && tx.description.trim().equals(f.description.trim()) && f.amount == f.amount)
+			{
+				found = true;
+				break;
+			}
+		}
+		return found;
 	}
 }

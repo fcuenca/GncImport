@@ -6,4 +6,11 @@ Feature: Browsing Transactions
     When the transaction file is loaded
     Then the app displays 20 transactions
     And displayed transactions match those in loaded file
+    And transaction data displayed includes:
+    	| date 		| description 						| amount 	|
+    	| 1/2/2014 	| MISC PAYMENT - IMH POOL I LP 		| -1635.00 	|
+    	| 1/6/2014  | MONTHLY FEE - 					| -4.00		|
+    	| 1/9/2014	| PAYROLL DEPOSIT - WSIB			| 2283.26	|
+    	| 1/22/2014 | Withdrawal - PTB WD --- TA689283	| -100.00	|
+    	
 
