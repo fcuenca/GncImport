@@ -1,12 +1,17 @@
 package gncimport.specs.steps.hypodermic;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.both;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
+import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxData;
 import gncimport.tests.data.TestFiles;
 import gncimport.tests.unit.ConfigPropertyBuilder;
@@ -17,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.gnucash.xml.gnc.Account;
@@ -45,13 +49,14 @@ public class MainWindowSteps
 		public String desc;
 		public String override;
 	}
-
+	
 	class AppContext
 	{
 		public Properties properties;
 		public String csvFileName;
 		public String gncFileName;
 		public String defaultAccName;
+		public List<MonthlyAccountParam> subAccountList;
 
 		public AppContext()
 		{
@@ -59,6 +64,7 @@ public class MainWindowSteps
 			csvFileName = "";
 			gncFileName = "";
 			defaultAccName = GncImportApp.DEFAULT_TARGET_ACCOUNT;
+			subAccountList = new ArrayList<MonthlyAccountParam>();
 		}
 		
 		public String csvFullPath()
@@ -310,16 +316,17 @@ public class MainWindowSteps
 			assertThat(tx.date, is(both(greaterThanOrEqualTo(start)).and(lessThanOrEqualTo(end))));		
 		}
 	}
-		
+	
 	@Given("^default sub-account list:$")
-	public void default_sub_account_list(DataTable arg1) throws Throwable
+	public void default_sub_account_list(List<MonthlyAccountParam> subAccounts) throws Throwable
 	{
+		_context.subAccountList = subAccounts;
 	}
 
 	@When("^accounts for \"([^\"]*)\" are created under \"([^\"]*)\" with the name \"([^\"]*)\"$")
 	public void accounts_for_are_created_under_with_the_name(String month, List<String> parentAccName, String newAccName) throws Throwable
 	{
-		app().createAccounts(month, parentAccName, newAccName, _context.tmpGncFullPath());
+		app().createAccounts(month, parentAccName, newAccName, _context.subAccountList, _context.tmpGncFullPath());
 	}
 	
 	class ExpectedSubAccounts
@@ -331,7 +338,7 @@ public class MainWindowSteps
 	//TODO: please refactor me!!
 	@Then("^a new account hierarchy \"([^\"]*)\" is created under \"([^\"]*)\" with code \"([^\"]*)\" and subaccounts:$")
 	public void a_new_account_hierarchy_is_created_under_with_code_and_subaccounts(
-			String newAccName, List<String> parentAccName, String newAccCode, 
+			String newAccName, List<String> pathToParentAcc, String newAccCode, 
 			List<ExpectedSubAccounts> subAccounts) throws Throwable
 	{
 		GncFile orig = new GncFile(_context.gncFullPath());
@@ -343,10 +350,10 @@ public class MainWindowSteps
 		assertThat(newAccount.getCode(), is(newAccCode));
 
 		String parentId = newAccount.getParent().getValue();
-		for (int i = parentAccName.size() - 1; i >= 0; i--)
+		for (int i = pathToParentAcc.size() - 1; i >= 0; i--)
 		{
 			Account parentAcc = updated.findAccountById(parentId);		
-			assertThat(parentAcc.getName(), is(parentAccName.get(i)));
+			assertThat(parentAcc.getName(), is(pathToParentAcc.get(i)));
 			parentId = parentAcc.getParent().getValue();
 		}
 

@@ -4,16 +4,14 @@ import gncimport.GncImportApp;
 import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
-import gncimport.interactors.TxClassificationInteractor;
 import gncimport.interactors.TxBrowseInteractor;
+import gncimport.interactors.TxClassificationInteractor;
 import gncimport.models.AccountData;
 import gncimport.models.Month;
 import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
-import gncimport.utils.ProgrammerError;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -93,7 +91,7 @@ public class HypodermicAppDriver3
 			@Override
 			public void accept(List<AccountData> accounts)
 			{
-				_targetHierarchyRoot = findAccountInList(accountName, accounts);
+				_targetHierarchyRoot = findFirstAccWithNameInList(accountName, accounts);
 				
 				if(_targetHierarchyRoot != null)
 				{
@@ -116,7 +114,7 @@ public class HypodermicAppDriver3
 			@Override
 			public void accept(List<AccountData> accounts)
 			{				
-				_sourceAccount = findAccountInList(accountName, accounts);
+				_sourceAccount = findFirstAccWithNameInList(accountName, accounts);
 
 				if(_sourceAccount != null)
 				{
@@ -277,7 +275,8 @@ public class HypodermicAppDriver3
 	}
 
 	//TODO: please refactor me!!
-	public void createAccounts(String month, final List<String> parentAccName, String newAccName, String fileNameToSave)
+	public void createAccounts(String month, final List<String> pathToParentAcc,
+			String newAccName, List<MonthlyAccountParam> subAccountList, String fileNameToSave)
 	{
 		final ArrayList<AccountData> parentAcc = new ArrayList<AccountData>();
 		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
@@ -285,7 +284,7 @@ public class HypodermicAppDriver3
 			@Override
 			public void accept(List<AccountData> accounts)
 			{
-				AccountData parent = findAccountWithParentInList(parentAccName, accounts);
+				AccountData parent = findLastSubAccountInChain(pathToParentAcc, accounts);
 				
 				if(parent != null)
 				{
@@ -293,7 +292,7 @@ public class HypodermicAppDriver3
 				}
 				else
 				{
-					throw new RuntimeException("Target Hierarchy not found: " + parentAccName);
+					throw new RuntimeException("Parent Account not found: " + pathToParentAcc);
 				}	
 			}
 		};
@@ -303,16 +302,12 @@ public class HypodermicAppDriver3
 		//TODO: create constructor from String
 		Month theMonth = new Month(Arrays.asList(Month.allMonths()).indexOf(month) + 1);
 		
-		//TODO: send expected subAcc list from the test
-		List<MonthlyAccountParam> subAccList = 
-				Arrays.asList(new MonthlyAccountParam[] { new MonthlyAccountParam(1, "Miscelaneous") });
-		
 		_interactors.accHierarchyCreation().createNewAccountHierarchy(
-				parentAcc.get(0), newAccName, theMonth, subAccList, fileNameToSave);
+				parentAcc.get(0), newAccName, theMonth, subAccountList, fileNameToSave);
 	}
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
-	private AccountData findAccountInList(String accountName, List<AccountData> accounts)
+	private AccountData findFirstAccWithNameInList(String accountName, List<AccountData> accounts)
 	{
 		for (AccountData acc : accounts)
 		{
@@ -324,9 +319,9 @@ public class HypodermicAppDriver3
 		return null;
 	}
 	
-	private AccountData findAccountWithParentInList(List<String> parentAccChain, List<AccountData> accounts)
+	private AccountData findLastSubAccountInChain(List<String> parentAccChain, List<AccountData> accounts)
 	{
-		AccountData parent = findAccountInList(parentAccChain.get(0), accounts);
+		AccountData parent = findFirstAccWithNameInList(parentAccChain.get(0), accounts);
 		
 		if(parent != null)
 		{

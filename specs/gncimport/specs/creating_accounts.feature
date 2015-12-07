@@ -4,7 +4,7 @@ Feature: Creating accounts
 	Scenario: creating standard account set
 		Given accounting data file "checkbook.xml" with default account "Miscelaneous"	
 		And default sub-account list:
-			| order | account 		|
+			| sequenceNo | accName		|
 			| 1 	| Miscelaneous	|
 			| 2		| Housing	 	|
 			| 3		| Groceries 	| 
@@ -21,4 +21,14 @@ Feature: Creating accounts
 		Then a new account hierarchy "March 2014" is created under "Monthly Expenses, Year 2014" with code "420140300" and subaccounts:
 			| code 		| account 		|
 			| 420140301	| Miscelaneous	|
+			| 420140302	| Housing	 	|
+			| 420140303	| Groceries 	| 
+			| 420140304	| Clothing		|
+			| 420140305	| Supplies		|
+			| 420140306	| Entertainment	|
+			| 420140307	| Casa Cordoba	|
+			| 420140308	| Books			|
+			| 420140309	| Health		|
+			| 420140310	| Car			|
+			| 420140311	| Expenses		|
 	
