@@ -1,0 +1,21 @@
+Features:
+
+- Browsing transactions from bank export
+   x from RBC export
+   * from MBNA export
+x Automatically classifying transactions into spending accounts (target hierarchy)
+  x Default assignment
+  x Identifying spending account from patterns in the description
+x Adjusting transactions before import
+   x changing description
+   x changing spending account within target hierarchy
+   x changing spending account to arbitrary account (outside target hierarchy)
+x Ignoring transactions during import
+  x manually
+  x automatically from description pattern
+x Rewriting transaction descriptions automatically based on patterns
+x Importing into Gnu Cash
+x Filtering transactions based on date range
+- Creating new account hierarchies in the Gnu Cash datastore
+- Remembering location of files from session to session
+* Editing transaction matching rules
