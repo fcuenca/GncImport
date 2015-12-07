@@ -7,10 +7,15 @@ import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxClassificationInteractor;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.models.AccountData;
+import gncimport.models.Month;
+import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
+import gncimport.utils.ProgrammerError;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -271,6 +276,41 @@ public class HypodermicAppDriver3
 		_interactors.txBrowse(txBrowseOutput).filterTxList(start, end);
 	}
 
+	//TODO: please refactor me!!
+	public void createAccounts(String month, final List<String> parentAccName, String newAccName, String fileNameToSave)
+	{
+		final ArrayList<AccountData> parentAcc = new ArrayList<AccountData>();
+		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
+		{
+			@Override
+			public void accept(List<AccountData> accounts)
+			{
+				AccountData parent = findAccountWithParentInList(parentAccName, accounts);
+				
+				if(parent != null)
+				{
+					parentAcc.add(parent);
+				}
+				else
+				{
+					throw new RuntimeException("Target Hierarchy not found: " + parentAccName);
+				}	
+			}
+		};
+		
+		_interactors.accSelection(boundary).getAccounts();	
+		
+		//TODO: create constructor from String
+		Month theMonth = new Month(Arrays.asList(Month.allMonths()).indexOf(month) + 1);
+		
+		//TODO: send expected subAcc list from the test
+		List<MonthlyAccountParam> subAccList = 
+				Arrays.asList(new MonthlyAccountParam[] { new MonthlyAccountParam(1, "Miscelaneous") });
+		
+		_interactors.accHierarchyCreation().createNewAccountHierarchy(
+				parentAcc.get(0), newAccName, theMonth, subAccList, fileNameToSave);
+	}
+
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
 	private AccountData findAccountInList(String accountName, List<AccountData> accounts)
 	{
@@ -279,6 +319,25 @@ public class HypodermicAppDriver3
 			if(acc.getName().equals(accountName))
 			{
 				return acc;
+			}
+		}
+		return null;
+	}
+	
+	private AccountData findAccountWithParentInList(List<String> parentAccChain, List<AccountData> accounts)
+	{
+		AccountData parent = findAccountInList(parentAccChain.get(0), accounts);
+		
+		if(parent != null)
+		{
+			for (AccountData acc : accounts)
+			{
+				//TODO: generalize for a list of more than 2 accounts
+				if(acc.getParentId() != null && acc.getParentId().equals(parent.getId()) && 
+						acc.getName().equals(parentAccChain.get(1)))
+				{
+					return acc;
+				}
 			}
 		}
 		return null;
