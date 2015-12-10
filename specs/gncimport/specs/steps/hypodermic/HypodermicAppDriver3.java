@@ -300,10 +300,8 @@ public class HypodermicAppDriver3
 		_interactors.accSelection(boundary).getAccounts();	
 		
 		//TODO: create constructor from String
-		Month theMonth = new Month(Arrays.asList(Month.allMonths()).indexOf(month) + 1);
-		
 		_interactors.accHierarchyCreation().createNewAccountHierarchy(
-				parentAcc.get(0), newAccName, theMonth, subAccountList, fileNameToSave);
+				parentAcc.get(0), newAccName, new Month(month), subAccountList, fileNameToSave);
 	}
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)

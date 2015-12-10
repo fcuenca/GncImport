@@ -28,4 +28,20 @@ public class MonthTests
 		assertThat(new Month(5).toNumericString(), is("05"));
 		assertThat(new Month(10).toNumericString(), is("10"));
 	}
+	
+	@Test
+	public void can_create_month_from_string()
+	{
+		assertThat(new Month("January"), is(new Month(1)));
+	}
+	
+	@Test(expected = ProgrammerError.class)
+	public void month_name_must_be_a_well_known_value()
+	{
+		new Month("unknown");
+	}
+
+
+
+
 }

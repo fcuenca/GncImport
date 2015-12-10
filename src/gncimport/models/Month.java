@@ -1,5 +1,7 @@
 package gncimport.models;
 
+import java.util.Arrays;
+
 import gncimport.utils.ProgrammerError;
 
 public class Month
@@ -14,6 +16,11 @@ public class Month
 		}
 		
 		this.month = month;
+	}
+
+	public Month(String monthName)
+	{
+		this(Arrays.asList(Month.allMonths()).indexOf(monthName) + 1);
 	}
 
 	public String toNumericString()
