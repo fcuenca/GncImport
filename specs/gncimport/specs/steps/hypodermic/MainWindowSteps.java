@@ -348,31 +348,6 @@ public class MainWindowSteps
 		assertThatGncFileContainsAccWithSubAccs(updated, newAccName, subAccounts);
 	}
 
-	private void assertThatGncFileContainsAccWithSubAccs(GncFile updated, String newAccName,
-			List<ExpectedSubAccounts> subAccounts)
-	{
-		for (ExpectedSubAccounts expectedSubAcc : subAccounts)
-		{
-			Account subAcc = findSubAccountByName(updated, expectedSubAcc.account, newAccName);
-			
-			assertThat(subAcc.getCode(), is(expectedSubAcc.code));
-		}
-	}
-
-	private void assertThatGncFileContainsAccWithCodeUnderParent(GncFile updated, String newAccName, String newAccCode,
-			List<String> pathToParentAcc)
-	{
-		Account newAccount = updated.findAccountByName(newAccName);
-		assertThat(newAccount.getCode(), is(newAccCode));
-
-		String parentId = newAccount.getParent().getValue();
-		for (int i = pathToParentAcc.size() - 1; i >= 0; i--)
-		{
-			Account parentAcc = updated.findAccountById(parentId);		
-			assertThat(parentAcc.getName(), is(pathToParentAcc.get(i)));
-			parentId = parentAcc.getParent().getValue();
-		}
-	}
 	
 	private Properties createMatchingRules(List<MatchingRule> matchingRules)
 	{
@@ -500,6 +475,20 @@ public class MainWindowSteps
 		return count;
 	}
 	
+	private boolean observedTxListContains(ExpectedTxFields f)
+	{
+		boolean found = false;
+		for(TxData tx : app().observedTxData())
+		{
+			if(tx.date.equals(f.date) && tx.description.trim().equals(f.description.trim()) && f.amount == f.amount)
+			{
+				found = true;
+				break;
+			}
+		}
+		return found;
+	}
+	
 	private Account findSubAccountByName(GncFile gnc, String accName, String parentAccName)
 	{		
 		Account parent = gnc.findAccountByName(parentAccName);
@@ -520,17 +509,30 @@ public class MainWindowSteps
 		return null;
 	}
 	
-	private boolean observedTxListContains(ExpectedTxFields f)
+	private void assertThatGncFileContainsAccWithSubAccs(GncFile gnc, String accName,
+			List<ExpectedSubAccounts> subAccounts)
 	{
-		boolean found = false;
-		for(TxData tx : app().observedTxData())
+		for (ExpectedSubAccounts expectedSubAcc : subAccounts)
 		{
-			if(tx.date.equals(f.date) && tx.description.trim().equals(f.description.trim()) && f.amount == f.amount)
-			{
-				found = true;
-				break;
-			}
+			Account subAcc = findSubAccountByName(gnc, expectedSubAcc.account, accName);
+			
+			assertThat(subAcc.getCode(), is(expectedSubAcc.code));
 		}
-		return found;
 	}
+
+	private void assertThatGncFileContainsAccWithCodeUnderParent(GncFile gnc, String accName, String accCode,
+			List<String> pathToParentAcc)
+	{
+		Account newAccount = gnc.findAccountByName(accName);
+		assertThat(newAccount.getCode(), is(accCode));
+
+		String parentId = newAccount.getParent().getValue();
+		for (int i = pathToParentAcc.size() - 1; i >= 0; i--)
+		{
+			Account parentAcc = gnc.findAccountById(parentId);		
+			assertThat(parentAcc.getName(), is(pathToParentAcc.get(i)));
+			parentId = parentAcc.getParent().getValue();
+		}
+	}
+
 }
