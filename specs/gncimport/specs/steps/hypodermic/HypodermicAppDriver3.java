@@ -274,7 +274,6 @@ public class HypodermicAppDriver3
 		_interactors.txBrowse(txBrowseOutput).filterTxList(start, end);
 	}
 
-	//TODO: please refactor me!!
 	public void createAccounts(String month, final List<String> pathToParentAcc,
 			String newAccName, List<MonthlyAccountParam> subAccountList, String fileNameToSave)
 	{
@@ -297,9 +296,7 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_interactors.accSelection(boundary).getAccounts();	
-		
-		//TODO: create constructor from String
+		_interactors.accSelection(boundary).getAccounts();			
 		_interactors.accHierarchyCreation().createNewAccountHierarchy(
 				parentAcc.get(0), newAccName, new Month(month), subAccountList, fileNameToSave);
 	}
