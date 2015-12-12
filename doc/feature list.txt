@@ -16,6 +16,6 @@ x Ignoring transactions during import
 x Rewriting transaction descriptions automatically based on patterns
 x Importing into Gnu Cash
 x Filtering transactions based on date range
-- Creating new account hierarchies in the Gnu Cash datastore
+x Creating new account hierarchies in the Gnu Cash datastore
 - Remembering location of files from session to session
 * Editing transaction matching rules
