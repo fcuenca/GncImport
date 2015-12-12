@@ -335,7 +335,6 @@ public class MainWindowSteps
 		public String account;
 	}
 
-	//TODO: please refactor me!!
 	@Then("^a new account hierarchy \"([^\"]*)\" is created under \"([^\"]*)\" with code \"([^\"]*)\" and subaccounts:$")
 	public void a_new_account_hierarchy_is_created_under_with_code_and_subaccounts(
 			String newAccName, List<String> pathToParentAcc, String newAccCode, 
@@ -345,7 +344,24 @@ public class MainWindowSteps
 		GncFile updated = new GncFile(_context.tmpGncFullPath());
 		
 		assertThat(updated.getAccountCount(), is(orig.getAccountCount() + 1 + subAccounts.size()));
-		
+		assertThatGncFileContainsAccWithCodeUnderParent(updated, newAccName, newAccCode, pathToParentAcc);
+		assertThatGncFileContainsAccWithSubAccs(updated, newAccName, subAccounts);
+	}
+
+	private void assertThatGncFileContainsAccWithSubAccs(GncFile updated, String newAccName,
+			List<ExpectedSubAccounts> subAccounts)
+	{
+		for (ExpectedSubAccounts expectedSubAcc : subAccounts)
+		{
+			Account subAcc = findSubAccountByName(updated, expectedSubAcc.account, newAccName);
+			
+			assertThat(subAcc.getCode(), is(expectedSubAcc.code));
+		}
+	}
+
+	private void assertThatGncFileContainsAccWithCodeUnderParent(GncFile updated, String newAccName, String newAccCode,
+			List<String> pathToParentAcc)
+	{
 		Account newAccount = updated.findAccountByName(newAccName);
 		assertThat(newAccount.getCode(), is(newAccCode));
 
@@ -356,16 +372,8 @@ public class MainWindowSteps
 			assertThat(parentAcc.getName(), is(pathToParentAcc.get(i)));
 			parentId = parentAcc.getParent().getValue();
 		}
-
-		for (ExpectedSubAccounts expectedSubAcc : subAccounts)
-		{
-			Account subAcc = findSubAccountByName(updated, expectedSubAcc.account, newAccName);
-			
-			assertThat(subAcc.getCode(), is(expectedSubAcc.code));
-		}
 	}
 	
-
 	private Properties createMatchingRules(List<MatchingRule> matchingRules)
 	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
