@@ -1,6 +1,7 @@
 package gncimport.ui;
 
 import gncimport.interactors.AccFileLoadInteractor;
+import gncimport.interactors.AccFileLoadInteractor.OutPort;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxClassificationInteractor;
@@ -49,7 +50,15 @@ public class MainWindowPresenter implements MainWindowRenderer
 		@Override
 		public void accept(List<TxData> txList)
 		{
-			_view.displayTxData(new TxTableModel(txList), buildTargetAccountList());
+			//TODO: pass the account list to this call back -> remove the need to call
+			// an interactor from a response object!!
+			final List<AccountData> accList = buildTargetAccountList();
+			do_accept(txList, accList);
+		}
+
+		private void do_accept(List<TxData> txList, final List<AccountData> accList)
+		{
+			_view.displayTxData(new TxTableModel(txList), accList);
 			_view.displayTxCount(txList.size());
 		}
 
@@ -74,26 +83,49 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onReadFromCsvFile()
 	{
-		try
-		{
-			String lastDir = _config.getLastCsvDirectory();
-			
-			if(lastDir == null || lastDir.isEmpty())
-			{
-				lastDir = System.getProperty("user.home");
-			}
-			
-			final String fileName = _view.promptForFile(lastDir);
-			
-			if (fileName != null)
-			{					
-				_interactors.txBrowse(txBrowseResponse).fetchTransactions(fileName);				
-			}
-		}
-		catch (Exception e)
-		{
-			_view.handleException(e);
-		}
+		loadCsv_execute(_view, txBrowseResponse);
+	}
+	
+	@Override
+	public void onFilterTxList(Date fromDate, Date toDate)
+	{
+		filter_execute(fromDate, toDate, txBrowseResponse);				
+	}
+	
+	@Override
+	public void onSaveToGncFile(String fileName)
+	{
+		saveGnc_execute(fileName, _view);
+	}
+
+	@Override
+	public void onLoadGncFile()
+	{
+		loadGnc_execute(_config, _view, accFileLoadReponse);
+	}
+	
+	@Override
+	public void onSelectSourceAccount()
+	{
+		selectSource_execute(_view, doNothingAccSelectionResponse);
+	}
+
+	@Override
+	public void onSelectTargetHierarchy()
+	{
+		selectTarget_execute(_view, doNothingAccSelectionResponse);
+	}
+
+	@Override
+	public void onCreateNewAccHierarchy(String fileNameToSave)
+	{	
+		createAcc_execute(fileNameToSave, _view, _config);
+	}
+
+	@Override
+	public AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc)
+	{
+		return accSelection_execute(newAcc, originalAcc, _view);
 	}
 
 	private List<AccountData> buildTargetAccountList()
@@ -115,150 +147,10 @@ public class MainWindowPresenter implements MainWindowRenderer
 		return candidates;
 	}
 
-	@Override
-	public void onSaveToGncFile(String fileName)
-	{
-		try
-		{
-			_interactors.txImport().saveTxTo(_view.getTxTableModel().getTransactions(), fileName);
-		}
-		catch (Exception e)
-		{
-			_view.handleException(e);
-		}
-	}
-
-	@Override
-	public void onLoadGncFile()
-	{
-		try
-		{
-			String lastGncDirectory = _config.getLastGncDirectory();
-			
-			if(lastGncDirectory == null || lastGncDirectory.isEmpty())
-			{
-				lastGncDirectory = System.getProperty("user.home");
-			}
-			
-			String fileName = _view.promptForFile(lastGncDirectory);
-			
-			if (fileName != null)
-			{
-				_interactors.accFileLoad(accFileLoadReponse).openGncFile(fileName);
-			}
-		}
-		catch (Exception e)
-		{
-			_view.handleException(e);
-		}
-	}
-
-	@Override
-	public void onSelectSourceAccount()
-	{
-		try
-		{
-			AccountData selectedAccount = selectAccountFromTree();
-
-			if (selectedAccount != null)
-			{
-				_interactors.accSelection(doNothingAccSelectionResponse).setSourceAccount(selectedAccount);;
-				
-				_view.displaySourceAccount(selectedAccount.getName());
-			}
-		}
-		catch (Exception e)
-		{
-			_view.handleException(e);
-		}
-	}
-
-	@Override
-	public void onSelectTargetHierarchy()
-	{
-		try
-		{
-			AccountData selectedAccount = selectAccountFromTree();
-			if (selectedAccount != null)
-			{
-				_interactors.accSelection(doNothingAccSelectionResponse).setTargetHierarchy(selectedAccount);
-
-				_view.displayTargetHierarchy(selectedAccount.getName());
-				_view.updateCandidateTargetAccountList(buildTargetAccountList());
-			}
-		}
-		catch (Exception e)
-		{
-			_view.handleException(e);
-		}
-	}
-
-	@Override
-	public void onCreateNewAccHierarchy(String fileNameToSave)
-	{	
-		if (fileNameToSave == null || fileNameToSave.trim().isEmpty())
-		{
-			_view.displayErrorMessage("GNC file must be opened first!");
-			return;
-		}
-	
-		try
-		{
-			DefaultMutableTreeNode accountRoot = getAccountTree();
-			NewHierarchyParams params = _view.promptForNewHierarchy(accountRoot);
-			
-			if (params != null)
-			{
-				if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
-				{
-					throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
-				}
-				
-				AccountData selectedAccount = (AccountData) params.parentNode.getUserObject();
-				
-				_interactors.accHierarchyCreation().createNewAccountHierarchy(
-						selectedAccount, params.rootAccName, params.month,
-						_config.getMonthlyAccounts(), fileNameToSave);
-				
-			}
-		}
-		catch (Exception e)
-		{
-			_view.handleException(e);
-		}
-	}
-
-	@Override
-	public AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc)
-	{
-		if (!newAcc.equals(OTHER_ACC_PLACEHOLDER))
-		{
-			return newAcc;
-		}
-
-		try
-		{
-			final AccountData selectedAcc = selectAccountFromTree();
-			if (selectedAcc != null)
-			{
-				return selectedAcc;
-			}
-			else
-			{
-				return originalAcc;
-			}
-		}
-		catch (Exception e)
-		{
-			_view.handleException(e);
-			return originalAcc;
-		}
-	}
-
-	private AccountData selectAccountFromTree()
+	private AccountData selectAccountFromTree(TxView txView)
 	{
 		DefaultMutableTreeNode accountRoot = getAccountTree();
-		DefaultMutableTreeNode selectedNode = _view.promptForAccount(accountRoot);
+		DefaultMutableTreeNode selectedNode = txView.promptForAccount(accountRoot);
 
 		if (selectedNode != null)
 		{
@@ -291,8 +183,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	}
 
 	@SuppressWarnings("deprecation")
-	@Override
-	public void onFilterTxList(Date fromDate, Date toDate)
+	private void filter_execute(Date fromDate, Date toDate, TxBrowseInteractor.OutPort outPort)
 	{
 		Date lowerBound = fromDate != null ? fromDate : new Date(Long.MIN_VALUE);
 
@@ -309,7 +200,165 @@ public class MainWindowPresenter implements MainWindowRenderer
 			upperBound = new Date(Long.MAX_VALUE);
 		}
 
-		_interactors.txBrowse(txBrowseResponse).filterTxList(lowerBound, upperBound);;				
+		_interactors.txBrowse(outPort).filterTxList(lowerBound, upperBound);;
 	}
 
+	private void loadCsv_execute(TxView txView, TxBrowseInteractor.OutPort outPort)
+	{
+		try
+		{
+			String lastDir = _config.getLastCsvDirectory();
+			
+			if(lastDir == null || lastDir.isEmpty())
+			{
+				lastDir = System.getProperty("user.home");
+			}
+			
+			final String fileName = txView.promptForFile(lastDir);
+			
+			if (fileName != null)
+			{					
+				_interactors.txBrowse(outPort).fetchTransactions(fileName);				
+			}
+		}
+		catch (Exception e)
+		{
+			txView.handleException(e);
+		}
+	}
+
+	private void saveGnc_execute(String fileName, TxView txView)
+	{
+		try
+		{
+			_interactors.txImport().saveTxTo(txView.getTxTableModel().getTransactions(), fileName);
+		}
+		catch (Exception e)
+		{
+			txView.handleException(e);
+		}
+	}
+
+	private  void loadGnc_execute(UIConfig config, TxView txView, OutPort outPort)
+	{
+		try
+		{
+			String lastGncDirectory = config.getLastGncDirectory();
+			
+			if(lastGncDirectory == null || lastGncDirectory.isEmpty())
+			{
+				lastGncDirectory = System.getProperty("user.home");
+			}
+			
+			String fileName = txView.promptForFile(lastGncDirectory);
+			
+			if (fileName != null)
+			{
+				_interactors.accFileLoad(outPort).openGncFile(fileName);
+			}
+		}
+		catch (Exception e)
+		{
+			txView.handleException(e);
+		}
+	}
+
+	private void selectSource_execute(TxView txView, AccSelectionInteractor.OutPort outPort)
+	{
+		try
+		{
+			AccountData selectedAccount = selectAccountFromTree(_view);
+
+			if (selectedAccount != null)
+			{
+				_interactors.accSelection(outPort).setSourceAccount(selectedAccount);;
+				
+				txView.displaySourceAccount(selectedAccount.getName());
+			}
+		}
+		catch (Exception e)
+		{
+			txView.handleException(e);
+		}
+	}
+
+	private void selectTarget_execute(TxView txView, AccSelectionInteractor.OutPort outPort)
+	{
+		try
+		{
+			AccountData selectedAccount = selectAccountFromTree(txView);
+			if (selectedAccount != null)
+			{
+				_interactors.accSelection(outPort).setTargetHierarchy(selectedAccount);
+
+				txView.displayTargetHierarchy(selectedAccount.getName());
+				//TODO: do this call from the setTargetHierarchy callback (which now does nothing)
+				txView.updateCandidateTargetAccountList(buildTargetAccountList());
+			}
+		}
+		catch (Exception e)
+		{
+			txView.handleException(e);
+		}
+	}
+
+	private void createAcc_execute(String fileNameToSave, TxView txView, UIConfig config)
+	{
+		if (fileNameToSave == null || fileNameToSave.trim().isEmpty())
+		{
+			txView.displayErrorMessage("GNC file must be opened first!");
+			return;
+		}
+	
+		try
+		{
+			DefaultMutableTreeNode accountRoot = getAccountTree();
+			NewHierarchyParams params = txView.promptForNewHierarchy(accountRoot);
+			
+			if (params != null)
+			{
+				if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
+				{
+					throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
+				}
+				
+				AccountData selectedAccount = (AccountData) params.parentNode.getUserObject();
+				
+				_interactors.accHierarchyCreation().createNewAccountHierarchy(
+						selectedAccount, params.rootAccName, params.month,
+						config.getMonthlyAccounts(), fileNameToSave);
+				
+			}
+		}
+		catch (Exception e)
+		{
+			txView.handleException(e);
+		}
+	}
+
+	private AccountData accSelection_execute(AccountData newAcc, AccountData originalAcc, TxView txView)
+	{
+		if (!newAcc.equals(OTHER_ACC_PLACEHOLDER))
+		{
+			return newAcc;
+		}
+
+		try
+		{
+			final AccountData selectedAcc = selectAccountFromTree(txView);
+			if (selectedAcc != null)
+			{
+				return selectedAcc;
+			}
+			else
+			{
+				return originalAcc;
+			}
+		}
+		catch (Exception e)
+		{
+			txView.handleException(e);
+			return originalAcc;
+		}
+	}
 }
