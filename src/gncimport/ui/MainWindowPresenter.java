@@ -141,28 +141,25 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		final ArrayList<AccountData> result = new ArrayList<AccountData>();
 		
-		final AccountTreeBuilder builder = new AccountTreeBuilder();
-		
 		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort()
 		{
 			@Override
 			public void accept(List<AccountData> accounts)
 			{
+				AccountTreeBuilder builder = new AccountTreeBuilder();
+				
 				for (AccountData account : accounts)
 				{
 					builder.addNodeFor(account);
 				}
 				
-				DefaultMutableTreeNode accountRoot = builder.getRoot();
-				
-				DefaultMutableTreeNode selectedNode = _view.promptForAccount(accountRoot);
+				DefaultMutableTreeNode selectedNode = _view.promptForAccount(builder.getRoot());
 
 				if (selectedNode != null)
 				{
 					AccountData selectedAccount = (AccountData) selectedNode.getUserObject();
 					result.add(selectedAccount);
 				}
-
 			}
 
 			@Override
@@ -179,8 +176,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 		};
 
 		_interactors.accSelection(boundary).browseAccounts();
-
-		//return builder.getRoot();
 		
 		return result.size() == 0 ? null : result.get(0);
 	}
@@ -257,8 +252,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		try
 		{
-//			DefaultMutableTreeNode accountRoot = getAccountTree();
-//			AccountData selectedAccount = selectAccFromTree(txView, accountRoot);
 			AccountData selectedAccount = selectAccountFromTree();
 
 			if (selectedAccount != null)
@@ -276,8 +269,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		try
 		{
-//			DefaultMutableTreeNode accountRoot = getAccountTree();
-//			AccountData selectedAccount = selectAccFromTree(txView, accountRoot);
 			AccountData selectedAccount = selectAccountFromTree();
 			
 			if (selectedAccount != null)
