@@ -101,6 +101,18 @@ public class HypodermicAppDriver3
 					throw new RuntimeException("Target Hierarchy not found: " + accountName);
 				}	
 			}
+
+			@Override
+			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
+			{
+				//DO nothing for now
+			}
+
+			@Override
+			public void sourceAccHasBenSet(String accName)
+			{
+				//Do nothing for now
+			}
 		};
 		
 		_interactors.accSelection(boundary).getAccounts();	
@@ -123,6 +135,18 @@ public class HypodermicAppDriver3
 				{
 					throw new RuntimeException("Source Hierarchy not found: " + accountName);
 				}		
+			}
+
+			@Override
+			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
+			{
+				// Do nothing for now
+			}
+
+			@Override
+			public void sourceAccHasBenSet(String accName)
+			{
+				//Do nothing for now
 			}
 		};
 		
@@ -175,6 +199,18 @@ public class HypodermicAppDriver3
 			public void accept(List<AccountData> accounts)
 			{			
 				addAccNamesToList(accounts, accNames);
+			}
+
+			@Override
+			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
+			{
+				// Do nothing for now
+			}
+
+			@Override
+			public void sourceAccHasBenSet(String accName)
+			{
+				//Do nothing for now
 			}
 		};
 
@@ -292,6 +328,18 @@ public class HypodermicAppDriver3
 				{
 					throw new RuntimeException("Parent Account not found: " + pathToParentAcc);
 				}	
+			}
+
+			@Override
+			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
+			{
+				// Do nothing for now
+			}
+
+			@Override
+			public void sourceAccHasBenSet(String accName)
+			{
+				//Do nothing for now				
 			}
 		};
 		

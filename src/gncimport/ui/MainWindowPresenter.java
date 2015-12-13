@@ -35,12 +35,25 @@ public class MainWindowPresenter implements MainWindowRenderer
 		this._config = config;
 	}
 	
-	AccSelectionInteractor.OutPort doNothingAccSelectionResponse = new AccSelectionInteractor.OutPort () 
+	AccSelectionInteractor.OutPort accSelectionResponse = new AccSelectionInteractor.OutPort () 
 	{
 		@Override
 		public void accept(List<AccountData> accounts)
 		{
 			throw new ProgrammerError("nothing to do for now");
+		}
+
+		@Override
+		public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
+		{
+			_view.displayTargetHierarchy(accName);	
+			_view.updateCandidateTargetAccountList(buildCandidateAccList(candidateAccList));
+		}
+
+		@Override
+		public void sourceAccHasBenSet(String accName)
+		{
+			_view.displaySourceAccount(accName);
 		}
 	};	
 	
@@ -50,19 +63,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		@Override
 		public void accept(List<TxData> txList, List<AccountData> theAccList)
 		{
-			//TODO: pass the account list to this call back -> remove the need to call
-			// an interactor from a response object!!
-			//final List<AccountData> accList = buildTargetAccountList();
-			ArrayList<AccountData> candidates = new ArrayList<AccountData>();
-			candidates.addAll(theAccList);
-			candidates.add(OTHER_ACC_PLACEHOLDER);
-
-			do_accept(txList, candidates);
-		}
-
-		private void do_accept(List<TxData> txList, final List<AccountData> accList)
-		{
-			_view.displayTxData(new TxTableModel(txList), accList);
+			_view.displayTxData(new TxTableModel(txList), buildCandidateAccList(theAccList));
 			_view.displayTxCount(txList.size());
 		}
 
@@ -137,25 +138,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 	// -- private utility funcs
 	
-	private List<AccountData> buildTargetAccountList()
-	{
-		final ArrayList<AccountData> candidates = new ArrayList<AccountData>();
-
-		TxClassificationInteractor.OutPort boundary = new TxClassificationInteractor.OutPort()
-		{
-			@Override
-			public void accept(List<AccountData> accounts)
-			{
-				candidates.addAll(accounts);
-				candidates.add(OTHER_ACC_PLACEHOLDER);
-			}
-		};
-		
-		_interactors.txClassification(boundary).getCandidateTargetAccounts();;
-		
-		return candidates;
-	}
-
 	private AccountData selectAccountFromTree(TxView txView)
 	{
 		DefaultMutableTreeNode accountRoot = getAccountTree();
@@ -184,11 +166,33 @@ public class MainWindowPresenter implements MainWindowRenderer
 					builder.addNodeFor(account);
 				}
 			}
+
+			@Override
+			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
+			{
+				throw new ProgrammerError("not in use here");
+			}
+
+			@Override
+			public void sourceAccHasBenSet(String accName)
+			{
+				throw new ProgrammerError("not in use here");				
+			}
 		};
 
 		_interactors.accSelection(boundary).getAccounts();;
 
 		return builder.getRoot();
+	}
+
+	private List<AccountData> buildCandidateAccList(List<AccountData> theAccList)
+	{
+		ArrayList<AccountData> candidateAccs = new ArrayList<AccountData>();
+		
+		candidateAccs.addAll(theAccList);
+		candidateAccs.add(OTHER_ACC_PLACEHOLDER);
+		
+		return candidateAccs;
 	}
 
 	// -- data --
@@ -224,10 +228,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 			if (selectedAccount != null)
 			{
-				_interactors.accSelection(doNothingAccSelectionResponse).setSourceAccount(selectedAccount);;
-				
-				// TODO -- do this in the setSourceAccount callback (add a sourceAccWasSelected callback?)
-				txView.displaySourceAccount(selectedAccount.getName());
+				_interactors.accSelection(accSelectionResponse).setSourceAccount(selectedAccount);;
 			}
 		}
 		catch (Exception e)
@@ -244,12 +245,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 			
 			if (selectedAccount != null)
 			{
-				_interactors.accSelection(doNothingAccSelectionResponse).setTargetHierarchy(selectedAccount);
-
-				// TODO -- do this in the setTargetHierarchy callback (add a targetHierarchyWasSelected callback?)
-				txView.displayTargetHierarchy(selectedAccount.getName());
-				//TODO: do this call from the setTargetHierarchy callback (which now does nothing)
-				txView.updateCandidateTargetAccountList(buildTargetAccountList());
+				_interactors.accSelection(accSelectionResponse).setTargetHierarchy(selectedAccount);
 			}
 		}
 		catch (Exception e)
@@ -379,4 +375,5 @@ public class MainWindowPresenter implements MainWindowRenderer
 			return originalAcc;
 		}
 	}
+
 }

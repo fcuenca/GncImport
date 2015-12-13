@@ -10,6 +10,8 @@ public class AccSelectionInteractor
 	public interface OutPort
 	{
 		void accept(List<AccountData> accounts);
+		void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList);
+		void sourceAccHasBenSet(String accName);
 	}
 
 	private TxImportModel _model;
@@ -29,12 +31,14 @@ public class AccSelectionInteractor
 
 	public void setTargetHierarchy(AccountData acc)
 	{
-		_model.setTargetHierarchy(acc);							
+		_model.setTargetHierarchy(acc);	
+		_output.targetHierarchyHasBeenSet(acc.getName(), _model.getCandidateTargetAccounts());
 	}
 
 	public void setSourceAccount(AccountData acc)
 	{
-		_model.setSourceAccount(acc);									
+		_model.setSourceAccount(acc);	
+		_output.sourceAccHasBenSet(acc.getName());
 	}
 
 }
