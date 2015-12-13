@@ -34,14 +34,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 		this._config = config;
 	}
 	
-	AccSelectionInteractor.OutPort accSelectionResponse = new AccSelectionInteractor.OutPort () 
+	abstract class MyAccSelectionInteractorOutPort implements AccSelectionInteractor.OutPort
 	{
-		@Override
-		public void accept(List<AccountData> accounts)
-		{
-			throw new ProgrammerError("nothing to do for now");
-		}
-
 		@Override
 		public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 		{
@@ -53,6 +47,15 @@ public class MainWindowPresenter implements MainWindowRenderer
 		public void sourceAccHasBenSet(String accName)
 		{
 			_view.displaySourceAccount(accName);
+		}
+	}
+	
+	AccSelectionInteractor.OutPort accSelectionResponse = new MyAccSelectionInteractorOutPort () 
+	{
+		@Override
+		public void accept(List<AccountData> accounts)
+		{
+			throw new ProgrammerError("nothing to do for now");
 		}
 	};	
 	
@@ -141,7 +144,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		final ArrayList<AccountData> result = new ArrayList<AccountData>();
 		
-		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort()
+		AccSelectionInteractor.OutPort boundary = new MyAccSelectionInteractorOutPort()
 		{
 			@Override
 			public void accept(List<AccountData> accounts)
@@ -161,18 +164,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 					result.add(selectedAccount);
 				}
 			}
-
-			@Override
-			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
-			{
-				throw new ProgrammerError("not in use here");
-			}
-
-			@Override
-			public void sourceAccHasBenSet(String accName)
-			{
-				throw new ProgrammerError("not in use here");				
-			}
 		};
 
 		_interactors.accSelection(boundary).browseAccounts();
@@ -180,37 +171,47 @@ public class MainWindowPresenter implements MainWindowRenderer
 		return result.size() == 0 ? null : result.get(0);
 	}
 
-	private DefaultMutableTreeNode getAccountTree_2()
+	NewHierarchyParams params; //TODO: fix me!!
+	
+	private AccountData selectAccRootForNewHierarchyFromTree()
 	{
-		final AccountTreeBuilder builder = new AccountTreeBuilder();
+		final ArrayList<AccountData> result = new ArrayList<AccountData>();	
 		
-		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort()
+		AccSelectionInteractor.OutPort boundary = new MyAccSelectionInteractorOutPort()
 		{
 			@Override
 			public void accept(List<AccountData> accounts)
 			{
+				AccountTreeBuilder builder = new AccountTreeBuilder();
+				
 				for (AccountData account : accounts)
 				{
 					builder.addNodeFor(account);
 				}
-			}
-
-			@Override
-			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
-			{
-				throw new ProgrammerError("not in use here");
-			}
-
-			@Override
-			public void sourceAccHasBenSet(String accName)
-			{
-				throw new ProgrammerError("not in use here");				
+				
+				DefaultMutableTreeNode accountRoot = builder.getRoot();				
+				params = _view.promptForNewHierarchy(accountRoot);
+				
+				if (params != null)
+				{
+					if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
+					{
+						throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
+					}
+					
+					AccountData selectedAccount = (AccountData) params.parentNode.getUserObject();
+					
+					if(selectedAccount != null)
+					{
+						result.add(selectedAccount);
+					}
+				}
 			}
 		};
 
 		_interactors.accSelection(boundary).browseAccounts();
 
-		return builder.getRoot();
+		return result.size() == 0 ? null : result.get(0);
 	}
 
 	private List<AccountData> buildCandidateAccList(List<AccountData> theAccList)
@@ -354,18 +355,10 @@ public class MainWindowPresenter implements MainWindowRenderer
 	
 		try
 		{
-			DefaultMutableTreeNode accountRoot = getAccountTree_2();
-			NewHierarchyParams params = txView.promptForNewHierarchy(accountRoot);
+			AccountData selectedAccount = selectAccRootForNewHierarchyFromTree();
 			
-			if (params != null)
+			if (selectedAccount != null)
 			{
-				if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
-				{
-					throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
-				}
-				
-				AccountData selectedAccount = (AccountData) params.parentNode.getUserObject();
-				
 				_interactors.accHierarchyCreation().createNewAccountHierarchy(
 						selectedAccount, params.rootAccName, params.month,
 						_config.getMonthlyAccounts(), fileNameToSave);
