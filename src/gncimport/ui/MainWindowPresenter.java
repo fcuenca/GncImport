@@ -137,21 +137,55 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 	// -- private utility funcs
 	
-	private AccountData selectAccountFromTree(TxView txView)
+	private AccountData selectAccountFromTree()
 	{
-		DefaultMutableTreeNode accountRoot = getAccountTree();
-		DefaultMutableTreeNode selectedNode = txView.promptForAccount(accountRoot);
-
-		if (selectedNode != null)
+		final ArrayList<AccountData> result = new ArrayList<AccountData>();
+		
+		final AccountTreeBuilder builder = new AccountTreeBuilder();
+		
+		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort()
 		{
-			AccountData selectedAccount = (AccountData) selectedNode.getUserObject();
-			return selectedAccount;
-		}
+			@Override
+			public void accept(List<AccountData> accounts)
+			{
+				for (AccountData account : accounts)
+				{
+					builder.addNodeFor(account);
+				}
+				
+				DefaultMutableTreeNode accountRoot = builder.getRoot();
+				
+				DefaultMutableTreeNode selectedNode = _view.promptForAccount(accountRoot);
 
-		return null;
+				if (selectedNode != null)
+				{
+					AccountData selectedAccount = (AccountData) selectedNode.getUserObject();
+					result.add(selectedAccount);
+				}
+
+			}
+
+			@Override
+			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
+			{
+				throw new ProgrammerError("not in use here");
+			}
+
+			@Override
+			public void sourceAccHasBenSet(String accName)
+			{
+				throw new ProgrammerError("not in use here");				
+			}
+		};
+
+		_interactors.accSelection(boundary).browseAccounts();
+
+		//return builder.getRoot();
+		
+		return result.size() == 0 ? null : result.get(0);
 	}
 
-	private DefaultMutableTreeNode getAccountTree()
+	private DefaultMutableTreeNode getAccountTree_2()
 	{
 		final AccountTreeBuilder builder = new AccountTreeBuilder();
 		
@@ -223,11 +257,13 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		try
 		{
-			AccountData selectedAccount = selectAccountFromTree(txView);
+//			DefaultMutableTreeNode accountRoot = getAccountTree();
+//			AccountData selectedAccount = selectAccFromTree(txView, accountRoot);
+			AccountData selectedAccount = selectAccountFromTree();
 
 			if (selectedAccount != null)
 			{
-				_interactors.accSelection(accSelectionResponse).setSourceAccount(selectedAccount);;
+				_interactors.accSelection(accSelectionResponse).setSourceAccount(selectedAccount);
 			}
 		}
 		catch (Exception e)
@@ -240,7 +276,9 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		try
 		{
-			AccountData selectedAccount = selectAccountFromTree(txView);
+//			DefaultMutableTreeNode accountRoot = getAccountTree();
+//			AccountData selectedAccount = selectAccFromTree(txView, accountRoot);
+			AccountData selectedAccount = selectAccountFromTree();
 			
 			if (selectedAccount != null)
 			{
@@ -325,7 +363,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	
 		try
 		{
-			DefaultMutableTreeNode accountRoot = getAccountTree();
+			DefaultMutableTreeNode accountRoot = getAccountTree_2();
 			NewHierarchyParams params = txView.promptForNewHierarchy(accountRoot);
 			
 			if (params != null)
@@ -358,7 +396,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		try
 		{
-			final AccountData selectedAcc = selectAccountFromTree(txView);
+			AccountData selectedAcc = selectAccountFromTree();
+
 			if (selectedAcc != null)
 			{
 				return selectedAcc;
