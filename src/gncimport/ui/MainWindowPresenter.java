@@ -4,7 +4,6 @@ import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
-import gncimport.interactors.TxClassificationInteractor;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
@@ -180,7 +179,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 			}
 		};
 
-		_interactors.accSelection(boundary).getAccounts();;
+		_interactors.accSelection(boundary).browseAccounts();
 
 		return builder.getRoot();
 	}

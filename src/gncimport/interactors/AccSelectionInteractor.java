@@ -23,7 +23,7 @@ public class AccSelectionInteractor
 		_output = output;
 	}
 
-	public void getAccounts()
+	public void browseAccounts()
 	{
 		List<AccountData> accounts = _model.getAccounts();
 		_output.accept(accounts);
