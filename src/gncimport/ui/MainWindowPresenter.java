@@ -48,12 +48,16 @@ public class MainWindowPresenter implements MainWindowRenderer
 	TxBrowseInteractor.OutPort txBrowseResponse = new TxBrowseInteractor.OutPort() 
 	{
 		@Override
-		public void accept(List<TxData> txList)
+		public void accept(List<TxData> txList, List<AccountData> theAccList)
 		{
 			//TODO: pass the account list to this call back -> remove the need to call
 			// an interactor from a response object!!
-			final List<AccountData> accList = buildTargetAccountList();
-			do_accept(txList, accList);
+			//final List<AccountData> accList = buildTargetAccountList();
+			ArrayList<AccountData> candidates = new ArrayList<AccountData>();
+			candidates.addAll(theAccList);
+			candidates.add(OTHER_ACC_PLACEHOLDER);
+
+			do_accept(txList, candidates);
 		}
 
 		private void do_accept(List<TxData> txList, final List<AccountData> accList)
@@ -82,11 +86,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	};
 	
 	// -- renderer overrides
-	
-
-	
-	// -- presenter triggers
-	
+		
 	@Override
 	public void onReadFromCsvFile()
 	{

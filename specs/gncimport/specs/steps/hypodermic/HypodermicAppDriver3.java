@@ -13,7 +13,6 @@ import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class HypodermicAppDriver3
 	private TxBrowseInteractor.OutPort 	txBrowseOutput = new TxBrowseInteractor.OutPort()
 	{	
 		@Override
-		public void accept(List<TxData> txList)
+		public void accept(List<TxData> txList, List<AccountData> accList)
 		{
 			_txList = txList;
 		}
