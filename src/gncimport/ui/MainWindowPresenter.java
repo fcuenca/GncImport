@@ -34,8 +34,39 @@ public class MainWindowPresenter implements MainWindowRenderer
 		this._config = config;
 	}
 	
-	abstract class MyAccSelectionInteractorOutPort implements AccSelectionInteractor.OutPort
+	//TODO
+	class MyAccSelectionInteractorOutPort implements AccSelectionInteractor.OutPort
 	{
+		public AccountData selectedAccount;
+		public NewHierarchyParams params; 
+
+		
+		@Override
+		public void accept(List<AccountData> accounts)
+		{
+			selectedAccount = null;
+			
+			AccountTreeBuilder builder = new AccountTreeBuilder();
+			
+			for (AccountData account : accounts)
+			{
+				builder.addNodeFor(account);
+			}
+			
+			DefaultMutableTreeNode accountRoot = builder.getRoot();				
+			params = _view.promptForNewHierarchy(accountRoot);
+			
+			if (params != null)
+			{
+				if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
+				{
+					throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
+				}
+				
+				selectedAccount = (AccountData) params.parentNode.getUserObject();				
+			}
+		}
+		
 		@Override
 		public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 		{
@@ -50,14 +81,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		}
 	}
 	
-	AccSelectionInteractor.OutPort accSelectionResponse = new MyAccSelectionInteractorOutPort () 
-	{
-		@Override
-		public void accept(List<AccountData> accounts)
-		{
-			throw new ProgrammerError("nothing to do for now");
-		}
-	};	
+	MyAccSelectionInteractorOutPort accSelectionResponse = new MyAccSelectionInteractorOutPort();	
 	
 	
 	TxBrowseInteractor.OutPort txBrowseResponse = new TxBrowseInteractor.OutPort() 
@@ -170,50 +194,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		
 		return result.size() == 0 ? null : result.get(0);
 	}
-
-	NewHierarchyParams params; //TODO: fix me!!
 	
-	private AccountData selectAccRootForNewHierarchyFromTree()
-	{
-		final ArrayList<AccountData> result = new ArrayList<AccountData>();	
-		
-		AccSelectionInteractor.OutPort boundary = new MyAccSelectionInteractorOutPort()
-		{
-			@Override
-			public void accept(List<AccountData> accounts)
-			{
-				AccountTreeBuilder builder = new AccountTreeBuilder();
-				
-				for (AccountData account : accounts)
-				{
-					builder.addNodeFor(account);
-				}
-				
-				DefaultMutableTreeNode accountRoot = builder.getRoot();				
-				params = _view.promptForNewHierarchy(accountRoot);
-				
-				if (params != null)
-				{
-					if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
-					{
-						throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
-					}
-					
-					AccountData selectedAccount = (AccountData) params.parentNode.getUserObject();
-					
-					if(selectedAccount != null)
-					{
-						result.add(selectedAccount);
-					}
-				}
-			}
-		};
-
-		_interactors.accSelection(boundary).browseAccounts();
-
-		return result.size() == 0 ? null : result.get(0);
-	}
-
 	private List<AccountData> buildCandidateAccList(List<AccountData> theAccList)
 	{
 		ArrayList<AccountData> candidateAccs = new ArrayList<AccountData>();
@@ -355,12 +336,14 @@ public class MainWindowPresenter implements MainWindowRenderer
 	
 		try
 		{
-			AccountData selectedAccount = selectAccRootForNewHierarchyFromTree();
+			_interactors.accSelection(accSelectionResponse).browseAccounts();
+			
+			AccountData selectedAccount = accSelectionResponse.selectedAccount;
 			
 			if (selectedAccount != null)
 			{
 				_interactors.accHierarchyCreation().createNewAccountHierarchy(
-						selectedAccount, params.rootAccName, params.month,
+						selectedAccount, accSelectionResponse.params.rootAccName, accSelectionResponse.params.month,
 						_config.getMonthlyAccounts(), fileNameToSave);
 				
 			}
