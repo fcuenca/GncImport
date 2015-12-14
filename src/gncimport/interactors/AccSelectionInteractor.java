@@ -40,18 +40,6 @@ public class AccSelectionInteractor
 		_output = output;
 	}
 
-	public void setTargetHierarchy(AccountData acc) //TODO: inline & remove
-	{
-		_model.setTargetHierarchy(acc);	
-		_output.targetHierarchyHasBeenSet(acc.getName(), _model.getCandidateTargetAccounts());
-	}
-
-	public void setSourceAccount(AccountData acc) //TODO: inline & remove
-	{
-		_model.setSourceAccount(acc);	
-		_output.sourceAccHasBenSet(acc.getName());
-	}
-
 	public void selectSourceAccount()
 	{
 		List<AccountData> accounts = _model.getAccounts();
@@ -60,7 +48,8 @@ public class AccSelectionInteractor
 
 		if (selectedAccount != null)
 		{
-			setSourceAccount(selectedAccount);
+			_model.setSourceAccount(selectedAccount);	
+			_output.sourceAccHasBenSet(selectedAccount.getName());
 		}
 	}
 
@@ -72,7 +61,8 @@ public class AccSelectionInteractor
 
 		if (selectedAccount != null)
 		{
-			setTargetHierarchy(selectedAccount);
+			_model.setTargetHierarchy(selectedAccount);	
+			_output.targetHierarchyHasBeenSet(selectedAccount.getName(), _model.getCandidateTargetAccounts());
 		}
 	}
 

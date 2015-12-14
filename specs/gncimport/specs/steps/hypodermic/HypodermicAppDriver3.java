@@ -6,7 +6,6 @@ import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
-import gncimport.interactors.TxClassificationInteractor;
 import gncimport.models.AccountData;
 import gncimport.models.Month;
 import gncimport.models.MonthlyAccountParam;
@@ -24,6 +23,7 @@ public class HypodermicAppDriver3
 	private List<TxData> _txList;
 	private AccountData _targetHierarchyRoot;
 	private AccountData _sourceAccount;
+	private List<AccountData> _candidateAccList =  new ArrayList<AccountData>();
 
 	private TxBrowseInteractor.OutPort 	txBrowseOutput = new TxBrowseInteractor.OutPort()
 	{	
@@ -91,7 +91,7 @@ public class HypodermicAppDriver3
 			@Override
 			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 			{
-				//DO nothing for now
+				_candidateAccList = candidateAccList;
 			}
 
 			@Override
@@ -104,6 +104,7 @@ public class HypodermicAppDriver3
 			public AccountData selectAccount(List<AccountData> accounts)
 			{
 				_targetHierarchyRoot = findFirstAccWithNameInList(accountName, accounts);
+				_candidateAccList = new ArrayList<AccountData>();
 				return _targetHierarchyRoot;
 			}
 
@@ -154,37 +155,19 @@ public class HypodermicAppDriver3
 
 	public List<String> observedTagetHierarchyAccounts()
 	{
-		final List<String> accNames = new ArrayList<String>();
-		
-		TxClassificationInteractor.OutPort boundary = new TxClassificationInteractor.OutPort() 
-		{
-			@Override
-			public void accept(List<AccountData> accounts)
-			{								
-				addAccNamesToList(accounts, accNames);
-			}
-		};
-		
-		_interactors.txClassification(boundary).getCandidateTargetAccounts();
-		
+		List<String> accNames = new ArrayList<String>();
+
+		addAccNamesToList(_candidateAccList, accNames);
+
 		return accNames;
 	}
 
 	public List<String> observedParentsForTargetHierarchyAccounts()
 	{
-		final List<String> parentIds = new ArrayList<String>();
+		 List<String> parentIds = new ArrayList<String>();
 				
-		TxClassificationInteractor.OutPort boundary = new TxClassificationInteractor.OutPort() 
-		{
-			@Override
-			public void accept(List<AccountData> accounts)
-			{								
-				addParentIdsToList(accounts, parentIds);
-			}
-		};
+		addParentIdsToList(_candidateAccList, parentIds);
 		
-		_interactors.txClassification(boundary).getCandidateTargetAccounts();
-
 		return parentIds;
 	}
 
@@ -271,31 +254,12 @@ public class HypodermicAppDriver3
 	
 	public void setAccountForTransactionsMatching(final String accName, final String txDesc)
 	{
-		final ArrayList<AccountData> newAccount = new ArrayList<AccountData>();
-		
-		TxClassificationInteractor.OutPort boundary = new TxClassificationInteractor.OutPort() 
-		{
-			@Override
-			public void accept(List<AccountData> accounts)
-			{	
-				for (AccountData acc : accounts)
-				{
-					if(acc.getName().equals(accName))
-					{
-						newAccount.add(acc);
-						break;
-					}
-				}
-			}
-		};
-		
-		_interactors.txClassification(boundary).getCandidateTargetAccounts();
-		
+		AccountData newAccount = findFirstAccWithNameInList(accName, _candidateAccList);
 		for (TxData txData : _txList)
 		{
 			if(txData.description.matches(txDesc))
 			{
-				txData.targetAccount = newAccount.get(0);
+				txData.targetAccount = newAccount;
 			}
 		}
 	}

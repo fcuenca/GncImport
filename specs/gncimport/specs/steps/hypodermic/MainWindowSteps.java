@@ -217,6 +217,8 @@ public class MainWindowSteps
 		String rootId = app().observedIdForTargetHierarchyRoot();
 		List<String> parentIds = app().observedParentsForTargetHierarchyAccounts();
 
+		assertThat("no parents were found", parentIds.size(), is(not(0)));
+		
 		for (int i = 0; i < parentIds.size(); i++)
 		{
 			assertThat("mismatch at row: " + i, parentIds.get(i), is(rootId));
@@ -228,6 +230,8 @@ public class MainWindowSteps
 			throws Throwable
 	{
 		List<String> actualAccNames = app().observedAccountList();
+
+		assertThat("no accounts were observed", actualAccNames.size(), is(not(0)));
 
 		for (String accName : expecteAccNames)
 		{

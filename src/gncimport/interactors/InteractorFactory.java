@@ -26,18 +26,8 @@ public class InteractorFactory
 		return new AccSelectionInteractor(boundary, _model);
 	}
 
-	public TxClassificationInteractor txClassification(TxClassificationInteractor.OutPort boundary)
-	{
-		return new TxClassificationInteractor(boundary, _model);
-	}
-
 	public TxImportInteractor txImport()
 	{
 		return new TxImportInteractor(_model);
-	}
-
-	public AccHierarchyCreationInteractor accHierarchyCreation()
-	{
-		return new AccHierarchyCreationInteractor(_model);
 	}
 }
