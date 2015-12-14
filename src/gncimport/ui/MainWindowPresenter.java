@@ -2,6 +2,7 @@ package gncimport.ui;
 
 import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
+import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.interactors.TxImportInteractor;
@@ -26,6 +27,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	private final UIConfig _config;
 	
 	private final InteractorFactory _interactors;
+	private final CommandFactory _commands;
 
 	class CommandFactory
 	{		
@@ -70,14 +72,52 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		public SelectExpenseAccCommand selectExpenseAcc(AccountData newAcc, AccountData originalAcc)
 		{
-			// TODO Auto-generated method stub
 			return new SelectExpenseAccCommand(newAcc, originalAcc, _view, _interactors.accSelection(accSelectionResponse));
 		}
+
+		public CreateAccHierarchyCommand createAccHierarchy(String fileNameToSave)
+		{
+			return new CreateAccHierarchyCommand(fileNameToSave, _view, _config, _interactors.accSelection(accSelectionResponse));
+		}
+	}
+	
+	class CreateAccHierarchyCommand
+	{
+		private String _fileNameToSave;
+		private TxView _theView;
+		private AccSelectionInteractor _theInteractor;
+		private UIConfig _theConfig;
+
+		public CreateAccHierarchyCommand(String fileNameToSave, TxView view, UIConfig config, AccSelectionInteractor interactor)
+		{
+			this._fileNameToSave = fileNameToSave;
+			this._theView = view;
+			this._theConfig = config;
+			this._theInteractor = interactor;
+		}
+
+		public void execute()
+		{
+			if (_fileNameToSave == null || _fileNameToSave.trim().isEmpty())
+			{
+				_theView.displayErrorMessage("GNC file must be opened first!");
+				return;
+			}
+		
+			try
+			{				
+				 _theInteractor.createNewAccountHierarchy(_theConfig.getMonthlyAccounts(), _fileNameToSave);
+			}
+			catch (Exception e)
+			{
+				_theView.handleException(e);
+			}
+		}
+		
 	}
 	
 	class SelectExpenseAccCommand
 	{
-
 		private AccountData _newAcc;
 		private AccountData _originalAcc;
 		private TxView _theView;
@@ -117,7 +157,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 				return _originalAcc;
 			}
 		}
-		
 	}
 	
 	class SelectTargetAccCommand
@@ -142,7 +181,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 				_theView.handleException(e);
 			}			
 		}
-		
 	}
 	
 	class SelectSourceAccCommand
@@ -167,12 +205,10 @@ public class MainWindowPresenter implements MainWindowRenderer
 				_theView.handleException(e);
 			}			
 		}
-		
 	}
 	
 	class LoadGncCommand
 	{
-
 		private TxView _theView;
 		private UIConfig _theConfig;
 		private AccFileLoadInteractor _theInteractor;
@@ -207,12 +243,10 @@ public class MainWindowPresenter implements MainWindowRenderer
 				_theView.handleException(e);
 			}			
 		}
-		
 	}
 	
 	class SaveGncCommand
 	{
-
 		private String _fileName;
 		private TxView _theView;
 		private TxImportInteractor _theInteractor;
@@ -308,10 +342,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 			_theInteractor.filterTxList(lowerBound, upperBound);;
 		}
-		
 	}
 	
-	CommandFactory _commands;
 	
 	public MainWindowPresenter(TxImportModel model, TxView view, UIConfig config)
 	{
@@ -323,7 +355,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 		_commands = new CommandFactory(_view, _config);
 	}
 	
-	abstract class AccSelectionInteractorOutPort implements AccSelectionInteractor.OutPort
+			
+	AccSelectionInteractor.OutPort accSelectionResponse = new AccSelectionInteractor.OutPort() 
 	{
 		@Override
 		public AccountData accept2(List<AccountData> accounts)
@@ -339,15 +372,53 @@ public class MainWindowPresenter implements MainWindowRenderer
 			
 			return selectAccountFromTree(accountRoot);
 		}
+			
+
+		@Override
+		public NewHierarchyOpts accept3(List<AccountData> accounts)
+		{
+			AccountTreeBuilder builder = new AccountTreeBuilder();
+			
+			for (AccountData account : accounts)
+			{
+				builder.addNodeFor(account);
+			}
+			
+			DefaultMutableTreeNode accountRoot = builder.getRoot();		
+
+			NewHierarchyParams params = _view.promptForNewHierarchy(accountRoot);
+			
+			if (params != null)
+			{
+				if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
+				{
+					throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
+				}
+								
+				return new AccSelectionInteractor.NewHierarchyOpts((AccountData) params.parentNode.getUserObject(), params.rootAccName, params.month);
+			}
+			
+			return null;
+		}
 
 		@Override
 		public void accept(List<AccountData> accounts)
 		{	
 			throw new ProgrammerError("No longer needed - remove later!"); //TODO: remove and rename accept2
 		}
-
-		abstract protected AccountData selectAccountFromTree(DefaultMutableTreeNode accountRoot);
 		
+		private AccountData selectAccountFromTree(DefaultMutableTreeNode accountRoot)
+		{
+			DefaultMutableTreeNode selectedNode = _view.promptForAccount(accountRoot);
+
+			if (selectedNode != null)
+			{
+				return (AccountData) selectedNode.getUserObject();
+			}
+						
+			return null;
+		}
+	
 		@Override
 		public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 		{
@@ -359,53 +430,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 		public void sourceAccHasBenSet(String accName)
 		{
 			_view.displaySourceAccount(accName);
-		}
-	}
-		
-	class NewHierarchyAccSelectionOutPort extends AccSelectionInteractorOutPort
-	{
-		public NewHierarchyParams params; 
-
-		@Override
-		protected AccountData selectAccountFromTree(DefaultMutableTreeNode accountRoot)
-		{
-			params = _view.promptForNewHierarchy(accountRoot);
-			
-			if (params != null)
-			{
-				if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
-				{
-					throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
-				}
-				
-				return (AccountData) params.parentNode.getUserObject();				
-			}
-			
-			return null;
-		}		
-	}
-	
-	class SimpleAccSelectionOutPort extends AccSelectionInteractorOutPort
-	{
-
-		@Override
-		protected AccountData selectAccountFromTree(DefaultMutableTreeNode accountRoot)
-		{
-			DefaultMutableTreeNode selectedNode = _view.promptForAccount(accountRoot);
-
-			if (selectedNode != null)
-			{
-				return (AccountData) selectedNode.getUserObject();
-			}
-						
-			return null;
-		}
-	};	
-
-	
-	NewHierarchyAccSelectionOutPort newHierarchyAccSelectionResponse = new NewHierarchyAccSelectionOutPort();
-	
-	AccSelectionInteractorOutPort accSelectionResponse = new SimpleAccSelectionOutPort();
+		}	
+	};
 	
 	TxBrowseInteractor.OutPort txBrowseResponse = new TxBrowseInteractor.OutPort() 
 	{
@@ -482,7 +508,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onCreateNewAccHierarchy(String fileNameToSave)
 	{	
-		createAcc_execute(fileNameToSave, _view);
+		_commands.createAccHierarchy(fileNameToSave).execute();
 	}
 
 	// -- private utility funcs
@@ -497,37 +523,4 @@ public class MainWindowPresenter implements MainWindowRenderer
 		
 		return candidateAccs;
 	}	
-	
-
-	// -- data + view --
-	
-	private void createAcc_execute(String fileNameToSave, TxView txView)
-	{
-		if (fileNameToSave == null || fileNameToSave.trim().isEmpty())
-		{
-			txView.displayErrorMessage("GNC file must be opened first!");
-			return;
-		}
-	
-		try
-		{
-			AccountData selectedAccount =_interactors.accSelection(newHierarchyAccSelectionResponse).browseAccounts2();
-			
-			if (selectedAccount != null)
-			{
-				_interactors.accHierarchyCreation().createNewAccountHierarchy(
-						selectedAccount, 
-						newHierarchyAccSelectionResponse.params.rootAccName, 
-						newHierarchyAccSelectionResponse.params.month,
-						_config.getMonthlyAccounts(), 
-						fileNameToSave);
-				
-			}
-		}
-		catch (Exception e)
-		{
-			txView.handleException(e);
-		}
-	}
-
 }

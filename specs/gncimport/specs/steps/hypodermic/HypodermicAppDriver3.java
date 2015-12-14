@@ -3,6 +3,7 @@ package gncimport.specs.steps.hypodermic;
 import gncimport.GncImportApp;
 import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
+import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.interactors.TxClassificationInteractor;
@@ -120,6 +121,13 @@ public class HypodermicAppDriver3
 				// TODO Auto-generated method stub
 				return null;
 			}
+
+			@Override
+			public NewHierarchyOpts accept3(List<AccountData> accounts)
+			{
+				// TODO Auto-generated method stub
+				return null;
+			}
 		};
 		
 		_interactors.accSelection(boundary).browseAccounts();	
@@ -158,6 +166,13 @@ public class HypodermicAppDriver3
 
 			@Override
 			public AccountData accept2(List<AccountData> accounts)
+			{
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public NewHierarchyOpts accept3(List<AccountData> accounts)
 			{
 				// TODO Auto-generated method stub
 				return null;
@@ -229,6 +244,13 @@ public class HypodermicAppDriver3
 
 			@Override
 			public AccountData accept2(List<AccountData> accounts)
+			{
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public NewHierarchyOpts accept3(List<AccountData> accounts)
 			{
 				// TODO Auto-generated method stub
 				return null;
@@ -365,6 +387,13 @@ public class HypodermicAppDriver3
 
 			@Override
 			public AccountData accept2(List<AccountData> accounts)
+			{
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public NewHierarchyOpts accept3(List<AccountData> accounts)
 			{
 				// TODO Auto-generated method stub
 				return null;
