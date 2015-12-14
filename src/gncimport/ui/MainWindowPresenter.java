@@ -4,6 +4,7 @@ import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
+import gncimport.interactors.TxImportInteractor;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
@@ -41,6 +42,43 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			return new LoadCsvCommand(_theView, _theConfig, _interactors.txBrowse(txBrowseResponse));
 		}
+
+		public FilterTxListCommand filterTxList(Date fromDate, Date toDate)
+		{
+			return new FilterTxListCommand(fromDate, toDate, _interactors.txBrowse(txBrowseResponse));
+		}
+
+		public SaveGncCommand saveGnc(String fileName)
+		{
+			return new SaveGncCommand(fileName, _theView, _interactors.txImport());
+		}
+	}
+	
+	class SaveGncCommand
+	{
+
+		private String _fileName;
+		private TxView _theView;
+		private TxImportInteractor _theInteractor;
+
+		public SaveGncCommand(String fileName, TxView view, TxImportInteractor interactor)
+		{
+			this._fileName = fileName;
+			this._theView = view;
+			this._theInteractor = interactor;
+		}
+
+		public void execute()
+		{
+			try
+			{
+				_theInteractor.saveTxTo(_theView.getTxTableModel().getTransactions(), _fileName);
+			}
+			catch (Exception e)
+			{
+				_theView.handleException(e);
+			}
+		}		
 	}
 	
 	class LoadCsvCommand
@@ -81,6 +119,42 @@ public class MainWindowPresenter implements MainWindowRenderer
 		}
 	}
 
+	class FilterTxListCommand
+	{
+		private Date _fromDate;
+		private Date _toDate;
+		private TxBrowseInteractor _theInteractor;
+
+		public FilterTxListCommand(Date fromDate, Date toDate, TxBrowseInteractor interactor)
+		{
+			_fromDate = fromDate;
+			_toDate = toDate;
+			_theInteractor = interactor;
+		}
+
+		@SuppressWarnings("deprecation")
+		public void execute()
+		{	
+			Date lowerBound = _fromDate != null ? _fromDate : new Date(Long.MIN_VALUE);
+
+			Date upperBound = _toDate;
+			if (upperBound != null)
+			{
+				upperBound = (Date) _toDate.clone();
+				upperBound.setHours(23);
+				upperBound.setMinutes(59);
+				upperBound.setSeconds(59);
+			}
+			else
+			{
+				upperBound = new Date(Long.MAX_VALUE);
+			}
+
+			_theInteractor.filterTxList(lowerBound, upperBound);;
+		}
+		
+	}
+	
 	CommandFactory _commands;
 	
 	public MainWindowPresenter(TxImportModel model, TxView view, UIConfig config)
@@ -208,13 +282,13 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onFilterTxList(Date fromDate, Date toDate)
 	{
-		filter_execute(fromDate, toDate);				
+		_commands.filterTxList(fromDate, toDate).execute();				
 	}
 	
 	@Override
 	public void onSaveToGncFile(String fileName)
 	{
-		saveGnc_execute(fileName, _view);
+		_commands.saveGnc(fileName).execute();
 	}
 
 	@Override
@@ -258,29 +332,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 		candidateAccs.add(OTHER_ACC_PLACEHOLDER);
 		
 		return candidateAccs;
-	}
-
-	// -- data --
-	
-	@SuppressWarnings("deprecation")
-	private void filter_execute(Date fromDate, Date toDate)
-	{
-		Date lowerBound = fromDate != null ? fromDate : new Date(Long.MIN_VALUE);
-
-		Date upperBound = toDate;
-		if (upperBound != null)
-		{
-			upperBound = (Date) toDate.clone();
-			upperBound.setHours(23);
-			upperBound.setMinutes(59);
-			upperBound.setSeconds(59);
-		}
-		else
-		{
-			upperBound = new Date(Long.MAX_VALUE);
-		}
-
-		_interactors.txBrowse(txBrowseResponse).filterTxList(lowerBound, upperBound);;
 	}
 
 	// -- view --
@@ -348,18 +399,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 	// -- data + view --
 	
-	private void saveGnc_execute(String fileName, TxView txView)
-	{
-		try
-		{
-			_interactors.txImport().saveTxTo(txView.getTxTableModel().getTransactions(), fileName);
-		}
-		catch (Exception e)
-		{
-			txView.handleException(e);
-		}
-	}
-
 	private void createAcc_execute(String fileNameToSave, TxView txView)
 	{
 		if (fileNameToSave == null || fileNameToSave.trim().isEmpty())
