@@ -26,12 +26,71 @@ public class MainWindowPresenter implements MainWindowRenderer
 	
 	private final InteractorFactory _interactors;
 
+	class CommandFactory
+	{		
+		private TxView _theView;
+		private UIConfig _theConfig;
+
+		public CommandFactory(TxView view, UIConfig config)
+		{
+			this._theView = view;
+			this._theConfig = config;
+		}
+		
+		public LoadCsvCommand loadCsv()
+		{
+			return new LoadCsvCommand(_theView, _theConfig, _interactors.txBrowse(txBrowseResponse));
+		}
+	}
+	
+	class LoadCsvCommand
+	{		
+		private TxView _theView;
+		private UIConfig _theConfig;
+		private TxBrowseInteractor _theInteractor;
+
+		public LoadCsvCommand(TxView view, UIConfig config, TxBrowseInteractor interactor)
+		{
+			_theView = view;
+			_theConfig = config;
+			_theInteractor = interactor;
+		}
+
+		public void execute()
+		{
+			try
+			{
+				String lastDir = _theConfig.getLastCsvDirectory();
+				
+				if(lastDir == null || lastDir.isEmpty())
+				{
+					lastDir = System.getProperty("user.home");
+				}
+				
+				final String fileName = _theView.promptForFile(lastDir);
+				
+				if (fileName != null)
+				{					
+					_theInteractor.fetchTransactions(fileName);				
+				}
+			}
+			catch (Exception e)
+			{
+				_theView.handleException(e);
+			}
+		}
+	}
+
+	CommandFactory _commands;
+	
 	public MainWindowPresenter(TxImportModel model, TxView view, UIConfig config)
 	{
 		this._interactors = new InteractorFactory(model);
 
 		this._view = view;
 		this._config = config;
+		
+		_commands = new CommandFactory(_view, _config);
 	}
 	
 	abstract class AccSelectionInteractorOutPort implements AccSelectionInteractor.OutPort
@@ -94,7 +153,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	
 	NewHierarchyAccSelectionOutPort newHierarchyAccSelectionResponse = new NewHierarchyAccSelectionOutPort();
 	
-	AccSelectionInteractorOutPort accSelecionResponse = new AccSelectionInteractorOutPort() {
+	AccSelectionInteractorOutPort accSelectionResponse = new AccSelectionInteractorOutPort() {
 
 		@Override
 		protected AccountData selectAccountFromTree(DefaultMutableTreeNode accountRoot)
@@ -143,7 +202,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onReadFromCsvFile()
 	{
-		loadCsv_execute(_view);
+		_commands.loadCsv().execute();
 	}
 	
 	@Override
@@ -230,13 +289,13 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		try
 		{
-			_interactors.accSelection(accSelecionResponse).browseAccounts();
+			_interactors.accSelection(accSelectionResponse).browseAccounts();
 			
-			AccountData selectedAccount = accSelecionResponse.selectedAccount;
+			AccountData selectedAccount = accSelectionResponse.selectedAccount;
 
 			if (selectedAccount != null)
 			{
-				_interactors.accSelection(accSelecionResponse).setSourceAccount(selectedAccount);
+				_interactors.accSelection(accSelectionResponse).setSourceAccount(selectedAccount);
 			}
 		}
 		catch (Exception e)
@@ -249,12 +308,12 @@ public class MainWindowPresenter implements MainWindowRenderer
 	{
 		try
 		{
-			_interactors.accSelection(accSelecionResponse).browseAccounts();
-			AccountData selectedAccount = accSelecionResponse.selectedAccount;
+			_interactors.accSelection(accSelectionResponse).browseAccounts();
+			AccountData selectedAccount = accSelectionResponse.selectedAccount;
 			
 			if (selectedAccount != null)
 			{
-				_interactors.accSelection(accSelecionResponse).setTargetHierarchy(selectedAccount);
+				_interactors.accSelection(accSelectionResponse).setTargetHierarchy(selectedAccount);
 			}
 		}
 		catch (Exception e)
@@ -262,31 +321,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 			txView.handleException(e);
 		}
 	}
-
-	private void loadCsv_execute(TxView txView)
-	{
-		try
-		{
-			String lastDir = _config.getLastCsvDirectory();
-			
-			if(lastDir == null || lastDir.isEmpty())
-			{
-				lastDir = System.getProperty("user.home");
-			}
-			
-			final String fileName = txView.promptForFile(lastDir);
-			
-			if (fileName != null)
-			{					
-				_interactors.txBrowse(txBrowseResponse).fetchTransactions(fileName);				
-			}
-		}
-		catch (Exception e)
-		{
-			txView.handleException(e);
-		}
-	}
-
+	
 	private  void loadGnc_execute(TxView txView)
 	{
 		try
@@ -365,8 +400,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		try
 		{
-			_interactors.accSelection(accSelecionResponse).browseAccounts();
-			AccountData selectedAcc = accSelecionResponse.selectedAccount;
+			_interactors.accSelection(accSelectionResponse).browseAccounts();
+			AccountData selectedAcc = accSelectionResponse.selectedAccount;
 
 			if (selectedAcc != null)
 			{
