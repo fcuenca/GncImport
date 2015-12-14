@@ -67,6 +67,57 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			return new SelectTargetAccCommand(_view, _interactors.accSelection(accSelectionResponse));
 		}
+
+		public SelectExpenseAccCommand selectExpenseAcc(AccountData newAcc, AccountData originalAcc)
+		{
+			// TODO Auto-generated method stub
+			return new SelectExpenseAccCommand(newAcc, originalAcc, _view, _interactors.accSelection(accSelectionResponse));
+		}
+	}
+	
+	class SelectExpenseAccCommand
+	{
+
+		private AccountData _newAcc;
+		private AccountData _originalAcc;
+		private TxView _theView;
+		private AccSelectionInteractor _theInteractor;
+
+		public SelectExpenseAccCommand(AccountData newAcc, AccountData originalAcc, TxView view, AccSelectionInteractor interactor)
+		{
+			this._newAcc = newAcc;
+			this._originalAcc = originalAcc;
+			this._theView = view;
+			this._theInteractor = interactor;
+		}
+
+		public AccountData execute()
+		{
+			if (!_newAcc.equals(OTHER_ACC_PLACEHOLDER))
+			{
+				return _newAcc;
+			}
+
+			try
+			{				
+				AccountData selectedAcc = _theInteractor.browseAccounts2();
+
+				if (selectedAcc != null)
+				{
+					return selectedAcc;
+				}
+				else
+				{
+					return _originalAcc;
+				}
+			}
+			catch (Exception e)
+			{
+				_theView.handleException(e);
+				return _originalAcc;
+			}
+		}
+		
 	}
 	
 	class SelectTargetAccCommand
@@ -274,8 +325,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 	
 	abstract class AccSelectionInteractorOutPort implements AccSelectionInteractor.OutPort
 	{
-		public AccountData selectedAccount;
-		
 		@Override
 		public AccountData accept2(List<AccountData> accounts)
 		{
@@ -293,17 +342,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		@Override
 		public void accept(List<AccountData> accounts)
-		{			
-			AccountTreeBuilder builder = new AccountTreeBuilder();
-			
-			for (AccountData account : accounts)
-			{
-				builder.addNodeFor(account);
-			}
-			
-			DefaultMutableTreeNode accountRoot = builder.getRoot();		
-			
-			selectedAccount = selectAccountFromTree(accountRoot);
+		{	
+			throw new ProgrammerError("No longer needed - remove later!"); //TODO: remove and rename accept2
 		}
 
 		abstract protected AccountData selectAccountFromTree(DefaultMutableTreeNode accountRoot);
@@ -436,7 +476,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc)
 	{
-		return accSelection_execute(newAcc, originalAcc, _view);
+		return _commands.selectExpenseAcc(newAcc, originalAcc).execute();
 	}
 
 	@Override
@@ -471,9 +511,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	
 		try
 		{
-			_interactors.accSelection(newHierarchyAccSelectionResponse).browseAccounts();
-			
-			AccountData selectedAccount = newHierarchyAccSelectionResponse.selectedAccount;
+			AccountData selectedAccount =_interactors.accSelection(newHierarchyAccSelectionResponse).browseAccounts2();
 			
 			if (selectedAccount != null)
 			{
@@ -489,34 +527,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 		catch (Exception e)
 		{
 			txView.handleException(e);
-		}
-	}
-
-	private AccountData accSelection_execute(AccountData newAcc, AccountData originalAcc, TxView txView)
-	{
-		if (!newAcc.equals(OTHER_ACC_PLACEHOLDER))
-		{
-			return newAcc;
-		}
-
-		try
-		{
-			_interactors.accSelection(accSelectionResponse).browseAccounts();
-			AccountData selectedAcc = accSelectionResponse.selectedAccount;
-
-			if (selectedAcc != null)
-			{
-				return selectedAcc;
-			}
-			else
-			{
-				return originalAcc;
-			}
-		}
-		catch (Exception e)
-		{
-			txView.handleException(e);
-			return originalAcc;
 		}
 	}
 

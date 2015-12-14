@@ -67,4 +67,10 @@ public class AccSelectionInteractor
 		
 	}
 
+	public AccountData browseAccounts2()
+	{
+		List<AccountData> accounts = _model.getAccounts();
+		return _output.accept2(accounts);
+	}
+
 }
