@@ -113,6 +113,13 @@ public class HypodermicAppDriver3
 			{
 				//Do nothing for now
 			}
+
+			@Override
+			public AccountData accept2(List<AccountData> accounts)
+			{
+				// TODO Auto-generated method stub
+				return null;
+			}
 		};
 		
 		_interactors.accSelection(boundary).browseAccounts();	
@@ -147,6 +154,13 @@ public class HypodermicAppDriver3
 			public void sourceAccHasBenSet(String accName)
 			{
 				//Do nothing for now
+			}
+
+			@Override
+			public AccountData accept2(List<AccountData> accounts)
+			{
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 		
@@ -211,6 +225,13 @@ public class HypodermicAppDriver3
 			public void sourceAccHasBenSet(String accName)
 			{
 				//Do nothing for now
+			}
+
+			@Override
+			public AccountData accept2(List<AccountData> accounts)
+			{
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 
@@ -340,6 +361,13 @@ public class HypodermicAppDriver3
 			public void sourceAccHasBenSet(String accName)
 			{
 				//Do nothing for now				
+			}
+
+			@Override
+			public AccountData accept2(List<AccountData> accounts)
+			{
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 		

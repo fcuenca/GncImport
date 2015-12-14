@@ -57,6 +57,66 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			return new SaveGncCommand(fileName, _theView, _interactors.txImport());
 		}
+
+		public SelectSourceAccCommand selectSourceAcc()
+		{
+			return new SelectSourceAccCommand(_view, _interactors.accSelection(accSelectionResponse));
+		}
+
+		public SelectTargetAccCommand selectTargetAcc()
+		{
+			return new SelectTargetAccCommand(_view, _interactors.accSelection(accSelectionResponse));
+		}
+	}
+	
+	class SelectTargetAccCommand
+	{
+		private TxView _theView;
+		private AccSelectionInteractor _theInteractor;
+
+		public SelectTargetAccCommand(TxView view, AccSelectionInteractor interactor)
+		{
+			this._theView = view;
+			this._theInteractor = interactor;
+		}
+
+		public void execute()
+		{
+			try
+			{
+				_theInteractor.selectTargetAccount();				
+			}
+			catch (Exception e)
+			{
+				_theView.handleException(e);
+			}			
+		}
+		
+	}
+	
+	class SelectSourceAccCommand
+	{
+		private TxView _theView;
+		private AccSelectionInteractor _theInteractor;
+
+		public SelectSourceAccCommand(TxView view, AccSelectionInteractor interactor)
+		{
+			this._theView = view;
+			this._theInteractor = interactor;
+		}
+
+		public void execute()
+		{
+			try
+			{
+				_theInteractor.selectSourceAccount();
+			}
+			catch (Exception e)
+			{
+				_theView.handleException(e);
+			}			
+		}
+		
 	}
 	
 	class LoadGncCommand
@@ -217,6 +277,21 @@ public class MainWindowPresenter implements MainWindowRenderer
 		public AccountData selectedAccount;
 		
 		@Override
+		public AccountData accept2(List<AccountData> accounts)
+		{
+			AccountTreeBuilder builder = new AccountTreeBuilder();
+			
+			for (AccountData account : accounts)
+			{
+				builder.addNodeFor(account);
+			}
+			
+			DefaultMutableTreeNode accountRoot = builder.getRoot();		
+			
+			return selectAccountFromTree(accountRoot);
+		}
+
+		@Override
 		public void accept(List<AccountData> accounts)
 		{			
 			AccountTreeBuilder builder = new AccountTreeBuilder();
@@ -246,7 +321,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 			_view.displaySourceAccount(accName);
 		}
 	}
-	
+		
 	class NewHierarchyAccSelectionOutPort extends AccSelectionInteractorOutPort
 	{
 		public NewHierarchyParams params; 
@@ -270,9 +345,8 @@ public class MainWindowPresenter implements MainWindowRenderer
 		}		
 	}
 	
-	NewHierarchyAccSelectionOutPort newHierarchyAccSelectionResponse = new NewHierarchyAccSelectionOutPort();
-	
-	AccSelectionInteractorOutPort accSelectionResponse = new AccSelectionInteractorOutPort() {
+	class SimpleAccSelectionOutPort extends AccSelectionInteractorOutPort
+	{
 
 		@Override
 		protected AccountData selectAccountFromTree(DefaultMutableTreeNode accountRoot)
@@ -287,6 +361,11 @@ public class MainWindowPresenter implements MainWindowRenderer
 			return null;
 		}
 	};	
+
+	
+	NewHierarchyAccSelectionOutPort newHierarchyAccSelectionResponse = new NewHierarchyAccSelectionOutPort();
+	
+	AccSelectionInteractorOutPort accSelectionResponse = new SimpleAccSelectionOutPort();
 	
 	TxBrowseInteractor.OutPort txBrowseResponse = new TxBrowseInteractor.OutPort() 
 	{
@@ -345,13 +424,13 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onSelectSourceAccount()
 	{
-		selectSource_execute(_view);
+		_commands.selectSourceAcc().execute();
 	}
 
 	@Override
 	public void onSelectTargetHierarchy()
 	{
-		selectTarget_execute(_view);
+		_commands.selectTargetAcc().execute();
 	}
 
 	@Override
@@ -377,47 +456,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		candidateAccs.add(OTHER_ACC_PLACEHOLDER);
 		
 		return candidateAccs;
-	}
-
-	// -- view --
-	
-	private void selectSource_execute(TxView txView)
-	{		
-		try
-		{
-			_interactors.accSelection(accSelectionResponse).browseAccounts();
-			
-			AccountData selectedAccount = accSelectionResponse.selectedAccount;
-
-			if (selectedAccount != null)
-			{
-				_interactors.accSelection(accSelectionResponse).setSourceAccount(selectedAccount);
-			}
-		}
-		catch (Exception e)
-		{
-			txView.handleException(e);
-		}
-	}
-
-	private void selectTarget_execute(TxView txView)
-	{
-		try
-		{
-			_interactors.accSelection(accSelectionResponse).browseAccounts();
-			AccountData selectedAccount = accSelectionResponse.selectedAccount;
-			
-			if (selectedAccount != null)
-			{
-				_interactors.accSelection(accSelectionResponse).setTargetHierarchy(selectedAccount);
-			}
-		}
-		catch (Exception e)
-		{
-			txView.handleException(e);
-		}
-	}
-	
+	}	
 	
 
 	// -- data + view --

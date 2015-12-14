@@ -9,6 +9,7 @@ public class AccSelectionInteractor
 {
 	public interface OutPort
 	{
+		AccountData accept2(List<AccountData> accounts); //TODO
 		void accept(List<AccountData> accounts);
 		void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList);
 		void sourceAccHasBenSet(String accName);
@@ -39,6 +40,31 @@ public class AccSelectionInteractor
 	{
 		_model.setSourceAccount(acc);	
 		_output.sourceAccHasBenSet(acc.getName());
+	}
+
+	public void selectSourceAccount()
+	{
+		List<AccountData> accounts = _model.getAccounts();
+				
+		AccountData selectedAccount = _output.accept2(accounts);
+
+		if (selectedAccount != null)
+		{
+			setSourceAccount(selectedAccount);
+		}
+	}
+
+	public void selectTargetAccount()
+	{
+		List<AccountData> accounts = _model.getAccounts();
+		
+		AccountData selectedAccount = _output.accept2(accounts);
+
+		if (selectedAccount != null)
+		{
+			setTargetHierarchy(selectedAccount);
+		}
+		
 	}
 
 }
