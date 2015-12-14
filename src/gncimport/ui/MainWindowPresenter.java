@@ -140,7 +140,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 			try
 			{				
-				AccountData selectedAcc = _theInteractor.browseAccounts2();
+				AccountData selectedAcc = _theInteractor.browseAccounts();
 
 				if (selectedAcc != null)
 				{
@@ -359,34 +359,23 @@ public class MainWindowPresenter implements MainWindowRenderer
 	AccSelectionInteractor.OutPort accSelectionResponse = new AccSelectionInteractor.OutPort() 
 	{
 		@Override
-		public AccountData accept2(List<AccountData> accounts)
+		public AccountData selectAccount(List<AccountData> accounts)
 		{
-			AccountTreeBuilder builder = new AccountTreeBuilder();
+			DefaultMutableTreeNode selectedNode = _view.promptForAccount(getRootNode(accounts));
 			
-			for (AccountData account : accounts)
+			if (selectedNode != null)
 			{
-				builder.addNodeFor(account);
+				return (AccountData) selectedNode.getUserObject();
 			}
-			
-			DefaultMutableTreeNode accountRoot = builder.getRoot();		
-			
-			return selectAccountFromTree(accountRoot);
+						
+			return null;
 		}
-			
+
 
 		@Override
-		public NewHierarchyOpts accept3(List<AccountData> accounts)
+		public NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts)
 		{
-			AccountTreeBuilder builder = new AccountTreeBuilder();
-			
-			for (AccountData account : accounts)
-			{
-				builder.addNodeFor(account);
-			}
-			
-			DefaultMutableTreeNode accountRoot = builder.getRoot();		
-
-			NewHierarchyParams params = _view.promptForNewHierarchy(accountRoot);
+			NewHierarchyParams params = _view.promptForNewHierarchy(getRootNode(accounts));
 			
 			if (params != null)
 			{
@@ -407,18 +396,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 			throw new ProgrammerError("No longer needed - remove later!"); //TODO: remove and rename accept2
 		}
 		
-		private AccountData selectAccountFromTree(DefaultMutableTreeNode accountRoot)
-		{
-			DefaultMutableTreeNode selectedNode = _view.promptForAccount(accountRoot);
-
-			if (selectedNode != null)
-			{
-				return (AccountData) selectedNode.getUserObject();
-			}
-						
-			return null;
-		}
-	
 		@Override
 		public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 		{
@@ -430,6 +407,18 @@ public class MainWindowPresenter implements MainWindowRenderer
 		public void sourceAccHasBenSet(String accName)
 		{
 			_view.displaySourceAccount(accName);
+		}	
+
+		private DefaultMutableTreeNode getRootNode(List<AccountData> accounts)
+		{
+			AccountTreeBuilder builder = new AccountTreeBuilder();
+			
+			for (AccountData account : accounts)
+			{
+				builder.addNodeFor(account);
+			}
+			
+			return builder.getRoot();
 		}	
 	};
 	
