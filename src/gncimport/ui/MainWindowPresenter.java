@@ -43,6 +43,11 @@ public class MainWindowPresenter implements MainWindowRenderer
 			return new LoadCsvCommand(_theView, _theConfig, _interactors.txBrowse(txBrowseResponse));
 		}
 
+		public LoadGncCommand loadGnc()
+		{
+			return new LoadGncCommand(_view, _config, _interactors.accFileLoad(accFileLoadReponse));
+		}
+
 		public FilterTxListCommand filterTxList(Date fromDate, Date toDate)
 		{
 			return new FilterTxListCommand(fromDate, toDate, _interactors.txBrowse(txBrowseResponse));
@@ -52,6 +57,46 @@ public class MainWindowPresenter implements MainWindowRenderer
 		{
 			return new SaveGncCommand(fileName, _theView, _interactors.txImport());
 		}
+	}
+	
+	class LoadGncCommand
+	{
+
+		private TxView _theView;
+		private UIConfig _theConfig;
+		private AccFileLoadInteractor _theInteractor;
+
+		public LoadGncCommand(TxView view, UIConfig config, AccFileLoadInteractor interactor)
+		{
+			this._theView = view;
+			this._theConfig = config;
+			this._theInteractor = interactor;
+		}
+
+		public void execute()
+		{
+			try
+			{
+				String lastGncDirectory = _theConfig.getLastGncDirectory();
+				
+				if(lastGncDirectory == null || lastGncDirectory.isEmpty())
+				{
+					lastGncDirectory = System.getProperty("user.home");
+				}
+				
+				String fileName = _theView.promptForFile(lastGncDirectory);
+				
+				if (fileName != null)
+				{
+					_theInteractor.openGncFile(fileName);
+				}
+			}
+			catch (Exception e)
+			{
+				_theView.handleException(e);
+			}			
+		}
+		
 	}
 	
 	class SaveGncCommand
@@ -294,7 +339,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onLoadGncFile()
 	{
-		loadGnc_execute(_view);
+		_commands.loadGnc().execute();
 	}
 	
 	@Override
@@ -337,7 +382,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	// -- view --
 	
 	private void selectSource_execute(TxView txView)
-	{
+	{		
 		try
 		{
 			_interactors.accSelection(accSelectionResponse).browseAccounts();
@@ -373,29 +418,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		}
 	}
 	
-	private  void loadGnc_execute(TxView txView)
-	{
-		try
-		{
-			String lastGncDirectory = _config.getLastGncDirectory();
-			
-			if(lastGncDirectory == null || lastGncDirectory.isEmpty())
-			{
-				lastGncDirectory = System.getProperty("user.home");
-			}
-			
-			String fileName = txView.promptForFile(lastGncDirectory);
-			
-			if (fileName != null)
-			{
-				_interactors.accFileLoad(accFileLoadReponse).openGncFile(fileName);
-			}
-		}
-		catch (Exception e)
-		{
-			txView.handleException(e);
-		}
-	}
+	
 
 	// -- data + view --
 	
