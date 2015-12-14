@@ -89,21 +89,6 @@ public class HypodermicAppDriver3
 		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
 		{
 			@Override
-			public void accept(List<AccountData> accounts)
-			{
-				_targetHierarchyRoot = findFirstAccWithNameInList(accountName, accounts);
-				
-				if(_targetHierarchyRoot != null)
-				{
-					_interactors.accSelection(this).setTargetHierarchy(_targetHierarchyRoot);
-				}
-				else
-				{
-					throw new RuntimeException("Target Hierarchy not found: " + accountName);
-				}	
-			}
-
-			@Override
 			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 			{
 				//DO nothing for now
@@ -118,8 +103,8 @@ public class HypodermicAppDriver3
 			@Override
 			public AccountData selectAccount(List<AccountData> accounts)
 			{
-				// TODO Auto-generated method stub
-				return null;
+				_targetHierarchyRoot = findFirstAccWithNameInList(accountName, accounts);
+				return _targetHierarchyRoot;
 			}
 
 			@Override
@@ -130,28 +115,13 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_interactors.accSelection(boundary).browseAccounts_OLD();	
+		_interactors.accSelection(boundary).selectTargetAccount();	
 	}
 
 	public void selectSourceAccount(final String accountName)
 	{
 		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
 		{
-			@Override
-			public void accept(List<AccountData> accounts)
-			{				
-				_sourceAccount = findFirstAccWithNameInList(accountName, accounts);
-
-				if(_sourceAccount != null)
-				{
-					_interactors.accSelection(this).setSourceAccount(_sourceAccount);
-				}
-				else
-				{
-					throw new RuntimeException("Source Hierarchy not found: " + accountName);
-				}		
-			}
-
 			@Override
 			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 			{
@@ -167,8 +137,8 @@ public class HypodermicAppDriver3
 			@Override
 			public AccountData selectAccount(List<AccountData> accounts)
 			{
-				// TODO Auto-generated method stub
-				return null;
+				_sourceAccount = findFirstAccWithNameInList(accountName, accounts);
+				return _sourceAccount;
 			}
 
 			@Override
@@ -179,7 +149,7 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_interactors.accSelection(boundary).browseAccounts_OLD();
+		_interactors.accSelection(boundary).selectSourceAccount();
 	}
 
 	public List<String> observedTagetHierarchyAccounts()
@@ -225,12 +195,6 @@ public class HypodermicAppDriver3
 		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
 		{
 			@Override
-			public void accept(List<AccountData> accounts)
-			{			
-				addAccNamesToList(accounts, accNames);
-			}
-
-			@Override
 			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 			{
 				// Do nothing for now
@@ -245,7 +209,7 @@ public class HypodermicAppDriver3
 			@Override
 			public AccountData selectAccount(List<AccountData> accounts)
 			{
-				// TODO Auto-generated method stub
+				addAccNamesToList(accounts, accNames);
 				return null;
 			}
 
@@ -257,7 +221,7 @@ public class HypodermicAppDriver3
 			}
 		};
 
-		_interactors.accSelection(boundary).browseAccounts_OLD();
+		_interactors.accSelection(boundary).browseAccounts();
 
 		return accNames;
 	}
@@ -352,27 +316,11 @@ public class HypodermicAppDriver3
 		_interactors.txBrowse(txBrowseOutput).filterTxList(start, end);
 	}
 
-	public void createAccounts(String month, final List<String> pathToParentAcc,
-			String newAccName, List<MonthlyAccountParam> subAccountList, String fileNameToSave)
+	public void createAccounts(final String month, final List<String> pathToParentAcc,
+			final String newAccName, List<MonthlyAccountParam> subAccountList, String fileNameToSave)
 	{
-		final ArrayList<AccountData> parentAcc = new ArrayList<AccountData>();
 		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
 		{
-			@Override
-			public void accept(List<AccountData> accounts)
-			{
-				AccountData parent = findLastSubAccountInChain(pathToParentAcc, accounts);
-				
-				if(parent != null)
-				{
-					parentAcc.add(parent);
-				}
-				else
-				{
-					throw new RuntimeException("Parent Account not found: " + pathToParentAcc);
-				}	
-			}
-
 			@Override
 			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 			{
@@ -388,21 +336,18 @@ public class HypodermicAppDriver3
 			@Override
 			public AccountData selectAccount(List<AccountData> accounts)
 			{
-				// TODO Auto-generated method stub
-				return null;
+				return null; // not used here
 			}
 
 			@Override
 			public NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts)
 			{
-				// TODO Auto-generated method stub
-				return null;
+				AccountData parent = findLastSubAccountInChain(pathToParentAcc, accounts);
+				return new NewHierarchyOpts(parent, newAccName, new Month(month));
 			}
 		};
 		
-		_interactors.accSelection(boundary).browseAccounts_OLD();			
-		_interactors.accHierarchyCreation().createNewAccountHierarchy(
-				parentAcc.get(0), newAccName, new Month(month), subAccountList, fileNameToSave);
+		_interactors.accSelection(boundary).createNewAccountHierarchy(subAccountList, fileNameToSave);
 	}
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)

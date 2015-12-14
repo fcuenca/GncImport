@@ -29,8 +29,6 @@ public class AccSelectionInteractor
 		NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts); 
 		void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList);
 		void sourceAccHasBenSet(String accName);
-
-		void accept(List<AccountData> accounts); //TODO: remove once specs are fixed!!
 	}
 
 	private TxImportModel _model;
@@ -40,12 +38,6 @@ public class AccSelectionInteractor
 	{
 		_model = model;
 		_output = output;
-	}
-
-	public void browseAccounts_OLD() //TODO: remove
-	{
-		List<AccountData> accounts = _model.getAccounts();
-		_output.accept(accounts);
 	}
 
 	public void setTargetHierarchy(AccountData acc) //TODO: inline & remove

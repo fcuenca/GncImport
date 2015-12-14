@@ -391,12 +391,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 		}
 
 		@Override
-		public void accept(List<AccountData> accounts)
-		{	
-			throw new ProgrammerError("No longer needed - remove later!"); //TODO: remove and rename accept2
-		}
-		
-		@Override
 		public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 		{
 			_view.displayTargetHierarchy(accName);	
