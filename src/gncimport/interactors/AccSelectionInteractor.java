@@ -28,7 +28,7 @@ public class AccSelectionInteractor
 		AccountData selectAccount(List<AccountData> accounts);
 		NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts); 
 		void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList);
-		void sourceAccHasBenSet(String accName);
+		void sourceAccHasBeenSet(String accName);
 	}
 
 	private TxImportModel _model;
@@ -49,7 +49,7 @@ public class AccSelectionInteractor
 		if (selectedAccount != null)
 		{
 			_model.setSourceAccount(selectedAccount);	
-			_output.sourceAccHasBenSet(selectedAccount.getName());
+			_output.sourceAccHasBeenSet(selectedAccount.getName());
 		}
 	}
 

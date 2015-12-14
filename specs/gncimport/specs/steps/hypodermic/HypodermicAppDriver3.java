@@ -11,6 +11,7 @@ import gncimport.models.Month;
 import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
+import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,35 @@ public class HypodermicAppDriver3
 	private List<TxData> _txList;
 	private AccountData _targetHierarchyRoot;
 	private AccountData _sourceAccount;
-	private List<AccountData> _candidateAccList =  new ArrayList<AccountData>();
+	private List<AccountData> _candidateAccList;
+
+	class AccSelectionOutput implements AccSelectionInteractor.OutPort
+	{
+		@Override
+		public void sourceAccHasBeenSet(String accName)
+		{
+			// not used here
+		}
+		
+		@Override
+		public NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts)
+		{
+			throw new ProgrammerError("overriden in subclasses");
+		}
+
+		@Override
+		public AccountData selectAccount(List<AccountData> accounts)
+		{
+			throw new ProgrammerError("overriden in subclasses");
+		}
+
+		@Override
+		public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
+		{	
+			throw new ProgrammerError("overriden in subclasses");
+		}
+	}
+
 
 	private TxBrowseInteractor.OutPort 	txBrowseOutput = new TxBrowseInteractor.OutPort()
 	{	
@@ -36,7 +65,7 @@ public class HypodermicAppDriver3
 		@Override
 		public void fileWasOpened(String fileName)
 		{
-			//do nothing here
+			//not used here
 		}
 	};
 	
@@ -83,10 +112,10 @@ public class HypodermicAppDriver3
 	{
 		return _txList;
 	}
-
+	
 	public void selectTargetAccHierarchy(final String accountName)
 	{		
-		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
+		AccSelectionInteractor.OutPort boundary = new AccSelectionOutput() 
 		{
 			@Override
 			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
@@ -95,24 +124,11 @@ public class HypodermicAppDriver3
 			}
 
 			@Override
-			public void sourceAccHasBenSet(String accName)
-			{
-				//Do nothing for now
-			}
-
-			@Override
 			public AccountData selectAccount(List<AccountData> accounts)
 			{
 				_targetHierarchyRoot = findFirstAccWithNameInList(accountName, accounts);
-				_candidateAccList = new ArrayList<AccountData>();
+				_candidateAccList = null;
 				return _targetHierarchyRoot;
-			}
-
-			@Override
-			public NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts)
-			{
-				// TODO Auto-generated method stub
-				return null;
 			}
 		};
 		
@@ -121,32 +137,13 @@ public class HypodermicAppDriver3
 
 	public void selectSourceAccount(final String accountName)
 	{
-		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
+		AccSelectionInteractor.OutPort boundary = new AccSelectionOutput() 
 		{
-			@Override
-			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
-			{
-				// Do nothing for now
-			}
-
-			@Override
-			public void sourceAccHasBenSet(String accName)
-			{
-				//Do nothing for now
-			}
-
 			@Override
 			public AccountData selectAccount(List<AccountData> accounts)
 			{
 				_sourceAccount = findFirstAccWithNameInList(accountName, accounts);
 				return _sourceAccount;
-			}
-
-			@Override
-			public NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts)
-			{
-				// TODO Auto-generated method stub
-				return null;
 			}
 		};
 		
@@ -175,31 +172,12 @@ public class HypodermicAppDriver3
 	{
 		final ArrayList<String> accNames = new ArrayList<String>();
 
-		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
+		AccSelectionInteractor.OutPort boundary = new AccSelectionOutput() 
 		{
-			@Override
-			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
-			{
-				// Do nothing for now
-			}
-
-			@Override
-			public void sourceAccHasBenSet(String accName)
-			{
-				//Do nothing for now
-			}
-
 			@Override
 			public AccountData selectAccount(List<AccountData> accounts)
 			{
 				addAccNamesToList(accounts, accNames);
-				return null;
-			}
-
-			@Override
-			public NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts)
-			{
-				// TODO Auto-generated method stub
 				return null;
 			}
 		};
@@ -283,26 +261,8 @@ public class HypodermicAppDriver3
 	public void createAccounts(final String month, final List<String> pathToParentAcc,
 			final String newAccName, List<MonthlyAccountParam> subAccountList, String fileNameToSave)
 	{
-		AccSelectionInteractor.OutPort boundary = new AccSelectionInteractor.OutPort() 
+		AccSelectionInteractor.OutPort boundary = new AccSelectionOutput() 
 		{
-			@Override
-			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
-			{
-				// Do nothing for now
-			}
-
-			@Override
-			public void sourceAccHasBenSet(String accName)
-			{
-				//Do nothing for now				
-			}
-
-			@Override
-			public AccountData selectAccount(List<AccountData> accounts)
-			{
-				return null; // not used here
-			}
-
 			@Override
 			public NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts)
 			{

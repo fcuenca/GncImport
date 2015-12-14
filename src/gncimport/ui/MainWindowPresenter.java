@@ -398,7 +398,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		}
 
 		@Override
-		public void sourceAccHasBenSet(String accName)
+		public void sourceAccHasBeenSet(String accName)
 		{
 			_view.displaySourceAccount(accName);
 		}	
