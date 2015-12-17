@@ -19,20 +19,106 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class MainWindowPresenter implements MainWindowRenderer
-{
-	private final TxView _view;
-	private final UIConfig _config;
-	
-	private final InteractorFactory _interactors;
+{	
 	private final CommandFactory _commands;
 
 	class CommandFactory
 	{		
+		private InteractorFactory _interactors;
 		private TxView _theView;
 		private UIConfig _theConfig;
-
-		public CommandFactory(TxView view, UIConfig config)
+		
+		TxBrowseInteractor.OutPort txBrowseResponse = new TxBrowseInteractor.OutPort() 
 		{
+			@Override
+			public void accept(List<TxData> txList, List<AccountData> theAccList)
+			{
+				_theView.displayTxData(new TxTableModel(txList), CandidateAccList.build(theAccList));
+				_theView.displayTxCount(txList.size());
+			}
+
+			@Override
+			public void fileWasOpened(String fileName)
+			{
+				_theConfig.setLastCsvDirectory(new File(fileName).getParent());
+				_theView.updateCsvFileLabel(fileName);
+			}
+		};
+		
+		AccFileLoadInteractor.OutPort accFileLoadReponse = new AccFileLoadInteractor.OutPort ()
+		{
+			@Override
+			public void fileWasOpened(String fileName)
+			{
+				_theView.updateGncFileLabel(fileName);
+				_theConfig.setLastGncDirectory(new File(fileName).getParent());						
+			}
+		};
+		
+		AccSelectionInteractor.OutPort accSelectionResponse = new AccSelectionInteractor.OutPort() 
+		{
+			@Override
+			public AccountData selectAccount(List<AccountData> accounts)
+			{
+				DefaultMutableTreeNode selectedNode = _theView.promptForAccount(getRootNode(accounts));
+				
+				if (selectedNode != null)
+				{
+					return (AccountData) selectedNode.getUserObject();
+				}
+							
+				return null;
+			}
+
+
+			@Override
+			public NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts)
+			{
+				NewHierarchyParams params = _theView.promptForNewHierarchy(getRootNode(accounts));
+				
+				if (params != null)
+				{
+					if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
+					{
+						throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
+					}
+									
+					return new AccSelectionInteractor.NewHierarchyOpts((AccountData) params.parentNode.getUserObject(), params.rootAccName, params.month);
+				}
+				
+				return null;
+			}
+
+			@Override
+			public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
+			{
+				_theView.displayTargetHierarchy(accName);	
+				_theView.updateCandidateTargetAccountList(CandidateAccList.build(candidateAccList));
+			}
+
+			@Override
+			public void sourceAccHasBeenSet(String accName)
+			{
+				_theView.displaySourceAccount(accName);
+			}	
+
+			private DefaultMutableTreeNode getRootNode(List<AccountData> accounts)
+			{
+				AccountTreeBuilder builder = new AccountTreeBuilder();
+				
+				for (AccountData account : accounts)
+				{
+					builder.addNodeFor(account);
+				}
+				
+				return builder.getRoot();
+			}	
+		};
+
+		
+		public CommandFactory(TxView view, UIConfig config, InteractorFactory interactors)
+		{
+			this._interactors = interactors;
 			this._theView = view;
 			this._theConfig = config;
 		}
@@ -44,7 +130,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		public LoadGncCommand loadGnc()
 		{
-			return new LoadGncCommand(_view, _config, _interactors.accFileLoad(accFileLoadReponse));
+			return new LoadGncCommand(_theView, _theConfig, _interactors.accFileLoad(accFileLoadReponse));
 		}
 
 		public FilterTxListCommand filterTxList(Date fromDate, Date toDate)
@@ -59,22 +145,22 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		public SelectSourceAccCommand selectSourceAcc()
 		{
-			return new SelectSourceAccCommand(_view, _interactors.accSelection(accSelectionResponse));
+			return new SelectSourceAccCommand(_theView, _interactors.accSelection(accSelectionResponse));
 		}
 
 		public SelectTargetAccCommand selectTargetAcc()
 		{
-			return new SelectTargetAccCommand(_view, _interactors.accSelection(accSelectionResponse));
+			return new SelectTargetAccCommand(_theView, _interactors.accSelection(accSelectionResponse));
 		}
 
 		public SelectExpenseAccCommand selectExpenseAcc(AccountData newAcc, AccountData originalAcc)
 		{
-			return new SelectExpenseAccCommand(newAcc, originalAcc, _view, _interactors.accSelection(accSelectionResponse));
+			return new SelectExpenseAccCommand(newAcc, originalAcc, _theView, _interactors.accSelection(accSelectionResponse));
 		}
 
 		public CreateAccHierarchyCommand createAccHierarchy(String fileNameToSave)
 		{
-			return new CreateAccHierarchyCommand(fileNameToSave, _view, _config, _interactors.accSelection(accSelectionResponse));
+			return new CreateAccHierarchyCommand(fileNameToSave, _theView, _theConfig, _interactors.accSelection(accSelectionResponse));
 		}
 	}
 	
@@ -344,103 +430,9 @@ public class MainWindowPresenter implements MainWindowRenderer
 	
 	public MainWindowPresenter(TxImportModel model, TxView view, UIConfig config)
 	{
-		this._interactors = new InteractorFactory(model);
-
-		this._view = view;
-		this._config = config;
-		
-		_commands = new CommandFactory(_view, _config);
+		_commands = new CommandFactory(view, config, new InteractorFactory(model));
 	}
-	
-			
-	AccSelectionInteractor.OutPort accSelectionResponse = new AccSelectionInteractor.OutPort() 
-	{
-		@Override
-		public AccountData selectAccount(List<AccountData> accounts)
-		{
-			DefaultMutableTreeNode selectedNode = _view.promptForAccount(getRootNode(accounts));
-			
-			if (selectedNode != null)
-			{
-				return (AccountData) selectedNode.getUserObject();
-			}
-						
-			return null;
-		}
-
-
-		@Override
-		public NewHierarchyOpts promptForNewHierarchy(List<AccountData> accounts)
-		{
-			NewHierarchyParams params = _view.promptForNewHierarchy(getRootNode(accounts));
-			
-			if (params != null)
-			{
-				if (params.parentNode == null || params.rootAccName == null || params.rootAccName.trim().isEmpty())
-				{
-					throw new ProgrammerError("Invalid values for new Hierarchy came through!!");
-				}
-								
-				return new AccSelectionInteractor.NewHierarchyOpts((AccountData) params.parentNode.getUserObject(), params.rootAccName, params.month);
-			}
-			
-			return null;
-		}
-
-		@Override
-		public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
-		{
-			_view.displayTargetHierarchy(accName);	
-			_view.updateCandidateTargetAccountList(CandidateAccList.build(candidateAccList));
-		}
-
-		@Override
-		public void sourceAccHasBeenSet(String accName)
-		{
-			_view.displaySourceAccount(accName);
-		}	
-
-		private DefaultMutableTreeNode getRootNode(List<AccountData> accounts)
-		{
-			AccountTreeBuilder builder = new AccountTreeBuilder();
-			
-			for (AccountData account : accounts)
-			{
-				builder.addNodeFor(account);
-			}
-			
-			return builder.getRoot();
-		}	
-	};
-	
-	TxBrowseInteractor.OutPort txBrowseResponse = new TxBrowseInteractor.OutPort() 
-	{
-		@Override
-		public void accept(List<TxData> txList, List<AccountData> theAccList)
-		{
-			_view.displayTxData(new TxTableModel(txList), CandidateAccList.build(theAccList));
-			_view.displayTxCount(txList.size());
-		}
-
-		@Override
-		public void fileWasOpened(String fileName)
-		{
-			_config.setLastCsvDirectory(new File(fileName).getParent());
-			_view.updateCsvFileLabel(fileName);
-		}
-	};
-	
-
-	AccFileLoadInteractor.OutPort accFileLoadReponse = new AccFileLoadInteractor.OutPort ()
-	{
-		@Override
-		public void fileWasOpened(String fileName)
-		{
-			_view.updateGncFileLabel(fileName);
-			_config.setLastGncDirectory(new File(fileName).getParent());						
-		}
-	};
-	
+		
 	// -- renderer overrides
 		
 	@Override
