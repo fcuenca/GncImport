@@ -52,9 +52,11 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JLabel _targetAccLabel;
 	private JLabel _gncFileLabel;
 	private JLabel _csvFileLabel;
-	private JComboBox _candidateTargetAccComboBox = new JComboBox();
 	private JXDatePicker _fromDatePicker;
 	private JXDatePicker _toDatePicker;
+	private JComboBox _candidateTargetAccComboBox;
+	private DefaultCellEditor _accComboBoxEditor;
+
 
 	public GncImportMainWindow(TxImportModel model, UIConfig config)
 	{
@@ -72,11 +74,52 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	{
 		setLayout(new BorderLayout());
 		setOpaque(true);
+		
+		createAccountSelectionComboBox();
 
 		add(createControlBox(), BorderLayout.PAGE_START);
 		add(createGridPane(), BorderLayout.CENTER);
 		add(createBottomBox(), BorderLayout.PAGE_END);
 
+	}
+	
+	private void createAccountSelectionComboBox()
+	{
+		_candidateTargetAccComboBox = new JComboBox();
+		_accComboBoxEditor = new DefaultCellEditor(_candidateTargetAccComboBox)
+		{
+			private AccountData originalValue;
+
+			@Override
+			public Component getTableCellEditorComponent(JTable table, Object
+					value, boolean isSelected, int row, int column)
+			{
+				originalValue = getTxTableModel().getTransactions().get(row).targetAccount;
+
+				((JComboBox) getComponent()).setSelectedItem(originalValue);
+
+				return super.getTableCellEditorComponent(table, value,
+						isSelected, row, column);
+			}
+
+			@Override
+			public Object getCellEditorValue()
+			{
+				AccountData newValue = (AccountData) super.getCellEditorValue();
+
+				((JComboBox) getComponent()).hidePopup();
+
+				return updateSelectedExpenseAcc(newValue, originalValue);
+			}
+		};
+	}
+
+	AccountData selectedExpenseAcc;
+
+	private AccountData updateSelectedExpenseAcc(AccountData newValue, AccountData originalValue)
+	{
+		selectedExpenseAcc = _presenter.onTargetAccountSelected(newValue, originalValue);
+		return selectedExpenseAcc;
 	}
 
 	private JPanel createControlBox()
@@ -193,12 +236,12 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 		_statusLabel.setText(message);
 	}
-
+	
 	private JScrollPane createGridPane()
 	{
 		_table = new JTable();
 		_table.setName("TRANSACTION_GRID");
-
+		
 		return new JScrollPane(_table);
 	}
 
@@ -234,43 +277,16 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 		return button;
 	}
-
+	
 	@Override
 	public void displayTxData(TxTableModel tableModel, List<AccountData> targetAccounts)
 	{
 		_table.setModel(tableModel);
 
 		updateCandidateTargetAccountList(targetAccounts);
-
-		DefaultCellEditor editor = new DefaultCellEditor(_candidateTargetAccComboBox)
-		{
-			private AccountData originalValue;
-
-			@Override
-			public Component getTableCellEditorComponent(JTable table, Object
-					value, boolean isSelected, int row, int column)
-			{
-				originalValue = getTxTableModel().getTransactions().get(row).targetAccount;
-
-				((JComboBox) getComponent()).setSelectedItem(originalValue);
-
-				return super.getTableCellEditorComponent(table, value,
-						isSelected, row, column);
-			}
-
-			@Override
-			public Object getCellEditorValue()
-			{
-				AccountData newValue = (AccountData) super.getCellEditorValue();
-
-				((JComboBox) getComponent()).hidePopup();
-
-				return _presenter.onTargetAccountSelected(newValue, originalValue);
-			}
-		};
-
+		
 		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
-		accountColumn.setCellEditor(editor);
+		accountColumn.setCellEditor(_accComboBoxEditor);
 	}
 	
 	@Override
