@@ -29,34 +29,40 @@ public class CommandFactory
 		_accSelectionPresenter = new AccSelectionPresenter(view);
 	}
 	
-	public LoadCsvCommand loadCsv()
+	public void loadCsv()
 	{
-		return new LoadCsvCommand(_view, _config, _interactors.txBrowse(_txBrowsePresenter));
+		final LoadCsvCommand cmd = new LoadCsvCommand(_view, _config, _interactors.txBrowse(_txBrowsePresenter));
+		cmd.execute();
 	}
 
-	public LoadGncCommand loadGnc()
+	public void loadGnc()
 	{
-		return new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter));
+		LoadGncCommand cmd = new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter));
+		cmd.execute();
 	}
 
-	public FilterTxListCommand filterTxList(Date fromDate, Date toDate)
+	public void filterTxList(Date fromDate, Date toDate)
 	{
-		return new FilterTxListCommand(fromDate, toDate, _interactors.txBrowse(_txBrowsePresenter));
+		FilterTxListCommand cmd = new FilterTxListCommand(fromDate, toDate, _interactors.txBrowse(_txBrowsePresenter));
+		cmd.execute();
 	}
 
-	public SaveGncCommand saveGnc(String fileName)
+	public void saveGnc(String fileName)
 	{
-		return new SaveGncCommand(fileName, _view, _interactors.txImport());
+		SaveGncCommand cmd = new SaveGncCommand(fileName, _view, _interactors.txImport());
+		cmd.execute();
 	}
 
-	public SelectSourceAccCommand selectSourceAcc()
+	public void selectSourceAcc()
 	{
-		return new SelectSourceAccCommand(_view, _interactors.accSelection(_accSelectionPresenter));
+		SelectSourceAccCommand cmd = new SelectSourceAccCommand(_view, _interactors.accSelection(_accSelectionPresenter));
+		cmd.execute();
 	}
 
-	public SelectTargetAccCommand selectTargetAcc()
+	public void selectTargetAcc()
 	{
-		return new SelectTargetAccCommand(_view, _interactors.accSelection(_accSelectionPresenter));
+		SelectTargetAccCommand cmd = new SelectTargetAccCommand(_view, _interactors.accSelection(_accSelectionPresenter));
+		cmd.execute();
 	}
 
 	public SelectExpenseAccCommand selectExpenseAcc(AccountData newAcc, AccountData originalAcc)
@@ -64,8 +70,9 @@ public class CommandFactory
 		return new SelectExpenseAccCommand(newAcc, originalAcc, _view, _interactors.accSelection(_accSelectionPresenter));
 	}
 
-	public CreateAccHierarchyCommand createAccHierarchy(String fileNameToSave)
+	public void createAccHierarchy(String fileNameToSave)
 	{
-		return new CreateAccHierarchyCommand(fileNameToSave, _view, _config, _interactors.accSelection(_accSelectionPresenter));
+		CreateAccHierarchyCommand cmd = new CreateAccHierarchyCommand(fileNameToSave, _view, _config, _interactors.accSelection(_accSelectionPresenter));
+		cmd.execute();
 	}
 }

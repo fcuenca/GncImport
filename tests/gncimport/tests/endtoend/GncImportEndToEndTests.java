@@ -65,6 +65,26 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	}
 	
 	@Test
+	public void can_change_expense_account_for_individual_transaction()
+	{
+		_app = new GncImportAppDriver(robot());		
+
+		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
+		_app.selectSourceAccount(new String[] {"Assets", "Current Assets", "Checking Account"});
+		_app.selectTargetAccount(new String[] {"Monthly Expenses", "Year 2014", "February 2014"});
+		
+		_app.openCsvFile(TestFiles.CSV_1_TEST_FILE);
+		
+		_app.shouldAllowSelectionOfExpenseAccountsInRow(5, new String[] { 
+				"Miscelaneous", "Housing", "Groceries", "Clothing", "Supplies", 
+				"Entertainment", "Casa Cordoba", "Books", "Health", "Car", "Expenses", "<< OTHER >>"
+				});
+		
+		_app.selectExpenseAccountForTransactionInRow(3, "Groceries");
+		_app.shouldDisplayAccountForTransactionInRow(3, "Groceries");
+	}
+
+	@Test
 	public void matches_known_transaction_patterns_with_other_accounts() throws IOException
 	{
 		_fs.setupConfigFile(TestFiles.CFG_WITH_MATCHING_RULES);

@@ -1,26 +1,33 @@
 package gncimport.tests.endtoend;
 
+import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsInstanceOf.*;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import gncimport.GncImportApp;
 import gncimport.models.TxData;
 import gncimport.ui.GncImportMainWindow;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.data.TableCell;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.fixture.JComboBoxFixture;
 import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.swing.fixture.JLabelFixture;
+import org.fest.swing.fixture.JTableCellFixture;
 import org.fest.swing.fixture.JTableFixture;
 import org.fest.swing.fixture.JTreeFixture;
 
@@ -105,6 +112,33 @@ public class GncImportAppDriver
 		}
 		
 		assertThat("couldn't find any matches for: '" + txText + "'", matchesFound, not(is(0)));
+	}
+	
+	public void shouldAllowSelectionOfExpenseAccountsInRow(int rowNumber, String[] expectedAccNames)
+	{
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		JTableCellFixture cell = grid.cell(TableCell.row(rowNumber).column(3));	
+		JComboBoxFixture editor = new JComboBoxFixture(_mainWindow.robot, (JComboBox) cell.editor());
+		
+		assertThat(editor.contents(), is(arrayContaining(expectedAccNames)));		
+	}
+	
+	public void selectExpenseAccountForTransactionInRow(int rowNumber, String accName)
+	{
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		JTableCellFixture cell = grid.cell(TableCell.row(rowNumber).column(3));
+		JComboBoxFixture editor = new JComboBoxFixture(_mainWindow.robot, (JComboBox) cell.editor());
+				
+		cell.click();
+		editor.selectItem(accName);
+	}
+
+	public void shouldDisplayAccountForTransactionInRow(int rowNumber, String expectedAccName)
+	{
+		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
+		JTableCellFixture cell = grid.cell(TableCell.row(rowNumber).column(3));
+				
+		assertThat(grid.target.getValueAt(rowNumber, 3).toString(), is(expectedAccName));		
 	}
 
 	public void shouldNotIgnoreAnyTransaction()
@@ -257,4 +291,5 @@ public class GncImportAppDriver
 					grid.target.getValueAt(i, 2).toString(), is(txDescription));
 		}
 	}
+
 }

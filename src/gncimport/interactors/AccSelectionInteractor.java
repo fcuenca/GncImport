@@ -69,7 +69,11 @@ public class AccSelectionInteractor
 	public AccountData browseAccounts()
 	{
 		List<AccountData> accounts = _model.getAccounts();
-		return _output.selectAccount(accounts);
+		AccountData selectedAccount = _output.selectAccount(accounts);
+		
+		//TODO: _output.expenseAccHasBeenSelected(selectedAccount);
+		
+		return selectedAccount;
 	}
 		
 	public void createNewAccountHierarchy(List<MonthlyAccountParam> monthlyAccounts, String fileNameToSave)

@@ -272,7 +272,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		TableColumn accountColumn = _table.getColumnModel().getColumn(TxTableModel.ACCOUNT_COLUMN);
 		accountColumn.setCellEditor(editor);
 	}
-
+	
 	@Override
 	public TxTableModel getTxTableModel()
 	{

@@ -18,37 +18,37 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onReadFromCsvFile()
 	{
-		_commands.loadCsv().execute();
+		_commands.loadCsv();
 	}
 	
 	@Override
 	public void onFilterTxList(Date fromDate, Date toDate)
 	{
-		_commands.filterTxList(fromDate, toDate).execute();				
+		_commands.filterTxList(fromDate, toDate);				
 	}
 	
 	@Override
 	public void onSaveToGncFile(String fileName)
 	{
-		_commands.saveGnc(fileName).execute();
+		_commands.saveGnc(fileName);
 	}
 
 	@Override
 	public void onLoadGncFile()
 	{
-		_commands.loadGnc().execute();
+		_commands.loadGnc();
 	}
 	
 	@Override
 	public void onSelectSourceAccount()
 	{
-		_commands.selectSourceAcc().execute();
+		_commands.selectSourceAcc();
 	}
 
 	@Override
 	public void onSelectTargetHierarchy()
 	{
-		_commands.selectTargetAcc().execute();
+		_commands.selectTargetAcc();
 	}
 
 	@Override
@@ -60,6 +60,6 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onCreateNewAccHierarchy(String fileNameToSave)
 	{	
-		_commands.createAccHierarchy(fileNameToSave).execute();
+		_commands.createAccHierarchy(fileNameToSave);
 	}	
 }
