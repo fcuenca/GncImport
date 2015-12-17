@@ -11,6 +11,7 @@ import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleTxData;
+import gncimport.ui.CandidateAccList;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
@@ -65,7 +66,7 @@ public class PresenterFiltersTxList
 
 		assertThat(expectedTxList.getValue().getTransactions(), is(txList));
 
-		accountList.add(MainWindowPresenter.OTHER_ACC_PLACEHOLDER);
+		accountList.add(CandidateAccList.OTHER_ACC_PLACEHOLDER);
 		assertThat(expectedAccountList.getValue(), is(accountList));
 	}
 

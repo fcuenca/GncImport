@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 import gncimport.models.AccountData;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleAccountData;
+import gncimport.ui.CandidateAccList;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
@@ -84,7 +85,7 @@ public class PresenterRendersTargetAccounts
 		verify(_view).displayTxData(any(TxTableModel.class), expectedAccountList.capture());
 
 		assertThat(expectedAccountList.getValue(), hasSize(accountList.size() + 1));
-		assertThat(expectedAccountList.getValue(), hasItem(MainWindowPresenter.OTHER_ACC_PLACEHOLDER));
+		assertThat(expectedAccountList.getValue(), hasItem(CandidateAccList.OTHER_ACC_PLACEHOLDER));
 	}
 
 	@Test
@@ -121,7 +122,7 @@ public class PresenterRendersTargetAccounts
 
 		assertThat(expectedAccountList.getValue(), hasItems(asArray(accountList)));
 		assertThat(expectedAccountList.getValue(), hasSize(accountList.size() + 1));
-		assertThat(expectedAccountList.getValue(), hasItem(MainWindowPresenter.OTHER_ACC_PLACEHOLDER));
+		assertThat(expectedAccountList.getValue(), hasItem(CandidateAccList.OTHER_ACC_PLACEHOLDER));
 
 	}
 
@@ -158,7 +159,7 @@ public class PresenterRendersTargetAccounts
 		when(_view.promptForAccount(expectedAccTree.capture())).thenReturn(selectedNode);
 
 		AccountData returnedAcc = _presenter.onTargetAccountSelected(
-				MainWindowPresenter.OTHER_ACC_PLACEHOLDER, originalAcc);
+				CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
 
 		assertThat(returnedAcc, is(selectedAccount));
 
@@ -176,7 +177,7 @@ public class PresenterRendersTargetAccounts
 		when(_view.promptForAccount(any(DefaultMutableTreeNode.class))).thenReturn(null);
 
 		AccountData returnedAcc = _presenter.onTargetAccountSelected(
-				MainWindowPresenter.OTHER_ACC_PLACEHOLDER, originalAcc);
+				CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
 
 		assertThat(returnedAcc, is(originalAcc));
 	}

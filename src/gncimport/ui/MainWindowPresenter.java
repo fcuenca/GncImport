@@ -13,7 +13,6 @@ import gncimport.ui.TxView.NewHierarchyParams;
 import gncimport.utils.ProgrammerError;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +20,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 public class MainWindowPresenter implements MainWindowRenderer
 {
-	public static final AccountData OTHER_ACC_PLACEHOLDER = new AccountData("<< OTHER >>", "-1");
-
 	private final TxView _view;
 	private final UIConfig _config;
 	
@@ -133,7 +130,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 
 		public AccountData execute()
 		{
-			if (!_newAcc.equals(OTHER_ACC_PLACEHOLDER))
+			if (!_newAcc.equals(CandidateAccList.OTHER_ACC_PLACEHOLDER))
 			{
 				return _newAcc;
 			}
@@ -394,7 +391,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		public void targetHierarchyHasBeenSet(String accName, List<AccountData> candidateAccList)
 		{
 			_view.displayTargetHierarchy(accName);	
-			_view.updateCandidateTargetAccountList(buildCandidateAccList(candidateAccList));
+			_view.updateCandidateTargetAccountList(CandidateAccList.build(candidateAccList));
 		}
 
 		@Override
@@ -421,7 +418,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 		@Override
 		public void accept(List<TxData> txList, List<AccountData> theAccList)
 		{
-			_view.displayTxData(new TxTableModel(txList), buildCandidateAccList(theAccList));
+			_view.displayTxData(new TxTableModel(txList), CandidateAccList.build(theAccList));
 			_view.displayTxCount(txList.size());
 		}
 
@@ -492,18 +489,5 @@ public class MainWindowPresenter implements MainWindowRenderer
 	public void onCreateNewAccHierarchy(String fileNameToSave)
 	{	
 		_commands.createAccHierarchy(fileNameToSave).execute();
-	}
-
-	// -- private utility funcs
-	
-	//TODO: remove dependency from two different outPorts to this function (?)
-	private List<AccountData> buildCandidateAccList(List<AccountData> theAccList)
-	{
-		ArrayList<AccountData> candidateAccs = new ArrayList<AccountData>();
-		
-		candidateAccs.addAll(theAccList);
-		candidateAccs.add(OTHER_ACC_PLACEHOLDER);
-		
-		return candidateAccs;
 	}	
 }

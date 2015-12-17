@@ -9,6 +9,7 @@ import static org.mockito.Matchers.anyString;
 import gncimport.models.AccountData;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleTxData;
+import gncimport.ui.CandidateAccList;
 import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
@@ -96,7 +97,7 @@ public class PresenterNotifiesViewWhenModelThrowsException
 		AccountData originalAcc = new AccountData("Original", "id-1");
 
 		AccountData selectedAcc = _presenter.onTargetAccountSelected(
-				MainWindowPresenter.OTHER_ACC_PLACEHOLDER, originalAcc);
+				CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
 
 		verify(_view).handleException(_expectedException);
 		assertThat(selectedAcc, is(originalAcc));
