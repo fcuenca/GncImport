@@ -101,6 +101,7 @@ public class PresenterNotifiesViewWhenModelThrowsException
 
 		verify(_view).handleException(_expectedException);
 		assertThat(selectedAcc, is(originalAcc));
+		verify(_view).selectExpenseAccForTx(originalAcc);
 	}
 
 	@Test

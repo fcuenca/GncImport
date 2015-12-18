@@ -20,28 +20,28 @@ class SelectExpenseAccCommand
 
 	public AccountData execute()
 	{
-		if (!_newAcc.equals(CandidateAccList.OTHER_ACC_PLACEHOLDER))
+		AccountData result = _newAcc;
+		
+		if (_newAcc.equals(CandidateAccList.OTHER_ACC_PLACEHOLDER))
 		{
-			return _newAcc;
-		}
-
-		try
-		{				
-			AccountData selectedAcc = _theInteractor.browseAccounts();
-
-			if (selectedAcc != null)
-			{
-				return selectedAcc;
+			result = _originalAcc;
+			
+			try
+			{				
+				AccountData selectedAcc = _theInteractor.browseAccounts();
+	
+				if (selectedAcc != null)
+				{
+					result = selectedAcc;
+				}
 			}
-			else
+			catch (Exception e)
 			{
-				return _originalAcc;
+				_theView.handleException(e);
 			}
 		}
-		catch (Exception e)
-		{
-			_theView.handleException(e);
-			return _originalAcc;
-		}
+		
+		_theView.selectExpenseAccForTx(result);
+		return result;
 	}
 }

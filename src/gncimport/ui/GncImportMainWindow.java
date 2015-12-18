@@ -114,12 +114,19 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		};
 	}
 
-	AccountData selectedExpenseAcc;
+	AccountData selectedExpenseAcc; //TODO: make it a member of editor?
 
 	private AccountData updateSelectedExpenseAcc(AccountData newValue, AccountData originalValue)
 	{
 		selectedExpenseAcc = _presenter.onTargetAccountSelected(newValue, originalValue);
 		return selectedExpenseAcc;
+	}
+	
+	@Override
+	public void selectExpenseAccForTx(AccountData newAcc)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	private JPanel createControlBox()

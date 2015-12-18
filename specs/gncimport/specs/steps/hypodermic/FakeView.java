@@ -107,4 +107,9 @@ public class FakeView implements TxView
 	{
 		throw new RuntimeException("NIY");
 	}
+
+	@Override
+	public void selectExpenseAccForTx(AccountData newAcc)
+	{		
+	}
 }

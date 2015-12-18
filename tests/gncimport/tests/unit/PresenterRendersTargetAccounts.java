@@ -145,6 +145,8 @@ public class PresenterRendersTargetAccounts
 		AccountData returnedAcc = _presenter.onTargetAccountSelected(newAcc, originalAcc);
 
 		assertThat(returnedAcc, is(newAcc));
+		
+		verify(_view).selectExpenseAccForTx(newAcc);
 	}
 
 	@Test
@@ -162,7 +164,8 @@ public class PresenterRendersTargetAccounts
 				CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
 
 		assertThat(returnedAcc, is(selectedAccount));
-
+		verify(_view).selectExpenseAccForTx(selectedAccount);
+	
 		assertThat(expectedAccTree.getValue().toString(), is("Root Account"));
 		assertThat(expectedAccTree.getValue().getChildCount(), is(2));
 		assertThat(expectedAccTree.getValue().getChildAt(0).getChildAt(1).toString(), is("Child 2"));
@@ -180,6 +183,7 @@ public class PresenterRendersTargetAccounts
 				CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
 
 		assertThat(returnedAcc, is(originalAcc));
+		verify(_view).selectExpenseAccForTx(originalAcc);
 	}
 
 	private AccountData[] asArray(List<AccountData> accountList)

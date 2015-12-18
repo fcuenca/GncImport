@@ -41,4 +41,6 @@ public interface TxView
 	NewHierarchyParams promptForNewHierarchy(DefaultMutableTreeNode rootNode);
 
 	void displayErrorMessage(String message);
+
+	void selectExpenseAccForTx(AccountData newAcc);
 }
