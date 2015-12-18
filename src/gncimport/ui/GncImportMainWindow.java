@@ -41,6 +41,45 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public static final String OPEN_CSV_BUTTON = "OPEN_CSV_BUTTON";
 	public static final String OPEN_GNC_BUTTON = "OPEN_GNC_BUTTON";
 	public static final String NEW_ACC_HIERARCHY_MENU = "NEW_ACC_HIERARCHY";
+	
+	private class AccComboBoxEditor extends DefaultCellEditor
+	{
+		public AccountData selectedExpenseAcc; 
+
+		private AccountData _originalValue;
+
+		private AccComboBoxEditor(JComboBox comboBox)
+		{
+			super(comboBox);
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object
+				value, boolean isSelected, int row, int column)
+		{
+			_originalValue = getTxTableModel().getTransactions().get(row).targetAccount;
+
+			((JComboBox) getComponent()).setSelectedItem(_originalValue);
+
+			return super.getTableCellEditorComponent(table, value,
+					isSelected, row, column);
+		}
+
+		@Override
+		public Object getCellEditorValue()
+		{
+			AccountData newValue = (AccountData) super.getCellEditorValue();
+
+			((JComboBox) getComponent()).hidePopup();
+
+			// Hmm.... This is kind of ugly: it was required to refactor the command's execute() function 
+			// into a void function, similar to all the other commands.
+			// The root cause is the way Swing's editors work.... :-/
+			// This will call back into selectExpenseAccForTx, which sets selectedExpenseAcc
+			_presenter.onTargetAccountSelected(newValue, _originalValue);  
+			return selectedExpenseAcc;
+		}
+	}
 
 	private final MainWindowRenderer _presenter;
 	
@@ -55,7 +94,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JXDatePicker _fromDatePicker;
 	private JXDatePicker _toDatePicker;
 	private JComboBox _candidateTargetAccComboBox;
-	private DefaultCellEditor _accComboBoxEditor;
+	private AccComboBoxEditor _accComboBoxEditor;
 
 
 	public GncImportMainWindow(TxImportModel model, UIConfig config)
@@ -86,49 +125,13 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private void createAccountSelectionComboBox()
 	{
 		_candidateTargetAccComboBox = new JComboBox();
-		_accComboBoxEditor = new DefaultCellEditor(_candidateTargetAccComboBox)
-		{
-			private AccountData originalValue;
-
-			@Override
-			public Component getTableCellEditorComponent(JTable table, Object
-					value, boolean isSelected, int row, int column)
-			{
-				originalValue = getTxTableModel().getTransactions().get(row).targetAccount;
-
-				((JComboBox) getComponent()).setSelectedItem(originalValue);
-
-				return super.getTableCellEditorComponent(table, value,
-						isSelected, row, column);
-			}
-
-			@Override
-			public Object getCellEditorValue()
-			{
-				AccountData newValue = (AccountData) super.getCellEditorValue();
-
-				((JComboBox) getComponent()).hidePopup();
-
-				return updateSelectedExpenseAcc(newValue, originalValue);
-			}
-		};
+		_accComboBoxEditor = new AccComboBoxEditor(_candidateTargetAccComboBox);
 	}
 
-	AccountData selectedExpenseAcc; //TODO: make it a member of editor?
-
-	private AccountData updateSelectedExpenseAcc(AccountData newValue, AccountData originalValue)
-	{
-		// Hmm.... This is kind of ugly: it was required to refactor the command's execute() function 
-		// into a void function, similar to all the other commands.
-		// The root cause is the way Swing's editors work.... :-/
-		_presenter.onTargetAccountSelected(newValue, originalValue); // will call back into selectExpenseAccForTx
-		return selectedExpenseAcc;
-	}
-	
 	@Override
 	public void selectExpenseAccForTx(AccountData newAcc)
 	{
-		selectedExpenseAcc = newAcc;
+		_accComboBoxEditor.selectedExpenseAcc = newAcc;
 	}
 
 	private JPanel createControlBox()
