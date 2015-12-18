@@ -142,10 +142,8 @@ public class PresenterRendersTargetAccounts
 		AccountData originalAcc = new AccountData("Original", "id-1");
 		AccountData newAcc = new AccountData("New Account", "id-2");
 
-		AccountData returnedAcc = _presenter.onTargetAccountSelected(newAcc, originalAcc);
+		_presenter.onTargetAccountSelected(newAcc, originalAcc);
 
-		assertThat(returnedAcc, is(newAcc));
-		
 		verify(_view).selectExpenseAccForTx(newAcc);
 	}
 
@@ -160,10 +158,8 @@ public class PresenterRendersTargetAccounts
 		when(_model.getAccounts()).thenReturn(sampleAccounts);
 		when(_view.promptForAccount(expectedAccTree.capture())).thenReturn(selectedNode);
 
-		AccountData returnedAcc = _presenter.onTargetAccountSelected(
-				CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
+		_presenter.onTargetAccountSelected(CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
 
-		assertThat(returnedAcc, is(selectedAccount));
 		verify(_view).selectExpenseAccForTx(selectedAccount);
 	
 		assertThat(expectedAccTree.getValue().toString(), is("Root Account"));
@@ -179,10 +175,8 @@ public class PresenterRendersTargetAccounts
 		when(_model.getAccounts()).thenReturn(SampleAccountData.testAccountList());
 		when(_view.promptForAccount(any(DefaultMutableTreeNode.class))).thenReturn(null);
 
-		AccountData returnedAcc = _presenter.onTargetAccountSelected(
-				CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
+		_presenter.onTargetAccountSelected(CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
 
-		assertThat(returnedAcc, is(originalAcc));
 		verify(_view).selectExpenseAccForTx(originalAcc);
 	}
 

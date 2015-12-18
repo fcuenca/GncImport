@@ -19,7 +19,7 @@ public interface MainWindowRenderer
 
 	public abstract void onSelectTargetHierarchy();
 
-	public AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc);
+	public void onTargetAccountSelected(AccountData newAcc, AccountData originalAcc);
 
 	public void onFilterTxList(Date fromDate, Date toDate);
 }

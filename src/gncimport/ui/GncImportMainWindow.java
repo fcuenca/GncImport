@@ -118,15 +118,17 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	private AccountData updateSelectedExpenseAcc(AccountData newValue, AccountData originalValue)
 	{
-		selectedExpenseAcc = _presenter.onTargetAccountSelected(newValue, originalValue);
+		// Hmm.... This is kind of ugly: it was required to refactor the command's execute() function 
+		// into a void function, similar to all the other commands.
+		// The root cause is the way Swing's editors work.... :-/
+		_presenter.onTargetAccountSelected(newValue, originalValue); // will call back into selectExpenseAccForTx
 		return selectedExpenseAcc;
 	}
 	
 	@Override
 	public void selectExpenseAccForTx(AccountData newAcc)
 	{
-		// TODO Auto-generated method stub
-		
+		selectedExpenseAcc = newAcc;
 	}
 
 	private JPanel createControlBox()

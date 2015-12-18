@@ -70,9 +70,7 @@ public class AccSelectionInteractor
 	{
 		List<AccountData> accounts = _model.getAccounts();
 		AccountData selectedAccount = _output.selectAccount(accounts);
-		
-		//TODO: _output.expenseAccHasBeenSelected(selectedAccount);
-		
+				
 		return selectedAccount;
 	}
 		

@@ -52,9 +52,9 @@ public class MainWindowPresenter implements MainWindowRenderer
 	}
 
 	@Override
-	public AccountData onTargetAccountSelected(AccountData newAcc, AccountData originalAcc)
+	public void onTargetAccountSelected(AccountData newAcc, AccountData originalAcc)
 	{
-		return _commands.selectExpenseAcc(newAcc, originalAcc).execute();
+		_commands.selectExpenseAcc(newAcc, originalAcc);
 	}
 
 	@Override

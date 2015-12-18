@@ -96,11 +96,9 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	{
 		AccountData originalAcc = new AccountData("Original", "id-1");
 
-		AccountData selectedAcc = _presenter.onTargetAccountSelected(
-				CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
+		_presenter.onTargetAccountSelected(CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc);
 
 		verify(_view).handleException(_expectedException);
-		assertThat(selectedAcc, is(originalAcc));
 		verify(_view).selectExpenseAccForTx(originalAcc);
 	}
 

@@ -65,9 +65,10 @@ public class CommandFactory
 		cmd.execute();
 	}
 
-	public SelectExpenseAccCommand selectExpenseAcc(AccountData newAcc, AccountData originalAcc)
+	public void selectExpenseAcc(AccountData newAcc, AccountData originalAcc)
 	{
-		return new SelectExpenseAccCommand(newAcc, originalAcc, _view, _interactors.accSelection(_accSelectionPresenter));
+		SelectExpenseAccCommand cmd = new SelectExpenseAccCommand(newAcc, originalAcc, _view, _interactors.accSelection(_accSelectionPresenter));
+		cmd.execute();
 	}
 
 	public void createAccHierarchy(String fileNameToSave)
