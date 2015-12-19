@@ -18,7 +18,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onReadFromCsvFile()
 	{
-		_commands.loadCsv();
+		_commands.trigger(new LoadCsvEvent());
 	}
 	
 	@Override
@@ -30,7 +30,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onSaveToGncFile(String fileName)
 	{
-		_commands.saveGnc(fileName);
+		_commands.trigger(new SaveGncEvent(fileName));
 	}
 
 	@Override

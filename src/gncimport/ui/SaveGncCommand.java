@@ -2,24 +2,23 @@ package gncimport.ui;
 
 import gncimport.interactors.TxImportInteractor;
 
-class SaveGncCommand
+class SaveGncCommand implements Command<SaveGncEvent>
 {
-	private String _fileName;
 	private TxView _theView;
 	private TxImportInteractor _theInteractor;
 
-	public SaveGncCommand(String fileName, TxView view, TxImportInteractor interactor)
+	public SaveGncCommand(TxView view, TxImportInteractor interactor)
 	{
-		this._fileName = fileName;
 		this._theView = view;
 		this._theInteractor = interactor;
 	}
 
-	public void execute()
+	@Override
+	public void execute(SaveGncEvent event)
 	{
 		try
 		{
-			_theInteractor.saveTxTo(_theView.getTxTableModel().getTransactions(), _fileName);
+			_theInteractor.saveTxTo(_theView.getTxTableModel().getTransactions(), event.fileName);
 		}
 		catch (Exception e)
 		{

@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class FilterTxListEvent extends Event
 {
-	public Date fromDate;
-	public Date toDate;
+	public final Date fromDate;
+	public final Date toDate;
 
 	public FilterTxListEvent(Date fromDate, Date toDate)
 	{

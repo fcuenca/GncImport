@@ -15,16 +15,14 @@ class FilterTxListCommand implements Command<FilterTxListEvent>
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void execute(FilterTxListEvent eventArgs)
-	{	
-		FilterTxListEvent e = (FilterTxListEvent)eventArgs;
-		
-		Date lowerBound = e.fromDate != null ? e.fromDate : new Date(Long.MIN_VALUE);
+	public void execute(FilterTxListEvent event)
+	{			
+		Date lowerBound = event.fromDate != null ? event.fromDate : new Date(Long.MIN_VALUE);
 
-		Date upperBound = e.toDate;
+		Date upperBound = event.toDate;
 		if (upperBound != null)
 		{
-			upperBound = (Date) e.toDate.clone();
+			upperBound = (Date) event.toDate.clone();
 			upperBound.setHours(23);
 			upperBound.setMinutes(59);
 			upperBound.setSeconds(59);

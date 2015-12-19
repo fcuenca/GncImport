@@ -15,7 +15,7 @@ public class CommandFactory
 	private TxView _view;
 	private UIConfig _config;
 	
-	private Map<String, Command<? extends Event>> _commands = new HashMap<String, Command<? extends Event>>();
+	private Map<Class<?>, Command<? extends Event>> _commands = new HashMap<Class<?>, Command<? extends Event>>();
 	
 	private TxBrowseInteractor.OutPort _txBrowsePresenter; 
 	private AccFileLoadInteractor.OutPort _accFileLoadPresenter;
@@ -32,35 +32,25 @@ public class CommandFactory
 		_accSelectionPresenter = new AccSelectionPresenter(view);
 	
 		registerEvent(FilterTxListEvent.class, new FilterTxListCommand(_interactors.txBrowse(_txBrowsePresenter)));
+		registerEvent(LoadCsvEvent.class, new LoadCsvCommand(_view, _config, _interactors.txBrowse(_txBrowsePresenter)));
+		registerEvent(SaveGncEvent.class, new SaveGncCommand(_view, _interactors.txImport()));
 	}
 
 	public <T extends Event> void registerEvent(Class<T> eventClass, Command<T> command)
 	{
-		_commands.put(eventClass.getName(), command);
+		_commands.put(eventClass, command);
 	}
 
-	public <T extends Event> void trigger(T event)
+	public <T extends Event> void trigger(T args)
 	{		
 		@SuppressWarnings("unchecked")
-		Command<T> cmd = (Command<T>) _commands.get(event.getClass().getName());
-		cmd.execute(event);
-	}
-
-	public void loadCsv()
-	{
-		final LoadCsvCommand cmd = new LoadCsvCommand(_view, _config, _interactors.txBrowse(_txBrowsePresenter));
-		cmd.execute();
+		Command<T> cmd = (Command<T>) _commands.get(args.getClass());
+		cmd.execute(args);
 	}
 
 	public void loadGnc()
 	{
 		LoadGncCommand cmd = new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter));
-		cmd.execute();
-	}
-
-	public void saveGnc(String fileName)
-	{
-		SaveGncCommand cmd = new SaveGncCommand(fileName, _view, _interactors.txImport());
 		cmd.execute();
 	}
 
