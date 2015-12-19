@@ -18,7 +18,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onReadFromCsvFile()
 	{
-		_commands.trigger(new LoadCsvEvent());
+		_commands.trigger(NoArgsEvent.LoadCsvEvent);
 	}
 	
 	@Override
@@ -36,7 +36,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onLoadGncFile()
 	{
-		_commands.loadGnc();
+		_commands.trigger(NoArgsEvent.LoadGncEvent);
 	}
 	
 	@Override

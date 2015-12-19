@@ -2,7 +2,7 @@ package gncimport.ui;
 
 import gncimport.interactors.AccFileLoadInteractor;
 
-class LoadGncCommand
+class LoadGncCommand implements Command<NoArgsEvent>
 {
 	private TxView _theView;
 	private UIConfig _theConfig;
@@ -15,7 +15,8 @@ class LoadGncCommand
 		this._theInteractor = interactor;
 	}
 
-	public void execute()
+	@Override
+	public void execute(NoArgsEvent __not_used__)
 	{
 		try
 		{

@@ -15,7 +15,7 @@ public class CommandFactory
 	private TxView _view;
 	private UIConfig _config;
 	
-	private Map<Class<?>, Command<? extends Event>> _commands = new HashMap<Class<?>, Command<? extends Event>>();
+	private Map<String, Command<? extends Event>> _commands = new HashMap<String, Command<? extends Event>>();
 	
 	private TxBrowseInteractor.OutPort _txBrowsePresenter; 
 	private AccFileLoadInteractor.OutPort _accFileLoadPresenter;
@@ -31,12 +31,13 @@ public class CommandFactory
 		_accFileLoadPresenter = new AccFileLoadPresenter(view, config);
 		_accSelectionPresenter = new AccSelectionPresenter(view);
 	
-		registerEvent(FilterTxListEvent.class, new FilterTxListCommand(_interactors.txBrowse(_txBrowsePresenter)));
-		registerEvent(LoadCsvEvent.class, new LoadCsvCommand(_view, _config, _interactors.txBrowse(_txBrowsePresenter)));
-		registerEvent(SaveGncEvent.class, new SaveGncCommand(_view, _interactors.txImport()));
+		registerEvent(FilterTxListEvent.class.getName(), new FilterTxListCommand(_interactors.txBrowse(_txBrowsePresenter)));
+		registerEvent(NoArgsEvent.LoadCsvEvent, new LoadCsvCommand(_view, _config, _interactors.txBrowse(_txBrowsePresenter)));
+		registerEvent(NoArgsEvent.LoadGncEvent, new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter)));
+		registerEvent(SaveGncEvent.class.getName(), new SaveGncCommand(_view, _interactors.txImport()));
 	}
 
-	public <T extends Event> void registerEvent(Class<T> eventClass, Command<T> command)
+	public <T extends Event> void registerEvent(String eventClass, Command<T> command)
 	{
 		_commands.put(eventClass, command);
 	}
@@ -44,14 +45,21 @@ public class CommandFactory
 	public <T extends Event> void trigger(T args)
 	{		
 		@SuppressWarnings("unchecked")
-		Command<T> cmd = (Command<T>) _commands.get(args.getClass());
+		Command<T> cmd = (Command<T>) _commands.get(args.getClass().getName());
 		cmd.execute(args);
+	}
+
+	public void trigger(String eventId)
+	{		
+		@SuppressWarnings("unchecked")
+		Command<NoArgsEvent> cmd = (Command<NoArgsEvent>) _commands.get(eventId);
+		cmd.execute(new NoArgsEvent());
 	}
 
 	public void loadGnc()
 	{
-		LoadGncCommand cmd = new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter));
-		cmd.execute();
+//		LoadGncCommand cmd = new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter));
+//		cmd.execute(new NoArgsEvent());
 	}
 
 	public void selectSourceAcc()
