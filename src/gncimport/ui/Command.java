@@ -1,6 +1,6 @@
 package gncimport.ui;
 
-public interface Command
+public interface Command<T extends Event>
 {
-	public void execute(Object eventArgs);
+	public void execute(T eventArgs);
 }

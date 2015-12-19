@@ -15,7 +15,7 @@ public class CommandFactory
 	private TxView _view;
 	private UIConfig _config;
 	
-	private Map<String, Command> _commands = new HashMap<String, Command>();
+	private Map<String, Command<? extends Event>> _commands = new HashMap<String, Command<? extends Event>>();
 	
 	private TxBrowseInteractor.OutPort _txBrowsePresenter; 
 	private AccFileLoadInteractor.OutPort _accFileLoadPresenter;
@@ -31,14 +31,21 @@ public class CommandFactory
 		_accFileLoadPresenter = new AccFileLoadPresenter(view, config);
 		_accSelectionPresenter = new AccSelectionPresenter(view);
 	
-		registerCommand(FilterTxListEvent.class, new FilterTxListCommand(_interactors.txBrowse(_txBrowsePresenter)));
+		registerEvent(FilterTxListEvent.class, new FilterTxListCommand(_interactors.txBrowse(_txBrowsePresenter)));
 	}
 
-	private void registerCommand(Class<?> eventClass, Command command)
+	public <T extends Event> void registerEvent(Class<T> eventClass, Command<T> command)
 	{
 		_commands.put(eventClass.getName(), command);
 	}
-	
+
+	public <T extends Event> void trigger(T event)
+	{		
+		@SuppressWarnings("unchecked")
+		Command<T> cmd = (Command<T>) _commands.get(event.getClass().getName());
+		cmd.execute(event);
+	}
+
 	public void loadCsv()
 	{
 		final LoadCsvCommand cmd = new LoadCsvCommand(_view, _config, _interactors.txBrowse(_txBrowsePresenter));
@@ -81,8 +88,4 @@ public class CommandFactory
 		cmd.execute();
 	}
 
-	public void trigger(Object event)
-	{		
-		_commands.get(event.getClass().getName()).execute(event);
-	}
 }

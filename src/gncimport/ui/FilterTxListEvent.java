@@ -2,7 +2,7 @@ package gncimport.ui;
 
 import java.util.Date;
 
-public class FilterTxListEvent
+public class FilterTxListEvent extends Event
 {
 	public Date fromDate;
 	public Date toDate;

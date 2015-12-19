@@ -4,7 +4,7 @@ import gncimport.interactors.TxBrowseInteractor;
 
 import java.util.Date;
 
-class FilterTxListCommand implements Command
+class FilterTxListCommand implements Command<FilterTxListEvent>
 {
 	private TxBrowseInteractor _theInteractor;
 
@@ -15,7 +15,7 @@ class FilterTxListCommand implements Command
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void execute(Object eventArgs)
+	public void execute(FilterTxListEvent eventArgs)
 	{	
 		FilterTxListEvent e = (FilterTxListEvent)eventArgs;
 		
