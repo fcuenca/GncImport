@@ -2,7 +2,7 @@ package gncimport.ui;
 
 import gncimport.interactors.TxBrowseInteractor;
 
-class LoadCsvCommand  implements Command<NoArgsEvent>
+public class LoadCsvCommand  implements Command<NoArgsEvent>
 {		
 	private TxView _theView;
 	private UIConfig _theConfig;

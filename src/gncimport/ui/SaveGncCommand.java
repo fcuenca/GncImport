@@ -2,7 +2,7 @@ package gncimport.ui;
 
 import gncimport.interactors.TxImportInteractor;
 
-class SaveGncCommand implements Command<SaveGncEvent>
+public class SaveGncCommand implements Command<SaveGncEvent>
 {
 	private TxView _theView;
 	private TxImportInteractor _theInteractor;

@@ -3,7 +3,7 @@ package gncimport.ui;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.models.AccountData;
 
-class SelectExpenseAccCommand implements Command<SelectExpenseAccEvent>
+public class SelectExpenseAccCommand implements Command<SelectExpenseAccEvent>
 {
 	private TxView _theView;
 	private AccSelectionInteractor _theInteractor;

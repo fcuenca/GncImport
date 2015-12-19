@@ -2,7 +2,7 @@ package gncimport.ui;
 
 import gncimport.interactors.AccSelectionInteractor;
 
-class CreateAccHierarchyCommand implements Command<CreateAccHierarchyEvent>
+public class CreateAccHierarchyCommand implements Command<CreateAccHierarchyEvent>
 {
 	private TxView _theView;
 	private AccSelectionInteractor _theInteractor;

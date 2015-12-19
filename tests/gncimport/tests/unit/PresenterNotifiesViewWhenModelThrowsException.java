@@ -1,16 +1,28 @@
 package gncimport.tests.unit;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.anyString;
+import gncimport.interactors.AccFileLoadInteractor;
+import gncimport.interactors.AccSelectionInteractor;
+import gncimport.interactors.TxBrowseInteractor;
+import gncimport.interactors.TxImportInteractor;
 import gncimport.models.AccountData;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleTxData;
 import gncimport.ui.CandidateAccList;
+import gncimport.ui.CreateAccHierarchyCommand;
+import gncimport.ui.CreateAccHierarchyEvent;
+import gncimport.ui.LoadCsvCommand;
+import gncimport.ui.LoadGncCommand;
 import gncimport.ui.MainWindowPresenter;
+import gncimport.ui.SaveGncCommand;
+import gncimport.ui.SaveGncEvent;
+import gncimport.ui.SelectExpenseAccCommand;
+import gncimport.ui.SelectExpenseAccEvent;
+import gncimport.ui.SelectSourceAccCommand;
+import gncimport.ui.SelectTargetAccCommand;
 import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
@@ -26,27 +38,35 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	private MainWindowPresenter _presenter;
 	private TxView _view;
 	private TxImportModel _model;
+	private UIConfig _config;
+
+	private  <T> T makeBomb(Class<T> clazz, final RuntimeException exceptionToThrow)
+	{
+		return mock(clazz, new Answer<Object>()
+		{
+			@Override
+			public Object answer(InvocationOnMock invocation)
+			{
+				throw exceptionToThrow;
+			}
+		});
+	}
 
 	@Before
 	public void setUp()
 	{
 		_expectedException = new RuntimeException("ahhhhh: exception wasn't handled!");
 
-		_model = mock(TxImportModel.class, new Answer<Object>()
-		{
-			@Override
-			public Object answer(InvocationOnMock invocation)
-			{
-				throw _expectedException;
-			}
-		});
-
+		_model = makeBomb(TxImportModel.class, _expectedException);
+		
+		_config = mock(UIConfig.class);
 		_view = mock(TxView.class);
+		
 		_presenter = new MainWindowPresenter(_model, _view, mock(UIConfig.class));
 	}
 
 	@Test
-	public void when_loading_csv_file()
+	public void DELETEME_when_loading_csv_file()
 	{
 		when(_view.promptForFile(anyString())).thenReturn("/some/file.csv");
 
@@ -56,7 +76,21 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	}
 
 	@Test
-	public void when_loading_gnc_file()
+	public void when_loading_csv_file()
+	{
+		TxBrowseInteractor interactor = makeBomb(TxBrowseInteractor.class, _expectedException);	
+		LoadCsvCommand cmd = new LoadCsvCommand(_view, _config, interactor);
+		
+		when(_view.promptForFile(anyString())).thenReturn("/some/path");
+
+		cmd.execute(null);
+		
+		verify(_view).handleException(_expectedException);
+	}
+
+
+	@Test
+	public void DELETEME_when_loading_gnc_file()
 	{
 		when(_view.promptForFile(anyString())).thenReturn("/some/path");
 		
@@ -66,7 +100,20 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	}
 
 	@Test
-	public void when_saving_gnc_file()
+	public void when_loading_gnc_file()
+	{
+		AccFileLoadInteractor interactor = makeBomb(AccFileLoadInteractor.class, _expectedException);	
+		LoadGncCommand cmd = new LoadGncCommand(_view, _config, interactor);
+		
+		when(_view.promptForFile(anyString())).thenReturn("/some/path");
+
+		cmd.execute(null);
+		
+		verify(_view).handleException(_expectedException);
+	}
+
+	@Test
+	public void DELETEME_when_saving_gnc_file()
 	{
 		when(_view.getTxTableModel()).thenReturn(new TxTableModel(SampleTxData.txDataList()));
 
@@ -76,7 +123,20 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	}
 
 	@Test
-	public void when_selecting_source_account()
+	public void when_saving_gnc_file()
+	{
+		TxImportInteractor interactor = makeBomb(TxImportInteractor.class, _expectedException);		
+		SaveGncCommand cmd = new SaveGncCommand(_view, interactor);
+		
+		when(_view.getTxTableModel()).thenReturn(new TxTableModel(SampleTxData.txDataList()));
+		
+		cmd.execute(new SaveGncEvent("/path/to/file.gnucash"));
+		
+		verify(_view).handleException(_expectedException);
+	}
+	
+	@Test
+	public void DELETEME_when_selecting_source_account()
 	{
 		_presenter.onSelectSourceAccount();
 
@@ -84,7 +144,18 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	}
 
 	@Test
-	public void when_selecting_target_hierarchy()
+	public void when_selecting_source_account()
+	{
+		AccSelectionInteractor interactor = makeBomb(AccSelectionInteractor.class, _expectedException);
+		SelectSourceAccCommand cmd = new SelectSourceAccCommand(_view, interactor);
+
+		cmd.execute(null);
+		
+		verify(_view).handleException(_expectedException);
+	}
+	
+	@Test
+	public void DELETEME_when_selecting_target_hierarchy()
 	{
 		_presenter.onSelectTargetHierarchy();
 
@@ -92,7 +163,18 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	}
 
 	@Test
-	public void when_selecting_target_account()
+	public void when_selecting_target_hierarchy()
+	{
+		AccSelectionInteractor interactor = makeBomb(AccSelectionInteractor.class, _expectedException);
+		SelectTargetAccCommand cmd = new SelectTargetAccCommand(_view, interactor);
+		
+		cmd.execute(null);
+		
+		verify(_view).handleException(_expectedException);
+	}
+
+	@Test
+	public void DELETEME_when_selecting_target_account()
 	{
 		AccountData originalAcc = new AccountData("Original", "id-1");
 
@@ -103,11 +185,35 @@ public class PresenterNotifiesViewWhenModelThrowsException
 	}
 
 	@Test
-	public void when_creating_new_account_hierarchy()
+	public void when_selecting_target_account()
+	{
+		AccSelectionInteractor interactor = makeBomb(AccSelectionInteractor.class, _expectedException);
+		SelectExpenseAccCommand cmd = new SelectExpenseAccCommand(_view, interactor);
+		AccountData originalAcc = new AccountData("Original", "id-1");
+		
+		cmd.execute(new SelectExpenseAccEvent(CandidateAccList.OTHER_ACC_PLACEHOLDER, originalAcc));
+		
+		verify(_view).handleException(_expectedException);
+		verify(_view).selectExpenseAccForTx(originalAcc);
+	}
+	
+	@Test
+	public void DELETEME_when_creating_new_account_hierarchy()
 	{
 		_presenter.onCreateNewAccHierarchy("filename");
 
 		verify(_view).handleException(_expectedException);
 	}
 
+	@Test
+	public void when_creating_new_account_hierarchy()
+	{
+		AccSelectionInteractor interactor = makeBomb(AccSelectionInteractor.class, _expectedException);
+		CreateAccHierarchyCommand cmd = new CreateAccHierarchyCommand(_view, _config, interactor);
+		
+		cmd.execute(new CreateAccHierarchyEvent("filename"));
+		
+		verify(_view).handleException(_expectedException);
+	}
+	
 }

@@ -2,7 +2,7 @@ package gncimport.ui;
 
 import gncimport.interactors.AccFileLoadInteractor;
 
-class LoadGncCommand implements Command<NoArgsEvent>
+public class LoadGncCommand implements Command<NoArgsEvent>
 {
 	private TxView _theView;
 	private UIConfig _theConfig;
