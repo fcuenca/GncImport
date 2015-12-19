@@ -6,7 +6,8 @@ import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.models.AccountData;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CommandFactory
 {		
@@ -14,10 +15,12 @@ public class CommandFactory
 	private TxView _view;
 	private UIConfig _config;
 	
+	private Map<String, Command> _commands = new HashMap<String, Command>();
+	
 	private TxBrowseInteractor.OutPort _txBrowsePresenter; 
 	private AccFileLoadInteractor.OutPort _accFileLoadPresenter;
 	private AccSelectionInteractor.OutPort _accSelectionPresenter;
-	
+		
 	public CommandFactory(TxView view, UIConfig config, InteractorFactory interactors)
 	{
 		_interactors = interactors;
@@ -27,6 +30,13 @@ public class CommandFactory
 		_txBrowsePresenter = new TxBrowsePresenter(view, config); 
 		_accFileLoadPresenter = new AccFileLoadPresenter(view, config);
 		_accSelectionPresenter = new AccSelectionPresenter(view);
+	
+		registerCommand(FilterTxListEvent.class, new FilterTxListCommand(_interactors.txBrowse(_txBrowsePresenter)));
+	}
+
+	private void registerCommand(Class<?> eventClass, Command command)
+	{
+		_commands.put(eventClass.getName(), command);
 	}
 	
 	public void loadCsv()
@@ -38,12 +48,6 @@ public class CommandFactory
 	public void loadGnc()
 	{
 		LoadGncCommand cmd = new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter));
-		cmd.execute();
-	}
-
-	public void filterTxList(Date fromDate, Date toDate)
-	{
-		FilterTxListCommand cmd = new FilterTxListCommand(fromDate, toDate, _interactors.txBrowse(_txBrowsePresenter));
 		cmd.execute();
 	}
 
@@ -75,5 +79,10 @@ public class CommandFactory
 	{
 		CreateAccHierarchyCommand cmd = new CreateAccHierarchyCommand(fileNameToSave, _view, _config, _interactors.accSelection(_accSelectionPresenter));
 		cmd.execute();
+	}
+
+	public void trigger(Object event)
+	{		
+		_commands.get(event.getClass().getName()).execute(event);
 	}
 }

@@ -24,7 +24,7 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onFilterTxList(Date fromDate, Date toDate)
 	{
-		_commands.filterTxList(fromDate, toDate);				
+		_commands.trigger(new FilterTxListEvent(fromDate, toDate));
 	}
 	
 	@Override
