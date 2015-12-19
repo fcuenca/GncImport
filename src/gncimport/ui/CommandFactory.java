@@ -34,6 +34,8 @@ public class CommandFactory
 		registerEvent(FilterTxListEvent.class.getName(), new FilterTxListCommand(_interactors.txBrowse(_txBrowsePresenter)));
 		registerEvent(NoArgsEvent.LoadCsvEvent, new LoadCsvCommand(_view, _config, _interactors.txBrowse(_txBrowsePresenter)));
 		registerEvent(NoArgsEvent.LoadGncEvent, new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter)));
+		registerEvent(NoArgsEvent.SelectSourceAccEvent, new SelectSourceAccCommand(_view, _interactors.accSelection(_accSelectionPresenter)));
+		registerEvent(NoArgsEvent.SelectTargetAccEvent, new SelectTargetAccCommand(_view, _interactors.accSelection(_accSelectionPresenter)));
 		registerEvent(SaveGncEvent.class.getName(), new SaveGncCommand(_view, _interactors.txImport()));
 	}
 
@@ -54,24 +56,6 @@ public class CommandFactory
 		@SuppressWarnings("unchecked")
 		Command<NoArgsEvent> cmd = (Command<NoArgsEvent>) _commands.get(eventId);
 		cmd.execute(new NoArgsEvent());
-	}
-
-	public void loadGnc()
-	{
-//		LoadGncCommand cmd = new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter));
-//		cmd.execute(new NoArgsEvent());
-	}
-
-	public void selectSourceAcc()
-	{
-		SelectSourceAccCommand cmd = new SelectSourceAccCommand(_view, _interactors.accSelection(_accSelectionPresenter));
-		cmd.execute();
-	}
-
-	public void selectTargetAcc()
-	{
-		SelectTargetAccCommand cmd = new SelectTargetAccCommand(_view, _interactors.accSelection(_accSelectionPresenter));
-		cmd.execute();
 	}
 
 	public void selectExpenseAcc(AccountData newAcc, AccountData originalAcc)

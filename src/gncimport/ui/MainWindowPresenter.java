@@ -42,13 +42,13 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onSelectSourceAccount()
 	{
-		_commands.selectSourceAcc();
+		_commands.trigger(NoArgsEvent.SelectSourceAccEvent);
 	}
 
 	@Override
 	public void onSelectTargetHierarchy()
 	{
-		_commands.selectTargetAcc();
+		_commands.trigger(NoArgsEvent.SelectTargetAccEvent);
 	}
 
 	@Override

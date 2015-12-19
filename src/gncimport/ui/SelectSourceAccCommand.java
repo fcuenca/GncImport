@@ -2,7 +2,7 @@ package gncimport.ui;
 
 import gncimport.interactors.AccSelectionInteractor;
 
-class SelectSourceAccCommand
+class SelectSourceAccCommand implements Command<NoArgsEvent>
 {
 	private TxView _theView;
 	private AccSelectionInteractor _theInteractor;
@@ -13,7 +13,8 @@ class SelectSourceAccCommand
 		this._theInteractor = interactor;
 	}
 
-	public void execute()
+	@Override
+	public void execute(NoArgsEvent __not_used__)
 	{
 		try
 		{
