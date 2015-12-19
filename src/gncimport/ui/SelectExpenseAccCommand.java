@@ -3,28 +3,25 @@ package gncimport.ui;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.models.AccountData;
 
-class SelectExpenseAccCommand
+class SelectExpenseAccCommand implements Command<SelectExpenseAccEvent>
 {
-	private AccountData _newAcc;
-	private AccountData _originalAcc;
 	private TxView _theView;
 	private AccSelectionInteractor _theInteractor;
 
-	public SelectExpenseAccCommand(AccountData newAcc, AccountData originalAcc, TxView view, AccSelectionInteractor interactor)
+	public SelectExpenseAccCommand(TxView view, AccSelectionInteractor interactor)
 	{
-		this._newAcc = newAcc;
-		this._originalAcc = originalAcc;
 		this._theView = view;
 		this._theInteractor = interactor;
 	}
 
-	public void execute()
+	@Override
+	public void execute(SelectExpenseAccEvent args)
 	{
-		AccountData result = _originalAcc;
+		AccountData result = args.originalAcc;
 
 		try
 		{			
-			result = chooseExpenseAccount();
+			result = chooseExpenseAccount(args);
 		}
 		catch (Exception e)
 		{
@@ -39,9 +36,9 @@ class SelectExpenseAccCommand
 		_theView.selectExpenseAccForTx(result);
 	}
 
-	private AccountData chooseExpenseAccount()
+	private AccountData chooseExpenseAccount(SelectExpenseAccEvent args)
 	{
-		if (_newAcc.equals(CandidateAccList.OTHER_ACC_PLACEHOLDER))
+		if (args.newAcc.equals(CandidateAccList.OTHER_ACC_PLACEHOLDER))
 		{
 			AccountData selectedAcc = _theInteractor.browseAccounts();
 
@@ -49,9 +46,9 @@ class SelectExpenseAccCommand
 			{
 				return selectedAcc;
 			}
-			else return _originalAcc;
+			else return args.originalAcc;
 		}
 		
-		return _newAcc;
+		return args.newAcc;
 	}
 }

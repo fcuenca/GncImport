@@ -18,48 +18,48 @@ public class MainWindowPresenter implements MainWindowRenderer
 	@Override
 	public void onReadFromCsvFile()
 	{
-		_commands.trigger(NoArgsEvent.LoadCsvEvent);
+		_commands.triggerWithoutArgs(NoArgsEvent.LoadCsvEvent);
 	}
 	
 	@Override
 	public void onFilterTxList(Date fromDate, Date toDate)
 	{
-		_commands.trigger(new FilterTxListEvent(fromDate, toDate));
+		_commands.triggerWithArgs(new FilterTxListEvent(fromDate, toDate));
 	}
 	
 	@Override
 	public void onSaveToGncFile(String fileName)
 	{
-		_commands.trigger(new SaveGncEvent(fileName));
+		_commands.triggerWithArgs(new SaveGncEvent(fileName));
 	}
 
 	@Override
 	public void onLoadGncFile()
 	{
-		_commands.trigger(NoArgsEvent.LoadGncEvent);
+		_commands.triggerWithoutArgs(NoArgsEvent.LoadGncEvent);
 	}
 	
 	@Override
 	public void onSelectSourceAccount()
 	{
-		_commands.trigger(NoArgsEvent.SelectSourceAccEvent);
+		_commands.triggerWithoutArgs(NoArgsEvent.SelectSourceAccEvent);
 	}
 
 	@Override
 	public void onSelectTargetHierarchy()
 	{
-		_commands.trigger(NoArgsEvent.SelectTargetAccEvent);
+		_commands.triggerWithoutArgs(NoArgsEvent.SelectTargetAccEvent);
 	}
 
 	@Override
 	public void onTargetAccountSelected(AccountData newAcc, AccountData originalAcc)
 	{
-		_commands.selectExpenseAcc(newAcc, originalAcc);
+		_commands.triggerWithArgs(new SelectExpenseAccEvent(newAcc, originalAcc));
 	}
 
 	@Override
 	public void onCreateNewAccHierarchy(String fileNameToSave)
 	{	
-		_commands.createAccHierarchy(fileNameToSave);
+		_commands.triggerWithArgs(new CreateAccHierarchyEvent(fileNameToSave));
 	}	
 }

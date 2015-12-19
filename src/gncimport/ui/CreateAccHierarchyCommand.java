@@ -2,24 +2,23 @@ package gncimport.ui;
 
 import gncimport.interactors.AccSelectionInteractor;
 
-class CreateAccHierarchyCommand
+class CreateAccHierarchyCommand implements Command<CreateAccHierarchyEvent>
 {
-	private String _fileNameToSave;
 	private TxView _theView;
 	private AccSelectionInteractor _theInteractor;
 	private UIConfig _theConfig;
 
-	public CreateAccHierarchyCommand(String fileNameToSave, TxView view, UIConfig config, AccSelectionInteractor interactor)
+	public CreateAccHierarchyCommand(TxView view, UIConfig config, AccSelectionInteractor interactor)
 	{
-		this._fileNameToSave = fileNameToSave;
 		this._theView = view;
 		this._theConfig = config;
 		this._theInteractor = interactor;
 	}
 
-	public void execute()
+	@Override
+	public void execute(CreateAccHierarchyEvent args)
 	{
-		if (_fileNameToSave == null || _fileNameToSave.trim().isEmpty())
+		if (args.fileNameToSave == null || args.fileNameToSave.trim().isEmpty())
 		{
 			_theView.displayErrorMessage("GNC file must be opened first!");
 			return;
@@ -27,7 +26,7 @@ class CreateAccHierarchyCommand
 	
 		try
 		{				
-			 _theInteractor.createNewAccountHierarchy(_theConfig.getMonthlyAccounts(), _fileNameToSave);
+			 _theInteractor.createNewAccountHierarchy(_theConfig.getMonthlyAccounts(), args.fileNameToSave);
 		}
 		catch (Exception e)
 		{

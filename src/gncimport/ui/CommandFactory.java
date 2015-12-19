@@ -4,7 +4,6 @@ import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
-import gncimport.models.AccountData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +16,6 @@ public class CommandFactory
 	
 	private Map<String, Command<? extends Event>> _commands = new HashMap<String, Command<? extends Event>>();
 	
-	private TxBrowseInteractor.OutPort _txBrowsePresenter; 
-	private AccFileLoadInteractor.OutPort _accFileLoadPresenter;
-	private AccSelectionInteractor.OutPort _accSelectionPresenter;
 		
 	public CommandFactory(TxView view, UIConfig config, InteractorFactory interactors)
 	{
@@ -27,47 +23,37 @@ public class CommandFactory
 		_view = view;
 		_config = config;
 		
-		_txBrowsePresenter = new TxBrowsePresenter(view, config); 
-		_accFileLoadPresenter = new AccFileLoadPresenter(view, config);
-		_accSelectionPresenter = new AccSelectionPresenter(view);
+		TxBrowseInteractor.OutPort txBrowsePresenter = new TxBrowsePresenter(view, config); 
+		AccFileLoadInteractor.OutPort accFileLoadPresenter = new AccFileLoadPresenter(view, config);
+		AccSelectionInteractor.OutPort accSelectionPresenter = new AccSelectionPresenter(view);
 	
-		registerEvent(FilterTxListEvent.class.getName(), new FilterTxListCommand(_interactors.txBrowse(_txBrowsePresenter)));
-		registerEvent(NoArgsEvent.LoadCsvEvent, new LoadCsvCommand(_view, _config, _interactors.txBrowse(_txBrowsePresenter)));
-		registerEvent(NoArgsEvent.LoadGncEvent, new LoadGncCommand(_view, _config, _interactors.accFileLoad(_accFileLoadPresenter)));
-		registerEvent(NoArgsEvent.SelectSourceAccEvent, new SelectSourceAccCommand(_view, _interactors.accSelection(_accSelectionPresenter)));
-		registerEvent(NoArgsEvent.SelectTargetAccEvent, new SelectTargetAccCommand(_view, _interactors.accSelection(_accSelectionPresenter)));
+		registerEvent(NoArgsEvent.LoadCsvEvent, new LoadCsvCommand(_view, _config, _interactors.txBrowse(txBrowsePresenter)));
+		registerEvent(NoArgsEvent.LoadGncEvent, new LoadGncCommand(_view, _config, _interactors.accFileLoad(accFileLoadPresenter)));
+		registerEvent(NoArgsEvent.SelectSourceAccEvent, new SelectSourceAccCommand(_view, _interactors.accSelection(accSelectionPresenter)));
+		registerEvent(NoArgsEvent.SelectTargetAccEvent, new SelectTargetAccCommand(_view, _interactors.accSelection(accSelectionPresenter)));
+
+		registerEvent(FilterTxListEvent.class.getName(), new FilterTxListCommand(_interactors.txBrowse(txBrowsePresenter)));
 		registerEvent(SaveGncEvent.class.getName(), new SaveGncCommand(_view, _interactors.txImport()));
+		registerEvent(SelectExpenseAccEvent.class.getName(), new SelectExpenseAccCommand(_view, _interactors.accSelection(accSelectionPresenter)));
+		registerEvent(CreateAccHierarchyEvent.class.getName(), new CreateAccHierarchyCommand(_view, _config, _interactors.accSelection(accSelectionPresenter)));
 	}
 
-	public <T extends Event> void registerEvent(String eventClass, Command<T> command)
+	public <T extends Event> void registerEvent(String eventId, Command<T> command)
 	{
-		_commands.put(eventClass, command);
+		_commands.put(eventId, command);
 	}
 
-	public <T extends Event> void trigger(T args)
+	public <T extends Event> void triggerWithArgs(T args)
 	{		
 		@SuppressWarnings("unchecked")
 		Command<T> cmd = (Command<T>) _commands.get(args.getClass().getName());
 		cmd.execute(args);
 	}
 
-	public void trigger(String eventId)
+	public void triggerWithoutArgs(String eventId)
 	{		
 		@SuppressWarnings("unchecked")
 		Command<NoArgsEvent> cmd = (Command<NoArgsEvent>) _commands.get(eventId);
 		cmd.execute(new NoArgsEvent());
 	}
-
-	public void selectExpenseAcc(AccountData newAcc, AccountData originalAcc)
-	{
-		SelectExpenseAccCommand cmd = new SelectExpenseAccCommand(newAcc, originalAcc, _view, _interactors.accSelection(_accSelectionPresenter));
-		cmd.execute();
-	}
-
-	public void createAccHierarchy(String fileNameToSave)
-	{
-		CreateAccHierarchyCommand cmd = new CreateAccHierarchyCommand(fileNameToSave, _view, _config, _interactors.accSelection(_accSelectionPresenter));
-		cmd.execute();
-	}
-
 }
