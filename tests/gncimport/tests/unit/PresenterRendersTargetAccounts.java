@@ -60,7 +60,7 @@ public class PresenterRendersTargetAccounts
 	}
 
 	@Test
-	public void sets_list_of_available_target_accounts()
+	public void DELETEME_sets_list_of_available_target_accounts()
 	{
 		List<AccountData> accountList = sampleAccounts();
 		
@@ -74,7 +74,7 @@ public class PresenterRendersTargetAccounts
 	}
 
 	@Test
-	public void inserts_special_place_holder_for_OTHER_accounts()
+	public void DELETEME_inserts_special_place_holder_for_OTHER_accounts()
 	{
 		List<AccountData> accountList = sampleAccounts();
 

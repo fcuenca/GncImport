@@ -1,8 +1,13 @@
 package gncimport.tests.unit;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import gncimport.models.AccountData;
 import gncimport.models.TxData;
@@ -44,23 +49,43 @@ public class TxBrowsePresenterTests
 		
 		_presenter = new TxBrowsePresenter(_view, _config);
 	}
-
+	
 	@Test
-	public void adds_OTHER_placeholder_when_displaying_expense_account_list()
+	public void displays_transaction_list()
 	{
 		List<TxData> txList = SampleTxData.txDataListWithAllAccounts();
 		
-		List<AccountData> accountList = new ArrayList<AccountData>();
-		accountList.add(new AccountData("Expenses", "id"));
+		_presenter.accept(txList, new ArrayList<AccountData>());
 		
-		_presenter.accept(txList, accountList);
-		
-		verify(_view).displayTxData(expectedTxList.capture(), expectedAccountList.capture());
+		verify(_view).displayTxData(expectedTxList.capture(), anyListOf(AccountData.class));
 
 		assertThat(expectedTxList.getValue().getTransactions(), is(txList));
+	}
 
-		accountList.add(CandidateAccList.OTHER_ACC_PLACEHOLDER);
-		assertThat(expectedAccountList.getValue(), is(accountList));
+
+	@Test
+	public void sets_candidate_expense_accounts()
+	{
+		List<AccountData> accountList = sampleAccounts();
+		
+		_presenter.accept(new ArrayList<TxData>(), accountList);
+		
+		verify(_view).displayTxData(any(TxTableModel.class), expectedAccountList.capture());
+
+		assertThat(expectedAccountList.getValue(), hasItems(asArray(accountList)));
+	}
+
+	@Test
+	public void inserts_special_place_holder_for_OTHER_accounts()
+	{
+		List<AccountData> accountList = sampleAccounts();
+		
+		_presenter.accept(new ArrayList<TxData>(), accountList);
+		
+		verify(_view).displayTxData(any(TxTableModel.class), expectedAccountList.capture());
+
+		assertThat(expectedAccountList.getValue(), hasSize(accountList.size() + 1));
+		assertThat(expectedAccountList.getValue(), hasItem(CandidateAccList.OTHER_ACC_PLACEHOLDER));
 	}
 
 	@Test
@@ -89,6 +114,20 @@ public class TxBrowsePresenterTests
 		verify(_config).setLastCsvDirectory("/path/to/input");
 	}
 
+	private AccountData[] asArray(List<AccountData> accountList)
+	{
+		return accountList.toArray(new AccountData[accountList.size()]);
+	}
+
+	private List<AccountData> sampleAccounts()
+	{
+		List<AccountData> accountList = new ArrayList<AccountData>();
+		accountList.add(new AccountData("Groceries", "id-1"));
+		accountList.add(new AccountData("Entertainment", "id-2"));
+		accountList.add(new AccountData("Misc Expenses", "id-3"));
+
+		return accountList;
+	}
 
 
 }
