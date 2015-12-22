@@ -1,5 +1,7 @@
 package gncimport.tests.unit;
 
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
@@ -37,6 +39,18 @@ public class AccSelectionInteractorTests
 		_interactor = new AccSelectionInteractor(_outPort, _model);
 	}
 	
+	@Test
+	public void prompts_user_for_expense_account_selection()
+	{
+		AccountData selectedAccount = new AccountData("Account", "id");
+		List<AccountData> accountList = SampleAccountData.testAccountList();
+
+		when(_model.getAccounts()).thenReturn(accountList);
+		when(_outPort.selectAccount(accountList)).thenReturn(selectedAccount);
+
+		assertThat(_interactor.browseAccounts(), is(selectedAccount));
+	}
+
 	@Test
 	public void prompts_user_to_select_target_account()
 	{

@@ -137,7 +137,7 @@ public class PresenterRendersTargetAccounts
 	}
 
 	@Test
-	public void returns_the_target_account_when_selected_from_candidate_list()
+	public void DELETEME_returns_the_target_account_when_selected_from_candidate_list()
 	{
 		AccountData originalAcc = new AccountData("Original", "id-1");
 		AccountData newAcc = new AccountData("New Account", "id-2");
@@ -148,7 +148,7 @@ public class PresenterRendersTargetAccounts
 	}
 
 	@Test
-	public void displays_account_tree_when_selecting_OTHER_as_target()
+	public void DELETEME_displays_account_tree_when_selecting_OTHER_as_target()
 	{
 		AccountData originalAcc = new AccountData("Original", "id-1");
 		AccountData selectedAccount = new AccountData("New Acc", "acc-id");
@@ -168,7 +168,7 @@ public class PresenterRendersTargetAccounts
 	}
 
 	@Test
-	public void keeps_target_account_when_no_selection_is_made()
+	public void DELETEME_keeps_target_account_when_no_selection_is_made()
 	{
 		AccountData originalAcc = new AccountData("Original", "id-1");
 
