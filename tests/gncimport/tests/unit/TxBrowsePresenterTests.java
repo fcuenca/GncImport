@@ -71,8 +71,24 @@ public class TxBrowsePresenterTests
 		_presenter.accept(txList, new ArrayList<AccountData>());
 		
 		verify(_view).displayTxCount(txList.size());
-
 	}
+	
+	@Test
+	public void updates_view_when_transaction_file_is_open()
+	{
+		_presenter.fileWasOpened("someFileName");
+		
+		verify(_view).updateCsvFileLabel("someFileName");
+	}
+
+	@Test
+	public void remembers_location_of_last_transaction_file_opened()
+	{
+		_presenter.fileWasOpened("/path/to/input/file.csv");
+		
+		verify(_config).setLastCsvDirectory("/path/to/input");
+	}
+
 
 
 }

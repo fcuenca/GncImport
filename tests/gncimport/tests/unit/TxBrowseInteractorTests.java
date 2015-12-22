@@ -3,6 +3,7 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,6 +47,34 @@ public class TxBrowseInteractorTests
 	}
 
 	@Test
+	public void fetches_transactions_into_the_model()
+	{
+		_interactor.fetchTransactions("fileName");
+		
+		verify(_model).fetchTransactionsFrom("fileName");
+	}
+	
+	@Test
+	public void updates_view_with_transaction_list()
+	{
+		List<TxData> txList = SampleTxData.txDataListWithAllAccounts();
+
+		List<AccountData> accountList = new ArrayList<AccountData>();
+		accountList.add(new AccountData("Expenses", "id"));
+
+		when(_model.fetchTransactionsFrom(anyString())).thenReturn(txList);
+		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
+
+		_interactor.fetchTransactions("/path/to/input/file.csv");
+
+		verify(_outPort).accept(expectedTxList.capture(), expectedAccountList.capture());
+		assertThat(expectedTxList.getValue(), is(txList));
+		assertThat(expectedAccountList.getValue(), is(accountList));
+		
+		verify(_outPort).fileWasOpened("/path/to/input/file.csv");
+	}
+
+	@Test
 	public void filters_the_model_with_supplied_date_range()
 	{
 		Date fromDate = new Date();
@@ -70,11 +99,7 @@ public class TxBrowseInteractorTests
 		_interactor.filterTxList(new Date(), new Date());
 
 		verify(_outPort).accept(expectedTxList.capture(), expectedAccountList.capture());
-
 		assertThat(expectedTxList.getValue(), is(txList));
 		assertThat(expectedAccountList.getValue(), is(accountList));
 	}
-
-
-
 }

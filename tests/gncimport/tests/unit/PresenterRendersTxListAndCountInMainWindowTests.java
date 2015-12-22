@@ -34,6 +34,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.runners.MockitoJUnitRunner;
 
+@SuppressWarnings("deprecation")
 @RunWith(MockitoJUnitRunner.class)
 public class PresenterRendersTxListAndCountInMainWindowTests
 {
@@ -56,7 +57,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	}
 
 	@Test
-	public void prompts_for_opening_csv_file_at_the_last_known_location()
+	public void DELETEME_prompts_for_opening_csv_file_at_the_last_known_location()
 	{
 		when(_config.getLastCsvDirectory()).thenReturn("/path/to/input");
 		when(_view.promptForFile("/path/to/input")).thenReturn("/path/to/input/file.csv");
@@ -69,7 +70,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	}
 	
 	@Test
-	public void defaults_to_homeDir_if_there_is_no_last_known_location()
+	public void DELETEME_defaults_to_homeDir_if_there_is_no_last_known_location()
 	{
 		String homeDir = System.getProperty("user.home");
 
@@ -84,7 +85,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	}
 	
 	@Test
-	public void can_handle_cancel_open_file_operation()
+	public void DELETEME_can_handle_cancel_open_file_operation()
 	{
 		when(_view.promptForFile(anyString())).thenReturn(null);
 
@@ -96,7 +97,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	}
 	
 	@Test
-	public void displays_available_transactions_from_file()
+	public void DELETEME_displays_available_transactions_from_file()
 	{
 		List<TxData> actualTxs = SampleTxData.txDataList();
 
@@ -113,7 +114,7 @@ public class PresenterRendersTxListAndCountInMainWindowTests
 	}
 
 	@Test
-	public void displays_transaction_count_on_file_open()
+	public void DELETEME_displays_transaction_count_on_file_open()
 	{
 		List<TxData> actualTxs = SampleTxData.txDataList();
 
