@@ -49,7 +49,7 @@ public class PresenterFiltersTxList
 	}
 
 	@Test
-	public void resets_table_mode_based_on_date_filter()
+	public void DELETEME_resets_table_mode_based_on_date_filter()
 	{
 		List<TxData> txList = SampleTxData.txDataListWithAllAccounts();
 
@@ -72,7 +72,7 @@ public class PresenterFiltersTxList
 
 	@SuppressWarnings("deprecation")
 	@Test
-	public void adjusts_upper_bound_to_be_inclusive_of_the_last_day()
+	public void DELETEME_adjusts_upper_bound_to_be_inclusive_of_the_last_day()
 	{
 		Date fromDate = new Date(2012 - 1900, 10, 14, 5, 30, 27);
 		Date toDate = new Date(2012 - 1900, 10, 16, 16, 33, 13);
@@ -88,7 +88,7 @@ public class PresenterFiltersTxList
 	}
 
 	@Test
-	public void lower_bound_can_be_open()
+	public void DELETEME_lower_bound_can_be_open()
 	{
 		_presenter.onFilterTxList(null, new Date());
 
@@ -98,7 +98,7 @@ public class PresenterFiltersTxList
 	}
 
 	@Test
-	public void upper_bound_can_be_open()
+	public void DELETEME_upper_bound_can_be_open()
 	{
 		_presenter.onFilterTxList(new Date(), null);
 
