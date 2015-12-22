@@ -36,6 +36,44 @@ public class AccSelectionInteractorTests
 
 		_interactor = new AccSelectionInteractor(_outPort, _model);
 	}
+	
+	@Test
+	public void prompts_user_to_select_target_account()
+	{
+		List<AccountData> accountList = SampleAccountData.testAccountList();
+
+		when(_model.getAccounts()).thenReturn(accountList);
+
+		_interactor.selectTargetAccount();
+		
+		verify(_outPort).selectAccount(accountList);
+	}
+	
+	@Test
+	public void resets_target_account_if_selection_is_made()
+	{
+		AccountData selectedAccount = new AccountData("selected Account", "id");
+		List<AccountData> accountList = sampleAccounts();
+		
+		when(_outPort.selectAccount(anyListOf(AccountData.class))).thenReturn(selectedAccount);
+		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
+
+		_interactor.selectTargetAccount();
+		
+		verify(_model).setTargetHierarchy(selectedAccount);
+		verify(_outPort).targetHierarchyHasBeenSet("selected Account", accountList);
+	}
+	
+	@Test
+	public void keeps_target_hierarchy_if_no_selection_is_made()
+	{
+		when(_outPort.selectAccount(anyListOf(AccountData.class))).thenReturn(null);
+
+		_interactor.selectTargetAccount();
+
+		verify(_model, never()).setTargetHierarchy(any(AccountData.class));
+		verify(_outPort, never()).targetHierarchyHasBeenSet(anyString(), anyListOf(AccountData.class));
+	}
 
 	@Test
 	public void creates_new_account_hierarchy()
@@ -71,5 +109,14 @@ public class AccSelectionInteractorTests
 	}
 
 
+	private List<AccountData> sampleAccounts()
+	{
+		List<AccountData> accountList = new ArrayList<AccountData>();
+		accountList.add(new AccountData("Groceries", "id-1"));
+		accountList.add(new AccountData("Entertainment", "id-2"));
+		accountList.add(new AccountData("Misc Expenses", "id-3"));
+
+		return accountList;
+	}
 
 }

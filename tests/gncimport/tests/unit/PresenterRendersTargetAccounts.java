@@ -89,7 +89,7 @@ public class PresenterRendersTargetAccounts
 	}
 
 	@Test
-	public void renders_the_target_account_tree()
+	public void DELETEME_renders_the_target_account_tree()
 	{
 		List<AccountData> accountList = SampleAccountData.testAccountList();
 
@@ -105,7 +105,7 @@ public class PresenterRendersTargetAccounts
 	}
 
 	@Test
-	public void resets_target_account_if_selection_is_made()
+	public void DELETEME_resets_target_account_if_selection_is_made()
 	{
 		AccountData selectedAccount = new AccountData("New Acc", "acc-id");
 		DefaultMutableTreeNode selectedNode = new DefaultMutableTreeNode(selectedAccount);
@@ -127,7 +127,7 @@ public class PresenterRendersTargetAccounts
 	}
 
 	@Test
-	public void keeps_target_hierarchy_if_no_selection_is_made()
+	public void DELETEME_keeps_target_hierarchy_if_no_selection_is_made()
 	{
 		when(_view.promptForAccount(any(DefaultMutableTreeNode.class))).thenReturn(null);
 
