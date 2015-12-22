@@ -54,7 +54,7 @@ public class PresenterCreatesNewAccountHierarchies
 	}
 	
 	@Test
-	public void allowed_only_after_opening_gnc_file()
+	public void DELETEME_allowed_only_after_opening_gnc_file()
 	{
 		_presenter.onCreateNewAccHierarchy("");
 		
@@ -64,7 +64,7 @@ public class PresenterCreatesNewAccountHierarchies
 	}
 
 	@Test
-	public void renders_the_account_tree()
+	public void DELETEME_renders_the_account_tree()
 	{
 		List<AccountData> accountList = SampleAccountData.testAccountList();
 
@@ -78,9 +78,9 @@ public class PresenterCreatesNewAccountHierarchies
 		assertThat(expectedAccTree.getValue().getChildCount(), is(2));
 		assertThat(expectedAccTree.getValue().getChildAt(0).getChildAt(1).toString(), is("Child 2"));
 	}
-	
+		
 	@Test
-	public void aborts_if_no_selection_is_made()
+	public void DELETEME_aborts_if_no_selection_is_made()
 	{
 		when(_view.promptForNewHierarchy(any(DefaultMutableTreeNode.class))).thenReturn(null);
 
@@ -91,7 +91,7 @@ public class PresenterCreatesNewAccountHierarchies
 	}
 	
 	@Test
-	public void parent_account_cannot_be_null()
+	public void DELETEME_parent_account_cannot_be_null()
 	{
 		NewHierarchyParams hierarchyParams = new  NewHierarchyParams(); 
 		hierarchyParams.parentNode = null;
@@ -105,7 +105,7 @@ public class PresenterCreatesNewAccountHierarchies
 	}
 	
 	@Test
-	public void root_acc_name_cannot_be_null()
+	public void DELETEME_root_acc_name_cannot_be_null()
 	{
 		NewHierarchyParams hierarchyParams = new  NewHierarchyParams(); 
 		hierarchyParams.parentNode = new DefaultMutableTreeNode();
@@ -119,7 +119,7 @@ public class PresenterCreatesNewAccountHierarchies
 	}
 	
 	@Test
-	public void root_acc_name_cannot_be_blank()
+	public void DELETEME_root_acc_name_cannot_be_blank()
 	{
 		NewHierarchyParams hierarchyParams = new  NewHierarchyParams(); 
 		hierarchyParams.parentNode = new DefaultMutableTreeNode();
@@ -133,7 +133,7 @@ public class PresenterCreatesNewAccountHierarchies
 	}
 	
 	@Test
-	public void triggers_account_creation_when_selection_is_made()
+	public void DELETEME_triggers_account_creation_when_selection_is_made()
 	{
 		AccountData selectedAccount = new AccountData("Parent Account", "acc-id");
 		
