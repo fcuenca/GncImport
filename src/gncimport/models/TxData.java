@@ -28,7 +28,7 @@ public class TxData
 	public String toString()
 	{
 		return "[" + date + ", " + amount + ", " + description + ", " +
-				targetAccount != null ? targetAccount.getId() : "null" + "]";
+				(targetAccount != null ? targetAccount.getId() : "null") + "]";
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class PresenterSavesImportedTransactiosToGncFile
 	}
 
 	@Test
-	public void transactions_from_view_are_forwarded_to_model()
+	public void DELETEME_transactions_from_view_are_forwarded_to_model()
 	{
 		List<TxData> actualTxs = SampleTxData.txDataList();
 
