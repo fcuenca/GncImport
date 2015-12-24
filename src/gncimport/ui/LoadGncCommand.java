@@ -15,13 +15,13 @@ public class LoadGncCommand extends LoadFileCommand
 	}
 
 	@Override
-	protected String getLastUsedDirectory()
+	public String getLastUsedDirectory()
 	{
 		return _theConfig.getLastGncDirectory();
 	}
 
 	@Override
-	protected void loadFile(String fileName)
+	public void loadFile(String fileName)
 	{	
 		_theInteractor.openGncFile(fileName);
 	}

@@ -2,14 +2,11 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.junit.Assert.fail;
 import gncimport.interactors.AccFileLoadInteractor;
+import gncimport.ui.LoadFileCommand;
 import gncimport.ui.LoadGncCommand;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
@@ -17,7 +14,7 @@ import gncimport.ui.UIConfig;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LoadGncCommandTests
+public class LoadGncCommandTests extends LoadFileCommandContractTests
 {
 	
 	private TxView _view;
@@ -35,25 +32,29 @@ public class LoadGncCommandTests
 		_cmd = new LoadGncCommand(_view, _config, _interactor);
 	}
 
-	@Test
-	public void prompts_for_opening_gnc_file_at_the_last_known_location()
+	@Override
+	protected LoadFileCommand newCommandToOpenFileFromLocation(String filePath, TxView view)
 	{
-		when(_config.getLastGncDirectory()).thenReturn("/path/to/input");
+		when(_config.getLastGncDirectory()).thenReturn(filePath);
 
-		_cmd.execute(null);
-		
-		verify(_view).promptForFile("/path/to/input");
+		return new LoadGncCommand(view, _config, _interactor);
 	}
 	
 	@Test
-	public void defaults_to_homeDir_if_there_is_no_last_known_location()
+	public void opens_accounting_file()
 	{
-		String homeDir = System.getProperty("user.home");
-
-		when(_config.getLastCsvDirectory()).thenReturn("");
-
-		_cmd.execute(null);
-
-		verify(_view).promptForFile(homeDir);
+		_cmd.loadFile("/path/to/input/file.gnc");
+		
+		verify(_interactor).openGncFile("/path/to/input/file.gnc");
 	}
+	
+	@Test
+	public void returns_last_used_directory()
+	{
+		when(_config.getLastGncDirectory()).thenReturn("/some/file/path");
+		
+		assertThat(_cmd.getLastUsedDirectory(), is("/some/file/path"));
+	}
+
+
 }

@@ -15,13 +15,13 @@ public class LoadCsvCommand extends LoadFileCommand
 	}
 
 	@Override
-	protected void loadFile(final String fileName)
+	public void loadFile(final String fileName)
 	{
 		_theInteractor.fetchTransactions(fileName);
 	}
 
 	@Override
-	protected String getLastUsedDirectory()
+	public String getLastUsedDirectory()
 	{
 		return _theConfig.getLastCsvDirectory();
 	}

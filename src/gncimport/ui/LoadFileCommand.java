@@ -34,6 +34,6 @@ public abstract class LoadFileCommand implements Command<NoArgsEvent>
 		}
 	}
 
-	protected abstract String getLastUsedDirectory();
-	protected abstract void loadFile(final String fileName);
+	public abstract String getLastUsedDirectory();
+	public abstract void loadFile(final String fileName);
 }

@@ -1,19 +1,20 @@
 package gncimport.tests.unit;
 
-import static org.mockito.Matchers.anyString;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.ui.LoadCsvCommand;
+import gncimport.ui.LoadFileCommand;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class LoadCsvCommandTests
+public class LoadCsvCommandTests extends LoadFileCommandContractTests
 {
 	private TxView _view;
 	private UIConfig _config;
@@ -29,50 +30,28 @@ public class LoadCsvCommandTests
 		
 		_cmd = new LoadCsvCommand(_view, _config, _interactor);
 	}
-
-	@Test
-	public void prompts_for_opening_csv_file_at_the_last_known_location()
-	{
-		when(_config.getLastCsvDirectory()).thenReturn("/path/to/input");
-
-		_cmd.execute(null);
-
-		verify(_view).promptForFile("/path/to/input");
-	}
 	
-	@Test
-	public void defaults_to_homeDir_if_there_is_no_last_known_location()
+	@Override
+	protected LoadFileCommand newCommandToOpenFileFromLocation(String filePath, TxView view)
 	{
-		String homeDir = System.getProperty("user.home");
+		when(_config.getLastCsvDirectory()).thenReturn(filePath);
 
-		when(_config.getLastCsvDirectory()).thenReturn("");
-
-		_cmd.execute(null);
-
-		verify(_view).promptForFile(homeDir);
+		return new LoadCsvCommand(view, _config, _interactor);
 	}
-	
+
 	@Test
 	public void fetches_transactions_from_file()
 	{
-		when(_view.promptForFile(anyString())).thenReturn("/path/to/input/file.csv");
-
-		_cmd.execute(null);
+		_cmd.loadFile("/path/to/input/file.csv");
 		
 		verify(_interactor).fetchTransactions("/path/to/input/file.csv");
 	}
-
+	
 	@Test
-	public void can_handle_cancel_open_file_operation()
+	public void returns_last_used_directory()
 	{
-		when(_view.promptForFile(anyString())).thenReturn(null);
-
-		_cmd.execute(null);
-
-		verify(_interactor, never()).fetchTransactions(anyString());
-		verify(_config, never()).setLastCsvDirectory(anyString());
-		verify(_view, never()).updateCsvFileLabel(anyString());
+		when(_config.getLastCsvDirectory()).thenReturn("/some/file/path");
+		
+		assertThat(_cmd.getLastUsedDirectory(), is("/some/file/path"));
 	}
-
-
 }

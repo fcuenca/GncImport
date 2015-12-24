@@ -76,7 +76,7 @@ public class PresenterRendersTheAccountList
 	}
 	
 	@Test
-	public void can_handle_cancel_open_file_operation()
+	public void DELETEME_can_handle_cancel_open_file_operation()
 	{
 		when(_view.promptForFile(anyString())).thenReturn(null);
 		
