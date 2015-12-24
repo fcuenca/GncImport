@@ -13,7 +13,6 @@ public class TxBrowseInteractor
 	{
 		void accept(List<TxData> txList, List<AccountData> theAccList);
 		void fileWasOpened(String fileName);
-
 	}
 	
 	private TxImportModel _model;

@@ -48,7 +48,7 @@ public class PresenterRendersTheAccountList
 	}
 
 	@Test
-	public void prompts_for_opening_gnc_file_at_the_last_known_location()
+	public void DELETEME_prompts_for_opening_gnc_file_at_the_last_known_location()
 	{
 		when(_config.getLastGncDirectory()).thenReturn("/path/to/input");
 		when(_view.promptForFile("/path/to/input")).thenReturn("/path/to/input/gnc.xml");
@@ -61,7 +61,7 @@ public class PresenterRendersTheAccountList
 	}
 	
 	@Test
-	public void defaults_to_homeDir_if_there_is_no_last_known_location()
+	public void DELETEME_defaults_to_homeDir_if_there_is_no_last_known_location()
 	{
 		String homeDir = System.getProperty("user.home");
 		
