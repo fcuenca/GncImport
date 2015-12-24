@@ -170,6 +170,14 @@ public class AccSelectionPresenterTests
 		assertThat(expectedAccountList.getValue(), hasSize(_accountList.size() + 1));
 		assertThat(expectedAccountList.getValue(), hasItem(CandidateAccList.OTHER_ACC_PLACEHOLDER));
 	}
+	
+	@Test
+	public void updates_source_account_in_view()
+	{
+		_presenter.sourceAccHasBeenSet("New Acc");
+		
+		verify(_view).displaySourceAccount("New Acc");
+	}
 
 	private AccountData[] asArray(List<AccountData> accountList)
 	{

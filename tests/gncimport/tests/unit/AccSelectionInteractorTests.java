@@ -40,7 +40,7 @@ public class AccSelectionInteractorTests
 	}
 	
 	@Test
-	public void prompts_user_for_expense_account_selection()
+	public void prompts_user_to_select_an_account()
 	{
 		AccountData selectedAccount = new AccountData("Account", "id");
 		List<AccountData> accountList = SampleAccountData.testAccountList();
@@ -64,6 +64,18 @@ public class AccSelectionInteractorTests
 	}
 	
 	@Test
+	public void prompts_user_to_select_source_account()
+	{
+		List<AccountData> accountList = SampleAccountData.testAccountList();
+		
+		when(_model.getAccounts()).thenReturn(accountList);
+		
+		_interactor.selectSourceAccount();
+		
+		verify(_outPort).selectAccount(accountList);
+	}
+	
+	@Test
 	public void resets_target_account_if_selection_is_made()
 	{
 		AccountData selectedAccount = new AccountData("selected Account", "id");
@@ -79,6 +91,21 @@ public class AccSelectionInteractorTests
 	}
 	
 	@Test
+	public void resets_source_account_if_selection_is_made()
+	{
+		AccountData selectedAccount = new AccountData("selected Account", "id");
+		List<AccountData> accountList = sampleAccounts();
+		
+		when(_outPort.selectAccount(anyListOf(AccountData.class))).thenReturn(selectedAccount);
+		when(_model.getCandidateTargetAccounts()).thenReturn(accountList);
+		
+		_interactor.selectSourceAccount();
+		
+		verify(_model).setSourceAccount(selectedAccount);
+		verify(_outPort).sourceAccHasBeenSet("selected Account");
+	}
+	
+	@Test
 	public void keeps_target_hierarchy_if_no_selection_is_made()
 	{
 		when(_outPort.selectAccount(anyListOf(AccountData.class))).thenReturn(null);
@@ -89,6 +116,17 @@ public class AccSelectionInteractorTests
 		verify(_outPort, never()).targetHierarchyHasBeenSet(anyString(), anyListOf(AccountData.class));
 	}
 
+	@Test
+	public void keeps_source_hierarchy_if_no_selection_is_made()
+	{
+		when(_outPort.selectAccount(anyListOf(AccountData.class))).thenReturn(null);
+		
+		_interactor.selectSourceAccount();
+		
+		verify(_model, never()).setSourceAccount(any(AccountData.class));
+		verify(_outPort, never()).sourceAccHasBeenSet(anyString());
+	}
+	
 	@Test
 	public void creates_new_account_hierarchy()
 	{

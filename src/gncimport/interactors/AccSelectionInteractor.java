@@ -42,8 +42,7 @@ public class AccSelectionInteractor
 
 	public void selectSourceAccount()
 	{
-		List<AccountData> accounts = _model.getAccounts();
-		AccountData selectedAccount = _output.selectAccount(accounts);
+		AccountData selectedAccount = browseAccounts();
 
 		if (selectedAccount != null)
 		{
@@ -54,8 +53,7 @@ public class AccSelectionInteractor
 
 	public void selectTargetAccount()
 	{
-		List<AccountData> accounts = _model.getAccounts();
-		AccountData selectedAccount = _output.selectAccount(accounts);
+		AccountData selectedAccount = browseAccounts();
 
 		if (selectedAccount != null)
 		{
@@ -84,6 +82,4 @@ public class AccSelectionInteractor
 			
 		}
 	}
-
-
 }
