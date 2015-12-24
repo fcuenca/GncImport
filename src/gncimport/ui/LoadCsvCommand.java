@@ -2,41 +2,27 @@ package gncimport.ui;
 
 import gncimport.interactors.TxBrowseInteractor;
 
-public class LoadCsvCommand  implements Command<NoArgsEvent>
+public class LoadCsvCommand extends LoadFileCommand  
 {		
-	private TxView _theView;
 	private UIConfig _theConfig;
 	private TxBrowseInteractor _theInteractor;
 
 	public LoadCsvCommand(TxView view, UIConfig config, TxBrowseInteractor interactor)
 	{
-		_theView = view;
+		super(view);
 		_theConfig = config;
 		_theInteractor = interactor;
 	}
 
 	@Override
-	public void execute(NoArgsEvent __not_used__)
+	protected void loadFile(final String fileName)
 	{
-		try
-		{
-			String lastDir = _theConfig.getLastCsvDirectory();
-			
-			if(lastDir == null || lastDir.isEmpty())
-			{
-				lastDir = System.getProperty("user.home");
-			}
-			
-			final String fileName = _theView.promptForFile(lastDir);
-			
-			if (fileName != null)
-			{					
-				_theInteractor.fetchTransactions(fileName);				
-			}
-		}
-		catch (Exception e)
-		{
-			_theView.handleException(e);
-		}
+		_theInteractor.fetchTransactions(fileName);
+	}
+
+	@Override
+	protected String getLastUsedDirectory()
+	{
+		return _theConfig.getLastCsvDirectory();
 	}
 }
