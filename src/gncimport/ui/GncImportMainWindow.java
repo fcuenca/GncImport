@@ -77,12 +77,11 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 			// into a void function, similar to all the other commands.
 			// The root cause is the way Swing's editors work.... :-/
 			// This will call back into selectExpenseAccForTx, which sets selectedExpenseAcc
-			_presenter.onTargetAccountSelected(newValue, _originalValue);  
+			onSelectExpenseAccount(newValue, _originalValue);
+			
 			return selectedExpenseAcc;
 		}
 	}
-
-	private final MainWindowRenderer _presenter;
 	
 	private String _gncFileName = "";
 
@@ -101,15 +100,12 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public GncImportMainWindow(TxImportModel model, UIConfig config)
 	{
-		_presenter = new MainWindowPresenter(model, this, config);
 		_commands = new GncImportAppCommandFactory(this, config, new InteractorFactory(model));
-
 		initialize();
 	}
 
-	public GncImportMainWindow(MainWindowRenderer presenter, CommandFactory commands)
+	public GncImportMainWindow(CommandFactory commands)
 	{
-		_presenter = presenter;
 		_commands = commands;
 		initialize();
 	}
@@ -418,6 +414,12 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		_gncFileLabel.setText(fileName);
 		_gncFileLabel.setToolTipText(fileName);
 	}
+	
+	@Override
+	public void displayErrorMessage(String message)
+	{
+		JOptionPane.showMessageDialog(this, message);
+	}
 
 	public void onSelectSourceAccClick()
 	{
@@ -426,7 +428,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public void onImportClick()
 	{
-		_presenter.onSaveToGncFile(_gncFileName);
+		_commands.triggerWithArgs(new SaveGncEvent(_gncFileName));
 	}
 
 	public void onSelectTargetHierarchyClick()
@@ -436,7 +438,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	
 	public void onNewAccHierarchy()
 	{
-		_presenter.onCreateNewAccHierarchy(_gncFileName);
+		_commands.triggerWithArgs(new CreateAccHierarchyEvent(_gncFileName));
 	}
 
 	public void onLoadCsvFile()
@@ -449,14 +451,13 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		_commands.triggerWithoutArgs(NoArgsEvent.LoadGncEvent);
 	}
 
-	private void onFilterTxList()
+	public void onFilterTxList()
 	{
-		_presenter.onFilterTxList(_fromDatePicker.getDate(), _toDatePicker.getDate());
+		_commands.triggerWithArgs(new FilterTxListEvent(_fromDatePicker.getDate(), _toDatePicker.getDate()));
 	}
 
-	@Override
-	public void displayErrorMessage(String message)
+	public void onSelectExpenseAccount(AccountData selectedAcc, AccountData originalAcc)
 	{
-		JOptionPane.showMessageDialog(this, message);
+		_commands.triggerWithArgs(new SelectExpenseAccEvent(selectedAcc, originalAcc));
 	}
 }
