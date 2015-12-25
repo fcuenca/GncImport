@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.ui.FilterTxListCommand;
 import gncimport.ui.FilterTxListEvent;
+import gncimport.ui.TxView;
 
 import java.util.Date;
 
@@ -22,7 +23,7 @@ public class FilterTxListCommandTests
 	public void SetUp()
 	{
 		_interactor = mock(TxBrowseInteractor.class);
-		_cmd = new FilterTxListCommand(_interactor);
+		_cmd = new FilterTxListCommand(mock(TxView.class), _interactor);
 	}
 
 	@SuppressWarnings("deprecation")

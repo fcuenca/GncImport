@@ -3,37 +3,34 @@ package gncimport.ui;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.models.AccountData;
 
-public class SelectExpenseAccCommand implements Command<SelectExpenseAccEvent>
+public class SelectExpenseAccCommand 
+	extends AbstractCommand<SelectExpenseAccEvent> implements Command<SelectExpenseAccEvent>
 {
-	private TxView _theView;
 	private AccSelectionInteractor _theInteractor;
 
 	public SelectExpenseAccCommand(TxView view, AccSelectionInteractor interactor)
 	{
-		this._theView = view;
+		super(view);
 		this._theInteractor = interactor;
 	}
 
 	@Override
-	public void execute(SelectExpenseAccEvent args)
+	protected void doExecute(SelectExpenseAccEvent args)
 	{
 		AccountData result = args.originalAcc;
-
 		try
-		{			
+		{
 			result = chooseExpenseAccount(args);
 		}
-		catch (Exception e)
+		finally
 		{
-			_theView.handleException(e);
+			// Hmm.... This is a weird command, because it sets the output directly
+			// rather than as an output of the Interactor. The functionality
+			// required here is purely the result of the design of the Swing UI (in particular,
+			// the way the ComboBox editor works), so it makes sense to keep it here.
+			// But.... this doesn't smell right .... :-/
+			_theView.selectExpenseAccForTx(result);
 		}
-
-		// Hmm.... This is a weird command, because it sets the output directly
-		// rather than as an output of the Interactor. The functionality
-		// required here is purely the result of the design of the Swing UI (in particular,
-		// the way the ComboBox editor works), so it makes sense to keep it here.
-		// But.... this doesn't smell right .... :-/
-		_theView.selectExpenseAccForTx(result);
 	}
 
 	private AccountData chooseExpenseAccount(SelectExpenseAccEvent args)

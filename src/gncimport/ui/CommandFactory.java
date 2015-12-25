@@ -32,7 +32,7 @@ public class CommandFactory
 		registerEvent(NoArgsEvent.SelectSourceAccEvent, new SelectSourceAccCommand(_view, _interactors.accSelection(accSelectionPresenter)));
 		registerEvent(NoArgsEvent.SelectTargetAccEvent, new SelectTargetAccCommand(_view, _interactors.accSelection(accSelectionPresenter)));
 
-		registerEvent(FilterTxListEvent.class.getName(), new FilterTxListCommand(_interactors.txBrowse(txBrowsePresenter)));
+		registerEvent(FilterTxListEvent.class.getName(), new FilterTxListCommand(_view, _interactors.txBrowse(txBrowsePresenter)));
 		registerEvent(SaveGncEvent.class.getName(), new SaveGncCommand(_view, _interactors.txImport()));
 		registerEvent(SelectExpenseAccEvent.class.getName(), new SelectExpenseAccCommand(_view, _interactors.accSelection(accSelectionPresenter)));
 		registerEvent(CreateAccHierarchyEvent.class.getName(), new CreateAccHierarchyCommand(_view, _config, _interactors.accSelection(accSelectionPresenter)));

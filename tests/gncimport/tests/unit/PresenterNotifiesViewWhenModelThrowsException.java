@@ -1,9 +1,13 @@
 package gncimport.tests.unit;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Date;
+
 import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.TxBrowseInteractor;
@@ -14,6 +18,8 @@ import gncimport.tests.data.SampleTxData;
 import gncimport.ui.CandidateAccList;
 import gncimport.ui.CreateAccHierarchyCommand;
 import gncimport.ui.CreateAccHierarchyEvent;
+import gncimport.ui.FilterTxListCommand;
+import gncimport.ui.FilterTxListEvent;
 import gncimport.ui.LoadCsvCommand;
 import gncimport.ui.LoadGncCommand;
 import gncimport.ui.MainWindowPresenter;
@@ -215,5 +221,20 @@ public class PresenterNotifiesViewWhenModelThrowsException
 		
 		verify(_view).handleException(_expectedException);
 	}
+	
+	
+	
+	@Test
+	public void when_filtering_transactions()
+	{
+		TxBrowseInteractor interactor = makeBomb(TxBrowseInteractor.class, _expectedException);
+		FilterTxListCommand cmd = new FilterTxListCommand(_view, interactor);
+		
+		cmd.execute(new FilterTxListEvent(new Date(), new Date()));
+		
+		verify(_view).handleException(_expectedException);
+	}
+
+
 	
 }

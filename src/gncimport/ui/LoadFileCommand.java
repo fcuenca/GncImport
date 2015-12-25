@@ -1,36 +1,28 @@
 package gncimport.ui;
 
-public abstract class LoadFileCommand implements Command<NoArgsEvent>
+public abstract class LoadFileCommand 
+	extends AbstractCommand<NoArgsEvent> implements Command<NoArgsEvent>
 {
-	private TxView _theView;
-
 	public LoadFileCommand(TxView view)
 	{
-		_theView = view;
+		super(view);
 	}
 
 	@Override
-	public void execute(NoArgsEvent __not_used__)
+	protected void doExecute(NoArgsEvent __not_used__)
 	{
-		try
+		String lastDir = getLastUsedDirectory();
+		
+		if(lastDir == null || lastDir.isEmpty())
 		{
-			String lastDir = getLastUsedDirectory();
-			
-			if(lastDir == null || lastDir.isEmpty())
-			{
-				lastDir = System.getProperty("user.home");
-			}
-			
-			final String fileName = _theView.promptForFile(lastDir);
-			
-			if (fileName != null)
-			{					
-				loadFile(fileName);				
-			}
+			lastDir = System.getProperty("user.home");
 		}
-		catch (Exception e)
-		{
-			_theView.handleException(e);
+		
+		final String fileName = _theView.promptForFile(lastDir);
+		
+		if (fileName != null)
+		{					
+			loadFile(fileName);				
 		}
 	}
 

@@ -4,19 +4,21 @@ import gncimport.interactors.TxBrowseInteractor;
 
 import java.util.Date;
 
-public class FilterTxListCommand implements Command<FilterTxListEvent>
+public class FilterTxListCommand 
+	extends AbstractCommand<FilterTxListEvent> implements Command<FilterTxListEvent>
 {
 	private TxBrowseInteractor _theInteractor;
 
-	public FilterTxListCommand(TxBrowseInteractor interactor)
+	public FilterTxListCommand(TxView view, TxBrowseInteractor interactor)
 	{
+		super(view);
 		_theInteractor = interactor;
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void execute(FilterTxListEvent event)
-	{			
+	protected void doExecute(FilterTxListEvent event)
+	{
 		Date lowerBound = event.fromDate != null ? event.fromDate : new Date(Long.MIN_VALUE);
 
 		Date upperBound = event.toDate;
