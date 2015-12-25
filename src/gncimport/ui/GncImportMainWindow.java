@@ -1,9 +1,7 @@
 package gncimport.ui;
 
 import gncimport.GncImportApp;
-import gncimport.interactors.InteractorFactory;
 import gncimport.models.AccountData;
-import gncimport.models.TxImportModel;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -97,32 +95,21 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private AccComboBoxEditor _accComboBoxEditor;
 	private CommandFactory _commands;
 
-
-	public GncImportMainWindow(TxImportModel model, UIConfig config)
-	{
-		_commands = new GncImportAppCommandFactory(this, config, new InteractorFactory(model));
-		initialize();
-	}
-
 	public GncImportMainWindow(CommandFactory commands)
 	{
 		_commands = commands;
-		initialize();
-	}
-
-	private void initialize()
-	{
+		_commands.attachToView(this);
+		
 		setLayout(new BorderLayout());
 		setOpaque(true);
 		
 		createAccountSelectionComboBox();
-
+		
 		add(createControlBox(), BorderLayout.PAGE_START);
 		add(createGridPane(), BorderLayout.CENTER);
 		add(createBottomBox(), BorderLayout.PAGE_END);
-
 	}
-	
+
 	private void createAccountSelectionComboBox()
 	{
 		_candidateTargetAccComboBox = new JComboBox();

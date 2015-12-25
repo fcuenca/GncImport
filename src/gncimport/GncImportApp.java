@@ -1,8 +1,10 @@
 package gncimport;
 
+import gncimport.interactors.InteractorFactory;
 import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxImportModel;
 import gncimport.models.TxMatcher;
+import gncimport.ui.GncImportAppCommandFactory;
 import gncimport.ui.GncImportMainWindow;
 import gncimport.ui.UIConfig;
 
@@ -144,7 +146,10 @@ public class GncImportApp
 	{		
 		JFrame mainFrame = new JFrame("GnuCash Transaction Import");
 
-		GncImportMainWindow newContentPane = new GncImportMainWindow(model, config);
+		InteractorFactory interactors = new InteractorFactory(model);
+		
+		GncImportMainWindow newContentPane = 
+				new GncImportMainWindow(new GncImportAppCommandFactory(config, interactors));
 		
 		mainFrame.setContentPane(newContentPane);
 

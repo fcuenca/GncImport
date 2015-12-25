@@ -11,8 +11,13 @@ import gncimport.ui.GncImportMainWindow;
 import gncimport.ui.NoArgsEvent;
 import gncimport.ui.SaveGncEvent;
 import gncimport.ui.SelectExpenseAccEvent;
+import gncimport.ui.TxView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiTask;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -20,7 +25,7 @@ import org.mockito.Captor;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MainWindowInteractsWithPresenter extends MainWindowTests
+public class MainWindowTriggersCommands extends MainWindowTests
 {
 	@Captor
 	private ArgumentCaptor<SelectExpenseAccEvent> expectedExpenseSelectEvent;
@@ -28,6 +33,23 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 	private ArgumentCaptor<SaveGncEvent> expectedSaveGncEvent;
 	@Captor
 	private ArgumentCaptor<CreateAccHierarchyEvent> expectedCreateAccHierarchyEvent;
+
+	@Test
+	public void attaches_itself_to_command_factory_on_creation()
+	{
+		final List<TxView> window = new ArrayList<TxView>();
+		
+		GuiActionRunner.execute(new GuiTask()
+		{
+			@Override
+			protected void executeInEDT() throws Throwable
+			{
+				window.add(new GncImportMainWindow(_commands));
+			}
+		});
+				
+		verify(_commands).attachToView(window.get(0));
+	}
 
 	@Test
 	public void triggers_loading_of_gnc_file()
