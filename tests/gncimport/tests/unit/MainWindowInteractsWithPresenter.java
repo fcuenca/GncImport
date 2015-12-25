@@ -34,7 +34,7 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 			}
 		});
 
-		verify(_presenter).onReadFromCsvFile();
+		verify(_commands).triggerWithoutArgs(NoArgsEvent.LoadCsvEvent);;		
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 			}
 		});
 
-		verify(_presenter).onSelectSourceAccount();
+		verify(_commands).triggerWithoutArgs(NoArgsEvent.SelectSourceAccEvent);
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 			}
 		});
 
-		verify(_presenter).onSelectTargetHierarchy();
+		verify(_commands).triggerWithoutArgs(NoArgsEvent.SelectTargetAccEvent);
 	}
 	
 	@Test

@@ -421,7 +421,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public void onSelectSourceAccClick()
 	{
-		_presenter.onSelectSourceAccount();
+		_commands.triggerWithoutArgs(NoArgsEvent.SelectSourceAccEvent);
 	}
 
 	public void onImportClick()
@@ -431,7 +431,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public void onSelectTargetHierarchyClick()
 	{
-		_presenter.onSelectTargetHierarchy();
+		_commands.triggerWithoutArgs(NoArgsEvent.SelectTargetAccEvent);
 	}
 	
 	public void onNewAccHierarchy()
@@ -441,12 +441,11 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public void onLoadCsvFile()
 	{
-		_presenter.onReadFromCsvFile();
+		_commands.triggerWithoutArgs(NoArgsEvent.LoadCsvEvent);
 	}
 
 	public void onLoadGncFile()
 	{
-		//_presenter.onLoadGncFile();
 		_commands.triggerWithoutArgs(NoArgsEvent.LoadGncEvent);
 	}
 
