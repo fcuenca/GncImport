@@ -2,6 +2,7 @@ package gncimport.tests.unit;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.models.AccountData;
@@ -12,6 +13,8 @@ import gncimport.ui.TxView;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 public class SelectExpenseAccCommandTests
 {
@@ -73,4 +76,32 @@ public class SelectExpenseAccCommandTests
 		
 		verify(_view).selectExpenseAccForTx(originalAcc);
 	}
+	
+	@Test
+	public void still_selects_original_account_if_interactor_blows_up()
+	{
+		_interactor = makeBomb(AccSelectionInteractor.class, new RuntimeException("ahhhhh"));
+		
+		_cmd = new SelectExpenseAccCommand(_view, _interactor);
+				
+		_cmd.execute(new SelectExpenseAccEvent(
+				CandidateAccList.OTHER_ACC_PLACEHOLDER, new AccountData("Original", "id-1")));
+		
+		verify(_view).handleException(any(RuntimeException.class));
+		verify(_view).selectExpenseAccForTx(new AccountData("Original", "id-1"));
+	}
+	
+	private  <T> T makeBomb(Class<T> clazz, final RuntimeException exceptionToThrow)
+	{
+		return mock(clazz, new Answer<Object>()
+		{
+			@Override
+			public Object answer(InvocationOnMock invocation)
+			{
+				throw exceptionToThrow;
+			}
+		});
+	}
+
+
 }
