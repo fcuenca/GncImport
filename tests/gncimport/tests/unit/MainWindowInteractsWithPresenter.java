@@ -2,6 +2,7 @@ package gncimport.tests.unit;
 
 import static org.mockito.Mockito.verify;
 import gncimport.ui.GncImportMainWindow;
+import gncimport.ui.NoArgsEvent;
 
 import org.fest.swing.edt.GuiActionRunner;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class MainWindowInteractsWithPresenter extends MainWindowTests
 			}
 		});
 
-		verify(_presenter).onLoadGncFile();
+		verify(_commands).triggerWithoutArgs(NoArgsEvent.LoadGncEvent);;
 	}
 
 	@Test

@@ -10,9 +10,14 @@ public class MainWindowPresenter implements MainWindowRenderer
 {	
 	private final CommandFactory _commands;
 	
+	public MainWindowPresenter(CommandFactory factory)
+	{
+		_commands  = factory;
+	}
+	
 	public MainWindowPresenter(TxImportModel model, TxView view, UIConfig config)
 	{
-		_commands = new CommandFactory(view, config, new InteractorFactory(model));
+		_commands = new GncImportAppCommandFactory(view, config, new InteractorFactory(model));
 	}
 		
 	@Override

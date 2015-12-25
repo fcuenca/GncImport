@@ -1,6 +1,7 @@
 package gncimport.ui;
 
 import gncimport.GncImportApp;
+import gncimport.interactors.InteractorFactory;
 import gncimport.models.AccountData;
 import gncimport.models.TxImportModel;
 
@@ -95,17 +96,21 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JXDatePicker _toDatePicker;
 	private JComboBox _candidateTargetAccComboBox;
 	private AccComboBoxEditor _accComboBoxEditor;
+	private CommandFactory _commands;
 
 
 	public GncImportMainWindow(TxImportModel model, UIConfig config)
 	{
-		this._presenter = new MainWindowPresenter(model, this, config);
+		_presenter = new MainWindowPresenter(model, this, config);
+		_commands = new GncImportAppCommandFactory(this, config, new InteractorFactory(model));
+
 		initialize();
 	}
 
-	public GncImportMainWindow(MainWindowRenderer presenter)
+	public GncImportMainWindow(MainWindowRenderer presenter, CommandFactory commands)
 	{
-		this._presenter = presenter;
+		_presenter = presenter;
+		_commands = commands;
 		initialize();
 	}
 
@@ -441,7 +446,8 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public void onLoadGncFile()
 	{
-		_presenter.onLoadGncFile();
+		//_presenter.onLoadGncFile();
+		_commands.triggerWithoutArgs(NoArgsEvent.LoadGncEvent);
 	}
 
 	private void onFilterTxList()
