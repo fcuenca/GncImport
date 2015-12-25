@@ -4,18 +4,20 @@ import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.TestFiles;
-import gncimport.ui.MainWindowPresenter;
 import gncimport.ui.TxTableModel;
 
 import java.util.Properties;
 
+
+// WARNING!! 
+// This class is no longer functional (the Presenter class has been removed)
 public class HypodermicAppDriver
 {
 	private FakeView _view;		
 	private TxImportModel _model;
 	private ConfigOptions _config;
 	
-	private MainWindowPresenter _presenter;
+	//private MainWindowPresenter _presenter;
 	
 	public HypodermicAppDriver()
 	{
@@ -26,19 +28,19 @@ public class HypodermicAppDriver
 		_model = GncImportApp.createAppModel(GncImportApp.DEFAULT_TARGET_ACCOUNT, _config);
 		_view = new FakeView();
 
-		_presenter = new MainWindowPresenter(_model, _view, _config);
+		//_presenter = new MainWindowPresenter(_model, _view, _config);
 	}
 	
 	public void openCsvFile(String fileName)
 	{
 		_view.FileNameToOpen = TestFiles.getFilePath(fileName);
-		_presenter.onReadFromCsvFile();
+		//_presenter.onReadFromCsvFile();
 	}
 	
 	public void openGncFile(String fileName)
 	{	
 		_view.FileNameToOpen = TestFiles.getFilePath(fileName);
-		_presenter.onLoadGncFile();
+		//_presenter.onLoadGncFile();
 	}
 
 	public int observedTxCount()
@@ -69,7 +71,7 @@ public class HypodermicAppDriver
 	public void selectTargetAccHierarchy(String accountName)
 	{
 		_view.AccountToSelect = accountName;
-		_presenter.onSelectTargetHierarchy();
+		//_presenter.onSelectTargetHierarchy();
 	}
 
 }
