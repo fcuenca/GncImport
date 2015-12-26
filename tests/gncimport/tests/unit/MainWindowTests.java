@@ -1,15 +1,15 @@
 package gncimport.tests.unit;
 
 import static org.mockito.Mockito.mock;
-import gncimport.ui.CommandFactory;
-import gncimport.ui.GncImportMainWindow;
+import gncimport.ui.EventDispatcher;
+import gncimport.ui.swing.GncImportMainWindow;
 
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.junit.testcase.FestSwingJUnitTestCase;
 
 public abstract class MainWindowTests extends FestSwingJUnitTestCase
 {
-	protected CommandFactory _commands;
+	protected EventDispatcher _dispatcher;
 
 	protected abstract class ViewDriver extends GuiQuery<GncImportMainWindow>
 	{
@@ -17,7 +17,7 @@ public abstract class MainWindowTests extends FestSwingJUnitTestCase
 
 		protected GncImportMainWindow executeInEDT()
 		{
-			GncImportMainWindow v = new GncImportMainWindow(_commands);
+			GncImportMainWindow v = new GncImportMainWindow(_dispatcher);
 
 			doActionsOnView(v);
 
@@ -28,7 +28,7 @@ public abstract class MainWindowTests extends FestSwingJUnitTestCase
 	@Override
 	protected void onSetUp()
 	{
-		_commands = mock(CommandFactory.class);
+		_dispatcher = mock(EventDispatcher.class);
 	}
 
 }

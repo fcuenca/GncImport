@@ -1,6 +1,9 @@
-package gncimport.ui;
+package gncimport.ui.commands;
 
 import gncimport.interactors.TxImportInteractor;
+import gncimport.ui.Command;
+import gncimport.ui.TxView;
+import gncimport.ui.events.SaveGncEvent;
 
 public class SaveGncCommand 
 	extends AbstractCommand<SaveGncEvent> implements Command<SaveGncEvent>

@@ -2,9 +2,9 @@ package gncimport.tests.unit;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import gncimport.ui.AccFileLoadPresenter;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
+import gncimport.ui.presenters.AccFileLoadPresenter;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -6,10 +6,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.AccFileLoadInteractor;
-import gncimport.ui.LoadFileCommand;
-import gncimport.ui.LoadGncCommand;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
+import gncimport.ui.commands.LoadFileCommand;
+import gncimport.ui.commands.LoadGncCommand;
 
 import org.junit.Before;
 import org.junit.Test;

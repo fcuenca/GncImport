@@ -1,7 +1,15 @@
-package gncimport.ui;
+package gncimport.ui.swing;
 
 import gncimport.GncImportApp;
 import gncimport.models.AccountData;
+import gncimport.ui.EventDispatcher;
+import gncimport.ui.TxView;
+import gncimport.ui.TxView.NewHierarchyParams;
+import gncimport.ui.events.CreateAccHierarchyEvent;
+import gncimport.ui.events.FilterTxListEvent;
+import gncimport.ui.events.NoArgsEvent;
+import gncimport.ui.events.SaveGncEvent;
+import gncimport.ui.events.SelectExpenseAccEvent;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -93,12 +101,12 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	private JXDatePicker _toDatePicker;
 	private JComboBox _candidateTargetAccComboBox;
 	private AccComboBoxEditor _accComboBoxEditor;
-	private CommandFactory _commands;
+	private EventDispatcher _dispatcher;
 
-	public GncImportMainWindow(CommandFactory commands)
+	public GncImportMainWindow(EventDispatcher dispatcher)
 	{
-		_commands = commands;
-		_commands.attachToView(this);
+		_dispatcher = dispatcher;
+		_dispatcher.attachToView(this);
 		
 		setLayout(new BorderLayout());
 		setOpaque(true);
@@ -410,41 +418,41 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 
 	public void onSelectSourceAccClick()
 	{
-		_commands.triggerWithoutArgs(NoArgsEvent.SelectSourceAccEvent);
+		_dispatcher.triggerWithoutArgs(NoArgsEvent.SelectSourceAccEvent);
 	}
 
 	public void onImportClick()
 	{
-		_commands.triggerWithArgs(new SaveGncEvent(_gncFileName));
+		_dispatcher.triggerWithArgs(new SaveGncEvent(_gncFileName));
 	}
 
 	public void onSelectTargetHierarchyClick()
 	{
-		_commands.triggerWithoutArgs(NoArgsEvent.SelectTargetAccEvent);
+		_dispatcher.triggerWithoutArgs(NoArgsEvent.SelectTargetAccEvent);
 	}
 	
 	public void onNewAccHierarchy()
 	{
-		_commands.triggerWithArgs(new CreateAccHierarchyEvent(_gncFileName));
+		_dispatcher.triggerWithArgs(new CreateAccHierarchyEvent(_gncFileName));
 	}
 
 	public void onLoadCsvFile()
 	{
-		_commands.triggerWithoutArgs(NoArgsEvent.LoadCsvEvent);
+		_dispatcher.triggerWithoutArgs(NoArgsEvent.LoadCsvEvent);
 	}
 
 	public void onLoadGncFile()
 	{
-		_commands.triggerWithoutArgs(NoArgsEvent.LoadGncEvent);
+		_dispatcher.triggerWithoutArgs(NoArgsEvent.LoadGncEvent);
 	}
 
 	public void onFilterTxList()
 	{
-		_commands.triggerWithArgs(new FilterTxListEvent(_fromDatePicker.getDate(), _toDatePicker.getDate()));
+		_dispatcher.triggerWithArgs(new FilterTxListEvent(_fromDatePicker.getDate(), _toDatePicker.getDate()));
 	}
 
 	public void onSelectExpenseAccount(AccountData selectedAcc, AccountData originalAcc)
 	{
-		_commands.triggerWithArgs(new SelectExpenseAccEvent(selectedAcc, originalAcc));
+		_dispatcher.triggerWithArgs(new SelectExpenseAccEvent(selectedAcc, originalAcc));
 	}
 }

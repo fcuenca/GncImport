@@ -1,29 +1,42 @@
-package gncimport.ui;
+package gncimport;
 
 import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
+import gncimport.ui.Command;
+import gncimport.ui.Event;
+import gncimport.ui.EventDispatcher;
+import gncimport.ui.TxView;
+import gncimport.ui.UIConfig;
+import gncimport.ui.commands.CreateAccHierarchyCommand;
+import gncimport.ui.commands.FilterTxListCommand;
+import gncimport.ui.commands.LoadCsvCommand;
+import gncimport.ui.commands.LoadGncCommand;
+import gncimport.ui.commands.SaveGncCommand;
+import gncimport.ui.commands.SelectExpenseAccCommand;
+import gncimport.ui.commands.SelectSourceAccCommand;
+import gncimport.ui.commands.SelectTargetAccCommand;
+import gncimport.ui.events.CreateAccHierarchyEvent;
+import gncimport.ui.events.FilterTxListEvent;
+import gncimport.ui.events.NoArgsEvent;
+import gncimport.ui.events.SaveGncEvent;
+import gncimport.ui.events.SelectExpenseAccEvent;
+import gncimport.ui.presenters.AccFileLoadPresenter;
+import gncimport.ui.presenters.AccSelectionPresenter;
+import gncimport.ui.presenters.TxBrowsePresenter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GncImportAppCommandFactory implements CommandFactory
+public class GncImportAppEventDispatcher implements EventDispatcher
 {		
 	private InteractorFactory _interactors;
 	private UIConfig _config;
 	
 	private Map<String, Command<? extends Event>> _commands = new HashMap<String, Command<? extends Event>>();
 	
-	//TODO: remove this constructor once the presenter is removed
-	public GncImportAppCommandFactory(TxView view, UIConfig config, InteractorFactory interactors)
-	{
-		_interactors = interactors;
-		_config = config;
-		attachToView(view);
-	}
-
-	public GncImportAppCommandFactory(UIConfig config, InteractorFactory interactors)
+	public GncImportAppEventDispatcher(UIConfig config, InteractorFactory interactors)
 	{
 		_interactors = interactors;
 		_config = config;

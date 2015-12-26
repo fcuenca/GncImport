@@ -1,4 +1,6 @@
-package gncimport.ui;
+package gncimport.ui.swing;
+
+import gncimport.ui.swing.AccountTreeView.Listener;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

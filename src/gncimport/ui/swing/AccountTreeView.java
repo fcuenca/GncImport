@@ -1,4 +1,4 @@
-package gncimport.ui;
+package gncimport.ui.swing;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;

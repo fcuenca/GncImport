@@ -1,4 +1,4 @@
-package gncimport.ui;
+package gncimport.ui.swing;
 
 import gncimport.models.AccountData;
 import gncimport.models.TxData;

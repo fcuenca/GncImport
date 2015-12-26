@@ -5,9 +5,9 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import gncimport.interactors.TxBrowseInteractor;
-import gncimport.ui.FilterTxListCommand;
-import gncimport.ui.FilterTxListEvent;
 import gncimport.ui.TxView;
+import gncimport.ui.commands.FilterTxListCommand;
+import gncimport.ui.events.FilterTxListEvent;
 
 import java.util.Date;
 

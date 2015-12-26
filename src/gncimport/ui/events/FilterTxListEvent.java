@@ -1,4 +1,6 @@
-package gncimport.ui;
+package gncimport.ui.events;
+
+import gncimport.ui.Event;
 
 import java.util.Date;
 

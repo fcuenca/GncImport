@@ -1,6 +1,7 @@
 package gncimport.ui;
 
-public interface CommandFactory
+
+public interface EventDispatcher
 {
 	public void attachToView(TxView view);
 	public <T extends Event> void registerEvent(String eventId, Command<T> command);

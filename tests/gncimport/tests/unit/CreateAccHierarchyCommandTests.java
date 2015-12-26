@@ -12,10 +12,10 @@ import java.util.List;
 
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.models.MonthlyAccountParam;
-import gncimport.ui.CreateAccHierarchyCommand;
-import gncimport.ui.CreateAccHierarchyEvent;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
+import gncimport.ui.commands.CreateAccHierarchyCommand;
+import gncimport.ui.events.CreateAccHierarchyEvent;
 
 import org.junit.Before;
 import org.junit.Test;

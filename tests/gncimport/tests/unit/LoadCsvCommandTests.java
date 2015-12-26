@@ -6,10 +6,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.TxBrowseInteractor;
-import gncimport.ui.LoadCsvCommand;
-import gncimport.ui.LoadFileCommand;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
+import gncimport.ui.commands.LoadCsvCommand;
+import gncimport.ui.commands.LoadFileCommand;
 
 import org.junit.Before;
 import org.junit.Test;

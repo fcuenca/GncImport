@@ -6,8 +6,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gncimport.ui.LoadFileCommand;
 import gncimport.ui.TxView;
+import gncimport.ui.commands.LoadFileCommand;
 
 import org.junit.Test;
 

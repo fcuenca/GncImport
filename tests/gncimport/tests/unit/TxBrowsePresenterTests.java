@@ -13,10 +13,10 @@ import gncimport.models.AccountData;
 import gncimport.models.TxData;
 import gncimport.tests.data.SampleTxData;
 import gncimport.ui.CandidateAccList;
-import gncimport.ui.TxBrowsePresenter;
-import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
+import gncimport.ui.presenters.TxBrowsePresenter;
+import gncimport.ui.swing.TxTableModel;
 
 import java.util.ArrayList;
 import java.util.List;

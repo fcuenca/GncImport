@@ -1,6 +1,8 @@
-package gncimport.ui;
+package gncimport.ui.commands;
 
 import gncimport.interactors.TxBrowseInteractor;
+import gncimport.ui.TxView;
+import gncimport.ui.UIConfig;
 
 public class LoadCsvCommand extends LoadFileCommand  
 {		

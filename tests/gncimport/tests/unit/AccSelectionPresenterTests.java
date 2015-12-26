@@ -14,10 +14,10 @@ import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
 import gncimport.models.AccountData;
 import gncimport.models.Month;
 import gncimport.tests.data.SampleAccountData;
-import gncimport.ui.AccSelectionPresenter;
 import gncimport.ui.CandidateAccList;
 import gncimport.ui.TxView;
 import gncimport.ui.TxView.NewHierarchyParams;
+import gncimport.ui.presenters.AccSelectionPresenter;
 import gncimport.utils.ProgrammerError;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.models.AccountData;
-import gncimport.ui.AccountTreeBuilder;
+import gncimport.ui.presenters.AccountTreeBuilder;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;

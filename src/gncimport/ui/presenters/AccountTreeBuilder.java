@@ -1,4 +1,4 @@
-package gncimport.ui;
+package gncimport.ui.presenters;
 
 import gncimport.models.AccountData;
 

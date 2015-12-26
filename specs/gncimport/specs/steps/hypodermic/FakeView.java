@@ -1,8 +1,8 @@
 package gncimport.specs.steps.hypodermic;
 
 import gncimport.models.AccountData;
-import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
+import gncimport.ui.swing.TxTableModel;
 
 import java.util.Enumeration;
 import java.util.List;

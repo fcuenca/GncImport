@@ -4,9 +4,8 @@ import gncimport.interactors.InteractorFactory;
 import gncimport.models.LocalFileTxImportModel;
 import gncimport.models.TxImportModel;
 import gncimport.models.TxMatcher;
-import gncimport.ui.GncImportAppCommandFactory;
-import gncimport.ui.GncImportMainWindow;
 import gncimport.ui.UIConfig;
+import gncimport.ui.swing.GncImportMainWindow;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
@@ -149,7 +148,7 @@ public class GncImportApp
 		InteractorFactory interactors = new InteractorFactory(model);
 		
 		GncImportMainWindow newContentPane = 
-				new GncImportMainWindow(new GncImportAppCommandFactory(config, interactors));
+				new GncImportMainWindow(new GncImportAppEventDispatcher(config, interactors));
 		
 		mainFrame.setContentPane(newContentPane);
 

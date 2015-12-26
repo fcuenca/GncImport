@@ -1,4 +1,8 @@
-package gncimport.ui;
+package gncimport.ui.commands;
+
+import gncimport.ui.Command;
+import gncimport.ui.TxView;
+import gncimport.ui.events.NoArgsEvent;
 
 public abstract class LoadFileCommand 
 	extends AbstractCommand<NoArgsEvent> implements Command<NoArgsEvent>

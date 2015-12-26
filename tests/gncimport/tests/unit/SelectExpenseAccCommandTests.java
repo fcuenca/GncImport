@@ -7,9 +7,9 @@ import static org.mockito.Mockito.when;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.models.AccountData;
 import gncimport.ui.CandidateAccList;
-import gncimport.ui.SelectExpenseAccCommand;
-import gncimport.ui.SelectExpenseAccEvent;
 import gncimport.ui.TxView;
+import gncimport.ui.commands.SelectExpenseAccCommand;
+import gncimport.ui.events.SelectExpenseAccEvent;
 
 import org.junit.Before;
 import org.junit.Test;

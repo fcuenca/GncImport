@@ -1,4 +1,7 @@
-package gncimport.ui;
+package gncimport.ui.commands;
+
+import gncimport.ui.Event;
+import gncimport.ui.TxView;
 
 public abstract class AbstractCommand<T extends Event>
 {

@@ -3,8 +3,8 @@ package gncimport.tests.unit;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import gncimport.interactors.AccSelectionInteractor;
-import gncimport.ui.SelectTargetAccCommand;
 import gncimport.ui.TxView;
+import gncimport.ui.commands.SelectTargetAccCommand;
 
 import org.junit.Test;
 

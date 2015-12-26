@@ -1,6 +1,9 @@
-package gncimport.ui;
+package gncimport.ui.commands;
 
 import gncimport.interactors.TxBrowseInteractor;
+import gncimport.ui.Command;
+import gncimport.ui.TxView;
+import gncimport.ui.events.FilterTxListEvent;
 
 import java.util.Date;
 

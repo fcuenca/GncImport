@@ -1,7 +1,11 @@
-package gncimport.ui;
+package gncimport.ui.commands;
 
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.models.AccountData;
+import gncimport.ui.CandidateAccList;
+import gncimport.ui.Command;
+import gncimport.ui.TxView;
+import gncimport.ui.events.SelectExpenseAccEvent;
 
 public class SelectExpenseAccCommand 
 	extends AbstractCommand<SelectExpenseAccEvent> implements Command<SelectExpenseAccEvent>

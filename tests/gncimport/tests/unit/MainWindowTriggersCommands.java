@@ -5,13 +5,13 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import gncimport.models.AccountData;
-import gncimport.ui.CreateAccHierarchyEvent;
-import gncimport.ui.FilterTxListEvent;
-import gncimport.ui.GncImportMainWindow;
-import gncimport.ui.NoArgsEvent;
-import gncimport.ui.SaveGncEvent;
-import gncimport.ui.SelectExpenseAccEvent;
 import gncimport.ui.TxView;
+import gncimport.ui.events.CreateAccHierarchyEvent;
+import gncimport.ui.events.FilterTxListEvent;
+import gncimport.ui.events.NoArgsEvent;
+import gncimport.ui.events.SaveGncEvent;
+import gncimport.ui.events.SelectExpenseAccEvent;
+import gncimport.ui.swing.GncImportMainWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +44,11 @@ public class MainWindowTriggersCommands extends MainWindowTests
 			@Override
 			protected void executeInEDT() throws Throwable
 			{
-				window.add(new GncImportMainWindow(_commands));
+				window.add(new GncImportMainWindow(_dispatcher));
 			}
 		});
 				
-		verify(_commands).attachToView(window.get(0));
+		verify(_dispatcher).attachToView(window.get(0));
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class MainWindowTriggersCommands extends MainWindowTests
 			}
 		});
 
-		verify(_commands).triggerWithoutArgs(NoArgsEvent.LoadGncEvent);;
+		verify(_dispatcher).triggerWithoutArgs(NoArgsEvent.LoadGncEvent);;
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class MainWindowTriggersCommands extends MainWindowTests
 			}
 		});
 
-		verify(_commands).triggerWithoutArgs(NoArgsEvent.LoadCsvEvent);;		
+		verify(_dispatcher).triggerWithoutArgs(NoArgsEvent.LoadCsvEvent);;		
 	}
 	
 	
@@ -92,7 +92,7 @@ public class MainWindowTriggersCommands extends MainWindowTests
 			}
 		});
 
-		verify(_commands).triggerWithArgs(expectedSaveGncEvent.capture());
+		verify(_dispatcher).triggerWithArgs(expectedSaveGncEvent.capture());
 		assertThat(expectedSaveGncEvent.getValue().fileName, is("file.gnc"));
 	}
 
@@ -107,7 +107,7 @@ public class MainWindowTriggersCommands extends MainWindowTests
 			}
 		});
 
-		verify(_commands).triggerWithoutArgs(NoArgsEvent.SelectSourceAccEvent);
+		verify(_dispatcher).triggerWithoutArgs(NoArgsEvent.SelectSourceAccEvent);
 	}
 
 	@Test
@@ -121,7 +121,7 @@ public class MainWindowTriggersCommands extends MainWindowTests
 			}
 		});
 
-		verify(_commands).triggerWithoutArgs(NoArgsEvent.SelectTargetAccEvent);
+		verify(_dispatcher).triggerWithoutArgs(NoArgsEvent.SelectTargetAccEvent);
 	}
 	
 	@Test
@@ -136,7 +136,7 @@ public class MainWindowTriggersCommands extends MainWindowTests
 			}
 		});
 
-		verify(_commands).triggerWithArgs(expectedCreateAccHierarchyEvent.capture());
+		verify(_dispatcher).triggerWithArgs(expectedCreateAccHierarchyEvent.capture());
 		assertThat(expectedCreateAccHierarchyEvent.getValue().fileNameToSave, is("file.gnc"));
 	}
 	
@@ -154,7 +154,7 @@ public class MainWindowTriggersCommands extends MainWindowTests
 			}
 		});
 		
-		verify(_commands).triggerWithArgs(expectedExpenseSelectEvent.capture());
+		verify(_dispatcher).triggerWithArgs(expectedExpenseSelectEvent.capture());
 		assertThat(expectedExpenseSelectEvent.getValue().newAcc, is(selectedAcc));
 		assertThat(expectedExpenseSelectEvent.getValue().originalAcc, is(originalAcc));
 	}
@@ -172,6 +172,6 @@ public class MainWindowTriggersCommands extends MainWindowTests
 		
 		// not much can be verified here in the event arguments without
 		// actually manipulating the buttons and pickers in the UI (we'll not go there....)
-		verify(_commands).triggerWithArgs(any(FilterTxListEvent.class));
+		verify(_dispatcher).triggerWithArgs(any(FilterTxListEvent.class));
 	}
 }

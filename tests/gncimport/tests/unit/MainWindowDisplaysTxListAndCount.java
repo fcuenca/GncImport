@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import gncimport.models.AccountData;
 import gncimport.tests.data.SampleTxData;
-import gncimport.ui.GncImportMainWindow;
-import gncimport.ui.TxTableModel;
+import gncimport.ui.swing.GncImportMainWindow;
+import gncimport.ui.swing.TxTableModel;
 
 import java.util.ArrayList;
 

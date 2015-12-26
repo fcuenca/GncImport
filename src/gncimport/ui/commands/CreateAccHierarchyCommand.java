@@ -1,6 +1,10 @@
-package gncimport.ui;
+package gncimport.ui.commands;
 
 import gncimport.interactors.AccSelectionInteractor;
+import gncimport.ui.Command;
+import gncimport.ui.TxView;
+import gncimport.ui.UIConfig;
+import gncimport.ui.events.CreateAccHierarchyEvent;
 
 public class CreateAccHierarchyCommand 
 	extends AbstractCommand<CreateAccHierarchyEvent> implements Command<CreateAccHierarchyEvent>

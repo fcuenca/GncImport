@@ -8,7 +8,7 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 import gncimport.GncImportApp;
 import gncimport.models.TxData;
-import gncimport.ui.GncImportMainWindow;
+import gncimport.ui.swing.GncImportMainWindow;
 
 import java.io.File;
 import java.lang.reflect.Array;

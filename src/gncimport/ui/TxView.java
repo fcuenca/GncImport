@@ -2,6 +2,7 @@ package gncimport.ui;
 
 import gncimport.models.AccountData;
 import gncimport.models.Month;
+import gncimport.ui.swing.TxTableModel;
 
 import java.util.List;
 

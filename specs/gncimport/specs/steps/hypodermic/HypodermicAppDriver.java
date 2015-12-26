@@ -4,7 +4,7 @@ import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.TestFiles;
-import gncimport.ui.TxTableModel;
+import gncimport.ui.swing.TxTableModel;
 
 import java.util.Properties;
 

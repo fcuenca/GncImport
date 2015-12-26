@@ -1,6 +1,8 @@
-package gncimport.ui;
+package gncimport.ui.commands;
 
 import gncimport.interactors.AccFileLoadInteractor;
+import gncimport.ui.TxView;
+import gncimport.ui.UIConfig;
 
 public class LoadGncCommand extends LoadFileCommand  
 {

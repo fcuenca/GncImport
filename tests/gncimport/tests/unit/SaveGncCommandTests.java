@@ -6,10 +6,10 @@ import static org.mockito.Mockito.when;
 import gncimport.interactors.TxImportInteractor;
 import gncimport.models.TxData;
 import gncimport.tests.data.SampleTxData;
-import gncimport.ui.SaveGncCommand;
-import gncimport.ui.SaveGncEvent;
-import gncimport.ui.TxTableModel;
 import gncimport.ui.TxView;
+import gncimport.ui.commands.SaveGncCommand;
+import gncimport.ui.events.SaveGncEvent;
+import gncimport.ui.swing.TxTableModel;
 
 import java.util.List;
 

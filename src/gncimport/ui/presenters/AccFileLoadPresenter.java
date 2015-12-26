@@ -1,6 +1,8 @@
-package gncimport.ui;
+package gncimport.ui.presenters;
 
 import gncimport.interactors.AccFileLoadInteractor;
+import gncimport.ui.TxView;
+import gncimport.ui.UIConfig;
 
 import java.io.File;
 
