@@ -8,10 +8,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.TxBrowseInteractor;
-import gncimport.models.AccountData;
-import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleTxData;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.TxData;
 
 import java.util.ArrayList;
 import java.util.Date;

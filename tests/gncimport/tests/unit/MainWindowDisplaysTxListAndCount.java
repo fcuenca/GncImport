@@ -4,8 +4,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import gncimport.models.AccountData;
 import gncimport.tests.data.SampleTxData;
+import gncimport.transfer.AccountData;
 import gncimport.ui.swing.GncImportMainWindow;
 import gncimport.ui.swing.TxTableModel;
 

@@ -1,10 +1,9 @@
 package gncimport.ui.swing;
 
 import gncimport.GncImportApp;
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 import gncimport.ui.EventDispatcher;
 import gncimport.ui.TxView;
-import gncimport.ui.TxView.NewHierarchyParams;
 import gncimport.ui.events.CreateAccHierarchyEvent;
 import gncimport.ui.events.FilterTxListEvent;
 import gncimport.ui.events.NoArgsEvent;

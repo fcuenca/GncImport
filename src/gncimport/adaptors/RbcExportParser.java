@@ -1,6 +1,6 @@
 package gncimport.adaptors;
 
-import gncimport.models.TxData;
+import gncimport.transfer.TxData;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

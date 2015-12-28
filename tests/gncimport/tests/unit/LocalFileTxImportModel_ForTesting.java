@@ -1,7 +1,7 @@
 package gncimport.tests.unit;
 
 import gncimport.models.LocalFileTxImportModel;
-import gncimport.models.TxData;
+import gncimport.transfer.TxData;
 
 import java.io.IOException;
 import java.util.List;

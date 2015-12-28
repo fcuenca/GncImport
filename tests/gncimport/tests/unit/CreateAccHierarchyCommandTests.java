@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gncimport.interactors.AccSelectionInteractor;
-import gncimport.models.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccountParam;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
 import gncimport.ui.commands.CreateAccHierarchyCommand;

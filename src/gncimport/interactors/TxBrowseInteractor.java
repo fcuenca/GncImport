@@ -3,9 +3,9 @@ package gncimport.interactors;
 import java.util.Date;
 import java.util.List;
 
-import gncimport.models.AccountData;
-import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.TxData;
 
 public class TxBrowseInteractor
 {

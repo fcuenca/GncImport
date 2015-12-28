@@ -1,8 +1,8 @@
-package gncimport.models;
-
-import java.util.Arrays;
+package gncimport.transfer;
 
 import gncimport.utils.ProgrammerError;
+
+import java.util.Arrays;
 
 public class Month
 {

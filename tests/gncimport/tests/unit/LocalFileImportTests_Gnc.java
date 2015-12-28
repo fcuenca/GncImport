@@ -6,12 +6,12 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gncimport.models.AccountData;
-import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
 import gncimport.tests.data.SampleTxData;
 import gncimport.tests.data.TestDataConfig;
 import gncimport.tests.data.TestFiles;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.TxData;
 
 import java.util.ArrayList;
 import java.util.Date;

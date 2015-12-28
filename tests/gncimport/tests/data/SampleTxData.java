@@ -1,7 +1,7 @@
 package gncimport.tests.data;
 
 import static gncimport.tests.unit.ListUtils.list_of;
-import gncimport.models.TxData;
+import gncimport.transfer.TxData;
 
 import java.math.BigDecimal;
 import java.util.Date;

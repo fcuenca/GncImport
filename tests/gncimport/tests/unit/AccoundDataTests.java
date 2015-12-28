@@ -1,6 +1,6 @@
 package gncimport.tests.unit;
 
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 
 import org.junit.Test;
 

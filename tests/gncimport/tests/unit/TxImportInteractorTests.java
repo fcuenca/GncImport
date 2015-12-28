@@ -3,9 +3,9 @@ package gncimport.tests.unit;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import gncimport.interactors.TxImportInteractor;
-import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleTxData;
+import gncimport.transfer.TxData;
 
 import java.util.List;
 

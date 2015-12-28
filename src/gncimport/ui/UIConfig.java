@@ -1,6 +1,6 @@
 package gncimport.ui;
 
-import gncimport.models.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccountParam;
 
 import java.util.List;
 

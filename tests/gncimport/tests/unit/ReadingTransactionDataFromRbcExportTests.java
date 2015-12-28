@@ -4,8 +4,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import gncimport.adaptors.RbcExportParser;
-import gncimport.models.TxData;
 import gncimport.tests.data.TestFiles;
+import gncimport.transfer.TxData;
 
 import java.io.IOException;
 import java.io.StringReader;

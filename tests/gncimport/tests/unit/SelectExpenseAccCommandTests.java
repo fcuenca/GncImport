@@ -5,7 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.AccSelectionInteractor;
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 import gncimport.ui.CandidateAccList;
 import gncimport.ui.TxView;
 import gncimport.ui.commands.SelectExpenseAccCommand;

@@ -4,7 +4,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 import gncimport.ConfigOptions;
-import gncimport.utils.InvalidConfigOption;
+import gncimport.InvalidConfigOption;
 
 import java.util.Properties;
 

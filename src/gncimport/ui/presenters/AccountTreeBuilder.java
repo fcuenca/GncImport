@@ -1,6 +1,6 @@
 package gncimport.ui.presenters;
 
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package gncimport.ui.swing;
 
-import gncimport.models.AccountData;
-import gncimport.models.TxData;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.TxData;
 import gncimport.utils.ProgrammerError;
 
 import java.text.DecimalFormat;

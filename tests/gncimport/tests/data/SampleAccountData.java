@@ -1,7 +1,7 @@
 package gncimport.tests.data;
 
 import static gncimport.tests.unit.ListUtils.list_of;
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 
 import java.util.List;
 

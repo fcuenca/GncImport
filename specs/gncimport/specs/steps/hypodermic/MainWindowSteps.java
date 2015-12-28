@@ -11,10 +11,10 @@ import static org.junit.Assert.fail;
 import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
-import gncimport.models.MonthlyAccountParam;
-import gncimport.models.TxData;
 import gncimport.tests.data.TestFiles;
 import gncimport.tests.unit.ConfigPropertyBuilder;
+import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.TxData;
 import gnclib.GncFile;
 
 import java.io.IOException;

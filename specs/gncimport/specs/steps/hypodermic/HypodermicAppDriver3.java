@@ -6,11 +6,11 @@ import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
-import gncimport.models.AccountData;
-import gncimport.models.Month;
-import gncimport.models.MonthlyAccountParam;
-import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.Month;
+import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.TxData;
 import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;

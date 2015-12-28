@@ -2,8 +2,8 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import gncimport.models.AccountData;
 import gncimport.tests.data.SampleTxData;
+import gncimport.transfer.AccountData;
 import gncimport.ui.swing.TxTableModel;
 
 import org.junit.Before;

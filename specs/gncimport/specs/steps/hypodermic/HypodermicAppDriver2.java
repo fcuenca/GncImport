@@ -1,10 +1,10 @@
 package gncimport.specs.steps.hypodermic;
 
 import gncimport.GncImportApp;
-import gncimport.models.AccountData;
-import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
 import gncimport.models.TxMatcher;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.TxData;
 
 import java.util.ArrayList;
 import java.util.List;

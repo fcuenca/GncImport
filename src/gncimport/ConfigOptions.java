@@ -1,9 +1,8 @@
 package gncimport;
 
-import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxMatcher;
+import gncimport.transfer.MonthlyAccountParam;
 import gncimport.ui.UIConfig;
-import gncimport.utils.InvalidConfigOption;
 import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;

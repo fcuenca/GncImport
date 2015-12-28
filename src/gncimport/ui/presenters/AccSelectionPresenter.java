@@ -2,7 +2,7 @@ package gncimport.ui.presenters;
 
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 import gncimport.ui.CandidateAccList;
 import gncimport.ui.TxView;
 import gncimport.ui.TxView.NewHierarchyParams;

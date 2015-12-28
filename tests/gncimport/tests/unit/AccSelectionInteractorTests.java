@@ -11,11 +11,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
-import gncimport.models.AccountData;
-import gncimport.models.Month;
-import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleAccountData;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.Month;
+import gncimport.transfer.MonthlyAccountParam;
 
 import java.util.ArrayList;
 import java.util.List;

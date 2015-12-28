@@ -2,7 +2,7 @@ package gncimport.tests.unit;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.is;
-import gncimport.models.Month;
+import gncimport.transfer.Month;
 import gncimport.utils.ProgrammerError;
 
 import org.junit.Test;

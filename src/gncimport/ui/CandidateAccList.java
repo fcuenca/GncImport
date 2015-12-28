@@ -1,6 +1,6 @@
 package gncimport.ui;
 
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 
 import java.util.ArrayList;
 import java.util.List;

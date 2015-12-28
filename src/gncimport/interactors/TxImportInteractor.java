@@ -1,7 +1,7 @@
 package gncimport.interactors;
 
-import gncimport.models.TxData;
 import gncimport.models.TxImportModel;
+import gncimport.transfer.TxData;
 
 import java.util.List;
 

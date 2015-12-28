@@ -1,4 +1,4 @@
-package gncimport.models;
+package gncimport.transfer;
 
 public class MonthlyAccountParam
 {
@@ -48,7 +48,4 @@ public class MonthlyAccountParam
 	{
 		return "MonthlyAccountParam(" + sequenceNo + ", " + accName + ")";
 	}
-	
-	
-
 }

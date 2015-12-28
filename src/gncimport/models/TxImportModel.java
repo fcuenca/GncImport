@@ -1,5 +1,10 @@
 package gncimport.models;
 
+import gncimport.transfer.AccountData;
+import gncimport.transfer.Month;
+import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.TxData;
+
 import java.util.Date;
 import java.util.List;
 

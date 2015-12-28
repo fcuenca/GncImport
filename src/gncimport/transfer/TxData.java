@@ -1,4 +1,4 @@
-package gncimport.models;
+package gncimport.transfer;
 
 import java.math.BigDecimal;
 import java.util.Date;

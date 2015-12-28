@@ -1,6 +1,6 @@
 package gncimport.ui.swing;
 
-import gncimport.models.Month;
+import gncimport.transfer.Month;
 import gncimport.ui.TxView;
 import gncimport.ui.TxView.NewHierarchyParams;
 

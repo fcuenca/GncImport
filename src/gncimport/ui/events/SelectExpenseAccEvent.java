@@ -1,6 +1,6 @@
 package gncimport.ui.events;
 
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 import gncimport.ui.Event;
 
 public class SelectExpenseAccEvent extends Event

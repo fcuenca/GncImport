@@ -1,7 +1,7 @@
 package gncimport.ui;
 
-import gncimport.models.AccountData;
-import gncimport.models.Month;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.Month;
 import gncimport.ui.swing.TxTableModel;
 
 import java.util.List;

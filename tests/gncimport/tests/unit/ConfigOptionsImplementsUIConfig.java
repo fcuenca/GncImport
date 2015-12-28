@@ -4,7 +4,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
-import gncimport.models.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccountParam;
 import gncimport.utils.ProgrammerError;
 
 import java.util.Properties;

@@ -1,6 +1,6 @@
 package gncimport.specs.steps.hypodermic;
 
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 import gncimport.ui.TxView;
 import gncimport.ui.swing.TxTableModel;
 

@@ -7,10 +7,10 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gncimport.models.TxData;
 import gncimport.models.TxMatcher;
 import gncimport.tests.data.TestDataConfig;
 import gncimport.tests.data.TestFiles;
+import gncimport.transfer.TxData;
 import gncimport.utils.ProgrammerError;
 
 import java.math.BigDecimal;

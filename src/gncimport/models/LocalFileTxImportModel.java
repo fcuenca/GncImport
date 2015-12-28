@@ -1,6 +1,10 @@
 package gncimport.models;
 
 import gncimport.adaptors.RbcExportParser;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.Month;
+import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.TxData;
 import gncimport.utils.ProgrammerError;
 import gnclib.GncFile;
 
@@ -173,7 +177,7 @@ public class LocalFileTxImportModel implements TxImportModel
 			{
 				if (a.getName().equals(accName))
 				{
-					return AccountData.fromAccount(a); 
+					return GncXmlLibUtils.fromAccount(a); 
 				}
 			}
 		}
@@ -200,7 +204,7 @@ public class LocalFileTxImportModel implements TxImportModel
 		List<AccountData> accData = new ArrayList<AccountData>();
 		for (Account account : accounts)
 		{
-			accData.add(AccountData.fromAccount(account));
+			accData.add(GncXmlLibUtils.fromAccount(account));
 		}
 
 		return accData;
@@ -215,7 +219,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	@Override
 	public AccountData getDefaultTargetHierarchyAccount()
 	{
-		return AccountData.fromAccount(_targetHierarcyParent); 
+		return GncXmlLibUtils.fromAccount(_targetHierarcyParent); 
 	}
 
 	@Override
@@ -231,12 +235,12 @@ public class LocalFileTxImportModel implements TxImportModel
 			{
 				for (Account a : children)
 				{
-					accounts.add(AccountData.fromAccount(a));
+					accounts.add(GncXmlLibUtils.fromAccount(a));
 				}
 			}
 			else
 			{
-				accounts.add(AccountData.fromAccount(_targetHierarcyParent));
+				accounts.add(GncXmlLibUtils.fromAccount(_targetHierarcyParent));
 			}
 		}
 		return accounts;
@@ -261,7 +265,7 @@ public class LocalFileTxImportModel implements TxImportModel
 
 		if (_targetAccount == null)
 		{
-			_targetAccount = AccountData.fromAccount(_targetHierarcyParent); 
+			_targetAccount = GncXmlLibUtils.fromAccount(_targetHierarcyParent); 
 		}
 
 		if (_txListOriginal != null)

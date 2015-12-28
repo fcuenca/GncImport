@@ -1,9 +1,9 @@
 package gncimport.interactors;
 
-import gncimport.models.AccountData;
-import gncimport.models.Month;
-import gncimport.models.MonthlyAccountParam;
 import gncimport.models.TxImportModel;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.Month;
+import gncimport.transfer.MonthlyAccountParam;
 
 import java.util.List;
 

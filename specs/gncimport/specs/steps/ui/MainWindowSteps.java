@@ -3,10 +3,10 @@ package gncimport.specs.steps.ui;
 import java.util.List;
 
 import gncimport.adaptors.RbcExportParser;
-import gncimport.models.TxData;
 import gncimport.tests.data.TestFiles;
 import gncimport.tests.endtoend.FileSystemDriver;
 import gncimport.tests.endtoend.GncImportAppDriver;
+import gncimport.transfer.TxData;
 
 import org.fest.swing.core.BasicRobot;
 import org.fest.swing.core.Robot;

@@ -1,8 +1,8 @@
 package gncimport.ui.presenters;
 
 import gncimport.interactors.TxBrowseInteractor;
-import gncimport.models.AccountData;
-import gncimport.models.TxData;
+import gncimport.transfer.AccountData;
+import gncimport.transfer.TxData;
 import gncimport.ui.CandidateAccList;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;

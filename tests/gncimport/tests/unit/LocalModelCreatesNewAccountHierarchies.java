@@ -3,11 +3,11 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
-import gncimport.models.AccountData;
-import gncimport.models.Month;
-import gncimport.models.MonthlyAccountParam;
+import gncimport.models.GncXmlLibUtils;
 import gncimport.tests.data.TestDataConfig;
 import gncimport.tests.data.TestFiles;
+import gncimport.transfer.Month;
+import gncimport.transfer.MonthlyAccountParam;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class LocalModelCreatesNewAccountHierarchies
 
 		Month month = new Month(SOME_MONTH);
 		
-		_model.createNewAccountHierarchy(AccountData.fromAccount(_parent), "This Month", month, subAccounts, "filename.gnc");
+		_model.createNewAccountHierarchy(GncXmlLibUtils.fromAccount(_parent), "This Month", month, subAccounts, "filename.gnc");
 
 		Account root = _model.findAccountByName("This Month");
 		
@@ -92,7 +92,7 @@ public class LocalModelCreatesNewAccountHierarchies
 	@Test
 	public void saves_new_accounts_to_file()
 	{	
-		_model.createNewAccountHierarchy(AccountData.fromAccount(_parent), "This Month", IRRELEVANT_MONTH, new ArrayList<MonthlyAccountParam>(), "filename.gnc");
+		_model.createNewAccountHierarchy(GncXmlLibUtils.fromAccount(_parent), "This Month", IRRELEVANT_MONTH, new ArrayList<MonthlyAccountParam>(), "filename.gnc");
 		
 		assertThat(_model.detectedFileName, is("filename.gnc"));	
 	}

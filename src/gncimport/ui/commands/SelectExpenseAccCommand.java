@@ -1,7 +1,7 @@
 package gncimport.ui.commands;
 
 import gncimport.interactors.AccSelectionInteractor;
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 import gncimport.ui.CandidateAccList;
 import gncimport.ui.Command;
 import gncimport.ui.TxView;

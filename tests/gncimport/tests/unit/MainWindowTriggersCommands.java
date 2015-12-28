@@ -4,7 +4,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
-import gncimport.models.AccountData;
+import gncimport.transfer.AccountData;
 import gncimport.ui.TxView;
 import gncimport.ui.events.CreateAccHierarchyEvent;
 import gncimport.ui.events.FilterTxListEvent;

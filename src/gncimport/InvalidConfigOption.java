@@ -1,4 +1,4 @@
-package gncimport.utils;
+package gncimport;
 
 public class InvalidConfigOption extends RuntimeException
 {
