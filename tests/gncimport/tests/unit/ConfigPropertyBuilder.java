@@ -28,4 +28,10 @@ public class ConfigPropertyBuilder
 	{
 		_props.setProperty("match." + index + ".rewrite", txDescPattern + "|" + override);
 	}
+
+	public void addSubAccountRule(int index, String accName)
+	{
+		_props.setProperty("monthly." + index, accName);		
+	}
+
 }

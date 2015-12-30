@@ -1,15 +1,14 @@
 package gncimport.specs.steps.hypodermic;
 
+import gncimport.ConfigOptions;
 import gncimport.GncImportApp;
 import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
-import gncimport.models.TxMatcher;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
-import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.TxData;
 import gncimport.utils.ProgrammerError;
 
@@ -20,6 +19,7 @@ import java.util.List;
 public class HypodermicAppDriver3 
 {
 	private InteractorFactory _interactors;
+	private ConfigOptions _config;
 	
 	private List<TxData> _txList;
 	private AccountData _targetHierarchyRoot;
@@ -67,12 +67,12 @@ public class HypodermicAppDriver3
 		{
 			//not used here
 		}
-	};
-	
+	};	
 		
-	public HypodermicAppDriver3(String defaultAccName, TxMatcher config)
+	public HypodermicAppDriver3(String defaultAccName, ConfigOptions config)
 	{
-		_interactors = new InteractorFactory(GncImportApp.createAppModel(defaultAccName, config));
+		_config = config;
+		_interactors = new InteractorFactory(GncImportApp.createAppModel(defaultAccName, _config));
 	}
 	
 	public void openCsvFile(String fileName)
@@ -259,7 +259,7 @@ public class HypodermicAppDriver3
 	}
 
 	public void createAccounts(final String month, final List<String> pathToParentAcc,
-			final String newAccName, List<MonthlyAccountParam> subAccountList, String fileNameToSave)
+			final String newAccName, String fileNameToSave)
 	{
 		AccSelectionInteractor.OutPort boundary = new AccSelectionOutput() 
 		{
@@ -271,7 +271,7 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_interactors.accSelection(boundary).createNewAccountHierarchy(subAccountList, fileNameToSave);
+		_interactors.accSelection(boundary).createNewAccountHierarchy(_config.getMonthlyAccounts(), fileNameToSave);
 	}
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)

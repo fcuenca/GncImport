@@ -56,7 +56,6 @@ public class MainWindowSteps
 		public String csvFileName;
 		public String gncFileName;
 		public String defaultAccName;
-		public List<MonthlyAccountParam> subAccountList;
 
 		public AppContext()
 		{
@@ -64,7 +63,6 @@ public class MainWindowSteps
 			csvFileName = "";
 			gncFileName = "";
 			defaultAccName = GncImportApp.DEFAULT_TARGET_ACCOUNT;
-			subAccountList = new ArrayList<MonthlyAccountParam>();
 		}
 		
 		public String csvFullPath()
@@ -324,13 +322,13 @@ public class MainWindowSteps
 	@Given("^default sub-account list:$")
 	public void default_sub_account_list(List<MonthlyAccountParam> subAccounts) throws Throwable
 	{
-		_context.subAccountList = subAccounts;
+		_context.properties.putAll(createMonthlyAccountRules(subAccounts));
 	}
 
 	@When("^accounts for \"([^\"]*)\" are created under \"([^\"]*)\" with the name \"([^\"]*)\"$")
 	public void accounts_for_are_created_under_with_the_name(String month, List<String> parentAccName, String newAccName) throws Throwable
 	{
-		app().createAccounts(month, parentAccName, newAccName, _context.subAccountList, _context.tmpGncFullPath());
+		app().createAccounts(month, parentAccName, newAccName, _context.tmpGncFullPath());
 	}
 	
 	class ExpectedSubAccounts
@@ -350,6 +348,18 @@ public class MainWindowSteps
 		assertThat(updated.getAccountCount(), is(orig.getAccountCount() + 1 + subAccounts.size()));
 		assertThatGncFileContainsAccWithCodeUnderParent(updated, newAccName, newAccCode, pathToParentAcc);
 		assertThatGncFileContainsAccWithSubAccs(updated, newAccName, subAccounts);
+	}
+
+	private Properties createMonthlyAccountRules(List<MonthlyAccountParam> subAccounts)
+	{
+		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
+		
+		for (MonthlyAccountParam rule : subAccounts)
+		{
+			builder.addSubAccountRule(rule.sequenceNo, rule.accName);
+		}
+		
+		return builder.build();
 	}
 
 	
