@@ -15,6 +15,7 @@ import gncimport.utils.ProgrammerError;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 public class HypodermicAppDriver3 
 {
@@ -273,6 +274,16 @@ public class HypodermicAppDriver3
 		
 		_interactors.accSelection(boundary).createNewAccountHierarchy(_config.getMonthlyAccounts(), fileNameToSave);
 	}
+	
+	public void startEditingProperties()
+	{
+		// TODO Auto-generated method stub	
+	}
+
+	public void editIgnoreRules(List<String> rules)
+	{
+		// TODO Auto-generated method stub
+	}
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
 	private AccountData findFirstAccWithNameInList(String accountName, List<AccountData> accounts)
@@ -320,5 +331,10 @@ public class HypodermicAppDriver3
 		{
 			result.add(accountData.getParentId());
 		}
+	}
+
+	public Properties getProperties()
+	{
+		return _config.getProperties();
 	}
 }

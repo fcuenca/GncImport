@@ -354,30 +354,27 @@ public class MainWindowSteps
 	@Given("^the properties file is initially empty$")
 	public void the_properties_file_is_initially_empty() throws Throwable
 	{
-		// Express the Regexp above with the code you wish you had
-		throw new PendingException();
+		_context.properties = new Properties();
 	}
 
 	@When("^properties are edited$")
 	public void properties_are_edited() throws Throwable
 	{
-		// Express the Regexp above with the code you wish you had
-		throw new PendingException();
+		app().startEditingProperties();
 	}
 
 	@When("^ignore rules are set to:$")
-	public void ignore_rules_are_set_to(DataTable arg1) throws Throwable
+	public void ignore_rules_are_set_to(List<String> rules) throws Throwable
 	{
-		// Express the Regexp above with the code you wish you had
-		// For automatic conversion, change DataTable to List<YourType>
-		throw new PendingException();
+		app().editIgnoreRules(rules);
 	}
 
 	@Then("^the properties file now contains (\\d+) ignore rules$")
-	public void the_properties_file_now_contains_ignore_rules(int arg1) throws Throwable
+	public void the_properties_file_now_contains_ignore_rules(int expectedRuleCount) throws Throwable
 	{
-		// Express the Regexp above with the code you wish you had
-		throw new PendingException();
+		Properties props = app().getProperties();
+		
+		assertThatPropertiesContainsRules(props, "match\\.[0-9]+\\.ignore", expectedRuleCount);
 	}
 
 	@Then("^the app displays existing ignore rules:$")
@@ -399,7 +396,6 @@ public class MainWindowSteps
 		
 		return builder.build();
 	}
-
 	
 	private Properties createMatchingRules(List<MatchingRule> matchingRules)
 	{
@@ -472,6 +468,21 @@ public class MainWindowSteps
 		regex = regex.substring(0, regex.length() - 1) + ").+";
 
 		return regex;
+	}
+	
+	private void assertThatPropertiesContainsRules(Properties props, String ruleRegex, int expectedCount)
+	{
+		int actualCount = 0;
+
+		for (String key : props.stringPropertyNames())
+		{
+			if (key.matches(ruleRegex))
+			{
+				actualCount++;
+			}
+		}
+		
+		assertThat(actualCount, is(expectedCount));
 	}
 
 	private void assertThatTransactionsAreAssociatedWithAcc(String expectedDescRegEx, String expectedAcc)
