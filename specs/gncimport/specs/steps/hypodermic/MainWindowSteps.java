@@ -33,6 +33,7 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.PendingException;
 
 public class MainWindowSteps
 {
@@ -350,6 +351,43 @@ public class MainWindowSteps
 		assertThatGncFileContainsAccWithSubAccs(updated, newAccName, subAccounts);
 	}
 
+	@Given("^the properties file is initially empty$")
+	public void the_properties_file_is_initially_empty() throws Throwable
+	{
+		// Express the Regexp above with the code you wish you had
+		throw new PendingException();
+	}
+
+	@When("^properties are edited$")
+	public void properties_are_edited() throws Throwable
+	{
+		// Express the Regexp above with the code you wish you had
+		throw new PendingException();
+	}
+
+	@When("^ignore rules are set to:$")
+	public void ignore_rules_are_set_to(DataTable arg1) throws Throwable
+	{
+		// Express the Regexp above with the code you wish you had
+		// For automatic conversion, change DataTable to List<YourType>
+		throw new PendingException();
+	}
+
+	@Then("^the properties file now contains (\\d+) ignore rules$")
+	public void the_properties_file_now_contains_ignore_rules(int arg1) throws Throwable
+	{
+		// Express the Regexp above with the code you wish you had
+		throw new PendingException();
+	}
+
+	@Then("^the app displays existing ignore rules:$")
+	public void the_app_displays_existing_ignore_rules(DataTable arg1) throws Throwable
+	{
+		// Express the Regexp above with the code you wish you had
+		// For automatic conversion, change DataTable to List<YourType>
+		throw new PendingException();
+	}
+	
 	private Properties createMonthlyAccountRules(List<MonthlyAccountParam> subAccounts)
 	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
