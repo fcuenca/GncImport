@@ -24,6 +24,7 @@ public class PropertyEditInteractor
 	public void displayCurrentConfig()
 	{
 		List<String> ignoreRules = new ArrayList<String>();
+		
 		_model.copyIgnoreRules(ignoreRules);
 		_outPort.editProperties(ignoreRules);
 	}

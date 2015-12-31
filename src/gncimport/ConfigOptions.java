@@ -177,12 +177,22 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	@Override
 	public void replaceIgnoreRules(List<String> rules)
 	{
-		// TODO Auto-generated method stub
-		
+		if(rules == null)
+		{
+			throw new IllegalArgumentException("rules cannot be null");
+		}
+
+		_ignoreRules = new ArrayList<String>(rules);
 	}
 
 	public void copyIgnoreRules(List<String> rules)
 	{
+		if(rules == null)
+		{
+			throw new IllegalArgumentException("rules cannot be null");
+		}
+		
+		rules.clear();
 		rules.addAll(_ignoreRules);
 	}
 }
