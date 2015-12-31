@@ -1,5 +1,6 @@
 package gncimport;
 
+import gncimport.models.PropertyModel;
 import gncimport.models.TxMatcher;
 import gncimport.transfer.MonthlyAccountParam;
 import gncimport.ui.UIConfig;
@@ -11,7 +12,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ConfigOptions implements TxMatcher, UIConfig
+public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 {
 	private class TxOverrideRule
 	{
@@ -171,5 +172,17 @@ public class ConfigOptions implements TxMatcher, UIConfig
 			}
 		}
 		return txDescription;
+	}
+
+	@Override
+	public void replaceIgnoreRules(List<String> rules)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void copyIgnoreRules(List<String> rules)
+	{
+		rules.addAll(_ignoreRules);
 	}
 }
