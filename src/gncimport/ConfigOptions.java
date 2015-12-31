@@ -31,12 +31,17 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	private List<String> _ignoreRules = new ArrayList<String>();
 	private Properties _properties;
 	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
+	private String _lastGnc;
+	private String _lastCsv;
 
 	public ConfigOptions(Properties properties)
 	{
 		if (properties == null) throw new ProgrammerError("Properties can't be null!!");
 		
 		_properties = properties;
+		
+		_lastGnc = _properties.getProperty("last.gnc");
+		_lastCsv = _properties.getProperty("last.csv");
 		
 		for (String key : properties.stringPropertyNames())
 		{
@@ -119,10 +124,8 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 
 	@Override
 	public String getLastGncDirectory()
-	{
-		String value = _properties.getProperty("last.gnc");
-		
-		return value == null? "" : value.trim();
+	{		
+		return _lastGnc == null? "" : _lastGnc.trim();
 	}
 
 	@Override
@@ -130,20 +133,21 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	{
 		if (path == null) throw new ProgrammerError("Last GNC file location can't be null!!");
 
-		_properties.setProperty("last.gnc", path.trim());
+		_lastGnc =  path.trim();
 	}
 
 	public Properties getProperties()
 	{
+		_properties.setProperty("last.gnc", _lastGnc);
+		_properties.setProperty("last.csv", _lastCsv);
+		
 		return _properties;
 	}
 
 	@Override
 	public String getLastCsvDirectory()
-	{
-		String value = _properties.getProperty("last.csv");
-		
-		return value == null? "" : value.trim();
+	{		
+		return _lastCsv == null? "" : _lastCsv.trim();
 	}
 
 	@Override
@@ -151,7 +155,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	{
 		if (path == null) throw new ProgrammerError("Last CSV file location can't be null!!");
 
-		_properties.setProperty("last.csv", path.trim());
+		_lastCsv =  path.trim();
 	}
 
 	@Override
