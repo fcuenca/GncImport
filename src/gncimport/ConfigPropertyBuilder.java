@@ -1,10 +1,8 @@
-package gncimport.tests.unit;
+package gncimport;
 
 import java.util.Properties;
 
-// This functionality so far is needed only in tests (both unit and specs)
-// but eventually will be required in production code (once the Property Editor is implemented)
-// Once that happens, it will have to be properly unit tested
+//TODO: unit test in isolation (?)
 public class ConfigPropertyBuilder
 {		
 	private Properties _props = new Properties();

@@ -5,8 +5,9 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import gncimport.ConfigOptions;
+import gncimport.ConfigPropertyBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,5 +101,30 @@ public class ConfigOptionsImplementsPropertyModel
 	{
 		_options.replaceIgnoreRules(null);
 	}
+	
+	@Test
+	public void updated_ignore_rules_added_to_property_file()
+	{
+		List<String> newRules = new ArrayList<String>(ListUtils.list_of("new-rule-1", "MISC PAYMENT - RBC CREDIT CARD.*", "new-rule-2"));
+		
+		_options.replaceIgnoreRules(newRules);
+		
+		Properties properties = _options.getProperties();
+		
+		int propCount = 0;
+		for (String key : properties.stringPropertyNames())
+		{
+			if (key.matches("match\\.[0-9]+\\.ignore"))
+			{
+				String value = properties.getProperty(key);
+
+				assertThat("Unexpected property value found: " + value, newRules.indexOf(value), is(not(-1)));
+				propCount++;
+			}
+		}
+		assertThat(propCount, is(newRules.size()));
+	}
+
+
 
 }

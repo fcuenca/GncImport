@@ -138,9 +138,19 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 
 	public Properties getProperties()
 	{
-		_properties.setProperty("last.gnc", _lastGnc);
-		_properties.setProperty("last.csv", _lastCsv);
+		if(_lastCsv != null) _properties.setProperty("last.gnc", _lastGnc);
+		if(_lastGnc != null) _properties.setProperty("last.csv", _lastCsv);
 		
+		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
+		int index = 0;
+		for (String rule : _ignoreRules)
+		{
+			index++;
+			builder.addTransactionIgnoreRule(index, rule);
+		}
+		
+		_properties.putAll(builder.build());
+				
 		return _properties;
 	}
 

@@ -1,5 +1,6 @@
 package gncimport.tests.unit;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
@@ -77,7 +78,15 @@ public class ConfigOptionsImplementsUIConfig
 		assertThat(options.getProperties().getProperty("last.gnc"), is(""));
 		assertThat(options.getProperties().getProperty("last.csv"), is(""));
 	}
+	
+	@Test
+	public void last_file_location_not_added_to_properties_if_it_wasnt_there()
+	{
+		ConfigOptions options = new ConfigOptions(new Properties());
 
+		assertThat(options.getProperties().getProperty("last.gnc"), is(nullValue()));
+		assertThat(options.getProperties().getProperty("last.csv"), is(nullValue()));
+	}
 
 	@Test(expected = ProgrammerError.class)
 	public void last_gnc_file_location_shouldnt_be_set_to_null()
