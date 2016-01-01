@@ -1,7 +1,6 @@
 package gncimport.ui.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,35 +11,23 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import javax.swing.tree.TreeNode;
 
 @SuppressWarnings("serial")
-public class AccountTreeBrowserDialog extends JDialog
+public class EditPropertiesDialog extends JDialog
 {
-	private TreeNode _selectedNode;
-	private AccountTreeView _accTreeView;
-
-	public AccountTreeBrowserDialog(Frame aFrame, String title, TreeNode rootNode)
+	public EditPropertiesDialog(Frame aFrame)
 	{
 		super(aFrame, true);
 
 		setLayout(new BorderLayout());
-		setTitle(title);
-		setName("ACC_SELECTION_DLG");
-
-		Dimension minimumSize = new Dimension(100, 100);
-		
-		add(createTreeView(minimumSize, rootNode), BorderLayout.CENTER);
+		setTitle("Property Editor");
+		setName("PROP_EDITOR_DLG");
+				
 		add(createButtonPanel(), BorderLayout.PAGE_END);
 
 		setupCloseOnESCkey();
 		
 		pack();
-	}
-
-	public TreeNode getSelectedNode()
-	{
-		return _selectedNode;
 	}
 
 	private JPanel createButtonPanel()
@@ -56,7 +43,7 @@ public class AccountTreeBrowserDialog extends JDialog
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				closeWithSelection(_accTreeView.selectedNode());
+				onOkClicked();
 			}
 		});
 
@@ -67,44 +54,25 @@ public class AccountTreeBrowserDialog extends JDialog
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				closeWithSelection(null);
+				onCancelClicked();
 			}
 		});
 
 		return buttonPanel;
 	}
 
-	private  AccountTreeView createTreeView(Dimension minimumSize, TreeNode rootNode)
-	{				
-		final AccountTreeView.Listener listener = new AccountTreeView.Listener()
-		{
-			@Override
-			public void onDoubleClick(TreeNode selectedNode)
-			{
-				closeIfLeafSelected(selectedNode);
-			}
-		};
-		
-		_accTreeView = new AccountTreeView(rootNode, minimumSize, listener);
-		
-		return _accTreeView;
-	}
-
-	private void closeWithSelection(TreeNode treeNode)
+	protected void onCancelClicked()
 	{
-		_selectedNode = treeNode;
 		setVisible(false);
 		dispose();
 	}
-	
-	private void closeIfLeafSelected(TreeNode selectedNode)
+
+	protected void onOkClicked()
 	{
-		if (selectedNode.isLeaf())
-		{
-			closeWithSelection(selectedNode);
-		}
+		setVisible(false);
+		dispose();
 	}
-	
+
 	public void setupCloseOnESCkey()
 	{
 		ActionListener escListener = new ActionListener()
@@ -112,7 +80,7 @@ public class AccountTreeBrowserDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				closeWithSelection(null);
+				onCancelClicked();
 			}
 		};
 

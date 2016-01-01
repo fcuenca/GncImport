@@ -292,4 +292,13 @@ public class GncImportAppDriver
 		}
 	}
 
+	public void editProperties()
+	{
+		_mainWindow.menuItem("EDIT_PROPERTIES").click();
+
+		DialogFixture dialog = _mainWindow.dialog("PROP_EDITOR_DLG");
+		
+		dialog.button("OK_BUTTON").click();
+	}
+
 }

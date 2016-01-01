@@ -47,6 +47,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public static final String OPEN_CSV_BUTTON = "OPEN_CSV_BUTTON";
 	public static final String OPEN_GNC_BUTTON = "OPEN_GNC_BUTTON";
 	public static final String NEW_ACC_HIERARCHY_MENU = "NEW_ACC_HIERARCHY";
+	public static final String EDIT_PROPERTIES_MENU = "EDIT_PROPERTIES";
 	
 	private class AccComboBoxEditor extends DefaultCellEditor
 	{
@@ -392,6 +393,10 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		{
 			onNewAccHierarchy();
 		}
+		else if(e.getActionCommand().equals(EDIT_PROPERTIES_MENU))
+		{
+			onEditProperties();
+		}
 	}
 
 	@Override
@@ -433,6 +438,14 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	public void onNewAccHierarchy()
 	{
 		_dispatcher.triggerWithArgs(new CreateAccHierarchyEvent(_gncFileName));
+	}
+	
+	private void onEditProperties()
+	{
+		//TODO: introduce command
+		EditPropertiesDialog dlg = new EditPropertiesDialog(null);
+		
+		dlg.setVisible(true);	
 	}
 
 	public void onLoadCsvFile()

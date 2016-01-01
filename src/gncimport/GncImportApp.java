@@ -99,15 +99,24 @@ public class GncImportApp
 	{
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Tools");
-		JMenuItem menuItem = new JMenuItem("Create new Account Hierarchy");
 		
-		menuItem.addActionListener(listener);
-		menuItem.setName(GncImportMainWindow.NEW_ACC_HIERARCHY_MENU);
-		menuItem.setActionCommand(GncImportMainWindow.NEW_ACC_HIERARCHY_MENU);
-		menu.add(menuItem);
+		menu.add(newMenuItem(
+				"Create new Account Hierarchy", GncImportMainWindow.NEW_ACC_HIERARCHY_MENU, listener));
+		menu.add(newMenuItem(
+				"Edit Properties", GncImportMainWindow.EDIT_PROPERTIES_MENU, listener));
+		
 		menuBar.add(menu);
 		
 		return menuBar;
+	}
+
+	private static JMenuItem newMenuItem(String menuText, String actionCommand, ActionListener listener)
+	{
+		JMenuItem menuItem = new JMenuItem(menuText);
+		menuItem.addActionListener(listener);
+		menuItem.setName(actionCommand);
+		menuItem.setActionCommand(actionCommand);
+		return menuItem;
 	}
 
 	private static void setupAppShutdown(JFrame frame, final ConfigOptions config)

@@ -1,7 +1,6 @@
 package gncimport.ui.swing;
 
 import gncimport.transfer.Month;
-import gncimport.ui.TxView;
 import gncimport.ui.TxView.NewHierarchyParams;
 
 import java.awt.BorderLayout;

@@ -190,4 +190,15 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app.createAccountHierarchy(new String[] {"Monthly Expenses", "Year 2014"}, "Marzo 2014");
 		_app.selectTargetAccount(new String[] {"Monthly Expenses", "Year 2014", "Marzo 2014", "Miscelaneous"});
 	}
+	
+	
+	
+	@Test
+	public void edits_configuration_properties()
+	{
+		_app = new GncImportAppDriver(robot());	
+		_app.editProperties();
+	}
+
+
 }
