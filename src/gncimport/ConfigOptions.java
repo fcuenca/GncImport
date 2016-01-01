@@ -7,6 +7,7 @@ import gncimport.ui.UIConfig;
 import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -29,7 +30,6 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	private List<TxOverrideRule> _accountOverrideRules = new ArrayList<TxOverrideRule>();
 	private List<TxOverrideRule> _rewriteRule = new ArrayList<TxOverrideRule>();
 	private List<String> _ignoreRules = new ArrayList<String>();
-	private Properties _properties;
 	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
 	private String _lastGnc;
 	private String _lastCsv;
@@ -37,11 +37,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	public ConfigOptions(Properties properties)
 	{
 		if (properties == null) throw new ProgrammerError("Properties can't be null!!");
-		
-		_properties = properties;
-		
-		_lastGnc = _properties.getProperty("last.gnc");
-		_lastCsv = _properties.getProperty("last.csv");
+				
+		_lastGnc = properties.getProperty("last.gnc");
+		_lastCsv = properties.getProperty("last.csv");
 		
 		for (String key : properties.stringPropertyNames())
 		{
@@ -138,10 +136,13 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 
 	public Properties getProperties()
 	{
-		if(_lastCsv != null) _properties.setProperty("last.gnc", _lastGnc);
-		if(_lastGnc != null) _properties.setProperty("last.csv", _lastCsv);
+		Properties newProps = new Properties();
+		
+		if(_lastCsv != null) newProps.setProperty("last.gnc", _lastGnc);
+		if(_lastGnc != null) newProps.setProperty("last.csv", _lastCsv);
 		
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
+		
 		int index = 0;
 		for (String rule : _ignoreRules)
 		{
@@ -149,9 +150,34 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 			builder.addTransactionIgnoreRule(index, rule);
 		}
 		
-		_properties.putAll(builder.build());
+		index = 0;
+		for (Iterator<TxOverrideRule> iterator = _accountOverrideRules.iterator(); iterator.hasNext();)
+		{
+			TxOverrideRule rule = iterator.next();
+			
+			index++;
+			builder.addAccountMatchRule(index, rule.desc, rule.override);
+		}		
+		
+		index = 0;
+		for (Iterator<TxOverrideRule> iterator = _rewriteRule.iterator(); iterator.hasNext();)
+		{
+			TxOverrideRule rule = iterator.next();
+			
+			index++;
+			builder.addDescRewriteRule(index, rule.desc, rule.override);
+		}	
+		
+		for (Iterator<MonthlyAccountParam> iterator = _monthlyAccounts.iterator(); iterator.hasNext();)
+		{
+			MonthlyAccountParam rule = iterator.next();
+			
+			builder.addSubAccountRule(rule.sequenceNo, rule.accName);
+		}		
+
+		newProps.putAll(builder.build());
 				
-		return _properties;
+		return newProps;
 	}
 
 	@Override

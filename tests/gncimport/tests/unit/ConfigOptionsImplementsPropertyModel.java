@@ -5,13 +5,15 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
 import gncimport.ConfigPropertyBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +29,16 @@ public class ConfigOptionsImplementsPropertyModel
 		builder.addTransactionIgnoreRule(1, "WEB TRANSFER");
 		builder.addTransactionIgnoreRule(2, "MISC PAYMENT - RBC CREDIT CARD.*");
 		
+		builder.addSubAccountRule(1, "month-1");
+		builder.addSubAccountRule(2, "month-2");
+		builder.addSubAccountRule(3, "month-3");
+		
+		builder.addDescRewriteRule(1, "tx-desc-1", "tx-override-1");
+		builder.addDescRewriteRule(2, "tx-desc-2", "tx-override-2");
+
+		builder.addAccountMatchRule(1, "acc-desc-1", "acc-override-1");
+		builder.addAccountMatchRule(2, "acc-desc-2", "acc-override-2");
+	
 		Properties p = builder.build();
 		
 		return p;
@@ -109,12 +121,39 @@ public class ConfigOptionsImplementsPropertyModel
 		
 		_options.replaceIgnoreRules(newRules);
 		
-		Properties properties = _options.getProperties();
+		assertThatPropertiesMatchList(newRules, _options.getProperties(), "match\\.[0-9]+\\.ignore");
+	}
+
+	@Test
+	public void monthly_account_list_is_added_to_property_file()
+	{
+		List<String> newRules = new ArrayList<String>(ListUtils.list_of("month-1", "month-2", "month-3"));
+
+		assertMonthlyAccListMatchesListInOrder(newRules, _options.getProperties());
+	}
+	
+	@Test
+	public void rewrite_rules_added_to_the_properties_file()
+	{
+		List<String> newRules = new ArrayList<String>(ListUtils.list_of("tx-desc-1|tx-override-1", "tx-desc-2|tx-override-2"));
 		
+		assertThatPropertiesMatchList(newRules, _options.getProperties(), "match\\.[0-9]+\\.rewrite");
+	}
+
+	@Test
+	public void account_override_rules_added_to_the_properties_file()
+	{
+		List<String> newRules = new ArrayList<String>(ListUtils.list_of("acc-desc-1|acc-override-1", "acc-desc-2|acc-override-2"));
+		
+		assertThatPropertiesMatchList(newRules, _options.getProperties(), "match\\.[0-9]+\\.account");
+	}
+
+	private void assertThatPropertiesMatchList(List<String> newRules, Properties properties, String propKeyRegex)
+	{
 		int propCount = 0;
 		for (String key : properties.stringPropertyNames())
 		{
-			if (key.matches("match\\.[0-9]+\\.ignore"))
+			if (key.matches(propKeyRegex))
 			{
 				String value = properties.getProperty(key);
 
@@ -122,9 +161,27 @@ public class ConfigOptionsImplementsPropertyModel
 				propCount++;
 			}
 		}
-		assertThat(propCount, is(newRules.size()));
+		assertThat("unxpected number of properties found", propCount, is(newRules.size()));
 	}
 
+	private void assertMonthlyAccListMatchesListInOrder(List<String> newRules, Properties properties)
+	{
+		int propCount = 0;
+		for (String key : properties.stringPropertyNames())
+		{
+			Pattern pattern = Pattern.compile("monthly\\.([0-9]+)");
+			Matcher matcher = pattern.matcher(key);
+			
+			if (matcher.matches())
+			{
+				String value = properties.getProperty(key);
+				int index = Integer.parseInt(matcher.group(1));
 
-
+				assertThat("Unexpected property value found: " + value, newRules.indexOf(value), is(index - 1));
+				propCount++;
+			}
+		}
+		assertThat("unexpected number of properties found", propCount, is(newRules.size()));
+	}
 }
+

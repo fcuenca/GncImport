@@ -27,19 +27,17 @@ public class ConfigOptionsImplementsTxMatcher
 		builder.addTransactionIgnoreRule(1, "WEB TRANSFER");
 		builder.addTransactionIgnoreRule(99, "MISC PAYMENT - RBC CREDIT CARD.*");
 		
+		builder.addDescRewriteRule(1, "MISC PAYMENT - GOODLIFE CLUBS", "Gym membership");
+		builder.addDescRewriteRule(2, "MISC PAYMENT - IMH POOL I LP", "Apartment Rent");
+		builder.addDescRewriteRule(3, "SAN CRISTOBAL.*", "Home Insurance");
+		builder.addDescRewriteRule(4, "Withdrawal - PTB WD --- TZ(\\d*)", "Cash withdrawal ($1)");
+		
 		Properties p = builder.build();
-
-		//TODO: move this functionality to the builder once needed in the specs
-		p.setProperty("match.1.rewrite", "MISC PAYMENT - GOODLIFE CLUBS|Gym membership");
-		p.setProperty("match.2.rewrite", "MISC PAYMENT - IMH POOL I LP|Apartment Rent");
-		p.setProperty("match.3.rewrite", "SAN CRISTOBAL.*|Home Insurance");
-		p.setProperty("match.4.rewrite", "Withdrawal - PTB WD --- TZ(\\d*)|Cash withdrawal ($1)");
 
 		p.setProperty("some.other.property", "this will not be matched|dummy");
 		
 		return p;
 	}
-
 	
 	@Before
 	public void Setup()
