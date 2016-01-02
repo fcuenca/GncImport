@@ -15,6 +15,11 @@ import java.util.regex.Pattern;
 
 public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 {
+	public static final String TX_REWRITE_RULE_KEY_REGEX = "match\\.[0-9]+\\.rewrite";
+	public static final String ACC_OVERRIDE_RULE_KEY_REGEX = "match\\.[0-9]+\\.account";
+	public static final String IGNORE_RULE_KEY_REGEX = "match\\.[0-9]+\\.ignore";
+	public static final String MONTHLY_ACC_KEY_REGEX = "monthly\\.([0-9]+)";
+
 	private class TxOverrideRule
 	{
 		public final String desc;
@@ -53,7 +58,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 
 	private void collectMonhtlyAccounts(String key, String value)
 	{
-		Pattern pattern = Pattern.compile("monthly\\.([0-9]+)");
+		Pattern pattern = Pattern.compile(MONTHLY_ACC_KEY_REGEX);
 		Matcher matcher = pattern.matcher(key);
 		
 		if (matcher.matches())
@@ -66,7 +71,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 
 	private void createIgnoreRule(String key, String value)
 	{
-		if (key.matches("match\\.[0-9]+\\.ignore"))
+		if (key.matches(IGNORE_RULE_KEY_REGEX))
 		{
 			_ignoreRules.add(value);
 		}
@@ -74,8 +79,8 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 
 	private void createTxOverrideRule(String key, String value)
 	{		
-		captureOverrideRuleIfApplicable(key, value, "match\\.[0-9]+\\.account", _accountOverrideRules);
-		captureOverrideRuleIfApplicable(key, value, "match\\.[0-9]+\\.rewrite", _rewriteRule);
+		captureOverrideRuleIfApplicable(key, value, ACC_OVERRIDE_RULE_KEY_REGEX, _accountOverrideRules);
+		captureOverrideRuleIfApplicable(key, value, TX_REWRITE_RULE_KEY_REGEX, _rewriteRule);
 	}
 
 	private void captureOverrideRuleIfApplicable(String key, String value, String propertyName, List<TxOverrideRule> ruleCollection)
@@ -141,6 +146,13 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		if(_lastCsv != null) newProps.setProperty("last.gnc", _lastGnc);
 		if(_lastGnc != null) newProps.setProperty("last.csv", _lastCsv);
 		
+		newProps.putAll(buildPropsForRules());
+				
+		return newProps;
+	}
+
+	private Properties buildPropsForRules()
+	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
 		
 		int index = 0;
@@ -175,9 +187,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 			builder.addSubAccountRule(rule.sequenceNo, rule.accName);
 		}		
 
-		newProps.putAll(builder.build());
-				
-		return newProps;
+		return builder.build();
 	}
 
 	@Override
@@ -200,6 +210,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		return _monthlyAccounts;
 	}
 
+	@Override
 	public String rewriteDescription(String txDescription)
 	{
 		for (TxOverrideRule rule : _rewriteRule)
@@ -225,6 +236,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		_ignoreRules = new ArrayList<String>(rules);
 	}
 
+	@Override
 	public void copyIgnoreRules(List<String> rules)
 	{
 		if(rules == null)

@@ -121,7 +121,7 @@ public class ConfigOptionsImplementsPropertyModel
 		
 		_options.replaceIgnoreRules(newRules);
 		
-		assertThatPropertiesMatchList(newRules, _options.getProperties(), "match\\.[0-9]+\\.ignore");
+		assertThatPropertiesMatchList(newRules, _options.getProperties(), ConfigOptions.IGNORE_RULE_KEY_REGEX);
 	}
 
 	@Test
@@ -137,7 +137,7 @@ public class ConfigOptionsImplementsPropertyModel
 	{
 		List<String> newRules = new ArrayList<String>(ListUtils.list_of("tx-desc-1|tx-override-1", "tx-desc-2|tx-override-2"));
 		
-		assertThatPropertiesMatchList(newRules, _options.getProperties(), "match\\.[0-9]+\\.rewrite");
+		assertThatPropertiesMatchList(newRules, _options.getProperties(), ConfigOptions.TX_REWRITE_RULE_KEY_REGEX);
 	}
 
 	@Test
@@ -145,7 +145,7 @@ public class ConfigOptionsImplementsPropertyModel
 	{
 		List<String> newRules = new ArrayList<String>(ListUtils.list_of("acc-desc-1|acc-override-1", "acc-desc-2|acc-override-2"));
 		
-		assertThatPropertiesMatchList(newRules, _options.getProperties(), "match\\.[0-9]+\\.account");
+		assertThatPropertiesMatchList(newRules, _options.getProperties(), ConfigOptions.ACC_OVERRIDE_RULE_KEY_REGEX);
 	}
 
 	private void assertThatPropertiesMatchList(List<String> newRules, Properties properties, String propKeyRegex)
@@ -169,7 +169,7 @@ public class ConfigOptionsImplementsPropertyModel
 		int propCount = 0;
 		for (String key : properties.stringPropertyNames())
 		{
-			Pattern pattern = Pattern.compile("monthly\\.([0-9]+)");
+			Pattern pattern = Pattern.compile(ConfigOptions.MONTHLY_ACC_KEY_REGEX);
 			Matcher matcher = pattern.matcher(key);
 			
 			if (matcher.matches())

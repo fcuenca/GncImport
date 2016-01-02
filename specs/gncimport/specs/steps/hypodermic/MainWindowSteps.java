@@ -375,7 +375,7 @@ public class MainWindowSteps
 	{
 		Properties props = app().getProperties();
 		
-		assertThatPropertiesContainsRules(props, "match\\.[0-9]+\\.ignore", expectedRuleCount);
+		assertThatPropertiesContainsRules(props, ConfigOptions.IGNORE_RULE_KEY_REGEX, expectedRuleCount);
 	}
 
 	@Then("^the app displays existing ignore rules:$")
