@@ -15,6 +15,7 @@ import gncimport.ConfigPropertyBuilder;
 import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.tests.data.TestFiles;
+import gncimport.tests.unit.ListUtils;
 import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.TxData;
 import gnclib.GncFile;
@@ -383,7 +384,7 @@ public class MainWindowSteps
 	{
 		List<String> actualRules = app().observedIgnoreRules();
 		
-		assertThat(actualRules, hasItems(asArray(expectedRules)));
+		assertThat(actualRules, hasItems(expectedRules.toArray(new String[0])));
 	}
 	
 	@Then("^the app displays empty ignore rule list$")
@@ -393,10 +394,6 @@ public class MainWindowSteps
 		assertThat(actualRules, is(empty()));
 	}
 	
-	private String[] asArray(List<String> list)
-	{
-		return list.toArray(new String[list.size()]);
-	}
 
 	private Properties createMonthlyAccountRules(List<MonthlyAccountParam> subAccounts)
 	{

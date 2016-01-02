@@ -11,8 +11,6 @@ import gncimport.transfer.TxData;
 import gncimport.ui.swing.GncImportMainWindow;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JComboBox;

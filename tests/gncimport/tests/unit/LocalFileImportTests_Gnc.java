@@ -248,7 +248,7 @@ public class LocalFileImportTests_Gnc
 
 		List<AccountData> newCandidates = _model.getCandidateTargetAccounts();
 
-		assertThat(newCandidates, not(hasItems(asArray(initialCandidates))));
+		assertThat(newCandidates, not(hasItems(initialCandidates.toArray(new AccountData[0]))));
 		assertThat(newCandidates.size(), is(11));
 	}
 
@@ -311,10 +311,5 @@ public class LocalFileImportTests_Gnc
 		assertThat(txList.get(0).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
 		assertThat(txList.get(10).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
 		assertThat(txList.get(txList.size() - 1).targetAccount.getId(), is(TestFiles.EXPENSES_FEBRERO_ID));
-	}
-
-	private AccountData[] asArray(List<AccountData> list)
-	{
-		return list.toArray(new AccountData[list.size()]);
 	}
 }

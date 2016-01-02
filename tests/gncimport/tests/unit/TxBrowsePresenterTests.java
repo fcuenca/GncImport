@@ -72,7 +72,7 @@ public class TxBrowsePresenterTests
 		
 		verify(_view).displayTxData(any(TxTableModel.class), expectedAccountList.capture());
 
-		assertThat(expectedAccountList.getValue(), hasItems(asArray(accountList)));
+		assertThat(expectedAccountList.getValue(), hasItems(accountList.toArray(new AccountData[0])));
 	}
 
 	@Test
@@ -112,11 +112,6 @@ public class TxBrowsePresenterTests
 		_presenter.fileWasOpened("/path/to/input/file.csv");
 		
 		verify(_config).setLastCsvDirectory("/path/to/input");
-	}
-
-	private AccountData[] asArray(List<AccountData> accountList)
-	{
-		return accountList.toArray(new AccountData[accountList.size()]);
 	}
 
 	private List<AccountData> sampleAccounts()

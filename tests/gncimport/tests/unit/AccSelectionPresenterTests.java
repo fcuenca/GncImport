@@ -166,7 +166,7 @@ public class AccSelectionPresenterTests
 		verify(_view).displayTargetHierarchy("New Acc");
 		verify(_view).updateCandidateTargetAccountList(expectedAccountList.capture());
 
-		assertThat(expectedAccountList.getValue(), hasItems(asArray(_accountList)));
+		assertThat(expectedAccountList.getValue(), hasItems(_accountList.toArray(new AccountData[0])));
 		assertThat(expectedAccountList.getValue(), hasSize(_accountList.size() + 1));
 		assertThat(expectedAccountList.getValue(), hasItem(CandidateAccList.OTHER_ACC_PLACEHOLDER));
 	}
@@ -177,11 +177,6 @@ public class AccSelectionPresenterTests
 		_presenter.sourceAccHasBeenSet("New Acc");
 		
 		verify(_view).displaySourceAccount("New Acc");
-	}
-
-	private AccountData[] asArray(List<AccountData> accountList)
-	{
-		return accountList.toArray(new AccountData[accountList.size()]);
 	}
 
 }
