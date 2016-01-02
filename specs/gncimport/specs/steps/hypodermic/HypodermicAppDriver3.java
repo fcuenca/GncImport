@@ -73,7 +73,8 @@ public class HypodermicAppDriver3
 	public HypodermicAppDriver3(String defaultAccName, ConfigOptions config)
 	{
 		_config = config;
-		_interactors = new InteractorFactory(GncImportApp.createAppModel(defaultAccName, _config));
+		_interactors = new InteractorFactory(
+				GncImportApp.createAppModel(defaultAccName, _config), config);
 	}
 	
 	public void openCsvFile(String fileName)

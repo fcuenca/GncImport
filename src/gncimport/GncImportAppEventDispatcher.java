@@ -3,6 +3,7 @@ package gncimport;
 import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.InteractorFactory;
+import gncimport.interactors.PropertyEditInteractor;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.ui.Command;
 import gncimport.ui.Event;
@@ -10,6 +11,7 @@ import gncimport.ui.EventDispatcher;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
 import gncimport.ui.commands.CreateAccHierarchyCommand;
+import gncimport.ui.commands.EditPropertiesCommand;
 import gncimport.ui.commands.FilterTxListCommand;
 import gncimport.ui.commands.LoadCsvCommand;
 import gncimport.ui.commands.LoadGncCommand;
@@ -24,6 +26,7 @@ import gncimport.ui.events.SaveGncEvent;
 import gncimport.ui.events.SelectExpenseAccEvent;
 import gncimport.ui.presenters.AccFileLoadPresenter;
 import gncimport.ui.presenters.AccSelectionPresenter;
+import gncimport.ui.presenters.PropertyEditorPresenter;
 import gncimport.ui.presenters.TxBrowsePresenter;
 
 import java.util.HashMap;
@@ -70,11 +73,13 @@ public class GncImportAppEventDispatcher implements EventDispatcher
 		TxBrowseInteractor.OutPort txBrowsePresenter = new TxBrowsePresenter(view, _config); 
 		AccFileLoadInteractor.OutPort accFileLoadPresenter = new AccFileLoadPresenter(view, _config);
 		AccSelectionInteractor.OutPort accSelectionPresenter = new AccSelectionPresenter(view);
+		PropertyEditInteractor.OutPort propEditorPresenter = new PropertyEditorPresenter(view);
 	
 		registerEvent(NoArgsEvent.LoadCsvEvent, new LoadCsvCommand(view, _config, _interactors.txBrowse(txBrowsePresenter)));
 		registerEvent(NoArgsEvent.LoadGncEvent, new LoadGncCommand(view, _config, _interactors.accFileLoad(accFileLoadPresenter)));
 		registerEvent(NoArgsEvent.SelectSourceAccEvent, new SelectSourceAccCommand(view, _interactors.accSelection(accSelectionPresenter)));
 		registerEvent(NoArgsEvent.SelectTargetAccEvent, new SelectTargetAccCommand(view, _interactors.accSelection(accSelectionPresenter)));
+		registerEvent(NoArgsEvent.EditProperties, new EditPropertiesCommand(view, _interactors.propertyEdit(propEditorPresenter)));
 
 		registerEvent(FilterTxListEvent.class.getName(), new FilterTxListCommand(view, _interactors.txBrowse(txBrowsePresenter)));
 		registerEvent(SaveGncEvent.class.getName(), new SaveGncCommand(view, _interactors.txImport()));

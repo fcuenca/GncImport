@@ -9,4 +9,5 @@ public class NoArgsEvent extends Event
 	public static final String LoadGncEvent = "LoadGncEvent";
 	public static final String SelectSourceAccEvent = "SelectSourceAccEvent";
 	public static final String SelectTargetAccEvent = "SelectTargetAccEvent";
+	public static final String EditProperties = "EditProperties";
 }

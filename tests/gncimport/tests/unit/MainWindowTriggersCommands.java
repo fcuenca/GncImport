@@ -174,4 +174,22 @@ public class MainWindowTriggersCommands extends MainWindowTests
 		// actually manipulating the buttons and pickers in the UI (we'll not go there....)
 		verify(_dispatcher).triggerWithArgs(any(FilterTxListEvent.class));
 	}
+	
+	
+	
+	@Test
+	public void triggers_property_edit()
+	{
+		GuiActionRunner.execute(new ViewDriver()
+		{
+			protected void doActionsOnView(GncImportMainWindow v)
+			{
+				v.onEditProperties();
+			}
+		});
+
+		verify(_dispatcher).triggerWithoutArgs(NoArgsEvent.EditProperties);
+	}
+
+
 }

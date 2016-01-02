@@ -1,7 +1,6 @@
 package gncimport.ui.swing;
 
 import gncimport.GncImportApp;
-import gncimport.tests.unit.ListUtils;
 import gncimport.transfer.AccountData;
 import gncimport.ui.EventDispatcher;
 import gncimport.ui.TxView;
@@ -420,6 +419,14 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	{
 		JOptionPane.showMessageDialog(this, message);
 	}
+	
+	@Override
+	public void editProperties(List<String> rules)
+	{
+		EditPropertiesDialog dlg = new EditPropertiesDialog(null, rules);
+		
+		dlg.setVisible(true);	
+	}
 
 	public void onSelectSourceAccClick()
 	{
@@ -441,12 +448,9 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 		_dispatcher.triggerWithArgs(new CreateAccHierarchyEvent(_gncFileName));
 	}
 	
-	private void onEditProperties()
+	public void onEditProperties()
 	{
-		//TODO: introduce command
-		EditPropertiesDialog dlg = new EditPropertiesDialog(null, ListUtils.list_of("ignore-1", "ignore-2"));
-		
-		dlg.setVisible(true);	
+		_dispatcher.triggerWithoutArgs(NoArgsEvent.EditProperties);
 	}
 
 	public void onLoadCsvFile()

@@ -112,4 +112,9 @@ public class FakeView implements TxView
 	public void selectExpenseAccForTx(AccountData newAcc)
 	{		
 	}
+
+	@Override
+	public void editProperties(List<String> rules)
+	{		
+	}
 }

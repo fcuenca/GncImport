@@ -6,6 +6,7 @@ import gncimport.ui.Command;
 import gncimport.ui.Event;
 import gncimport.ui.TxView;
 import gncimport.ui.commands.CreateAccHierarchyCommand;
+import gncimport.ui.commands.EditPropertiesCommand;
 import gncimport.ui.commands.FilterTxListCommand;
 import gncimport.ui.commands.LoadCsvCommand;
 import gncimport.ui.commands.LoadGncCommand;
@@ -105,6 +106,15 @@ public class CommandExceptionHandlingContractTests<T extends Event>
 					},
 					{
 						new SelectTargetAccCommand(_view, null) {
+							@Override
+							protected void doExecute(NoArgsEvent __not_used__)
+							{
+								throw _expectedException;
+							}
+						}
+					},
+					{
+						new EditPropertiesCommand(_view, null) {
 							@Override
 							protected void doExecute(NoArgsEvent __not_used__)
 							{

@@ -2,6 +2,7 @@ package gncimport;
 
 import gncimport.interactors.InteractorFactory;
 import gncimport.models.LocalFileTxImportModel;
+import gncimport.models.PropertyModel;
 import gncimport.models.TxImportModel;
 import gncimport.models.TxMatcher;
 import gncimport.ui.UIConfig;
@@ -78,7 +79,7 @@ public class GncImportApp
 		
 		final TxImportModel model = createAppModel(DEFAULT_TARGET_ACCOUNT, config);
 		
-		final JFrame frame = createMainFrame(model, config);
+		final JFrame frame = createMainFrame(model, config, config);
 									
 		setupAppShutdown(frame, config);
 		
@@ -150,11 +151,11 @@ public class GncImportApp
 		});
 	}
 
-	private static JFrame createMainFrame(TxImportModel model, UIConfig config)
+	private static JFrame createMainFrame(TxImportModel model, PropertyModel propModel, UIConfig config)
 	{		
 		JFrame mainFrame = new JFrame("GnuCash Transaction Import");
 
-		InteractorFactory interactors = new InteractorFactory(model);
+		InteractorFactory interactors = new InteractorFactory(model, propModel);
 		
 		GncImportMainWindow newContentPane = 
 				new GncImportMainWindow(new GncImportAppEventDispatcher(config, interactors));

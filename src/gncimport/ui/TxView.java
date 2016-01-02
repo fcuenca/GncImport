@@ -44,4 +44,7 @@ public interface TxView
 	void displayErrorMessage(String message);
 
 	void selectExpenseAccForTx(AccountData newAcc);
+
+	void editProperties(List<String> rules);
+
 }
