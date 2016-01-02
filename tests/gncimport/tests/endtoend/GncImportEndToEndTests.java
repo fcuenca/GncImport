@@ -1,5 +1,6 @@
 package gncimport.tests.endtoend;
 
+import gncimport.ConfigOptions;
 import gncimport.tests.data.TestFiles;
 
 import java.io.File;
@@ -167,8 +168,8 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		
 		forceAppShutdown();
 
-		_fs.assertConfigPropertyEquals("last.gnc", new File(_fs.TMP_CHECKBOOK_NEW_XML).getParent());
-		_fs.assertConfigPropertyEquals("last.csv", new File(TestFiles.CSV_1_TEST_FILE).getParent());
+		_fs.assertConfigPropertyEquals(ConfigOptions.LAST_GNC_KEY, new File(_fs.TMP_CHECKBOOK_NEW_XML).getParent());
+		_fs.assertConfigPropertyEquals(ConfigOptions.LAST_CSV_KEY, new File(TestFiles.CSV_1_TEST_FILE).getParent());
 
 	}
 	

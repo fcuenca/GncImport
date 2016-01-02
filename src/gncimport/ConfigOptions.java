@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 
 public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 {
+	public static final String LAST_CSV_KEY = "last.csv";
+	public static final String LAST_GNC_KEY = "last.gnc";
 	public static final String TX_REWRITE_RULE_KEY_REGEX = "match\\.[0-9]+\\.rewrite";
 	public static final String ACC_OVERRIDE_RULE_KEY_REGEX = "match\\.[0-9]+\\.account";
 	public static final String IGNORE_RULE_KEY_REGEX = "match\\.[0-9]+\\.ignore";
@@ -43,8 +45,8 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	{
 		if (properties == null) throw new ProgrammerError("Properties can't be null!!");
 				
-		_lastGnc = properties.getProperty("last.gnc");
-		_lastCsv = properties.getProperty("last.csv");
+		_lastGnc = properties.getProperty(LAST_GNC_KEY);
+		_lastCsv = properties.getProperty(LAST_CSV_KEY);
 		
 		for (String key : properties.stringPropertyNames())
 		{
@@ -143,8 +145,8 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	{
 		Properties newProps = new Properties();
 		
-		if(_lastCsv != null) newProps.setProperty("last.gnc", _lastGnc);
-		if(_lastGnc != null) newProps.setProperty("last.csv", _lastCsv);
+		if(_lastCsv != null) newProps.setProperty(LAST_GNC_KEY, _lastGnc);
+		if(_lastGnc != null) newProps.setProperty(LAST_CSV_KEY, _lastCsv);
 		
 		newProps.putAll(buildPropsForRules());
 				

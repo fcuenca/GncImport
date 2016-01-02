@@ -5,6 +5,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
+import gncimport.ConfigPropertyBuilder;
 import gncimport.transfer.MonthlyAccountParam;
 import gncimport.utils.ProgrammerError;
 
@@ -29,8 +30,8 @@ public class ConfigOptionsImplementsUIConfig
 	public void last_file_locations_can_be_retrieved_from_properties()
 	{
 		Properties properties = new Properties();
-		properties.setProperty("last.gnc", "/path/to/gnc");
-		properties.setProperty("last.csv", "/path/to/csv");
+		properties.setProperty(ConfigOptions.LAST_GNC_KEY, "/path/to/gnc");
+		properties.setProperty(ConfigOptions.LAST_CSV_KEY, "/path/to/csv");
 		
 		ConfigOptions options = new ConfigOptions(properties);
 		
@@ -42,8 +43,8 @@ public class ConfigOptionsImplementsUIConfig
 	public void last_file_location_properties_can_be_left_blank()
 	{
 		Properties properties = new Properties();
-		properties.setProperty("last.gnc", " ");
-		properties.setProperty("last.csv", " ");
+		properties.setProperty(ConfigOptions.LAST_GNC_KEY, " ");
+		properties.setProperty(ConfigOptions.LAST_CSV_KEY, " ");
 		
 		ConfigOptions options = new ConfigOptions(properties);
 		
@@ -55,16 +56,16 @@ public class ConfigOptionsImplementsUIConfig
 	public void last_file_location_can_be_changed()
 	{
 		Properties properties = new Properties();
-		properties.setProperty("last.gnc", "/path/to/gnc");
-		properties.setProperty("last.csv", "/path/to/csv");
+		properties.setProperty(ConfigOptions.LAST_GNC_KEY, "/path/to/gnc");
+		properties.setProperty(ConfigOptions.LAST_CSV_KEY, "/path/to/csv");
 		
 		ConfigOptions options = new ConfigOptions(properties);
 		
 		options.setLastGncDirectory("/new/path/gnc");
 		options.setLastCsvDirectory("/new/path/csv");
 		
-		assertThat(options.getProperties().getProperty("last.gnc"), is("/new/path/gnc"));
-		assertThat(options.getProperties().getProperty("last.csv"), is("/new/path/csv"));
+		assertThat(options.getProperties().getProperty(ConfigOptions.LAST_GNC_KEY), is("/new/path/gnc"));
+		assertThat(options.getProperties().getProperty(ConfigOptions.LAST_CSV_KEY), is("/new/path/csv"));
 	}
 
 	@Test
@@ -75,8 +76,8 @@ public class ConfigOptionsImplementsUIConfig
 		options.setLastGncDirectory("   ");
 		options.setLastCsvDirectory("   ");
 		
-		assertThat(options.getProperties().getProperty("last.gnc"), is(""));
-		assertThat(options.getProperties().getProperty("last.csv"), is(""));
+		assertThat(options.getProperties().getProperty(ConfigOptions.LAST_GNC_KEY), is(""));
+		assertThat(options.getProperties().getProperty(ConfigOptions.LAST_CSV_KEY), is(""));
 	}
 	
 	@Test
@@ -84,8 +85,8 @@ public class ConfigOptionsImplementsUIConfig
 	{
 		ConfigOptions options = new ConfigOptions(new Properties());
 
-		assertThat(options.getProperties().getProperty("last.gnc"), is(nullValue()));
-		assertThat(options.getProperties().getProperty("last.csv"), is(nullValue()));
+		assertThat(options.getProperties().getProperty(ConfigOptions.LAST_GNC_KEY), is(nullValue()));
+		assertThat(options.getProperties().getProperty(ConfigOptions.LAST_CSV_KEY), is(nullValue()));
 	}
 
 	@Test(expected = ProgrammerError.class)
@@ -113,12 +114,12 @@ public class ConfigOptionsImplementsUIConfig
 	@Test
 	public void provides_standard_hierarchy_account_names()
 	{
-		Properties properties = new Properties();
-		properties.setProperty("monthly.1", "Gastos Varios");
-		properties.setProperty("monthly.2", "Departamento");
-		properties.setProperty("monthly.3", "Salud");
+		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
+		builder.addSubAccountRule(1, "Gastos Varios");
+		builder.addSubAccountRule(2, "Departamento");
+		builder.addSubAccountRule(3, "Salud");
 		
-		ConfigOptions options = new ConfigOptions(properties);
+		ConfigOptions options = new ConfigOptions(builder.build());
 
 		assertThat(options.getMonthlyAccounts(), hasSize(3));
 		assertThat(options.getMonthlyAccounts(), hasItems(
