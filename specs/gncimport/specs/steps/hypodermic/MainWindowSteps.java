@@ -1,7 +1,9 @@
 package gncimport.specs.steps.hypodermic;
 
 import static org.hamcrest.Matchers.both;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -33,7 +35,6 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import cucumber.runtime.PendingException;
 
 public class MainWindowSteps
 {
@@ -378,13 +379,25 @@ public class MainWindowSteps
 	}
 
 	@Then("^the app displays existing ignore rules:$")
-	public void the_app_displays_existing_ignore_rules(DataTable arg1) throws Throwable
+	public void the_app_displays_existing_ignore_rules(List<String> expectedRules) throws Throwable
 	{
-		// Express the Regexp above with the code you wish you had
-		// For automatic conversion, change DataTable to List<YourType>
-		throw new PendingException();
+		List<String> actualRules = app().observedIgnoreRules();
+		
+		assertThat(actualRules, hasItems(asArray(expectedRules)));
 	}
 	
+	@Then("^the app displays empty ignore rule list$")
+	public void the_app_displays_empty_ignore_rule_list() throws Throwable
+	{
+		List<String> actualRules = app().observedIgnoreRules();
+		assertThat(actualRules, is(empty()));
+	}
+	
+	private String[] asArray(List<String> list)
+	{
+		return list.toArray(new String[list.size()]);
+	}
+
 	private Properties createMonthlyAccountRules(List<MonthlyAccountParam> subAccounts)
 	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();

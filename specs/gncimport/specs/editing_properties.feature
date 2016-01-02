@@ -5,6 +5,7 @@ Feature: Editing Configuration Properties
 	Scenario: editing ignore rules
 		Given the properties file is initially empty
 		When properties are edited
+		Then the app displays empty ignore rule list
 		And ignore rules are set to:
 		   	|MISC PAYMENT - RBC CREDIT CARD |
 	    	|PAYROLL DEPOSIT.* 				|

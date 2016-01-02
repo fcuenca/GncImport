@@ -6,6 +6,7 @@ import gncimport.interactors.AccFileLoadInteractor;
 import gncimport.interactors.AccSelectionInteractor;
 import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
 import gncimport.interactors.InteractorFactory;
+import gncimport.interactors.PropertyEditInteractor;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
@@ -68,7 +69,8 @@ public class HypodermicAppDriver3
 		{
 			//not used here
 		}
-	};	
+	};
+	private List<String> _ignoreRules;	
 		
 	public HypodermicAppDriver3(String defaultAccName, ConfigOptions config)
 	{
@@ -278,12 +280,21 @@ public class HypodermicAppDriver3
 	
 	public void startEditingProperties()
 	{
-		// TODO Auto-generated method stub	
+		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
+		{
+			@Override
+			public void editProperties(List<String> ignoreRules)
+			{
+				_ignoreRules = ignoreRules;
+			}
+		};
+		
+		_interactors.propertyEdit(boundary).displayCurrentConfig();
 	}
 
 	public void editIgnoreRules(List<String> rules)
-	{
-		// TODO Auto-generated method stub
+	{		
+		_interactors.propertyEdit(null).updateProperties(rules);
 	}
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
@@ -337,5 +348,10 @@ public class HypodermicAppDriver3
 	public Properties getProperties()
 	{
 		return _config.getProperties();
+	}
+
+	public List<String> observedIgnoreRules()
+	{
+		return _ignoreRules;
 	}
 }
