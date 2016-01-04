@@ -45,6 +45,7 @@ public class PropertyEditorPresenterTests
 		
 		TableModel tm = expectedTableModel.getValue();
 		
+		//TODO: extract class for this table model and test separately
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getColumnCount(), is(1));
 		assertThat(tm.getValueAt(1, 0), is((Object)"rule-2"));

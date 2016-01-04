@@ -28,10 +28,8 @@ public class PropertyEditInteractor
 		_model.copyIgnoreRules(ignoreRules);
 				
 		_outPort.editProperties(ignoreRules);
-	}
-
-	public void updateProperties(List<String> rules)
-	{
-		_model.replaceIgnoreRules(rules);
+		
+		_model.replaceIgnoreRules(ignoreRules);
+		
 	}
 }

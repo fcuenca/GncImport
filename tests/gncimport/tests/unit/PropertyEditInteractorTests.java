@@ -67,10 +67,23 @@ public class PropertyEditInteractorTests
 	@Test
 	public void updates_edited_properties()
 	{
-		List<String> newRules = ListUtils.list_of("rule-1", "rule-2");
+		List<String> expectedEditedRules = ListUtils.list_of("rule-1", "rule-2");
 		
-		_interactor.updateProperties(newRules);
+		doAnswer(new Answer<Void>(){
+			@Override
+			public Void answer(InvocationOnMock invocation) throws Throwable
+			{
+                Object[] args = invocation.getArguments();
+                @SuppressWarnings("unchecked")
+				List<String> rules = (List<String>) args[0];
+                rules.addAll(ListUtils.list_of("rule-1", "rule-2"));
+				return null;
+			}
+			
+		}).when(_outPort).editProperties(anyListOf(String.class));
 		
-		verify(_model).replaceIgnoreRules(newRules);
+		_interactor.editProperties();
+		
+		verify(_model).replaceIgnoreRules(expectedEditedRules);
 	}
 }

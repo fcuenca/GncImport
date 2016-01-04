@@ -15,7 +15,6 @@ import gncimport.ConfigPropertyBuilder;
 import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.tests.data.TestFiles;
-import gncimport.tests.unit.ListUtils;
 import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.TxData;
 import gnclib.GncFile;
@@ -359,10 +358,10 @@ public class MainWindowSteps
 		_context.properties = new Properties();
 	}
 
-	@When("^properties are edited$")
+	@When("^properties are displayed$")
 	public void properties_are_edited() throws Throwable
 	{
-		app().startEditingProperties();
+		app().browseCurrentProperties();
 	}
 
 	@When("^ignore rules are set to:$")
