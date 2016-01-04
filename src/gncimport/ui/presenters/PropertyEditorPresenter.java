@@ -48,17 +48,17 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 				return ignoreList.get(row);
 			}
 			
-//			@Override
-//			public boolean isCellEditable(int row, int col)
-//			{
-//				return true;
-//			}
-//
-//			@Override
-//			public void setValueAt(Object value, int row, int col)
-//			{
-//				ignoreList.set(row, (String) value);
-//			}
+			@Override
+			public boolean isCellEditable(int row, int col)
+			{
+				return true;
+			}
+
+			@Override
+			public void setValueAt(Object value, int row, int col)
+			{
+				ignoreList.set(row, (String) value);
+			}
 		};
 		
 		_view.editProperties(tableModel);

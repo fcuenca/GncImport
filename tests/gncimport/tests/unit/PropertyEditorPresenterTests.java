@@ -48,6 +48,11 @@ public class PropertyEditorPresenterTests
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getColumnCount(), is(1));
 		assertThat(tm.getValueAt(1, 0), is((Object)"rule-2"));
+		assertThat(tm.isCellEditable(0, 0), is(true));
+		
+		tm.setValueAt("new value", 1, 0);
+		assertThat(tm.getValueAt(1, 0), is((Object)"new value"));
+
 	}
 
 }
