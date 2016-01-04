@@ -190,16 +190,14 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_app.openGncFile(_fs.TMP_CHECKBOOK_NEW_XML);
 		_app.createAccountHierarchy(new String[] {"Monthly Expenses", "Year 2014"}, "Marzo 2014");
 		_app.selectTargetAccount(new String[] {"Monthly Expenses", "Year 2014", "Marzo 2014", "Miscelaneous"});
-	}
-	
-	
+	}	
 	
 	@Test
-	public void edits_configuration_properties()
+	public void edits_configuration_properties() throws IOException
 	{
+		_fs.setupConfigFile(TestFiles.CFG_WITH_MATCHING_RULES);
+
 		_app = new GncImportAppDriver(robot());	
-		_app.editProperties();
+		_app.editProperties(1);
 	}
-
-
 }

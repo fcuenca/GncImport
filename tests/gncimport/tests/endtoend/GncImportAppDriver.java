@@ -134,8 +134,6 @@ public class GncImportAppDriver
 	public void shouldDisplayAccountForTransactionInRow(int rowNumber, String expectedAccName)
 	{
 		JTableFixture grid = _mainWindow.table("TRANSACTION_GRID");
-		JTableCellFixture cell = grid.cell(TableCell.row(rowNumber).column(3));
-				
 		assertThat(grid.target.getValueAt(rowNumber, 3).toString(), is(expectedAccName));		
 	}
 
@@ -290,11 +288,15 @@ public class GncImportAppDriver
 		}
 	}
 
-	public void editProperties()
+	public void editProperties(int expectedIgnoreRules)
 	{
 		_mainWindow.menuItem("EDIT_PROPERTIES").click();
 
 		DialogFixture dialog = _mainWindow.dialog("PROP_EDITOR_DLG");
+		
+		JTableFixture table = dialog.table("IGNORE_RULES");
+		
+		assertThat(table.rowCount(), is(expectedIgnoreRules));
 		
 		dialog.button("OK_BUTTON").click();
 	}

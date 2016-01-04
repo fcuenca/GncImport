@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
+import javax.swing.table.TableModel;
 
 
 public class FakeView implements TxView
@@ -114,7 +115,7 @@ public class FakeView implements TxView
 	}
 
 	@Override
-	public void editProperties(List<String> rules)
+	public void editProperties(TableModel tm)
 	{		
 	}
 }

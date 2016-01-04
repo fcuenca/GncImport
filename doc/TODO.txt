@@ -1,9 +1,21 @@
 TODO:
 
 Features:
+* Editing properties - ignore rules
+- Editing properties - account override rules
+- Editing properties - transaction rewrite rules
+- Editing properties - monthly accounts
 
-end-to-end test improvements:
-- extract window driver from app driver
+
+Stories:
+x display current props
+* edit existing rules
+- validation
+- add new rules
+- remove rules
+- try rules 
+
+
 
 General improvements:
 - LocalFileTxImportModel could be implemented using the State Pattern 

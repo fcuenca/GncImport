@@ -21,6 +21,6 @@ public class EditPropertiesCommandTests
 		
 		cmd.execute(null);
 		
-		verify(interactor).displayCurrentConfig();
+		verify(interactor).editProperties();
 	}
 }

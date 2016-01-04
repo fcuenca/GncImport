@@ -289,7 +289,7 @@ public class HypodermicAppDriver3
 			}
 		};
 		
-		_interactors.propertyEdit(boundary).displayCurrentConfig();
+		_interactors.propertyEdit(boundary).editProperties();
 	}
 
 	public void editIgnoreRules(List<String> rules)

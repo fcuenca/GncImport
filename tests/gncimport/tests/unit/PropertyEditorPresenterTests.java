@@ -9,6 +9,8 @@ import gncimport.ui.presenters.PropertyEditorPresenter;
 
 import java.util.List;
 
+import javax.swing.table.TableModel;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +22,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class PropertyEditorPresenterTests
 {
 	@Captor
-	private ArgumentCaptor<List<String>> expectedRules;
-
+	private ArgumentCaptor<TableModel> expectedTableModel;
+	
 	private TxView _view;
 	private PropertyEditorPresenter _presenter;
 
@@ -31,7 +33,7 @@ public class PropertyEditorPresenterTests
 		_view = mock(TxView.class);
 		_presenter = new PropertyEditorPresenter(_view);
 	}
-
+	
 	@Test
 	public void displays_ignore_rules()
 	{
@@ -39,9 +41,13 @@ public class PropertyEditorPresenterTests
 		
 		_presenter.editProperties(rules);
 		
-		verify(_view).editProperties(expectedRules.capture());
-
-		assertThat(expectedRules.getValue(), is(rules));
+		verify(_view).editProperties(expectedTableModel.capture());
+		
+		TableModel tm = expectedTableModel.getValue();
+		
+		assertThat(tm.getRowCount(), is(2));
+		assertThat(tm.getColumnCount(), is(1));
+		assertThat(tm.getValueAt(1, 0), is((Object)"rule-2"));
 	}
 
 }

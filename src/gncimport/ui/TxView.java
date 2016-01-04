@@ -6,6 +6,7 @@ import gncimport.ui.swing.TxTableModel;
 
 import java.util.List;
 
+import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public interface TxView
@@ -45,6 +46,6 @@ public interface TxView
 
 	void selectExpenseAccForTx(AccountData newAcc);
 
-	void editProperties(List<String> rules);
+	void editProperties(TableModel tableModel);
 
 }

@@ -57,7 +57,7 @@ public class PropertyEditInteractorTests
 			
 		}).when(_model).copyIgnoreRules(anyListOf(String.class));
 		
-		_interactor.displayCurrentConfig();
+		_interactor.editProperties();
 		
 		verify(_outPort).editProperties(_expectedList.capture());
 		assertThat(_expectedList.getValue(), hasSize(2));

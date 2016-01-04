@@ -19,7 +19,7 @@ public class EditPropertiesCommand
 	@Override
 	protected void doExecute(NoArgsEvent __not_used__)
 	{		
-		_interactor.displayCurrentConfig();
+		_interactor.editProperties();
 	}
 
 }

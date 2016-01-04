@@ -33,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.jdesktop.swingx.JXDatePicker;
@@ -421,9 +422,9 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 	
 	@Override
-	public void editProperties(List<String> rules)
+	public void editProperties(TableModel tm)
 	{
-		EditPropertiesDialog dlg = new EditPropertiesDialog(null, rules);
+		EditPropertiesDialog dlg = new EditPropertiesDialog(null, tm);
 		
 		dlg.setVisible(true);	
 	}
