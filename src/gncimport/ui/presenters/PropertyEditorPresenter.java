@@ -18,7 +18,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	}
 
 	@Override
-	public void editProperties(final List<String> ignoreList)
+	public boolean editProperties(final List<String> ignoreList)
 	{
 		TableModel tableModel = new AbstractTableModel() 
 		{			
@@ -61,6 +61,6 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 			}
 		};
 		
-		_view.editProperties(tableModel);
+		return _view.editProperties(tableModel);
 	}
 }

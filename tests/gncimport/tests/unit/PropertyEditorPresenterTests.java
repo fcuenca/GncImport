@@ -2,11 +2,13 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import gncimport.ui.TxView;
 import gncimport.ui.presenters.PropertyEditorPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.TableModel;
@@ -39,9 +41,9 @@ public class PropertyEditorPresenterTests
 	{
 		List<String> rules = ListUtils.list_of("rule-1", "rule-2");
 		
-		_presenter.editProperties(rules);
+		when(_view.editProperties(expectedTableModel.capture())).thenReturn(true);
 		
-		verify(_view).editProperties(expectedTableModel.capture());
+		assertThat(_presenter.editProperties(rules), is(true));
 		
 		TableModel tm = expectedTableModel.getValue();
 		
@@ -53,7 +55,16 @@ public class PropertyEditorPresenterTests
 		
 		tm.setValueAt("new value", 1, 0);
 		assertThat(tm.getValueAt(1, 0), is((Object)"new value"));
-
 	}
+	
+	
+	@Test
+	public void signals_that_user_canceled_editing()
+	{
+		when(_view.editProperties(any(TableModel.class))).thenReturn(false);
+		
+		assertThat(_presenter.editProperties(new ArrayList<String>()), is(false));
+	}
+
 
 }

@@ -115,7 +115,8 @@ public class FakeView implements TxView
 	}
 
 	@Override
-	public void editProperties(TableModel tm)
+	public boolean editProperties(TableModel tm)
 	{		
+		return false;
 	}
 }

@@ -283,10 +283,11 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public void editProperties(List<String> ignoreRules)
+			public boolean editProperties(List<String> ignoreRules)
 			{
-				_observedIgnoreRules.clear();
-				_observedIgnoreRules.addAll(ignoreRules);
+				_observedIgnoreRules = new ArrayList<String>(ignoreRules);
+				
+				return false;
 			}
 		};
 		
@@ -298,12 +299,14 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public void editProperties(List<String> ignoreRules)
+			public boolean editProperties(List<String> ignoreRules)
 			{
-				_observedIgnoreRules.clear();
-				_observedIgnoreRules.addAll(ignoreRules);
+				_observedIgnoreRules = new ArrayList<String>(ignoreRules);
+				
 				ignoreRules.clear();
 				ignoreRules.addAll(newRules);
+				
+				return true;
 			}
 		};
 		

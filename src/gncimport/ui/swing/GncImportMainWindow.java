@@ -422,11 +422,11 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 	
 	@Override
-	public void editProperties(TableModel tm)
+	public boolean editProperties(TableModel tm)
 	{
 		EditPropertiesDialog dlg = new EditPropertiesDialog(null, tm);
 		
-		dlg.setVisible(true);	
+		return dlg.editProperties();
 	}
 
 	public void onSelectSourceAccClick()

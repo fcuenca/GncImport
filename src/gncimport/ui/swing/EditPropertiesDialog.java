@@ -18,6 +18,8 @@ import javax.swing.table.TableModel;
 @SuppressWarnings("serial")
 public class EditPropertiesDialog extends JDialog
 {
+	private boolean _okClicked;
+	
 	public EditPropertiesDialog(Frame aFrame, TableModel ignoreTable)
 	{
 		super(aFrame, true);
@@ -78,14 +80,15 @@ public class EditPropertiesDialog extends JDialog
 		return buttonPanel;
 	}
 
-	protected void onCancelClicked()
+	private void onCancelClicked()
 	{
 		setVisible(false);
 		dispose();
 	}
 
-	protected void onOkClicked()
+	private void onOkClicked()
 	{
+		_okClicked = true;
 		setVisible(false);
 		dispose();
 	}
@@ -105,5 +108,16 @@ public class EditPropertiesDialog extends JDialog
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
 
+	}
+
+	public boolean editProperties()
+	{
+		_okClicked = false;
+		
+		setVisible(true);
+		
+		System.out.println(_okClicked);
+		
+		return _okClicked;
 	}
 }

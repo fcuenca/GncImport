@@ -6,7 +6,9 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.models.PropertyModel;
 
@@ -65,19 +67,19 @@ public class PropertyEditInteractorTests
 	}
 	
 	@Test
-	public void updates_edited_properties()
+	public void updates_edited_properties_when_user_makes_changes()
 	{
 		List<String> expectedEditedRules = ListUtils.list_of("rule-1", "rule-2");
 		
-		doAnswer(new Answer<Void>(){
+		doAnswer(new Answer<Boolean>(){
 			@Override
-			public Void answer(InvocationOnMock invocation) throws Throwable
+			public Boolean answer(InvocationOnMock invocation) throws Throwable
 			{
                 Object[] args = invocation.getArguments();
                 @SuppressWarnings("unchecked")
 				List<String> rules = (List<String>) args[0];
                 rules.addAll(ListUtils.list_of("rule-1", "rule-2"));
-				return null;
+				return true;
 			}
 			
 		}).when(_outPort).editProperties(anyListOf(String.class));
@@ -85,5 +87,15 @@ public class PropertyEditInteractorTests
 		_interactor.editProperties();
 		
 		verify(_model).replaceIgnoreRules(expectedEditedRules);
+	}
+	
+	@Test
+	public void keeps_properties_unchanged_when_user_cancel_edits()
+	{
+		when(_outPort.editProperties(anyListOf(String.class))).thenReturn(false);
+		
+		_interactor.editProperties();
+		
+		verify(_model, never()).replaceIgnoreRules(anyListOf(String.class));
 	}
 }

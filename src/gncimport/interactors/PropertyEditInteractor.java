@@ -12,7 +12,7 @@ public class PropertyEditInteractor
 
 	public interface OutPort
 	{
-		void editProperties(List<String> ignoreRules);
+		boolean editProperties(List<String> ignoreRules);
 	}
 	
 	public PropertyEditInteractor(OutPort outPort, PropertyModel model)
@@ -27,9 +27,10 @@ public class PropertyEditInteractor
 		
 		_model.copyIgnoreRules(ignoreRules);
 				
-		_outPort.editProperties(ignoreRules);
-		
-		_model.replaceIgnoreRules(ignoreRules);
+		if(_outPort.editProperties(ignoreRules))
+		{
+			_model.replaceIgnoreRules(ignoreRules);
+		}
 		
 	}
 }

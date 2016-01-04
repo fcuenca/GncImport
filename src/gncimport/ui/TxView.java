@@ -46,6 +46,6 @@ public interface TxView
 
 	void selectExpenseAccForTx(AccountData newAcc);
 
-	void editProperties(TableModel tableModel);
+	boolean editProperties(TableModel tableModel);
 
 }

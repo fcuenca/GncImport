@@ -10,11 +10,12 @@ Features:
 Stories:
 x display current props
 * edit existing rules
+   - cancel 
+   - edited props take effect immediately (w/o needing to restart the app) -- (re-loading the csv file is OK)
 - validation
 - add new rules
 - remove rules
 - try rules 
-
 
 
 General improvements:
