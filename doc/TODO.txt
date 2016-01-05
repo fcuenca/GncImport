@@ -9,10 +9,12 @@ Features:
 
 Stories:
 x display current props
-* edit existing rules
-   - cancel 
-   - edited props take effect immediately (w/o needing to restart the app) -- (re-loading the csv file is OK)
-- validation
+x edit existing rules
+  	x cancel 
+	x edited props take effect immediately (w/o needing to restart the app) -- (re-loading the csv file is OK)
+* validation
+	- ignore rule can't be blank
+	- it needs to be a valid regex
 - add new rules
 - remove rules
 - try rules 
