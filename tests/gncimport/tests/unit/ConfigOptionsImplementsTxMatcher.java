@@ -2,10 +2,9 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
 import gncimport.ConfigPropertyBuilder;
-import gncimport.InvalidConfigOption;
 
 import java.util.Properties;
 
@@ -75,15 +74,6 @@ public class ConfigOptionsImplementsTxMatcher
 		assertThat(_options.findAccountOverride("this will not be matched"), is(nullValue()));
 	}
 	
-	@Test(expected = InvalidConfigOption.class)
-	public void only_matching_rules_are_considered()
-	{
-		Properties p = new Properties();
-		p.setProperty("match.1.account", "missing account name");
-		
-		new ConfigOptions(p); // this should throw
-	}
-	
 	@Test
 	public void matching_rules_are_optional_in_property_file()
 	{
@@ -136,15 +126,4 @@ public class ConfigOptionsImplementsTxMatcher
 		assertThat(_options.rewriteDescription("MISC PAYMENT - GOODLIFE CLUBS    "), is("Gym membership"));
 		assertThat(_options.rewriteDescription("SAN CRISTOBAL 123456     "), is("Home Insurance"));
 	}
-	
-	@Test(expected = InvalidConfigOption.class)
-	public void invalid_rewrite_rules_are_rejected()
-	{
-		Properties p = new Properties();
-		p.setProperty("match.1.rewrite", "missing rewrite text");
-		
-		new ConfigOptions(p); // this should throw
-	}
-
-
 }

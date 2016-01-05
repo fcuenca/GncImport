@@ -65,6 +65,13 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		
 		if (matcher.matches())
 		{
+			value = value.trim();
+			
+			if(value.isEmpty())
+			{
+				throw new InvalidConfigOption("Invalid property format: " + value);
+			}
+			
 			MonthlyAccountParam p = new MonthlyAccountParam(Integer.parseInt(matcher.group(1)), value);
 			
 			_monthlyAccounts.add(p);
@@ -75,6 +82,13 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	{
 		if (key.matches(IGNORE_RULE_KEY_REGEX))
 		{
+			value = value.trim();
+			
+			if(value.isEmpty())
+			{
+				throw new InvalidConfigOption("Invalid property format: " + value);
+			}
+			
 			_ignoreRules.add(value);
 		}
 	}
@@ -87,16 +101,24 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 
 	private void captureOverrideRuleIfApplicable(String key, String value, String propertyName, List<TxOverrideRule> ruleCollection)
 	{
-		String[] parts = value.split("\\|");
-
 		if (key.matches(propertyName))
 		{
+			String[] parts = value.split("\\|");
+			
 			if (parts.length != 2)
 			{
 				throw new InvalidConfigOption("Invalid property format: " + value);
 			}
+			
+			String desc = parts[0].trim();
+			String override = parts[1].trim();
+			
+			if(desc.isEmpty() || override.isEmpty())
+			{
+				throw new InvalidConfigOption("Invalid property format: " + value);
+			}
 
-			ruleCollection.add(new TxOverrideRule(parts[0], parts[1]));
+			ruleCollection.add(new TxOverrideRule(desc, override));
 		}
 	}
 
