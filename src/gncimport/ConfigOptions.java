@@ -3,6 +3,8 @@ package gncimport;
 import gncimport.models.PropertyModel;
 import gncimport.models.TxMatcher;
 import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.UserEnteredRuleDefinition;
 import gncimport.ui.UIConfig;
 import gncimport.utils.ProgrammerError;
 
@@ -36,7 +38,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 
 	private List<TxOverrideRule> _accountOverrideRules = new ArrayList<TxOverrideRule>();
 	private List<TxOverrideRule> _rewriteRule = new ArrayList<TxOverrideRule>();
-	private List<String> _ignoreRules = new ArrayList<String>();
+	private List<RuleDefinition> _ignoreRules = new ArrayList<RuleDefinition>();
 	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
 	private String _lastGnc;
 	private String _lastCsv;
@@ -82,14 +84,13 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	{
 		if (key.matches(IGNORE_RULE_KEY_REGEX))
 		{
-			value = value.trim();
-			
-			if(value.isEmpty())
+			RuleDefinition def = new UserEnteredRuleDefinition(value);
+			if(!def.isValid())
 			{
-				throw new InvalidConfigOption("Invalid property format: " + value);
+				throw new InvalidConfigOption("Invalid property format: " + def.hint());
 			}
 			
-			_ignoreRules.add(value);
+			_ignoreRules.add(def);
 		}
 	}
 
@@ -139,9 +140,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	@Override
 	public boolean isToBeIgnored(String txDescription)
 	{
-		for (String rule : _ignoreRules)
+		for (RuleDefinition rule : _ignoreRules)
 		{
-			if (txDescription.trim().matches(rule))
+			if (txDescription.trim().matches(rule.text()))
 			{
 				return true;
 			}
@@ -180,10 +181,10 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
 		
 		int index = 0;
-		for (String rule : _ignoreRules)
+		for (RuleDefinition rule : _ignoreRules)
 		{
 			index++;
-			builder.addTransactionIgnoreRule(index, rule);
+			builder.addTransactionIgnoreRule(index, rule.text());
 		}
 		
 		index = 0;
@@ -257,7 +258,12 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 			throw new IllegalArgumentException("rules cannot be null");
 		}
 
-		_ignoreRules = new ArrayList<String>(rules);
+		_ignoreRules = new ArrayList<RuleDefinition>();
+		
+		for(String r: rules)
+		{
+			_ignoreRules.add(new UserEnteredRuleDefinition(r));
+		}
 	}
 
 	@Override
@@ -269,6 +275,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		}
 		
 		rules.clear();
-		rules.addAll(_ignoreRules);
+		for(RuleDefinition r: _ignoreRules)
+		{
+			rules.add(r.text());			
+		}
 	}
 }
