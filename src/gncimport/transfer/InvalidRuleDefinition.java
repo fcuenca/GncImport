@@ -28,4 +28,10 @@ public class InvalidRuleDefinition extends RuleDefinition
 	{
 		return _hint;
 	}
+
+	@Override
+	public RuleDefinition copy()
+	{
+		return new InvalidRuleDefinition(_offendingText, _hint);
+	}
 }

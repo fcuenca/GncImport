@@ -26,4 +26,10 @@ public class UserEnteredRuleDefinition extends RuleDefinition
 	{
 		return _backingRule.hint();
 	}
+
+	@Override
+	public RuleDefinition copy()
+	{
+		return _backingRule.copy();
+	}
 }

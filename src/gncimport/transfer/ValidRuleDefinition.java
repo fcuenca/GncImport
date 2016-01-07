@@ -2,8 +2,9 @@ package gncimport.transfer;
 
 public class ValidRuleDefinition extends RuleDefinition
 {
+	
 	private String _text;
-
+	
 	protected ValidRuleDefinition(String text)
 	{
 		this._text = text;
@@ -25,5 +26,11 @@ public class ValidRuleDefinition extends RuleDefinition
 	public String hint()
 	{
 		return "";
+	}
+
+	@Override
+	public RuleDefinition copy()
+	{
+		return new ValidRuleDefinition(_text);
 	}
 }

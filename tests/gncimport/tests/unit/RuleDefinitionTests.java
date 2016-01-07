@@ -56,4 +56,28 @@ public class RuleDefinitionTests
 		new UserEnteredRuleDefinition(null); // will throw
 	}
 	
+	@Test
+	public void copying_valid_rule_definition()
+	{
+		RuleDefinition rule = new UserEnteredRuleDefinition("rule");
+		
+		RuleDefinition copy = rule.copy();
+		
+		assertThat(copy.isValid(), is(true));
+		assertThat(copy.text(), is(rule.text()));
+		assertThat(copy.hint(), is(rule.hint()));
+	}
+	
+	@Test
+	public void copying_invalid_rule_definition()
+	{
+		RuleDefinition rule = new UserEnteredRuleDefinition("");
+		
+		RuleDefinition copy = rule.copy();
+		
+		assertThat(copy.isValid(), is(false));
+		assertThat(copy.text(), is(rule.text()));
+		assertThat(copy.hint(), is(rule.hint()));
+	}
+	
 }

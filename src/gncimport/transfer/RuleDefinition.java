@@ -50,4 +50,40 @@ public abstract class RuleDefinition
 	public abstract boolean isValid();
 	public abstract String text();
 	public abstract String hint();
+	public abstract RuleDefinition copy();
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((hint() == null) ? 0 : hint().hashCode());
+		result = prime * result + ((text() == null) ? 0 : text().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		RuleDefinition other = (RuleDefinition) obj;
+		if (hint() == null)
+		{
+			if (other.hint() != null)
+				return false;
+		}
+		else if (!hint().equals(other.hint()))
+			return false;
+		if (text() == null)
+		{
+			if (other.text() != null)
+				return false;
+		}
+		else if (!text().equals(other.text()))
+			return false;
+		return true;
+	}
 }
