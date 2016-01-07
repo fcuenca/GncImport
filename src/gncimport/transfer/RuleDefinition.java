@@ -86,4 +86,10 @@ public abstract class RuleDefinition
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + " [" + isValid() + ", " + text() + "]";
+	}
 }

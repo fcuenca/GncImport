@@ -11,7 +11,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.models.PropertyModel;
+import gncimport.transfer.RuleDefinition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -52,12 +54,12 @@ public class PropertyEditInteractorTests
 			{
                 Object[] args = invocation.getArguments();
                 @SuppressWarnings("unchecked")
-				List<String> rules = (List<String>) args[0];
-                rules.addAll(ListUtils.list_of("rule-1", "rule-2"));
+				List<RuleDefinition> rules = (List<RuleDefinition>) args[0];
+                rules.addAll(ListUtils.list_of(new RuleDefinitionForTest("rule-1"), new RuleDefinitionForTest("rule-2")));
 				return null;
 			}
 			
-		}).when(_model).copyIgnoreRules(anyListOf(String.class));
+		}).when(_model).copyIgnoreRules(anyListOf(RuleDefinition.class));
 		
 		_interactor.editProperties();
 		
@@ -69,7 +71,9 @@ public class PropertyEditInteractorTests
 	@Test
 	public void updates_edited_properties_when_user_makes_changes()
 	{
-		List<String> expectedEditedRules = ListUtils.list_of("rule-1", "rule-2");
+		List<RuleDefinition> expectedEditedRules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2")));
 		
 		doAnswer(new Answer<Boolean>(){
 			@Override
@@ -96,6 +100,6 @@ public class PropertyEditInteractorTests
 		
 		_interactor.editProperties();
 		
-		verify(_model, never()).replaceIgnoreRules(anyListOf(String.class));
+		verify(_model, never()).replaceIgnoreRules(anyListOf(RuleDefinition.class));
 	}
 }

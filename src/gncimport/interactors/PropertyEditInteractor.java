@@ -1,9 +1,11 @@
 package gncimport.interactors;
 
+import gncimport.models.PropertyModel;
+import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.UserEnteredRuleDefinition;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import gncimport.models.PropertyModel;
 
 public class PropertyEditInteractor
 {
@@ -23,12 +25,23 @@ public class PropertyEditInteractor
 
 	public void editProperties()
 	{
-		List<String> ignoreRules = new ArrayList<String>();
+		List<RuleDefinition> ignoreRules = new ArrayList<RuleDefinition>();
 		
 		_model.copyIgnoreRules(ignoreRules);
-				
-		if(_outPort.editProperties(ignoreRules))
+		
+		List<String> rules = new ArrayList<String>();
+		for (RuleDefinition r : ignoreRules)
 		{
+			rules.add(r.text());
+		}
+				
+		if(_outPort.editProperties(rules))
+		{
+			ignoreRules.clear();
+			for (String r : rules)
+			{
+				ignoreRules.add(new UserEnteredRuleDefinition(r));
+			}
 			_model.replaceIgnoreRules(ignoreRules);
 		}
 		

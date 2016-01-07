@@ -250,8 +250,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		return txDescription;
 	}
 
-	@Override
-	public void replaceIgnoreRules(List<String> rules)
+	public void replaceIgnoreRules_old(List<String> rules)
 	{
 		if(rules == null)
 		{
@@ -266,7 +265,8 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		}
 	}
 	
-	public void replaceIgnoreRules2(List<RuleDefinition> newRules)
+	@Override
+	public void replaceIgnoreRules(List<RuleDefinition> newRules)
 	{
 		if(newRules == null)
 		{
@@ -276,8 +276,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		_ignoreRules = new ArrayList<RuleDefinition>(newRules);
 	}
 
-	@Override
-	public void copyIgnoreRules(List<String> rules)
+	public void copyIgnoreRules_old(List<String> rules)
 	{
 		if(rules == null)
 		{
@@ -291,7 +290,8 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		}
 	}
 
-	public void copyIgnoreRules2(List<RuleDefinition> rules)
+	@Override
+	public void copyIgnoreRules(List<RuleDefinition> rules)
 	{
 		if(rules == null)
 		{

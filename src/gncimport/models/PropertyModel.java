@@ -1,9 +1,11 @@
 package gncimport.models;
 
+import gncimport.transfer.RuleDefinition;
+
 import java.util.List;
 
 public interface PropertyModel
 {
-	void replaceIgnoreRules(List<String> rules);
-	void copyIgnoreRules(List<String> rules);
+	void replaceIgnoreRules(List<RuleDefinition> rules);
+	void copyIgnoreRules(List<RuleDefinition> rules);
 }
