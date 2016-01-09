@@ -2,6 +2,7 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import gncimport.transfer.RuleDefinition;
 import gncimport.transfer.UserEnteredRuleDefinition;
 import gncimport.ui.swing.RuleDefCellEditor;
 
@@ -16,7 +17,7 @@ public class RuleDefCellEditorTests
 {
 
 	@Test
-	public void shows_rule_definition_text_for_edit()
+	public void shows_rule_definition_raw_text_for_edit()
 	{
 		GuiActionRunner.execute(new GuiTask()
 		{
@@ -24,11 +25,12 @@ public class RuleDefCellEditorTests
 			protected void executeInEDT() throws Throwable
 			{
 				RuleDefCellEditor editor = new RuleDefCellEditor();
+				RuleDefinition ruleDef = new RuleDefinitionForTest("some rule");
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
-						new JTable(), new RuleDefinitionForTest("some rule"), true, 0, 1);
+						new JTable(), ruleDef, true, 0, 1);
 
-				assertThat(tf.getText(), is("some rule"));
+				assertThat(tf.getText(), is(ruleDef.text()));
 			}
 		});
 	}

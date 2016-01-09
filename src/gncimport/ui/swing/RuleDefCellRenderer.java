@@ -12,6 +12,6 @@ public class RuleDefCellRenderer extends DefaultTableCellRenderer
 	public void setValue(Object value)
 	{
 		RuleDefinition renderable = (RuleDefinition) value;
-		setText(renderable.text());
+		setText(renderable.displayText());
 	}
 }
