@@ -21,6 +21,24 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	{		
 		PropertyEditorTableModel tableModel = new PropertyEditorTableModel(rules);
 
-		return _view.editProperties(tableModel);
+		boolean changesConfirmed;
+		
+		while(true)
+		{
+			changesConfirmed = _view.editProperties(tableModel);
+			
+			if(!changesConfirmed)
+			{
+				return false;
+			}
+			else if(tableModel.isValid())
+			{
+				return true;
+			}
+			else 
+			{
+				_view.displayErrorMessage("Fix invalid properties!!");
+			}
+		}
 	}
 }

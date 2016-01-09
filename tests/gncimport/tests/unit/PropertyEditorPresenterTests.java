@@ -3,7 +3,10 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.transfer.RuleDefinition;
 import gncimport.ui.TxView;
@@ -64,6 +67,26 @@ public class PropertyEditorPresenterTests
 		
 		assertThat(_presenter.editProperties(new ArrayList<RuleDefinition>()), is(false));
 	}
+
+	
+	
+	@Test
+	public void displays_error_if_there_are_invalid_properties()
+	{
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2", false)));
+		
+		when(_view.editProperties(any(PropertyEditorTableModel.class)))
+			.thenReturn(true)
+			.thenReturn(false);
+		
+		assertThat(_presenter.editProperties(rules), is(false));
+		
+		verify(_view, times(2)).editProperties(any(PropertyEditorTableModel.class));
+		verify(_view).displayErrorMessage(anyString());
+	}
+
 
 
 }

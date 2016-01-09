@@ -13,8 +13,9 @@ x edit existing rules
   	x cancel 
 	x edited props take effect immediately (w/o needing to restart the app) -- (re-loading the csv file is OK)
 * validation
-	- ignore rule can't be blank
-	- it needs to be a valid regex
+	x ignore rule can't be blank
+	x it needs to be a valid regex
+	- UI feedback for invalid rules
 - add new rules
 - remove rules
 - try rules 
