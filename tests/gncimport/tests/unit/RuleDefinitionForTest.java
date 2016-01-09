@@ -33,7 +33,7 @@ class RuleDefinitionForTest extends RuleDefinition
 	@Override
 	public String hint()
 	{
-		return "";
+		return "HINT[" + _text + "]";
 	}
 
 	@Override

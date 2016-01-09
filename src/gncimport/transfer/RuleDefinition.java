@@ -57,8 +57,8 @@ public abstract class RuleDefinition
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((hint() == null) ? 0 : hint().hashCode());
 		result = prime * result + ((text() == null) ? 0 : text().hashCode());
+		result = prime * result + new Boolean(isValid()).hashCode();
 		return result;
 	}
 
@@ -70,12 +70,7 @@ public abstract class RuleDefinition
 		if (obj == null)
 			return false;
 		RuleDefinition other = (RuleDefinition) obj;
-		if (hint() == null)
-		{
-			if (other.hint() != null)
-				return false;
-		}
-		else if (!hint().equals(other.hint()))
+		if(isValid() != other.isValid())
 			return false;
 		if (text() == null)
 		{

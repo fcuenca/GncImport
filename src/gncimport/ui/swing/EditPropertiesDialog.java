@@ -1,7 +1,6 @@
 package gncimport.ui.swing;
 
 import gncimport.transfer.RuleDefinition;
-import gncimport.transfer.UserEnteredRuleDefinition;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,17 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
@@ -40,57 +35,13 @@ public class EditPropertiesDialog extends JDialog
 		{
 			super(model);
 			
-			setDefaultRenderer(RuleDefinition.class, cellRenderer());
-			setDefaultEditor(RuleDefinition.class, cellEditor());
+			setDefaultRenderer(RuleDefinition.class, new RuleDefCellRenderer());
+			setDefaultEditor(RuleDefinition.class, new RuleDefCellEditor());
 			
 			setName("IGNORE_RULES");
 			setModel(model);
 		}
 		
-		private TableCellEditor cellEditor()
-		{
-			final JTextField textField = new JTextField();
-			textField.setBorder(null);
-			
-			
-			final DefaultCellEditor editor = new DefaultCellEditor(textField)
-			{
-				@Override
-				public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-						int column)
-				{
-					JTextField tf = (JTextField)super.getTableCellEditorComponent(table, value, isSelected, row, column);
-					RuleDefinition rule = (RuleDefinition)value;
-					
-					tf.setText(rule.text());
-					return tf;
-				}
-
-				@Override
-				public Object getCellEditorValue()
-				{
-					String theValue = (String)super.getCellEditorValue();
-					return new UserEnteredRuleDefinition(theValue);
-				}
-			};
-			
-			return editor;
-		}
-
-		private TableCellRenderer cellRenderer()
-		{
-			return new DefaultTableCellRenderer()
-			{
-				
-				@Override
-				public void setValue(Object value)
-				{
-					RuleDefinition renderable = (RuleDefinition) value;
-					//renderable.render(new Resources(), new LabelRenderTargetAdapter(this));
-					setText(renderable.text());
-				}
-			};
-		}
 		@Override
 		public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
 		{
