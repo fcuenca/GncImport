@@ -50,6 +50,7 @@ public abstract class RuleDefinition
 	public abstract boolean isValid();
 	public abstract String text();
 	public abstract String hint();
+	public abstract String displayText();
 	public abstract RuleDefinition copy();
 
 	@Override

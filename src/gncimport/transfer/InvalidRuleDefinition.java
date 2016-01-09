@@ -20,7 +20,7 @@ public class InvalidRuleDefinition extends RuleDefinition
 	@Override
 	public String text()
 	{
-		return "<<" + _offendingText + ">>";
+		return _offendingText;
 	}
 
 	@Override
@@ -33,5 +33,11 @@ public class InvalidRuleDefinition extends RuleDefinition
 	public RuleDefinition copy()
 	{
 		return new InvalidRuleDefinition(_offendingText, _hint);
+	}
+
+	@Override
+	public String displayText()
+	{
+		return "<<" + _offendingText + ">>";
 	}
 }

@@ -32,4 +32,10 @@ public class UserEnteredRuleDefinition extends RuleDefinition
 	{
 		return _backingRule.copy();
 	}
+
+	@Override
+	public String displayText()
+	{
+		return _backingRule.displayText();
+	}
 }

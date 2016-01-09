@@ -18,6 +18,7 @@ public class RuleDefinitionTests
 		assertThat(rule.isValid(), is(true));
 		assertThat(rule.text(), is("rule text.*"));
 		assertThat(rule.hint(), is(""));
+		assertThat(rule.displayText(), is(rule.text()));
 	}
 	
 	@Test
@@ -26,7 +27,8 @@ public class RuleDefinitionTests
 		RuleDefinition rule = new UserEnteredRuleDefinition("");
 		
 		assertThat(rule.isValid(), is(false));
-		assertThat(rule.text(), is("<<>>"));
+		assertThat(rule.text(), is(""));
+		assertThat(rule.displayText(), is("<<>>"));
 		assertThat(rule.hint(), is("Empty string is invalid"));
 	}
 
@@ -36,7 +38,8 @@ public class RuleDefinitionTests
 		RuleDefinition rule = new UserEnteredRuleDefinition("   ");
 		
 		assertThat(rule.isValid(), is(false));
-		assertThat(rule.text(), is("<<   >>"));
+		assertThat(rule.text(), is("   "));
+		assertThat(rule.displayText(), is("<<   >>"));
 		assertThat(rule.hint(), is("Empty string is invalid"));
 	}
 	
@@ -46,7 +49,8 @@ public class RuleDefinitionTests
 		RuleDefinition rule = new UserEnteredRuleDefinition("(missing bracket");
 		
 		assertThat(rule.isValid(), is(false));
-		assertThat(rule.text(), is("<<(missing bracket>>"));
+		assertThat(rule.text(), is("(missing bracket"));
+		assertThat(rule.displayText(), is("<<(missing bracket>>"));
 		assertThat(rule.hint(), is("Invalid regex: Unclosed group"));
 	}
 	
@@ -65,6 +69,7 @@ public class RuleDefinitionTests
 		
 		assertThat(copy.isValid(), is(true));
 		assertThat(copy.text(), is(rule.text()));
+		assertThat(copy.displayText(), is(rule.displayText()));
 		assertThat(copy.hint(), is(rule.hint()));
 	}
 	
@@ -77,6 +82,7 @@ public class RuleDefinitionTests
 		
 		assertThat(copy.isValid(), is(false));
 		assertThat(copy.text(), is(rule.text()));
+		assertThat(copy.displayText(), is(rule.displayText()));
 		assertThat(copy.hint(), is(rule.hint()));
 	}
 	

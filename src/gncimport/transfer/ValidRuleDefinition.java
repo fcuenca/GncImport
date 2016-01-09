@@ -33,4 +33,10 @@ public class ValidRuleDefinition extends RuleDefinition
 	{
 		return new ValidRuleDefinition(_text);
 	}
+
+	@Override
+	public String displayText()
+	{
+		return text();
+	}
 }

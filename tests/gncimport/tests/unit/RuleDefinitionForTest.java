@@ -41,5 +41,11 @@ class RuleDefinitionForTest extends RuleDefinition
 	{
 		return new RuleDefinitionForTest(_text);
 	}
+
+	@Override
+	public String displayText()
+	{
+		return "DISPLAY[" + _text + "]";
+	}
 	
 }
