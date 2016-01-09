@@ -2,9 +2,9 @@ package gncimport.ui.presenters;
 
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.UserEnteredRuleDefinition;
 import gncimport.ui.TxView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -21,9 +21,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 
 	@Override
 	public boolean editProperties(final List<RuleDefinition> rules)
-	{
-		final List<String> ignoreList = new ArrayList<String>();
-		
+	{		
 		TableModel tableModel = new AbstractTableModel() 
 		{			
 			private static final long serialVersionUID = 9060984673285510233L;
@@ -37,7 +35,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 			@Override
 			public int getRowCount()
 			{
-				return ignoreList.size();
+				return rules.size();
 			}
 
 			@Override
@@ -49,7 +47,9 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 			@Override
 			public Object getValueAt(int row, int col)
 			{
-				return ignoreList.get(row);
+				RuleDefinition def = (RuleDefinition)rules.get(row);
+				
+				return def.text();
 			}
 			
 			@Override
@@ -61,14 +61,9 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 			@Override
 			public void setValueAt(Object value, int row, int col)
 			{
-				ignoreList.set(row, (String) value);
+				rules.set(row, new UserEnteredRuleDefinition((String) value));
 			}
 		};
-		
-		for (RuleDefinition r : rules)
-		{
-			ignoreList.add(r.text());
-		}
 
 		return _view.editProperties(tableModel);
 	}
