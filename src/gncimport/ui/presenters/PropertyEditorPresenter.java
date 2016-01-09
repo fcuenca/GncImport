@@ -1,8 +1,10 @@
 package gncimport.ui.presenters;
 
 import gncimport.interactors.PropertyEditInteractor;
+import gncimport.transfer.RuleDefinition;
 import gncimport.ui.TxView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -18,8 +20,10 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	}
 
 	@Override
-	public boolean editProperties(final List<String> ignoreList)
+	public boolean editProperties(final List<RuleDefinition> rules)
 	{
+		final List<String> ignoreList = new ArrayList<String>();
+		
 		TableModel tableModel = new AbstractTableModel() 
 		{			
 			private static final long serialVersionUID = 9060984673285510233L;
@@ -61,6 +65,11 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 			}
 		};
 		
+		for (RuleDefinition r : rules)
+		{
+			ignoreList.add(r.text());
+		}
+
 		return _view.editProperties(tableModel);
 	}
 }

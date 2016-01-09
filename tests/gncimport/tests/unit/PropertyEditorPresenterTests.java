@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gncimport.transfer.RuleDefinition;
 import gncimport.ui.TxView;
 import gncimport.ui.presenters.PropertyEditorPresenter;
 
@@ -39,7 +40,7 @@ public class PropertyEditorPresenterTests
 	@Test
 	public void displays_ignore_rules()
 	{
-		List<String> rules = ListUtils.list_of("rule-1", "rule-2");
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(new RuleDefinitionForTest("rule-1"), new RuleDefinitionForTest("rule-2")));
 		
 		when(_view.editProperties(expectedTableModel.capture())).thenReturn(true);
 		
@@ -63,7 +64,7 @@ public class PropertyEditorPresenterTests
 	{
 		when(_view.editProperties(any(TableModel.class))).thenReturn(false);
 		
-		assertThat(_presenter.editProperties(new ArrayList<String>()), is(false));
+		assertThat(_presenter.editProperties(new ArrayList<RuleDefinition>()), is(false));
 	}
 
 

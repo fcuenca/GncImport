@@ -10,7 +10,9 @@ import gncimport.interactors.PropertyEditInteractor;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
+import gncimport.transfer.RuleDefinition;
 import gncimport.transfer.TxData;
+import gncimport.transfer.UserEnteredRuleDefinition;
 import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
@@ -70,7 +72,7 @@ public class HypodermicAppDriver3
 			//not used here
 		}
 	};
-	private List<String> _observedIgnoreRules = new ArrayList<String>();	
+	private List<RuleDefinition> _observedIgnoreRules = new ArrayList<RuleDefinition>();	
 		
 	public HypodermicAppDriver3(String defaultAccName, ConfigOptions config)
 	{
@@ -283,9 +285,9 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<String> ignoreRules)
+			public boolean editProperties(List<RuleDefinition> ignoreRules)
 			{
-				_observedIgnoreRules = new ArrayList<String>(ignoreRules);
+				_observedIgnoreRules = new ArrayList<RuleDefinition>(ignoreRules);
 				
 				return false;
 			}
@@ -299,12 +301,16 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<String> ignoreRules)
+			public boolean editProperties(List<RuleDefinition> ignoreRules)
 			{
-				_observedIgnoreRules = new ArrayList<String>(ignoreRules);
+				_observedIgnoreRules = new ArrayList<RuleDefinition>(ignoreRules);
 				
 				ignoreRules.clear();
-				ignoreRules.addAll(newRules);
+				
+				for (String rule : newRules)
+				{
+					ignoreRules.add(new UserEnteredRuleDefinition(rule));					
+				}
 				
 				return true;
 			}
@@ -368,6 +374,13 @@ public class HypodermicAppDriver3
 
 	public List<String> observedIgnoreRules()
 	{
-		return _observedIgnoreRules;
+		List<String> rules = new ArrayList<String>();
+		
+		for (RuleDefinition rule : _observedIgnoreRules)
+		{
+			rules.add(rule.text());
+		}
+		
+		return rules;
 	}
 }

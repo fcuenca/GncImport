@@ -34,7 +34,7 @@ public class PropertyEditInteractorTests
 	private PropertyEditInteractor _interactor;
 
 	@Captor
-	private ArgumentCaptor<List<String>> _expectedList;
+	private ArgumentCaptor<List<RuleDefinition>> _expectedList;
 	
 	@Before
 	public void Setup()
@@ -65,7 +65,7 @@ public class PropertyEditInteractorTests
 		
 		verify(_outPort).editProperties(_expectedList.capture());
 		assertThat(_expectedList.getValue(), hasSize(2));
-		assertThat(_expectedList.getValue(), hasItems("rule-1", "rule-2"));
+		assertThat(_expectedList.getValue(), hasItems( testRule("rule-1"), testRule("rule-2")));
 	}
 	
 	@Test
@@ -81,12 +81,12 @@ public class PropertyEditInteractorTests
 			{
                 Object[] args = invocation.getArguments();
                 @SuppressWarnings("unchecked")
-				List<String> rules = (List<String>) args[0];
-                rules.addAll(ListUtils.list_of("rule-1", "rule-2"));
+				List<RuleDefinition> rules = (List<RuleDefinition>) args[0];
+                rules.addAll(ListUtils.list_of(new RuleDefinitionForTest("rule-1"), new RuleDefinitionForTest("rule-2")));
 				return true;
 			}
 			
-		}).when(_outPort).editProperties(anyListOf(String.class));
+		}).when(_outPort).editProperties(anyListOf(RuleDefinition.class));
 		
 		_interactor.editProperties();
 		
@@ -96,10 +96,15 @@ public class PropertyEditInteractorTests
 	@Test
 	public void keeps_properties_unchanged_when_user_cancel_edits()
 	{
-		when(_outPort.editProperties(anyListOf(String.class))).thenReturn(false);
+		when(_outPort.editProperties(anyListOf(RuleDefinition.class))).thenReturn(false);
 		
 		_interactor.editProperties();
 		
 		verify(_model, never()).replaceIgnoreRules(anyListOf(RuleDefinition.class));
+	}
+	
+	private RuleDefinition testRule(String text)
+	{
+		return new RuleDefinitionForTest(text);
 	}
 }
