@@ -55,10 +55,9 @@ public class PropertyEditorPresenterTests
 		TableModel tm = expectedTableModel.getValue();
 		
 		assertThat(tm.getRowCount(), is(2));
-		assertThat(tm.getValueAt(0, 0), is((Object)"rule-1"));
-		assertThat(tm.getValueAt(1, 0), is((Object)"rule-2"));
+		assertThat(tm.getValueAt(0, 0), is((Object)new RuleDefinitionForTest("rule-1")));
+		assertThat(tm.getValueAt(1, 0), is((Object)new RuleDefinitionForTest("rule-2")));
 	}
-	
 	
 	@Test
 	public void signals_that_user_canceled_editing()
@@ -67,8 +66,6 @@ public class PropertyEditorPresenterTests
 		
 		assertThat(_presenter.editProperties(new ArrayList<RuleDefinition>()), is(false));
 	}
-
-	
 	
 	@Test
 	public void displays_error_if_there_are_invalid_properties()
@@ -86,7 +83,4 @@ public class PropertyEditorPresenterTests
 		verify(_view, times(2)).editProperties(any(PropertyEditorTableModel.class));
 		verify(_view).displayErrorMessage(anyString());
 	}
-
-
-
 }

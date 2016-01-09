@@ -1,7 +1,6 @@
 package gncimport.ui.swing;
 
 import gncimport.transfer.RuleDefinition;
-import gncimport.transfer.UserEnteredRuleDefinition;
 
 import java.util.List;
 
@@ -9,6 +8,9 @@ import javax.swing.table.AbstractTableModel;
 
 public final class PropertyEditorTableModel extends AbstractTableModel
 {
+	public static final String[] COLUMN_TITLES = { "Description Pattern" };
+	public static final Class<?>[] COLUMN_CLASSES = { RuleDefinition.class };
+
 	private final List<RuleDefinition> _rules;
 	private static final long serialVersionUID = 9060984673285510233L;
 
@@ -20,7 +22,7 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	@Override
 	public int getColumnCount()
 	{
-		return 1;
+		return COLUMN_TITLES.length;
 	}
 
 	@Override
@@ -32,15 +34,13 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	@Override
 	public String getColumnName(int col)
 	{
-		return "Description Pattern";
+		return COLUMN_TITLES[col];
 	}
 
 	@Override
 	public Object getValueAt(int row, int col)
 	{
-		RuleDefinition def = (RuleDefinition)_rules.get(row);
-		
-		return def.text();
+		return (RuleDefinition)_rules.get(row);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
-		_rules.set(row, new UserEnteredRuleDefinition((String) value));
+		_rules.set(row, (RuleDefinition) value);
 	}
 
 	public boolean isValid()
@@ -62,5 +62,11 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 			if(!rule.isValid()) return false;
 		}
 		return true;
+	}
+
+	@Override
+	public Class<?> getColumnClass(int col)
+	{
+		return COLUMN_CLASSES[col];
 	}
 }
