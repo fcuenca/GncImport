@@ -49,4 +49,31 @@ public class PropertyEditorTableModelTests
 		tm.setValueAt("new value", 1, 0);
 		assertThat(tm.getValueAt(1, 0), is((Object)"new value"));
 	}
+	
+	
+	
+	@Test
+	public void valid_when_all_rules_are_valid()
+	{
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2")));
+		
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		
+		assertThat(tm.isValid(), is(true));
+	}
+
+	@Test
+	public void invalid_when_at_least_one_rule_is_invalid()
+	{
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2", false), 
+				new RuleDefinitionForTest("rule-3")));
+		
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		
+		assertThat(tm.isValid(), is(false));
+	}
 }

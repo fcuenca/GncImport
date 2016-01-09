@@ -9,12 +9,12 @@ import javax.swing.table.AbstractTableModel;
 
 public final class PropertyEditorTableModel extends AbstractTableModel
 {
-	private final List<RuleDefinition> rules;
+	private final List<RuleDefinition> _rules;
 	private static final long serialVersionUID = 9060984673285510233L;
 
 	public PropertyEditorTableModel(List<RuleDefinition> rules)
 	{
-		this.rules = rules;
+		this._rules = rules;
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	@Override
 	public int getRowCount()
 	{
-		return rules.size();
+		return _rules.size();
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	@Override
 	public Object getValueAt(int row, int col)
 	{
-		RuleDefinition def = (RuleDefinition)rules.get(row);
+		RuleDefinition def = (RuleDefinition)_rules.get(row);
 		
 		return def.text();
 	}
@@ -52,6 +52,15 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
-		rules.set(row, new UserEnteredRuleDefinition((String) value));
+		_rules.set(row, new UserEnteredRuleDefinition((String) value));
+	}
+
+	public boolean isValid()
+	{
+		for (RuleDefinition rule : _rules)
+		{
+			if(!rule.isValid()) return false;
+		}
+		return true;
 	}
 }

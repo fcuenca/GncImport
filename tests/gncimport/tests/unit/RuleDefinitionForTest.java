@@ -5,16 +5,23 @@ import gncimport.transfer.RuleDefinition;
 class RuleDefinitionForTest extends RuleDefinition
 {
 	private String _text;
+	private boolean _isValid = true;
 
 	public RuleDefinitionForTest(String text)
 	{
 		this._text = text;
 	}
 
+	public RuleDefinitionForTest(String text, boolean isValid)
+	{
+		this(text);
+		this._isValid = isValid;
+	}
+
 	@Override
 	public boolean isValid()
 	{
-		return true;
+		return _isValid;
 	}
 
 	@Override
