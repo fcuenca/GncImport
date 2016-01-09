@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import gncimport.transfer.RuleDefinition;
 import gncimport.ui.TxView;
 import gncimport.ui.presenters.PropertyEditorPresenter;
+import gncimport.ui.swing.PropertyEditorTableModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class PropertyEditorPresenterTests
 {
 	@Captor
-	private ArgumentCaptor<TableModel> expectedTableModel;
+	private ArgumentCaptor<PropertyEditorTableModel> expectedTableModel;
 	
 	private TxView _view;
 	private PropertyEditorPresenter _presenter;
@@ -40,7 +41,9 @@ public class PropertyEditorPresenterTests
 	@Test
 	public void displays_ignore_rules()
 	{
-		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(new RuleDefinitionForTest("rule-1"), new RuleDefinitionForTest("rule-2")));
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2")));
 		
 		when(_view.editProperties(expectedTableModel.capture())).thenReturn(true);
 		
@@ -48,21 +51,16 @@ public class PropertyEditorPresenterTests
 		
 		TableModel tm = expectedTableModel.getValue();
 		
-		//TODO: extract class for this table model and test separately
 		assertThat(tm.getRowCount(), is(2));
-		assertThat(tm.getColumnCount(), is(1));
+		assertThat(tm.getValueAt(0, 0), is((Object)"rule-1"));
 		assertThat(tm.getValueAt(1, 0), is((Object)"rule-2"));
-		assertThat(tm.isCellEditable(0, 0), is(true));
-		
-		tm.setValueAt("new value", 1, 0);
-		assertThat(tm.getValueAt(1, 0), is((Object)"new value"));
 	}
 	
 	
 	@Test
 	public void signals_that_user_canceled_editing()
 	{
-		when(_view.editProperties(any(TableModel.class))).thenReturn(false);
+		when(_view.editProperties(any(PropertyEditorTableModel.class))).thenReturn(false);
 		
 		assertThat(_presenter.editProperties(new ArrayList<RuleDefinition>()), is(false));
 	}

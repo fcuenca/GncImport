@@ -2,6 +2,7 @@ package gncimport.specs.steps.hypodermic;
 
 import gncimport.transfer.AccountData;
 import gncimport.ui.TxView;
+import gncimport.ui.swing.PropertyEditorTableModel;
 import gncimport.ui.swing.TxTableModel;
 
 import java.util.Enumeration;
@@ -9,7 +10,6 @@ import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
-import javax.swing.table.TableModel;
 
 
 public class FakeView implements TxView
@@ -115,7 +115,7 @@ public class FakeView implements TxView
 	}
 
 	@Override
-	public boolean editProperties(TableModel tm)
+	public boolean editProperties(PropertyEditorTableModel tm)
 	{		
 		return false;
 	}
