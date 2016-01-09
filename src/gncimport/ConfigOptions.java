@@ -250,21 +250,6 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		return txDescription;
 	}
 
-	public void replaceIgnoreRules_old(List<String> rules)
-	{
-		if(rules == null)
-		{
-			throw new IllegalArgumentException("rules cannot be null");
-		}
-
-		_ignoreRules = new ArrayList<RuleDefinition>();
-		
-		for(String r: rules)
-		{
-			_ignoreRules.add(new UserEnteredRuleDefinition(r));
-		}
-	}
-	
 	@Override
 	public void replaceIgnoreRules(List<RuleDefinition> newRules)
 	{
@@ -274,20 +259,6 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 		}
 
 		_ignoreRules = new ArrayList<RuleDefinition>(newRules);
-	}
-
-	public void copyIgnoreRules_old(List<String> rules)
-	{
-		if(rules == null)
-		{
-			throw new IllegalArgumentException("rules cannot be null");
-		}
-		
-		rules.clear();
-		for(RuleDefinition r: _ignoreRules)
-		{
-			rules.add(r.text());			
-		}
 	}
 
 	@Override

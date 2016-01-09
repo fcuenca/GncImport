@@ -61,14 +61,12 @@ public class ConfigOptionsImplementsPropertyModel
 		
 		assertThat(rules, hasSize(2));
 		
-		@SuppressWarnings("unchecked")
-		List<RuleDefinitionForTest> rules2 = (List<RuleDefinitionForTest>)((List<?>)rules);
-		
-		assertThat(rules2, hasItems(
+		assertThat(asTestRules(rules), hasItems(
 				new RuleDefinitionForTest("WEB TRANSFER"), 
 				new RuleDefinitionForTest("MISC PAYMENT - RBC CREDIT CARD.*")));
 	}
-	
+
+
 	@Test(expected=IllegalArgumentException.class)
 	public void rejects_null_when_providing_ignore_rules()
 	{
@@ -85,9 +83,7 @@ public class ConfigOptionsImplementsPropertyModel
 		_options.copyIgnoreRules(rules);
 		
 		assertThat(rules, hasSize(2));
-		@SuppressWarnings("unchecked")
-		List<RuleDefinitionForTest> rules2 = (List<RuleDefinitionForTest>)((List<?>)rules);
-		assertThat(rules2, not(hasItems(new RuleDefinitionForTest("existing-1"), new RuleDefinitionForTest("existing-2"))));
+		assertThat(asTestRules(rules), not(hasItems(new RuleDefinitionForTest("existing-1"), new RuleDefinitionForTest("existing-2"))));
 	}
 		
 	@Test
@@ -116,9 +112,7 @@ public class ConfigOptionsImplementsPropertyModel
 		_options.copyIgnoreRules(updatedRules);
 		
 		assertThat(updatedRules, hasSize(3));
-		@SuppressWarnings("unchecked")
-		List<RuleDefinitionForTest> rules2 = (List<RuleDefinitionForTest>)((List<?>)updatedRules);
-		assertThat(rules2, hasItems(
+		assertThat(asTestRules(updatedRules), hasItems(
 				new RuleDefinitionForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new RuleDefinitionForTest("new-rule-1"), 
 				new RuleDefinitionForTest("new-rule-2")));
@@ -144,7 +138,7 @@ public class ConfigOptionsImplementsPropertyModel
 		
 		_options.replaceIgnoreRules(newRules);
 		
-		assertThatPropertiesMatchList2(newRules, _options.getProperties(), ConfigOptions.IGNORE_RULE_KEY_REGEX);
+		assertThatPropertiesMatchRuleDefinitions(newRules, _options.getProperties(), ConfigOptions.IGNORE_RULE_KEY_REGEX);
 	}
 
 	@Test
@@ -187,7 +181,7 @@ public class ConfigOptionsImplementsPropertyModel
 		assertThat("unxpected number of properties found", propCount, is(newRules.size()));
 	}
 
-	private void assertThatPropertiesMatchList2(List<RuleDefinition> newRules, Properties properties, String propKeyRegex)
+	private void assertThatPropertiesMatchRuleDefinitions(List<RuleDefinition> newRules, Properties properties, String propKeyRegex)
 	{
 		int propCount = 0;
 		for (String key : properties.stringPropertyNames())
@@ -221,6 +215,12 @@ public class ConfigOptionsImplementsPropertyModel
 			}
 		}
 		assertThat("unexpected number of properties found", propCount, is(newRules.size()));
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<RuleDefinitionForTest> asTestRules(List<RuleDefinition> rules)
+	{
+		return (List<RuleDefinitionForTest>)((List<?>)rules);
 	}
 }
 
