@@ -76,4 +76,13 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 		_rules.add(new UserEnteredRuleDefinition(""));
 		fireTableDataChanged();
 	}
+
+	public void removeRule(int row)
+	{
+		if(row >= 0 && row < _rules.size())
+		{
+			_rules.remove(row);
+			fireTableDataChanged();
+		}
+	}
 }

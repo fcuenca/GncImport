@@ -100,6 +100,14 @@ public class EditPropertiesDialog extends JDialog
 
 		button = new JButton("-");
 		toolBar.add(button);
+		button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				onRemoveRule(ignoreTable);
+			}
+		});
+
 
 		panel.add(toolBar, BorderLayout.PAGE_END);
 		
@@ -159,6 +167,11 @@ public class EditPropertiesDialog extends JDialog
 	private void onAddRule(PropertyEditorTableModel tableModel)
 	{
 		tableModel.newRow();
+	}
+
+	private void onRemoveRule(PropertyEditorTableModel tableModel)
+	{
+		tableModel.removeRule(_table.getSelectedRow());		
 	}
 	
 	public void setupCloseOnESCkey()

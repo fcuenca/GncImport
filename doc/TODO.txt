@@ -18,8 +18,8 @@ x validation
 	x it needs to be a valid regex
 	x UI feedback for invalid rules
 x add new rules
-- remove rules
-- try rules 
+x remove rules
+* try rules 
 
 
 General improvements:
