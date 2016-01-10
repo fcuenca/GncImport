@@ -24,6 +24,7 @@ import javax.swing.table.TableModel;
 public class EditPropertiesDialog extends JDialog
 {
 	private boolean _okClicked;
+	private JTable _table;
 	
 	class RulesTable extends JTable
 	{
@@ -79,9 +80,9 @@ public class EditPropertiesDialog extends JDialog
 	private JPanel createIgnoreListPanel(TableModel ignoreTable)
 	{
 		JPanel panel = new JPanel();
-		JTable table = new RulesTable(ignoreTable);
+		_table = new RulesTable(ignoreTable);
 			
-		panel.add(new JScrollPane(table));
+		panel.add(new JScrollPane(_table));
 		
 		return panel;
 	}
@@ -125,9 +126,15 @@ public class EditPropertiesDialog extends JDialog
 
 	private void onOkClicked()
 	{
-		_okClicked = true;
+		if (_table.getCellEditor() != null) 
+		{
+		      _table.getCellEditor().stopCellEditing();
+		}		
+		
 		setVisible(false);
 		dispose();
+		
+		_okClicked = true;
 	}
 
 	public void setupCloseOnESCkey()
