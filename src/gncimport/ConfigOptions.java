@@ -142,7 +142,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
 	{
 		for (RuleDefinition rule : _ignoreRules)
 		{
-			if (txDescription.trim().matches(rule.text()))
+			if (rule.matches(txDescription))
 			{
 				return true;
 			}

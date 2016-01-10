@@ -9,7 +9,7 @@ import gncimport.utils.ProgrammerError;
 import org.junit.Test;
 
 public class RuleDefinitionTests
-{
+{	
 	@Test
 	public void valid_regex_makes_a_valid_rule()
 	{
@@ -19,6 +19,14 @@ public class RuleDefinitionTests
 		assertThat(rule.text(), is("rule text.*"));
 		assertThat(rule.hint(), is(""));
 		assertThat(rule.displayText(), is(rule.text()));
+	}
+	
+	@Test
+	public void valid_rules_are_trimmed()
+	{
+		RuleDefinition rule = new UserEnteredRuleDefinition("   rule text    ");
+		
+		assertThat(rule.text(), is("rule text"));
 	}
 	
 	@Test
@@ -86,4 +94,22 @@ public class RuleDefinitionTests
 		assertThat(copy.hint(), is(rule.hint()));
 	}
 	
+	@Test
+	public void can_determine_regex_match()
+	{
+		RuleDefinition rule = new UserEnteredRuleDefinition("ab(c+)d.*");
+		
+		assertThat(rule.matches("abccccdx"), is(true));
+		assertThat(rule.matches("abXd"), is(false));
+	}
+	
+	@Test
+	public void whitespace_is_ignore_when_matching_rules()
+	{
+		RuleDefinition rule = new UserEnteredRuleDefinition("abcd");
+		
+		assertThat(rule.matches("  abcd   "), is(true));
+	}
+
+
 }

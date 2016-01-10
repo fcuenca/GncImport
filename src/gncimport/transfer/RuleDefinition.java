@@ -18,7 +18,7 @@ public abstract class RuleDefinition
 		
 		if(errorMsg == null)
 		{
-			return new ValidRuleDefinition(text);
+			return new ValidRuleDefinition(text.trim());
 		}
 		else
 		{
@@ -52,6 +52,11 @@ public abstract class RuleDefinition
 	public abstract String hint();
 	public abstract String displayText();
 	public abstract RuleDefinition copy();
+	
+	public boolean matches(String someText)
+	{
+		return someText.trim().matches(text());
+	}
 
 	@Override
 	public int hashCode()
