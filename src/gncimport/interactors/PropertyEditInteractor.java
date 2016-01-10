@@ -1,6 +1,6 @@
 package gncimport.interactors;
 
-import gncimport.models.PropertyModel;
+import gncimport.models.RuleModel;
 import gncimport.transfer.RuleDefinition;
 
 import java.util.ArrayList;
@@ -9,14 +9,14 @@ import java.util.List;
 public class PropertyEditInteractor
 {
 	private OutPort _outPort;
-	private PropertyModel _model;
+	private RuleModel _model;
 
 	public interface OutPort
 	{
 		boolean editProperties(List<RuleDefinition> ignoreRules);
 	}
 	
-	public PropertyEditInteractor(OutPort outPort, PropertyModel model)
+	public PropertyEditInteractor(OutPort outPort, RuleModel model)
 	{
 		this._outPort = outPort;
 		this._model = model;
@@ -33,4 +33,6 @@ public class PropertyEditInteractor
 			_model.replaceIgnoreRules(ignoreRules);
 		}		
 	}
+	
+	//public boolean tryRulesWithText(String textToMatch, Iterable<RuleDefinition> candidateRules);
 }

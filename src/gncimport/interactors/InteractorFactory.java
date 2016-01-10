@@ -1,14 +1,14 @@
 package gncimport.interactors;
 
-import gncimport.models.PropertyModel;
+import gncimport.models.RuleModel;
 import gncimport.models.TxImportModel;
 
 public class InteractorFactory
 {
 	private TxImportModel _txImportModel;
-	private PropertyModel _propertyModel;
+	private RuleModel _propertyModel;
 	
-	public InteractorFactory(TxImportModel importModel, PropertyModel propModel)
+	public InteractorFactory(TxImportModel importModel, RuleModel propModel)
 	{
 		_txImportModel = importModel;
 		_propertyModel = propModel;

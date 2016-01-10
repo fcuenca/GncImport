@@ -1,6 +1,6 @@
 package gncimport;
 
-import gncimport.models.PropertyModel;
+import gncimport.models.RuleModel;
 import gncimport.models.TxMatcher;
 import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.RuleDefinition;
@@ -15,7 +15,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ConfigOptions implements TxMatcher, UIConfig, PropertyModel
+public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 {
 	public static final String LAST_CSV_KEY = "last.csv";
 	public static final String LAST_GNC_KEY = "last.gnc";

@@ -4,7 +4,7 @@ import gncimport.transfer.RuleDefinition;
 
 import java.util.List;
 
-public interface PropertyModel
+public interface RuleModel
 {
 	void replaceIgnoreRules(List<RuleDefinition> rules);
 	void copyIgnoreRules(List<RuleDefinition> rules);

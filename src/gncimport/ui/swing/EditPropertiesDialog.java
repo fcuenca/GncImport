@@ -8,18 +8,22 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 
 @SuppressWarnings("serial")
 public class EditPropertiesDialog extends JDialog
@@ -33,7 +37,7 @@ public class EditPropertiesDialog extends JDialog
 		final Color ALTERNATE_BACKGROUND_COLOR = new Color(209, 229, 255);
 		final Color SELECTION_BACKGROUND_COLOR = new Color(52, 117, 237);
 
-		public RulesTable(TableModel model) 
+		public RulesTable(PropertyEditorTableModel model) 
 		{
 			super(model);
 			
@@ -84,11 +88,20 @@ public class EditPropertiesDialog extends JDialog
 		panel.setLayout(new BorderLayout());
 		
 		_table = new RulesTable(ignoreTable);
-		panel.add(new JScrollPane(_table), BorderLayout.PAGE_START);
 		
-		JToolBar toolBar = new JToolBar();
+		panel.add(new JScrollPane(_table), BorderLayout.PAGE_START);
+		panel.add(createToolBar(ignoreTable), BorderLayout.PAGE_END);
+		
+		return panel;
+	}
+
+	private JToolBar createToolBar(final PropertyEditorTableModel ignoreTable)
+	{
 		JButton button;
+		JToolBar toolBar = new JToolBar();
+		
 		button = new JButton("+");
+		button.setToolTipText("Add new Rule");
 		toolBar.add(button);
 		button.addActionListener(new ActionListener()
 		{
@@ -99,6 +112,7 @@ public class EditPropertiesDialog extends JDialog
 		});
 
 		button = new JButton("-");
+		button.setToolTipText("Remove selected Rule");
 		toolBar.add(button);
 		button.addActionListener(new ActionListener()
 		{
@@ -107,11 +121,47 @@ public class EditPropertiesDialog extends JDialog
 				onRemoveRule(ignoreTable);
 			}
 		});
-
-
-		panel.add(toolBar, BorderLayout.PAGE_END);
+				
+		toolBar.addSeparator();
 		
-		return panel;
+		button = new JButton();
+		button.setToolTipText("Try Rules");
+		JTextField textField = new JTextField();
+		final JLabel resultLabel = new JLabel();
+		final ImageIcon passIcon = new ImageIcon(getClass().getResource("pass.png"), "pass");
+		final ImageIcon failIcon = new ImageIcon(getClass().getResource("fail.png"), "fail");
+		
+		button.setIcon(new ImageIcon(getClass().getResource("tryMe.png"), "try me"));
+		button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if(new Random().nextBoolean())
+				{
+					resultLabel.setIcon(passIcon);
+				}
+				else
+				{
+					resultLabel.setIcon(failIcon);
+				}
+			}
+		});
+		
+		textField.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				resultLabel.setIcon(null);
+				super.keyPressed(e);
+			}
+		});
+
+		toolBar.add(button);
+		toolBar.add(textField);
+		toolBar.add(resultLabel);
+		
+		return toolBar;
 	}
 
 	private JPanel createButtonPanel()

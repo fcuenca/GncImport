@@ -10,7 +10,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.PropertyEditInteractor;
-import gncimport.models.PropertyModel;
+import gncimport.models.RuleModel;
 import gncimport.transfer.RuleDefinition;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class PropertyEditInteractorTests
 {
 	
 	private PropertyEditInteractor.OutPort _outPort;
-	private PropertyModel _model;
+	private RuleModel _model;
 	private PropertyEditInteractor _interactor;
 
 	@Captor
@@ -40,7 +40,7 @@ public class PropertyEditInteractorTests
 	public void Setup()
 	{
 		_outPort = mock(PropertyEditInteractor.OutPort.class);
-		_model = mock(PropertyModel.class);
+		_model = mock(RuleModel.class);
 		
 		_interactor = new PropertyEditInteractor(_outPort, _model);		
 	}
