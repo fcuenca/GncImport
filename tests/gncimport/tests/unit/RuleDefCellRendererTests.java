@@ -1,7 +1,9 @@
 package gncimport.tests.unit;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import gncimport.transfer.RuleDefinition;
 import gncimport.ui.swing.RuleDefCellRenderer;
 
@@ -18,5 +20,39 @@ public class RuleDefCellRendererTests
 		renderer.setValue(ruleDef);
 		
 		assertThat(renderer.getText(), is(ruleDef.displayText()));
+	}
+	
+	@Test
+	public void valid_rule_definitions_dont_have_icon_and_tooltip()
+	{
+		RuleDefCellRenderer renderer = new RuleDefCellRenderer();
+		RuleDefinition ruleDef = new RuleDefinitionForTest("some rule");
+		
+		renderer.setValue(ruleDef);
+		
+		assertThat(renderer.getIcon(), is(nullValue()));
+		assertThat(renderer.getToolTipText(), is(nullValue()));
+	}
+
+	@Test
+	public void invalid_rule_definitions_use_hint_as_tooltip()
+	{
+		RuleDefCellRenderer renderer = new RuleDefCellRenderer();
+		RuleDefinition ruleDef = new RuleDefinitionForTest("some rule", false);
+		
+		renderer.setValue(ruleDef);
+		
+		assertThat(renderer.getToolTipText(), is(ruleDef.hint()));
+	}
+	
+	@Test
+	public void invalid_rule_definition_renders_icon()
+	{
+		RuleDefCellRenderer renderer = new RuleDefCellRenderer();
+		RuleDefinition ruleDef = new RuleDefinitionForTest("some rule", false);
+		
+		renderer.setValue(ruleDef);
+		
+		assertThat(renderer.getIcon(), is(not(nullValue())));
 	}
 }

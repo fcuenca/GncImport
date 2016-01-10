@@ -12,10 +12,11 @@ x display current props
 x edit existing rules
   	x cancel 
 	x edited props take effect immediately (w/o needing to restart the app) -- (re-loading the csv file is OK)
+	- Fix: edit - no ENTER - click OK looses the changes
 * validation
 	x ignore rule can't be blank
 	x it needs to be a valid regex
-	- UI feedback for invalid rules
+	x UI feedback for invalid rules
 - add new rules
 - remove rules
 - try rules 
