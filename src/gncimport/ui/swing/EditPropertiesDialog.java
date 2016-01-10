@@ -16,6 +16,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
@@ -61,7 +62,7 @@ public class EditPropertiesDialog extends JDialog
 		}
 	}
 	
-	public EditPropertiesDialog(Frame aFrame, TableModel ignoreTable)
+	public EditPropertiesDialog(Frame aFrame, PropertyEditorTableModel ignoreTable)
 	{
 		super(aFrame, true);
 
@@ -77,12 +78,30 @@ public class EditPropertiesDialog extends JDialog
 		pack();
 	}
 
-	private JPanel createIgnoreListPanel(TableModel ignoreTable)
+	private JPanel createIgnoreListPanel(final PropertyEditorTableModel ignoreTable)
 	{
 		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		
 		_table = new RulesTable(ignoreTable);
-			
-		panel.add(new JScrollPane(_table));
+		panel.add(new JScrollPane(_table), BorderLayout.PAGE_START);
+		
+		JToolBar toolBar = new JToolBar();
+		JButton button;
+		button = new JButton("+");
+		toolBar.add(button);
+		button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				onAddRule(ignoreTable);
+			}
+		});
+
+		button = new JButton("-");
+		toolBar.add(button);
+
+		panel.add(toolBar, BorderLayout.PAGE_END);
 		
 		return panel;
 	}
@@ -137,6 +156,11 @@ public class EditPropertiesDialog extends JDialog
 		_okClicked = true;
 	}
 
+	private void onAddRule(PropertyEditorTableModel tableModel)
+	{
+		tableModel.newRow();
+	}
+	
 	public void setupCloseOnESCkey()
 	{
 		ActionListener escListener = new ActionListener()

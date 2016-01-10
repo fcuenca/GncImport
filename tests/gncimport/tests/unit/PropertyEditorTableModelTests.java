@@ -1,5 +1,8 @@
 package gncimport.tests.unit;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.any;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.transfer.RuleDefinition;
@@ -7,6 +10,9 @@ import gncimport.ui.swing.PropertyEditorTableModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import org.junit.Test;
 
@@ -111,4 +117,39 @@ public class PropertyEditorTableModelTests
 		
 		assertThat(tm.isValid(), is(false));
 	}
+	
+	@Test
+	public void adding_new_rule()
+	{
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2")));
+		
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		
+		tm.newRow();
+		
+		assertThat(tm.getRowCount(), is(3));
+		assertThat(tm.getValueAt(2, 0), is((Object)new RuleDefinitionForTest("", false)));
+	}
+	
+	@Test
+	public void adding_rule_notifies_listeners()
+	{
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2")));
+		
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		
+		TableModelListener listener = mock(TableModelListener.class)
+				;
+		tm.addTableModelListener(listener);
+		
+		tm.newRow();
+		
+		verify(listener).tableChanged(any(TableModelEvent.class));
+	}
+
+
 }

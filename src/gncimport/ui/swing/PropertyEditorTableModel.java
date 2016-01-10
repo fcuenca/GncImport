@@ -1,6 +1,7 @@
 package gncimport.ui.swing;
 
 import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.UserEnteredRuleDefinition;
 
 import java.util.List;
 
@@ -68,5 +69,11 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	public Class<?> getColumnClass(int col)
 	{
 		return COLUMN_CLASSES[col];
+	}
+
+	public void newRow()
+	{
+		_rules.add(new UserEnteredRuleDefinition(""));
+		fireTableDataChanged();
 	}
 }
