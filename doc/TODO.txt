@@ -20,6 +20,7 @@ x validation
 x add new rules
 x remove rules
 * try rules 
+  - error handling
 
 
 General improvements:

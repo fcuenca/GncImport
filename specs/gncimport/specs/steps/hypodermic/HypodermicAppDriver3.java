@@ -10,6 +10,7 @@ import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
+import gncimport.transfer.RuleTester;
 import gncimport.transfer.RuleDefinition;
 import gncimport.transfer.TxData;
 import gncimport.transfer.UserEnteredRuleDefinition;
@@ -285,7 +286,7 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<RuleDefinition> ignoreRules)
+			public boolean editProperties(List<RuleDefinition> ignoreRules, RuleTester tester)
 			{
 				_observedIgnoreRules = new ArrayList<RuleDefinition>(ignoreRules);
 				
@@ -301,7 +302,7 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<RuleDefinition> ignoreRules)
+			public boolean editProperties(List<RuleDefinition> ignoreRules, RuleTester tester)
 			{
 				_observedIgnoreRules = new ArrayList<RuleDefinition>(ignoreRules);
 				

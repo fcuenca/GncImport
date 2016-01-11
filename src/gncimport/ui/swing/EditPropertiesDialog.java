@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -66,7 +65,7 @@ public class EditPropertiesDialog extends JDialog
 		}
 	}
 	
-	public EditPropertiesDialog(Frame aFrame, PropertyEditorTableModel ignoreTable)
+	public EditPropertiesDialog(Frame aFrame, PropertyEditorTableModel tableModel)
 	{
 		super(aFrame, true);
 
@@ -74,7 +73,7 @@ public class EditPropertiesDialog extends JDialog
 		setTitle("Property Editor");
 		setName("PROP_EDITOR_DLG");
 				
-		add(createIgnoreListPanel(ignoreTable), BorderLayout.PAGE_START);
+		add(createIgnoreListPanel(tableModel), BorderLayout.PAGE_START);
 		add(createButtonPanel(), BorderLayout.PAGE_END);
 
 		setupCloseOnESCkey();
@@ -126,7 +125,7 @@ public class EditPropertiesDialog extends JDialog
 		
 		button = new JButton();
 		button.setToolTipText("Try Rules");
-		JTextField textField = new JTextField();
+		final JTextField textField = new JTextField();
 		final JLabel resultLabel = new JLabel();
 		final ImageIcon passIcon = new ImageIcon(getClass().getResource("pass.png"), "pass");
 		final ImageIcon failIcon = new ImageIcon(getClass().getResource("fail.png"), "fail");
@@ -136,7 +135,7 @@ public class EditPropertiesDialog extends JDialog
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if(new Random().nextBoolean())
+				if(ignoreTable.testRulesWithText(textField.getText()))
 				{
 					resultLabel.setIcon(passIcon);
 				}

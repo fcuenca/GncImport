@@ -14,7 +14,7 @@ class RuleDefinitionForTest extends RuleDefinition
 
 	public RuleDefinitionForTest(String text, boolean isValid)
 	{
-		this(text);
+		this._text = text;
 		this._isValid = isValid;
 	}
 

@@ -9,14 +9,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.presenters.PropertyEditorPresenter;
 import gncimport.ui.swing.PropertyEditorTableModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.table.TableModel;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,12 +32,14 @@ public class PropertyEditorPresenterTests
 	
 	private TxView _view;
 	private PropertyEditorPresenter _presenter;
+	private RuleTester _tester;
 
 	@Before
 	public void Setup()
 	{
 		_view = mock(TxView.class);
 		_presenter = new PropertyEditorPresenter(_view);
+		_tester = mock(RuleTester.class);
 	}
 	
 	@Test
@@ -50,9 +51,9 @@ public class PropertyEditorPresenterTests
 		
 		when(_view.editProperties(expectedTableModel.capture())).thenReturn(true);
 		
-		assertThat(_presenter.editProperties(rules), is(true));
+		assertThat(_presenter.editProperties(rules, _tester), is(true));
 		
-		TableModel tm = expectedTableModel.getValue();
+		PropertyEditorTableModel tm = expectedTableModel.getValue();
 		
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getValueAt(0, 0), is((Object)new RuleDefinitionForTest("rule-1")));
@@ -64,7 +65,7 @@ public class PropertyEditorPresenterTests
 	{
 		when(_view.editProperties(any(PropertyEditorTableModel.class))).thenReturn(false);
 		
-		assertThat(_presenter.editProperties(new ArrayList<RuleDefinition>()), is(false));
+		assertThat(_presenter.editProperties(new ArrayList<RuleDefinition>(), _tester), is(false));
 	}
 	
 	@Test
@@ -78,7 +79,7 @@ public class PropertyEditorPresenterTests
 			.thenReturn(true)
 			.thenReturn(false);
 		
-		assertThat(_presenter.editProperties(rules), is(false));
+		assertThat(_presenter.editProperties(rules, _tester), is(false));
 		
 		verify(_view, times(2)).editProperties(any(PropertyEditorTableModel.class));
 		verify(_view).displayErrorMessage(anyString());

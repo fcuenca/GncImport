@@ -5,7 +5,9 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.RuleTester;
 import gncimport.ui.swing.PropertyEditorTableModel;
 
 import java.util.ArrayList;
@@ -14,10 +16,19 @@ import java.util.List;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class PropertyEditorTableModelTests
 {
+	private RuleTester _tester;
+	
+	@Before
+	public void Setup()
+	{
+		_tester = mock(RuleTester.class);
+	}
+
 	@Test
 	public void displays_list_of_rule_definitions()
 	{
@@ -25,7 +36,7 @@ public class PropertyEditorTableModelTests
 				new RuleDefinitionForTest("rule-1"), 
 				new RuleDefinitionForTest("rule-2")));
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 		
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getValueAt(0, 0), is((Object)new RuleDefinitionForTest("rule-1")));
@@ -35,7 +46,7 @@ public class PropertyEditorTableModelTests
 	@Test
 	public void columns_are_editable()
 	{
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(new ArrayList<RuleDefinition>());
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(new ArrayList<RuleDefinition>(), _tester);
 		
 		for(int i = 0; i < PropertyEditorTableModel.COLUMN_TITLES.length; i++)
 		{
@@ -46,7 +57,7 @@ public class PropertyEditorTableModelTests
 	@Test
 	public void all_columns_have_title()
 	{
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(new ArrayList<RuleDefinition>());
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(new ArrayList<RuleDefinition>(), _tester);
 
 		assertThat(tm.getColumnCount(), is(PropertyEditorTableModel.COLUMN_TITLES.length));
 	}
@@ -54,7 +65,7 @@ public class PropertyEditorTableModelTests
 	@Test
 	public void all_columns_have_types_defined()
 	{
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(new ArrayList<RuleDefinition>());
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(new ArrayList<RuleDefinition>(), _tester);
 
 		assertThat(tm.getColumnCount(), is(PropertyEditorTableModel.COLUMN_CLASSES.length));
 	}
@@ -65,7 +76,7 @@ public class PropertyEditorTableModelTests
 		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
 				new RuleDefinitionForTest("some rule")));
 
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 
 		for(int i = 0; i < PropertyEditorTableModel.COLUMN_CLASSES.length; i++)
 		{
@@ -87,7 +98,7 @@ public class PropertyEditorTableModelTests
 				new RuleDefinitionForTest("rule-1"), 
 				new RuleDefinitionForTest("rule-2")));
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 		
 		tm.setValueAt(new RuleDefinitionForTest("new value"), 1, 0);
 		assertThat(tm.getValueAt(1, 0), is((Object)new RuleDefinitionForTest("new value")));
@@ -100,7 +111,7 @@ public class PropertyEditorTableModelTests
 				new RuleDefinitionForTest("rule-1"), 
 				new RuleDefinitionForTest("rule-2")));
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 		
 		assertThat(tm.isValid(), is(true));
 	}
@@ -113,7 +124,7 @@ public class PropertyEditorTableModelTests
 				new RuleDefinitionForTest("rule-2", false), 
 				new RuleDefinitionForTest("rule-3")));
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 		
 		assertThat(tm.isValid(), is(false));
 	}
@@ -125,7 +136,7 @@ public class PropertyEditorTableModelTests
 				new RuleDefinitionForTest("rule-1"), 
 				new RuleDefinitionForTest("rule-2")));
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 		
 		tm.newRow();
 		
@@ -140,7 +151,7 @@ public class PropertyEditorTableModelTests
 				new RuleDefinitionForTest("rule-1"), 
 				new RuleDefinitionForTest("rule-2")));
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 		
 		TableModelListener listener = mock(TableModelListener.class);
 		tm.addTableModelListener(listener);
@@ -150,7 +161,6 @@ public class PropertyEditorTableModelTests
 		verify(listener).tableChanged(any(TableModelEvent.class));
 	}
 
-	
 	@Test
 	public void rules_can_be_removed()
 	{
@@ -158,7 +168,7 @@ public class PropertyEditorTableModelTests
 				new RuleDefinitionForTest("rule-1"), 
 				new RuleDefinitionForTest("rule-2")));
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 		
 		tm.removeRule(1);		
 		assertThat(tm.getRowCount(), is(1));
@@ -175,7 +185,7 @@ public class PropertyEditorTableModelTests
 				new RuleDefinitionForTest("rule-1"), 
 				new RuleDefinitionForTest("rule-2")));
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 		
 		tm.removeRule(-1);
 		tm.removeRule(2);
@@ -190,7 +200,7 @@ public class PropertyEditorTableModelTests
 				new RuleDefinitionForTest("rule-1"), 
 				new RuleDefinitionForTest("rule-2")));
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
 		
 		TableModelListener listener = mock(TableModelListener.class);
 		tm.addTableModelListener(listener);
@@ -199,5 +209,19 @@ public class PropertyEditorTableModelTests
 		
 		verify(listener).tableChanged(any(TableModelEvent.class));
 	}
-	
+		
+	@Test
+	public void can_test_rules_against_sample_text()
+	{
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2")));
+		
+		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
+		
+		when(_tester.tryRulesWithText("rule-1", rules)).thenReturn(true);
+		
+		assertThat(tm.testRulesWithText("rule-1"), is(true));
+		
+	}
 }

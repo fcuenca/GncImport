@@ -1,6 +1,7 @@
 package gncimport.ui.swing;
 
 import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.RuleTester;
 import gncimport.transfer.UserEnteredRuleDefinition;
 
 import java.util.List;
@@ -14,10 +15,12 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 
 	private final List<RuleDefinition> _rules;
 	private static final long serialVersionUID = 9060984673285510233L;
+	private RuleTester _ruleTester;
 
-	public PropertyEditorTableModel(List<RuleDefinition> rules)
+	public PropertyEditorTableModel(List<RuleDefinition> rules, RuleTester tester)
 	{
 		this._rules = rules;
+		this._ruleTester = tester;
 	}
 
 	@Override
@@ -84,5 +87,10 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 			_rules.remove(row);
 			fireTableDataChanged();
 		}
+	}
+
+	public boolean testRulesWithText(String sampleText)
+	{
+		return _ruleTester.tryRulesWithText(sampleText, _rules);
 	}
 }

@@ -2,6 +2,7 @@ package gncimport.ui.presenters;
 
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.swing.PropertyEditorTableModel;
 
@@ -17,9 +18,9 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	}
 
 	@Override
-	public boolean editProperties(final List<RuleDefinition> rules)
+	public boolean editProperties(final List<RuleDefinition> rules, RuleTester tester)
 	{		
-		PropertyEditorTableModel tableModel = new PropertyEditorTableModel(rules);
+		PropertyEditorTableModel tableModel = new PropertyEditorTableModel(rules, tester);
 
 		boolean changesConfirmed;
 		

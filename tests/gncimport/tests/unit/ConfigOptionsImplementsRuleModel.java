@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ConfigOptionsImplementsPropertyModel
+public class ConfigOptionsImplementsRuleModel
 {
 	private ConfigOptions _options;
 	
@@ -163,6 +163,27 @@ public class ConfigOptionsImplementsPropertyModel
 		List<String> newRules = new ArrayList<String>(ListUtils.list_of("acc-desc-1|acc-override-1", "acc-desc-2|acc-override-2"));
 		
 		assertThatPropertiesMatchList(newRules, _options.getProperties(), ConfigOptions.ACC_OVERRIDE_RULE_KEY_REGEX);
+	}
+	
+	@Test
+	public void can_test_candidate_properties()
+	{
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2")));
+
+		assertThat(_options.testRulesWithText("rule-1", rules), is(true));
+		assertThat(_options.testRulesWithText("doesn't match", rules), is(false));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void candidate_rules_must_be_valid_when_testing_them()
+	{
+		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
+				new RuleDefinitionForTest("rule-1"), 
+				new RuleDefinitionForTest("rule-2", false)));
+		
+		_options.testRulesWithText("rule-1", rules); // should throw
 	}
 
 	private void assertThatPropertiesMatchList(List<String> newRules, Properties properties, String propKeyRegex)

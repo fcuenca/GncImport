@@ -1,9 +1,13 @@
 package gncimport.tests.unit;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -12,6 +16,7 @@ import static org.mockito.Mockito.when;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.models.RuleModel;
 import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.RuleTester;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +68,7 @@ public class PropertyEditInteractorTests
 		
 		_interactor.editProperties();
 		
-		verify(_outPort).editProperties(_expectedList.capture());
+		verify(_outPort).editProperties(_expectedList.capture(), same(_interactor));
 		assertThat(_expectedList.getValue(), hasSize(2));
 		assertThat(_expectedList.getValue(), hasItems( testRule("rule-1"), testRule("rule-2")));
 	}
@@ -86,7 +91,7 @@ public class PropertyEditInteractorTests
 				return true;
 			}
 			
-		}).when(_outPort).editProperties(anyListOf(RuleDefinition.class));
+		}).when(_outPort).editProperties(anyListOf(RuleDefinition.class), same(_interactor));
 		
 		_interactor.editProperties();
 		
@@ -96,13 +101,43 @@ public class PropertyEditInteractorTests
 	@Test
 	public void keeps_properties_unchanged_when_user_cancel_edits()
 	{
-		when(_outPort.editProperties(anyListOf(RuleDefinition.class))).thenReturn(false);
+		when(_outPort.editProperties(anyListOf(RuleDefinition.class), same(_interactor))).thenReturn(false);
 		
 		_interactor.editProperties();
 		
 		verify(_model, never()).replaceIgnoreRules(anyListOf(RuleDefinition.class));
 	}
 	
+	@Test
+	public void implements_rule_tester_interface()
+	{
+		final Iterable<RuleDefinition> rules = new ArrayList<RuleDefinition>();
+			
+		doAnswer(new Answer<Boolean>(){
+            @SuppressWarnings("unchecked")
+			@Override
+			public Boolean answer(InvocationOnMock invocation) throws Throwable
+			{
+                Object[] args = invocation.getArguments();
+				String text = (String) args[0];
+				List<RuleDefinition> candidates = (List<RuleDefinition>) args[1];
+				
+				if(rules != candidates) fail("unrecognized list of rules");
+				
+				if(text.equals("rule-1")) return true;
+				if(text.equals("rule-2")) return false;
+				
+				return false;
+			}
+			
+		}).when(_model).testRulesWithText(anyString(), anyListOf(RuleDefinition.class));
+		
+		RuleTester tester = _interactor;
+		
+		assertThat(tester.tryRulesWithText("rule-1", rules), is(true));
+		assertThat(tester.tryRulesWithText("rule-2", rules), is(false));
+	}
+
 	private RuleDefinition testRule(String text)
 	{
 		return new RuleDefinitionForTest(text);

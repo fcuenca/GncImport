@@ -140,14 +140,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	@Override
 	public boolean isToBeIgnored(String txDescription)
 	{
-		for (RuleDefinition rule : _ignoreRules)
-		{
-			if (rule.matches(txDescription))
-			{
-				return true;
-			}
-		}
-		return false;
+		return textMatchesRule(txDescription, _ignoreRules);
 	}
 
 	@Override
@@ -273,4 +266,28 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		rules.addAll(_ignoreRules);
 	}
 
+	public boolean testRulesWithText(String text, Iterable<RuleDefinition> candidateRules)
+	{
+		for (RuleDefinition rule : candidateRules)
+		{
+			if(!rule.isValid())
+			{
+				throw new IllegalArgumentException("list contains invalid rule: " + rule.text());
+			}
+		};
+		
+		return textMatchesRule(text, candidateRules);
+	}
+
+	private boolean textMatchesRule(String txDescription, Iterable<RuleDefinition> rules)
+	{
+		for (RuleDefinition rule : rules)
+		{
+			if (rule.matches(txDescription))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
