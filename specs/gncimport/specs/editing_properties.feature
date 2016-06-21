@@ -14,6 +14,9 @@ Feature: Editing Configuration Properties
 	    Then the app displays existing ignore rules:
 		   	|MISC PAYMENT - RBC CREDIT CARD |
 	    	|PAYROLL DEPOSIT.* 				|
-	    
-	    
+	    	    
+	Scenario: editing account override rules
+		Given the properties file is initially empty
+		When properties are displayed
+		Then the app displays empty account override rule list
 		

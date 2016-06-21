@@ -393,6 +393,12 @@ public class MainWindowSteps
 		assertThat(actualRules, is(empty()));
 	}
 	
+	@Then("^the app displays empty account override rule list$")
+	public void the_app_displays_empty_account_override_rule_list() throws Throwable
+	{
+		List<String> actualRules = app().observedAccountOverrideRules();
+		assertThat(actualRules, is(empty()));
+	}
 
 	private Properties createMonthlyAccountRules(List<MonthlyAccountParam> subAccounts)
 	{

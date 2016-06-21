@@ -1,26 +1,21 @@
 TODO:
 
 Features:
-* Editing properties - ignore rules
-- Editing properties - account override rules
+* Editing properties - account override rules
 - Editing properties - transaction rewrite rules
 - Editing properties - monthly accounts
 
 
 Stories:
-x display current props
-x edit existing rules
-  	x cancel 
-	x edited props take effect immediately (w/o needing to restart the app) -- (re-loading the csv file is OK)
-	x Fix: edit - no ENTER - click OK looses the changes
-x validation
-	x ignore rule can't be blank
-	x it needs to be a valid regex
-	x UI feedback for invalid rules
-x add new rules
-x remove rules
-* try rules 
-  - error handling
+* display current props
+- edit existing rules
+- validation
+	- desc can't be blank
+	- account can't be blank
+	- desc needs to be a valid regex
+- add new rules
+- remove rules
+- try rules 
 
 
 General improvements:
@@ -58,4 +53,5 @@ DONE:
 - add more e-to-e tests for all other high-level features
 - (DECIDED NOT TO) script the generation of the jar app 
 - generate monthly account hierarchy (from menu option?)
+- Editing properties - ignore rules
 
