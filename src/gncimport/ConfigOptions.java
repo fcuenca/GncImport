@@ -233,7 +233,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	}
 
 	@Override
-	public void replaceIgnoreRules(List<MatchingRule> newRules)
+	public void replaceRulesWith(List<MatchingRule> newRules)
 	{
 		if(newRules == null)
 		{
@@ -244,7 +244,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	}
 
 	@Override
-	public void copyIgnoreRules(List<MatchingRule> rules)
+	public void copyRulesTo(List<MatchingRule> rules)
 	{
 		if(rules == null)
 		{

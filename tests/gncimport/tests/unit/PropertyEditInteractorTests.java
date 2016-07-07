@@ -64,7 +64,7 @@ public class PropertyEditInteractorTests
 				return null;
 			}
 			
-		}).when(_model).copyIgnoreRules(anyListOf(MatchingRule.class));
+		}).when(_model).copyRulesTo(anyListOf(MatchingRule.class));
 		
 		_interactor.editProperties();
 		
@@ -95,7 +95,7 @@ public class PropertyEditInteractorTests
 		
 		_interactor.editProperties();
 		
-		verify(_model).replaceIgnoreRules(expectedEditedRules);
+		verify(_model).replaceRulesWith(expectedEditedRules);
 	}
 	
 	@Test
@@ -105,7 +105,7 @@ public class PropertyEditInteractorTests
 		
 		_interactor.editProperties();
 		
-		verify(_model, never()).replaceIgnoreRules(anyListOf(MatchingRule.class));
+		verify(_model, never()).replaceRulesWith(anyListOf(MatchingRule.class));
 	}
 	
 	@Test

@@ -57,7 +57,7 @@ public class ConfigOptionsImplementsRuleModel
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>();
 		
-		_options.copyIgnoreRules(rules);
+		_options.copyRulesTo(rules);
 		
 		assertThat(rules, hasSize(2));
 		
@@ -70,7 +70,7 @@ public class ConfigOptionsImplementsRuleModel
 	@Test(expected=IllegalArgumentException.class)
 	public void rejects_null_when_providing_ignore_rules()
 	{
-		_options.copyIgnoreRules(null);
+		_options.copyRulesTo(null);
 	}
 	
 	@Test
@@ -80,7 +80,7 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("existing-1"), 
 				new MatchingRuleForTest("existing-2")));
 		
-		_options.copyIgnoreRules(rules);
+		_options.copyRulesTo(rules);
 		
 		assertThat(rules, hasSize(2));
 		assertThat(asTestRules(rules), not(hasItems(new MatchingRuleForTest("existing-1"), new MatchingRuleForTest("existing-2"))));
@@ -92,7 +92,7 @@ public class ConfigOptionsImplementsRuleModel
 		List<MatchingRule> rules = new ArrayList<MatchingRule>();
 		
 		_options = new ConfigOptions(new Properties());
-		_options.copyIgnoreRules(rules);
+		_options.copyRulesTo(rules);
 		
 		assertThat(rules, is(empty()));
 	}
@@ -105,11 +105,11 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-2")));
 		
-		_options.replaceIgnoreRules(newRules);
+		_options.replaceRulesWith(newRules);
 						
 		List<MatchingRule> updatedRules = new ArrayList<MatchingRule>();
 		
-		_options.copyIgnoreRules(updatedRules);
+		_options.copyRulesTo(updatedRules);
 		
 		assertThat(updatedRules, hasSize(3));
 		assertThat(asTestRules(updatedRules), hasItems(
@@ -125,7 +125,7 @@ public class ConfigOptionsImplementsRuleModel
 	@Test(expected=IllegalArgumentException.class)
 	public void rejects_null_when_updating_ignore_rules()
 	{
-		_options.replaceIgnoreRules(null);
+		_options.replaceRulesWith(null);
 	}
 	
 	@Test
@@ -136,7 +136,7 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-2")));
 		
-		_options.replaceIgnoreRules(newRules);
+		_options.replaceRulesWith(newRules);
 		
 		assertThatPropertiesMatchRuleDefinitions(newRules, _options.getProperties(), ConfigOptions.IGNORE_RULE_KEY_REGEX);
 	}
