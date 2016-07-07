@@ -4,6 +4,7 @@ import gncimport.models.RuleModel;
 import gncimport.models.TxMatcher;
 import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.TxOverrideRule;
 import gncimport.transfer.UserEnteredRuleDefinition;
 import gncimport.ui.UIConfig;
 import gncimport.utils.ProgrammerError;
@@ -23,18 +24,6 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	public static final String ACC_OVERRIDE_RULE_KEY_REGEX = "match\\.[0-9]+\\.account";
 	public static final String IGNORE_RULE_KEY_REGEX = "match\\.[0-9]+\\.ignore";
 	public static final String MONTHLY_ACC_KEY_REGEX = "monthly\\.([0-9]+)";
-
-	private class TxOverrideRule
-	{
-		public final RuleDefinition desc;
-		public final RuleDefinition override;
-		
-		public TxOverrideRule(String desc, String account)
-		{
-			this.desc = new UserEnteredRuleDefinition(desc);
-			this.override = new UserEnteredRuleDefinition(account);
-		}
-	}
 
 	private List<TxOverrideRule> _accountOverrideRules = new ArrayList<TxOverrideRule>();
 	private List<TxOverrideRule> _rewriteRule = new ArrayList<TxOverrideRule>();
