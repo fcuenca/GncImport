@@ -114,11 +114,14 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	@Override
 	public String findAccountOverride(String txDescription)
 	{
+		//TODO: find a better way to handle this case (class with two purposes) 
+		// here the OverrideRule is used for a slightly different purpose:
+		// the override text is not to be replaced in the matching text, but to override something else (the Account, in this case)
 		for (OverrideRule rule : _accountOverrideRules)
 		{
 			if (rule.matches(txDescription))
 			{
-				return rule.getOverride();
+				return rule.override.text();
 			}
 		}
 
@@ -174,7 +177,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			OverrideRule rule = iterator.next();
 			
 			index++;
-			builder.addAccountMatchRule(index, rule.desc.text(), rule.override.text());
+			builder.addAccountMatchRule(index, rule.textToMatch.text(), rule.override.text());
 		}		
 		
 		index = 0;
@@ -183,7 +186,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			OverrideRule rule = iterator.next();
 			
 			index++;
-			builder.addDescRewriteRule(index, rule.desc.text(), rule.override.text());
+			builder.addDescRewriteRule(index, rule.textToMatch.text(), rule.override.text());
 		}	
 		
 		for (Iterator<MonthlyAccountParam> iterator = _monthlyAccounts.iterator(); iterator.hasNext();)
