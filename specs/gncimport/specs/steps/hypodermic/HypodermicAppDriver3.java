@@ -11,9 +11,9 @@ import gncimport.interactors.TxBrowseInteractor;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
 import gncimport.transfer.RuleTester;
-import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.MatchingText;
 import gncimport.transfer.TxData;
-import gncimport.transfer.UserEnteredRuleDefinition;
+import gncimport.transfer.UserEnteredMatchingText;
 import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class HypodermicAppDriver3
 			//not used here
 		}
 	};
-	private List<RuleDefinition> _observedIgnoreRules = new ArrayList<RuleDefinition>();	
+	private List<MatchingText> _observedIgnoreRules = new ArrayList<MatchingText>();	
 		
 	public HypodermicAppDriver3(String defaultAccName, ConfigOptions config)
 	{
@@ -286,9 +286,9 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<RuleDefinition> ignoreRules, RuleTester tester)
+			public boolean editProperties(List<MatchingText> ignoreRules, RuleTester tester)
 			{
-				_observedIgnoreRules = new ArrayList<RuleDefinition>(ignoreRules);
+				_observedIgnoreRules = new ArrayList<MatchingText>(ignoreRules);
 				
 				return false;
 			}
@@ -302,15 +302,15 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<RuleDefinition> ignoreRules, RuleTester tester)
+			public boolean editProperties(List<MatchingText> ignoreRules, RuleTester tester)
 			{
-				_observedIgnoreRules = new ArrayList<RuleDefinition>(ignoreRules);
+				_observedIgnoreRules = new ArrayList<MatchingText>(ignoreRules);
 				
 				ignoreRules.clear();
 				
 				for (String rule : newRules)
 				{
-					ignoreRules.add(new UserEnteredRuleDefinition(rule));					
+					ignoreRules.add(new UserEnteredMatchingText(rule));					
 				}
 				
 				return true;
@@ -377,7 +377,7 @@ public class HypodermicAppDriver3
 	{
 		List<String> rules = new ArrayList<String>();
 		
-		for (RuleDefinition rule : _observedIgnoreRules)
+		for (MatchingText rule : _observedIgnoreRules)
 		{
 			rules.add(rule.text());
 		}

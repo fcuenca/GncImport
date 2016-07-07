@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.MatchingText;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.presenters.PropertyEditorPresenter;
@@ -45,9 +45,9 @@ public class PropertyEditorPresenterTests
 	@Test
 	public void displays_ignore_rules()
 	{
-		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
-				new RuleDefinitionForTest("rule-1"), 
-				new RuleDefinitionForTest("rule-2")));
+		List<MatchingText> rules = new ArrayList<MatchingText>(ListUtils.list_of(
+				new MatchingTextForTest("rule-1"), 
+				new MatchingTextForTest("rule-2")));
 		
 		when(_view.editProperties(expectedTableModel.capture())).thenReturn(true);
 		
@@ -56,8 +56,8 @@ public class PropertyEditorPresenterTests
 		PropertyEditorTableModel tm = expectedTableModel.getValue();
 		
 		assertThat(tm.getRowCount(), is(2));
-		assertThat(tm.getValueAt(0, 0), is((Object)new RuleDefinitionForTest("rule-1")));
-		assertThat(tm.getValueAt(1, 0), is((Object)new RuleDefinitionForTest("rule-2")));
+		assertThat(tm.getValueAt(0, 0), is((Object)new MatchingTextForTest("rule-1")));
+		assertThat(tm.getValueAt(1, 0), is((Object)new MatchingTextForTest("rule-2")));
 	}
 	
 	@Test
@@ -65,15 +65,15 @@ public class PropertyEditorPresenterTests
 	{
 		when(_view.editProperties(any(PropertyEditorTableModel.class))).thenReturn(false);
 		
-		assertThat(_presenter.editProperties(new ArrayList<RuleDefinition>(), _tester), is(false));
+		assertThat(_presenter.editProperties(new ArrayList<MatchingText>(), _tester), is(false));
 	}
 	
 	@Test
 	public void displays_error_if_there_are_invalid_properties()
 	{
-		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
-				new RuleDefinitionForTest("rule-1"), 
-				new RuleDefinitionForTest("rule-2", false)));
+		List<MatchingText> rules = new ArrayList<MatchingText>(ListUtils.list_of(
+				new MatchingTextForTest("rule-1"), 
+				new MatchingTextForTest("rule-2", false)));
 		
 		when(_view.editProperties(any(PropertyEditorTableModel.class)))
 			.thenReturn(true)

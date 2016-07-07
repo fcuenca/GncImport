@@ -5,9 +5,9 @@ import gncimport.utils.ProgrammerError;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public abstract class RuleDefinition
+public abstract class MatchingText
 {
-	protected RuleDefinition create(String text)
+	protected MatchingText create(String text)
 	{
 		if(text == null)
 		{
@@ -18,11 +18,11 @@ public abstract class RuleDefinition
 		
 		if(errorMsg == null)
 		{
-			return new ValidRuleDefinition(text.trim());
+			return new ValidMachingText(text.trim());
 		}
 		else
 		{
-			return new InvalidRuleDefinition(text, errorMsg);
+			return new InvalidMatchingText(text, errorMsg);
 		}
 	}
 
@@ -51,7 +51,7 @@ public abstract class RuleDefinition
 	public abstract String text();
 	public abstract String hint();
 	public abstract String displayText();
-	public abstract RuleDefinition copy();
+	public abstract MatchingText copy();
 	
 	public boolean matches(String someText)
 	{
@@ -75,7 +75,7 @@ public abstract class RuleDefinition
 			return true;
 		if (obj == null)
 			return false;
-		RuleDefinition other = (RuleDefinition) obj;
+		MatchingText other = (MatchingText) obj;
 		if(isValid() != other.isValid())
 			return false;
 		if (text() == null)

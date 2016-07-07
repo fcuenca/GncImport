@@ -1,7 +1,7 @@
 package gncimport.ui.swing;
 
-import gncimport.transfer.RuleDefinition;
-import gncimport.transfer.UserEnteredRuleDefinition;
+import gncimport.transfer.MatchingText;
+import gncimport.transfer.UserEnteredMatchingText;
 
 import java.awt.Component;
 
@@ -26,7 +26,7 @@ public class RuleDefCellEditor extends DefaultCellEditor
 			int column)
 	{
 		JTextField tf = (JTextField)super.getTableCellEditorComponent(table, value, isSelected, row, column);
-		RuleDefinition rule = (RuleDefinition)value;
+		MatchingText rule = (MatchingText)value;
 		
 		tf.setText(rule.text());
 		return tf;
@@ -36,6 +36,6 @@ public class RuleDefCellEditor extends DefaultCellEditor
 	public Object getCellEditorValue()
 	{
 		String theValue = (String)super.getCellEditorValue();
-		return new UserEnteredRuleDefinition(theValue);
+		return new UserEnteredMatchingText(theValue);
 	}
 }

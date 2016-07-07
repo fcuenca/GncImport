@@ -20,13 +20,14 @@ Stories:
 Tasks:
 * TxOverrideRule -> replace with a composite RuleDefinition
 * Make TxOverride public to be used as transfer object
+- Better name for RuleDefinition -> is not a rule; it's some value entered by the user (directly or indirectly)
+
 - ConfigOptions: get/set account override rules (copy..., replace...)
 - new structure to pass rules around (ignore, override, etc.) -> use in PropertyEditInteractor.OutPort.editProperties
 - PropertyEditInteractor.editProperties needs to retrieve/pass on/replace rules
 - EditPropertiesDialog -> needs a new model that contains several table models
 - PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
 
-- Better name for RuleDefinition -> is not a rule; it's some value entered by the user (directly or indirectly)
 
 
 General improvements:

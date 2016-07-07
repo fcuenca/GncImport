@@ -8,7 +8,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
 import gncimport.ConfigPropertyBuilder;
-import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.MatchingText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,15 +55,15 @@ public class ConfigOptionsImplementsRuleModel
 	@Test
 	public void provides_current_ignore_rules()
 	{
-		List<RuleDefinition> rules = new ArrayList<RuleDefinition>();
+		List<MatchingText> rules = new ArrayList<MatchingText>();
 		
 		_options.copyIgnoreRules(rules);
 		
 		assertThat(rules, hasSize(2));
 		
 		assertThat(asTestRules(rules), hasItems(
-				new RuleDefinitionForTest("WEB TRANSFER"), 
-				new RuleDefinitionForTest("MISC PAYMENT - RBC CREDIT CARD.*")));
+				new MatchingTextForTest("WEB TRANSFER"), 
+				new MatchingTextForTest("MISC PAYMENT - RBC CREDIT CARD.*")));
 	}
 
 
@@ -76,20 +76,20 @@ public class ConfigOptionsImplementsRuleModel
 	@Test
 	public void replaces_content_when_providing_ignore_rules()
 	{
-		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
-				new RuleDefinitionForTest("existing-1"), 
-				new RuleDefinitionForTest("existing-2")));
+		List<MatchingText> rules = new ArrayList<MatchingText>(ListUtils.list_of(
+				new MatchingTextForTest("existing-1"), 
+				new MatchingTextForTest("existing-2")));
 		
 		_options.copyIgnoreRules(rules);
 		
 		assertThat(rules, hasSize(2));
-		assertThat(asTestRules(rules), not(hasItems(new RuleDefinitionForTest("existing-1"), new RuleDefinitionForTest("existing-2"))));
+		assertThat(asTestRules(rules), not(hasItems(new MatchingTextForTest("existing-1"), new MatchingTextForTest("existing-2"))));
 	}
 		
 	@Test
 	public void can_provide_empty_list_of_ignore_rules()
 	{
-		List<RuleDefinition> rules = new ArrayList<RuleDefinition>();
+		List<MatchingText> rules = new ArrayList<MatchingText>();
 		
 		_options = new ConfigOptions(new Properties());
 		_options.copyIgnoreRules(rules);
@@ -100,22 +100,22 @@ public class ConfigOptionsImplementsRuleModel
 	@Test
 	public void updates_ignore_rules_making_a_copy_of_provided_list()
 	{
-		List<RuleDefinition> newRules = new ArrayList<RuleDefinition>(ListUtils.list_of(
-				new RuleDefinitionForTest("new-rule-1"), 
-				new RuleDefinitionForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
-				new RuleDefinitionForTest("new-rule-2")));
+		List<MatchingText> newRules = new ArrayList<MatchingText>(ListUtils.list_of(
+				new MatchingTextForTest("new-rule-1"), 
+				new MatchingTextForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
+				new MatchingTextForTest("new-rule-2")));
 		
 		_options.replaceIgnoreRules(newRules);
 						
-		List<RuleDefinition> updatedRules = new ArrayList<RuleDefinition>();
+		List<MatchingText> updatedRules = new ArrayList<MatchingText>();
 		
 		_options.copyIgnoreRules(updatedRules);
 		
 		assertThat(updatedRules, hasSize(3));
 		assertThat(asTestRules(updatedRules), hasItems(
-				new RuleDefinitionForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
-				new RuleDefinitionForTest("new-rule-1"), 
-				new RuleDefinitionForTest("new-rule-2")));
+				new MatchingTextForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
+				new MatchingTextForTest("new-rule-1"), 
+				new MatchingTextForTest("new-rule-2")));
 		
 		newRules.clear(); // just to make sure this list object is not kept inside the options object
 		assertThat(newRules.size(), is(not(updatedRules.size())));
@@ -131,10 +131,10 @@ public class ConfigOptionsImplementsRuleModel
 	@Test
 	public void updated_ignore_rules_added_to_property_file()
 	{
-		List<RuleDefinition> newRules = new ArrayList<RuleDefinition>(ListUtils.list_of(
-				new RuleDefinitionForTest("new-rule-1"), 
-				new RuleDefinitionForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
-				new RuleDefinitionForTest("new-rule-2")));
+		List<MatchingText> newRules = new ArrayList<MatchingText>(ListUtils.list_of(
+				new MatchingTextForTest("new-rule-1"), 
+				new MatchingTextForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
+				new MatchingTextForTest("new-rule-2")));
 		
 		_options.replaceIgnoreRules(newRules);
 		
@@ -168,9 +168,9 @@ public class ConfigOptionsImplementsRuleModel
 	@Test
 	public void can_test_candidate_properties()
 	{
-		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
-				new RuleDefinitionForTest("rule-1"), 
-				new RuleDefinitionForTest("rule-2")));
+		List<MatchingText> rules = new ArrayList<MatchingText>(ListUtils.list_of(
+				new MatchingTextForTest("rule-1"), 
+				new MatchingTextForTest("rule-2")));
 
 		assertThat(_options.testRulesWithText("rule-1", rules), is(true));
 		assertThat(_options.testRulesWithText("doesn't match", rules), is(false));
@@ -179,9 +179,9 @@ public class ConfigOptionsImplementsRuleModel
 	@Test(expected=IllegalArgumentException.class)
 	public void candidate_rules_must_be_valid_when_testing_them()
 	{
-		List<RuleDefinition> rules = new ArrayList<RuleDefinition>(ListUtils.list_of(
-				new RuleDefinitionForTest("rule-1"), 
-				new RuleDefinitionForTest("rule-2", false)));
+		List<MatchingText> rules = new ArrayList<MatchingText>(ListUtils.list_of(
+				new MatchingTextForTest("rule-1"), 
+				new MatchingTextForTest("rule-2", false)));
 		
 		_options.testRulesWithText("rule-1", rules); // should throw
 	}
@@ -202,7 +202,7 @@ public class ConfigOptionsImplementsRuleModel
 		assertThat("unxpected number of properties found", propCount, is(newRules.size()));
 	}
 
-	private void assertThatPropertiesMatchRuleDefinitions(List<RuleDefinition> newRules, Properties properties, String propKeyRegex)
+	private void assertThatPropertiesMatchRuleDefinitions(List<MatchingText> newRules, Properties properties, String propKeyRegex)
 	{
 		int propCount = 0;
 		for (String key : properties.stringPropertyNames())
@@ -211,7 +211,7 @@ public class ConfigOptionsImplementsRuleModel
 			{
 				String value = properties.getProperty(key);
 				
-				assertThat("Unexpected property value found: " + value, newRules.indexOf(new RuleDefinitionForTest(value)), is(not(-1)));
+				assertThat("Unexpected property value found: " + value, newRules.indexOf(new MatchingTextForTest(value)), is(not(-1)));
 				propCount++;
 			}
 		}
@@ -239,9 +239,9 @@ public class ConfigOptionsImplementsRuleModel
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<RuleDefinitionForTest> asTestRules(List<RuleDefinition> rules)
+	private List<MatchingTextForTest> asTestRules(List<MatchingText> rules)
 	{
-		return (List<RuleDefinitionForTest>)((List<?>)rules);
+		return (List<MatchingTextForTest>)((List<?>)rules);
 	}
 }
 

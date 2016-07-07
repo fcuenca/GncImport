@@ -3,9 +3,9 @@ package gncimport;
 import gncimport.models.RuleModel;
 import gncimport.models.TxMatcher;
 import gncimport.transfer.MonthlyAccountParam;
-import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.MatchingText;
 import gncimport.transfer.TxOverrideRule;
-import gncimport.transfer.UserEnteredRuleDefinition;
+import gncimport.transfer.UserEnteredMatchingText;
 import gncimport.ui.UIConfig;
 import gncimport.utils.ProgrammerError;
 
@@ -27,7 +27,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 
 	private List<TxOverrideRule> _accountOverrideRules = new ArrayList<TxOverrideRule>();
 	private List<TxOverrideRule> _rewriteRule = new ArrayList<TxOverrideRule>();
-	private List<RuleDefinition> _ignoreRules = new ArrayList<RuleDefinition>();
+	private List<MatchingText> _ignoreRules = new ArrayList<MatchingText>();
 	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
 	private String _lastGnc;
 	private String _lastCsv;
@@ -73,7 +73,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	{
 		if (key.matches(IGNORE_RULE_KEY_REGEX))
 		{
-			RuleDefinition def = new UserEnteredRuleDefinition(value);
+			MatchingText def = new UserEnteredMatchingText(value);
 			if(!def.isValid())
 			{
 				throw new InvalidConfigOption("Invalid property format: " + def.hint());
@@ -163,7 +163,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
 		
 		int index = 0;
-		for (RuleDefinition rule : _ignoreRules)
+		for (MatchingText rule : _ignoreRules)
 		{
 			index++;
 			builder.addTransactionIgnoreRule(index, rule.text());
@@ -233,18 +233,18 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	}
 
 	@Override
-	public void replaceIgnoreRules(List<RuleDefinition> newRules)
+	public void replaceIgnoreRules(List<MatchingText> newRules)
 	{
 		if(newRules == null)
 		{
 			throw new IllegalArgumentException("rules cannot be null");
 		}
 
-		_ignoreRules = new ArrayList<RuleDefinition>(newRules);
+		_ignoreRules = new ArrayList<MatchingText>(newRules);
 	}
 
 	@Override
-	public void copyIgnoreRules(List<RuleDefinition> rules)
+	public void copyIgnoreRules(List<MatchingText> rules)
 	{
 		if(rules == null)
 		{
@@ -255,9 +255,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		rules.addAll(_ignoreRules);
 	}
 
-	public boolean testRulesWithText(String text, Iterable<RuleDefinition> candidateRules)
+	public boolean testRulesWithText(String text, Iterable<MatchingText> candidateRules)
 	{
-		for (RuleDefinition rule : candidateRules)
+		for (MatchingText rule : candidateRules)
 		{
 			if(!rule.isValid())
 			{
@@ -268,9 +268,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		return textMatchesRule(text, candidateRules);
 	}
 
-	private boolean textMatchesRule(String txDescription, Iterable<RuleDefinition> rules)
+	private boolean textMatchesRule(String txDescription, Iterable<MatchingText> rules)
 	{
-		for (RuleDefinition rule : rules)
+		for (MatchingText rule : rules)
 		{
 			if (rule.matches(txDescription))
 			{

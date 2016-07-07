@@ -3,12 +3,12 @@ package gncimport.transfer;
 
 public class TxOverrideRule
 {
-	public final RuleDefinition desc;
-	public final RuleDefinition override;
+	public final MatchingText desc;
+	public final MatchingText override;
 	
 	public TxOverrideRule(String desc, String account)
 	{
-		this.desc = new UserEnteredRuleDefinition(desc);
-		this.override = new UserEnteredRuleDefinition(account);
+		this.desc = new UserEnteredMatchingText(desc);
+		this.override = new UserEnteredMatchingText(account);
 	}
 }

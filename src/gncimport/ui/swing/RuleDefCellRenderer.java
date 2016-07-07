@@ -2,7 +2,7 @@ package gncimport.ui.swing;
 
 import java.net.URL;
 
-import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.MatchingText;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
@@ -20,7 +20,7 @@ public class RuleDefCellRenderer extends DefaultTableCellRenderer
 	@Override
 	public void setValue(Object value)
 	{
-		RuleDefinition renderable = (RuleDefinition) value;
+		MatchingText renderable = (MatchingText) value;
 		
 		setText(renderable.displayText());
 		

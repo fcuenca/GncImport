@@ -1,8 +1,8 @@
 package gncimport.ui.swing;
 
-import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.MatchingText;
 import gncimport.transfer.RuleTester;
-import gncimport.transfer.UserEnteredRuleDefinition;
+import gncimport.transfer.UserEnteredMatchingText;
 
 import java.util.List;
 
@@ -11,13 +11,13 @@ import javax.swing.table.AbstractTableModel;
 public final class PropertyEditorTableModel extends AbstractTableModel
 {
 	public static final String[] COLUMN_TITLES = { "Description Pattern" };
-	public static final Class<?>[] COLUMN_CLASSES = { RuleDefinition.class };
+	public static final Class<?>[] COLUMN_CLASSES = { MatchingText.class };
 
-	private final List<RuleDefinition> _rules;
+	private final List<MatchingText> _rules;
 	private static final long serialVersionUID = 9060984673285510233L;
 	private RuleTester _ruleTester;
 
-	public PropertyEditorTableModel(List<RuleDefinition> rules, RuleTester tester)
+	public PropertyEditorTableModel(List<MatchingText> rules, RuleTester tester)
 	{
 		this._rules = rules;
 		this._ruleTester = tester;
@@ -44,7 +44,7 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	@Override
 	public Object getValueAt(int row, int col)
 	{
-		return (RuleDefinition)_rules.get(row);
+		return (MatchingText)_rules.get(row);
 	}
 
 	@Override
@@ -56,12 +56,12 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
-		_rules.set(row, (RuleDefinition) value);
+		_rules.set(row, (MatchingText) value);
 	}
 
 	public boolean isValid()
 	{
-		for (RuleDefinition rule : _rules)
+		for (MatchingText rule : _rules)
 		{
 			if(!rule.isValid()) return false;
 		}
@@ -76,7 +76,7 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 
 	public void newRow()
 	{
-		_rules.add(new UserEnteredRuleDefinition(""));
+		_rules.add(new UserEnteredMatchingText(""));
 		fireTableDataChanged();
 	}
 

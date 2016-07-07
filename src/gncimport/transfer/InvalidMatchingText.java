@@ -1,11 +1,11 @@
 package gncimport.transfer;
 
-public class InvalidRuleDefinition extends RuleDefinition
+public class InvalidMatchingText extends MatchingText
 {
 	private String _offendingText;
 	private String _hint;
 
-	protected InvalidRuleDefinition(String offendingText, String hint)
+	protected InvalidMatchingText(String offendingText, String hint)
 	{
 		this._offendingText = offendingText;
 		this._hint = hint;
@@ -30,9 +30,9 @@ public class InvalidRuleDefinition extends RuleDefinition
 	}
 
 	@Override
-	public RuleDefinition copy()
+	public MatchingText copy()
 	{
-		return new InvalidRuleDefinition(_offendingText, _hint);
+		return new InvalidMatchingText(_offendingText, _hint);
 	}
 
 	@Override

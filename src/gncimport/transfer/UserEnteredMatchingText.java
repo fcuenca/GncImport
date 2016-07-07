@@ -1,10 +1,10 @@
 package gncimport.transfer;
 
-public class UserEnteredRuleDefinition extends RuleDefinition
+public class UserEnteredMatchingText extends MatchingText
 {
-	private final RuleDefinition _backingRule;
+	private final MatchingText _backingRule;
 	
-	public UserEnteredRuleDefinition(String ruleText)
+	public UserEnteredMatchingText(String ruleText)
 	{
 		_backingRule = create(ruleText);
 	}
@@ -28,7 +28,7 @@ public class UserEnteredRuleDefinition extends RuleDefinition
 	}
 
 	@Override
-	public RuleDefinition copy()
+	public MatchingText copy()
 	{
 		return _backingRule.copy();
 	}

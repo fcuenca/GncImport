@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.models.RuleModel;
-import gncimport.transfer.RuleDefinition;
+import gncimport.transfer.MatchingText;
 import gncimport.transfer.RuleTester;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class PropertyEditInteractorTests
 	private PropertyEditInteractor _interactor;
 
 	@Captor
-	private ArgumentCaptor<List<RuleDefinition>> _expectedList;
+	private ArgumentCaptor<List<MatchingText>> _expectedList;
 	
 	@Before
 	public void Setup()
@@ -59,12 +59,12 @@ public class PropertyEditInteractorTests
 			{
                 Object[] args = invocation.getArguments();
                 @SuppressWarnings("unchecked")
-				List<RuleDefinition> rules = (List<RuleDefinition>) args[0];
-                rules.addAll(ListUtils.list_of(new RuleDefinitionForTest("rule-1"), new RuleDefinitionForTest("rule-2")));
+				List<MatchingText> rules = (List<MatchingText>) args[0];
+                rules.addAll(ListUtils.list_of(new MatchingTextForTest("rule-1"), new MatchingTextForTest("rule-2")));
 				return null;
 			}
 			
-		}).when(_model).copyIgnoreRules(anyListOf(RuleDefinition.class));
+		}).when(_model).copyIgnoreRules(anyListOf(MatchingText.class));
 		
 		_interactor.editProperties();
 		
@@ -76,9 +76,9 @@ public class PropertyEditInteractorTests
 	@Test
 	public void updates_edited_properties_when_user_makes_changes()
 	{
-		List<RuleDefinition> expectedEditedRules = new ArrayList<RuleDefinition>(ListUtils.list_of(
-				new RuleDefinitionForTest("rule-1"), 
-				new RuleDefinitionForTest("rule-2")));
+		List<MatchingText> expectedEditedRules = new ArrayList<MatchingText>(ListUtils.list_of(
+				new MatchingTextForTest("rule-1"), 
+				new MatchingTextForTest("rule-2")));
 		
 		doAnswer(new Answer<Boolean>(){
 			@Override
@@ -86,12 +86,12 @@ public class PropertyEditInteractorTests
 			{
                 Object[] args = invocation.getArguments();
                 @SuppressWarnings("unchecked")
-				List<RuleDefinition> rules = (List<RuleDefinition>) args[0];
-                rules.addAll(ListUtils.list_of(new RuleDefinitionForTest("rule-1"), new RuleDefinitionForTest("rule-2")));
+				List<MatchingText> rules = (List<MatchingText>) args[0];
+                rules.addAll(ListUtils.list_of(new MatchingTextForTest("rule-1"), new MatchingTextForTest("rule-2")));
 				return true;
 			}
 			
-		}).when(_outPort).editProperties(anyListOf(RuleDefinition.class), same(_interactor));
+		}).when(_outPort).editProperties(anyListOf(MatchingText.class), same(_interactor));
 		
 		_interactor.editProperties();
 		
@@ -101,17 +101,17 @@ public class PropertyEditInteractorTests
 	@Test
 	public void keeps_properties_unchanged_when_user_cancel_edits()
 	{
-		when(_outPort.editProperties(anyListOf(RuleDefinition.class), same(_interactor))).thenReturn(false);
+		when(_outPort.editProperties(anyListOf(MatchingText.class), same(_interactor))).thenReturn(false);
 		
 		_interactor.editProperties();
 		
-		verify(_model, never()).replaceIgnoreRules(anyListOf(RuleDefinition.class));
+		verify(_model, never()).replaceIgnoreRules(anyListOf(MatchingText.class));
 	}
 	
 	@Test
 	public void implements_rule_tester_interface()
 	{
-		final Iterable<RuleDefinition> rules = new ArrayList<RuleDefinition>();
+		final Iterable<MatchingText> rules = new ArrayList<MatchingText>();
 			
 		doAnswer(new Answer<Boolean>(){
             @SuppressWarnings("unchecked")
@@ -120,7 +120,7 @@ public class PropertyEditInteractorTests
 			{
                 Object[] args = invocation.getArguments();
 				String text = (String) args[0];
-				List<RuleDefinition> candidates = (List<RuleDefinition>) args[1];
+				List<MatchingText> candidates = (List<MatchingText>) args[1];
 				
 				if(rules != candidates) fail("unrecognized list of rules");
 				
@@ -130,7 +130,7 @@ public class PropertyEditInteractorTests
 				return false;
 			}
 			
-		}).when(_model).testRulesWithText(anyString(), anyListOf(RuleDefinition.class));
+		}).when(_model).testRulesWithText(anyString(), anyListOf(MatchingText.class));
 		
 		RuleTester tester = _interactor;
 		
@@ -138,8 +138,8 @@ public class PropertyEditInteractorTests
 		assertThat(tester.tryRulesWithText("rule-2", rules), is(false));
 	}
 
-	private RuleDefinition testRule(String text)
+	private MatchingText testRule(String text)
 	{
-		return new RuleDefinitionForTest(text);
+		return new MatchingTextForTest(text);
 	}
 }
