@@ -27,14 +27,12 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	private class TxOverrideRule
 	{
 		public final RuleDefinition desc;
-		public final RuleDefinition _override;
-		public final String override;
-
+		public final RuleDefinition override;
+		
 		public TxOverrideRule(String desc, String account)
 		{
 			this.desc = new UserEnteredRuleDefinition(desc);
-			this._override = new UserEnteredRuleDefinition(account);
-			this.override = account;
+			this.override = new UserEnteredRuleDefinition(account);
 		}
 	}
 
@@ -132,7 +130,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		{
 			if (rule.desc.matches(txDescription))
 			{
-				return rule.override;
+				return rule.override.text();
 			}
 		}
 
@@ -188,7 +186,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			TxOverrideRule rule = iterator.next();
 			
 			index++;
-			builder.addAccountMatchRule(index, rule.desc.text(), rule.override);
+			builder.addAccountMatchRule(index, rule.desc.text(), rule.override.text());
 		}		
 		
 		index = 0;
@@ -197,7 +195,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			TxOverrideRule rule = iterator.next();
 			
 			index++;
-			builder.addDescRewriteRule(index, rule.desc.text(), rule.override);
+			builder.addDescRewriteRule(index, rule.desc.text(), rule.override.text());
 		}	
 		
 		for (Iterator<MonthlyAccountParam> iterator = _monthlyAccounts.iterator(); iterator.hasNext();)
@@ -239,7 +237,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			
 			if(rule.desc.matches(trimmedTxDesc))
 			{
-				return trimmedTxDesc.replaceAll(rule.desc.text(), rule.override);
+				return trimmedTxDesc.replaceAll(rule.desc.text(), rule.override.text());
 			}
 		}
 		return txDescription;
