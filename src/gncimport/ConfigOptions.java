@@ -100,15 +100,14 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 				throw new InvalidConfigOption("Invalid property format: " + value);
 			}
 			
-			String desc = parts[0].trim();
-			String override = parts[1].trim();
+			OverrideRule rule = new OverrideRule(parts[0], parts[1]);
 			
-			if(desc.isEmpty() || override.isEmpty())
+			if(!rule.isValid())
 			{
 				throw new InvalidConfigOption("Invalid property format: " + value);
 			}
 
-			ruleCollection.add(new OverrideRule(desc, override));
+			ruleCollection.add(rule);
 		}
 	}
 
@@ -117,9 +116,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	{
 		for (OverrideRule rule : _accountOverrideRules)
 		{
-			if (rule.desc.matches(txDescription))
+			if (rule.matches(txDescription))
 			{
-				return rule.override.text();
+				return rule.getOverride();
 			}
 		}
 
@@ -221,12 +220,10 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	public String rewriteDescription(String txDescription)
 	{
 		for (OverrideRule rule : _rewriteRule)
-		{
-			String trimmedTxDesc = txDescription.trim();
-			
-			if(rule.desc.matches(trimmedTxDesc))
+		{			
+			if(rule.matches(txDescription))
 			{
-				return trimmedTxDesc.replaceAll(rule.desc.text(), rule.override.text());
+				return rule.applyOverrideTo(txDescription);
 			}
 		}
 		return txDescription;

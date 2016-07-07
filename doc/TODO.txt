@@ -18,11 +18,10 @@ Stories:
 - try rules 
 
 Tasks:
-* TxOverrideRule -> replace with a composite RuleDefinition
-* Make TxOverride public to be used as transfer object
-- Better name for RuleDefinition -> is not a rule; it's some value entered by the user (directly or indirectly)
-
-- move behaviour to OverrideRule (make it less dumb)
++ TxOverrideRule -> replace with a composite RuleDefinition
++ Make TxOverride public to be used as transfer object
++ Better name for RuleDefinition -> is not a rule; it's some value entered by the user (directly or indirectly)
++ move behaviour to OverrideRule (make it less dumb)
 - ConfigOptions: get/set account override rules (copy..., replace...)
 - new structure to pass rules around (ignore, override, etc.) -> use in PropertyEditInteractor.OutPort.editProperties
 - PropertyEditInteractor.editProperties needs to retrieve/pass on/replace rules
