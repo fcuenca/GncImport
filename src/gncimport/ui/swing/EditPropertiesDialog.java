@@ -1,6 +1,6 @@
 package gncimport.ui.swing;
 
-import gncimport.transfer.MatchingText;
+import gncimport.transfer.MatchingRule;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -40,8 +40,8 @@ public class EditPropertiesDialog extends JDialog
 		{
 			super(model);
 			
-			setDefaultRenderer(MatchingText.class, new RuleDefCellRenderer());
-			setDefaultEditor(MatchingText.class, new RuleDefCellEditor());
+			setDefaultRenderer(MatchingRule.class, new RuleDefCellRenderer());
+			setDefaultEditor(MatchingRule.class, new RuleDefCellEditor());
 			
 			setName("IGNORE_RULES");
 			setModel(model);

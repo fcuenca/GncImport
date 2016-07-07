@@ -1,18 +1,18 @@
 package gncimport.tests.unit;
 
-import gncimport.transfer.MatchingText;
+import gncimport.transfer.MatchingRule;
 
-class MatchingTextForTest extends MatchingText
+class MatchingRuleForTest extends MatchingRule
 {
 	private String _text;
 	private boolean _isValid = true;
 
-	public MatchingTextForTest(String text)
+	public MatchingRuleForTest(String text)
 	{
 		this._text = text;
 	}
 
-	public MatchingTextForTest(String text, boolean isValid)
+	public MatchingRuleForTest(String text, boolean isValid)
 	{
 		this._text = text;
 		this._isValid = isValid;
@@ -37,9 +37,9 @@ class MatchingTextForTest extends MatchingText
 	}
 
 	@Override
-	public MatchingText copy()
+	public MatchingRule copy()
 	{
-		return new MatchingTextForTest(_text);
+		return new MatchingRuleForTest(_text);
 	}
 
 	@Override

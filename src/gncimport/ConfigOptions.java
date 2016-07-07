@@ -3,9 +3,9 @@ package gncimport;
 import gncimport.models.RuleModel;
 import gncimport.models.TxMatcher;
 import gncimport.transfer.MonthlyAccountParam;
-import gncimport.transfer.MatchingText;
-import gncimport.transfer.TxOverrideRule;
-import gncimport.transfer.UserEnteredMatchingText;
+import gncimport.transfer.MatchingRule;
+import gncimport.transfer.OverrideRule;
+import gncimport.transfer.UserEnteredMatchingRule;
 import gncimport.ui.UIConfig;
 import gncimport.utils.ProgrammerError;
 
@@ -25,9 +25,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	public static final String IGNORE_RULE_KEY_REGEX = "match\\.[0-9]+\\.ignore";
 	public static final String MONTHLY_ACC_KEY_REGEX = "monthly\\.([0-9]+)";
 
-	private List<TxOverrideRule> _accountOverrideRules = new ArrayList<TxOverrideRule>();
-	private List<TxOverrideRule> _rewriteRule = new ArrayList<TxOverrideRule>();
-	private List<MatchingText> _ignoreRules = new ArrayList<MatchingText>();
+	private List<OverrideRule> _accountOverrideRules = new ArrayList<OverrideRule>();
+	private List<OverrideRule> _rewriteRule = new ArrayList<OverrideRule>();
+	private List<MatchingRule> _ignoreRules = new ArrayList<MatchingRule>();
 	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
 	private String _lastGnc;
 	private String _lastCsv;
@@ -73,7 +73,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	{
 		if (key.matches(IGNORE_RULE_KEY_REGEX))
 		{
-			MatchingText def = new UserEnteredMatchingText(value);
+			MatchingRule def = new UserEnteredMatchingRule(value);
 			if(!def.isValid())
 			{
 				throw new InvalidConfigOption("Invalid property format: " + def.hint());
@@ -89,7 +89,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		captureOverrideRuleIfApplicable(key, value, TX_REWRITE_RULE_KEY_REGEX, _rewriteRule);
 	}
 
-	private void captureOverrideRuleIfApplicable(String key, String value, String propertyName, List<TxOverrideRule> ruleCollection)
+	private void captureOverrideRuleIfApplicable(String key, String value, String propertyName, List<OverrideRule> ruleCollection)
 	{
 		if (key.matches(propertyName))
 		{
@@ -108,14 +108,14 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 				throw new InvalidConfigOption("Invalid property format: " + value);
 			}
 
-			ruleCollection.add(new TxOverrideRule(desc, override));
+			ruleCollection.add(new OverrideRule(desc, override));
 		}
 	}
 
 	@Override
 	public String findAccountOverride(String txDescription)
 	{
-		for (TxOverrideRule rule : _accountOverrideRules)
+		for (OverrideRule rule : _accountOverrideRules)
 		{
 			if (rule.desc.matches(txDescription))
 			{
@@ -163,25 +163,25 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
 		
 		int index = 0;
-		for (MatchingText rule : _ignoreRules)
+		for (MatchingRule rule : _ignoreRules)
 		{
 			index++;
 			builder.addTransactionIgnoreRule(index, rule.text());
 		}
 		
 		index = 0;
-		for (Iterator<TxOverrideRule> iterator = _accountOverrideRules.iterator(); iterator.hasNext();)
+		for (Iterator<OverrideRule> iterator = _accountOverrideRules.iterator(); iterator.hasNext();)
 		{
-			TxOverrideRule rule = iterator.next();
+			OverrideRule rule = iterator.next();
 			
 			index++;
 			builder.addAccountMatchRule(index, rule.desc.text(), rule.override.text());
 		}		
 		
 		index = 0;
-		for (Iterator<TxOverrideRule> iterator = _rewriteRule.iterator(); iterator.hasNext();)
+		for (Iterator<OverrideRule> iterator = _rewriteRule.iterator(); iterator.hasNext();)
 		{
-			TxOverrideRule rule = iterator.next();
+			OverrideRule rule = iterator.next();
 			
 			index++;
 			builder.addDescRewriteRule(index, rule.desc.text(), rule.override.text());
@@ -220,7 +220,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	@Override
 	public String rewriteDescription(String txDescription)
 	{
-		for (TxOverrideRule rule : _rewriteRule)
+		for (OverrideRule rule : _rewriteRule)
 		{
 			String trimmedTxDesc = txDescription.trim();
 			
@@ -233,18 +233,18 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	}
 
 	@Override
-	public void replaceIgnoreRules(List<MatchingText> newRules)
+	public void replaceIgnoreRules(List<MatchingRule> newRules)
 	{
 		if(newRules == null)
 		{
 			throw new IllegalArgumentException("rules cannot be null");
 		}
 
-		_ignoreRules = new ArrayList<MatchingText>(newRules);
+		_ignoreRules = new ArrayList<MatchingRule>(newRules);
 	}
 
 	@Override
-	public void copyIgnoreRules(List<MatchingText> rules)
+	public void copyIgnoreRules(List<MatchingRule> rules)
 	{
 		if(rules == null)
 		{
@@ -255,9 +255,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		rules.addAll(_ignoreRules);
 	}
 
-	public boolean testRulesWithText(String text, Iterable<MatchingText> candidateRules)
+	public boolean testRulesWithText(String text, Iterable<MatchingRule> candidateRules)
 	{
-		for (MatchingText rule : candidateRules)
+		for (MatchingRule rule : candidateRules)
 		{
 			if(!rule.isValid())
 			{
@@ -268,9 +268,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		return textMatchesRule(text, candidateRules);
 	}
 
-	private boolean textMatchesRule(String txDescription, Iterable<MatchingText> rules)
+	private boolean textMatchesRule(String txDescription, Iterable<MatchingRule> rules)
 	{
-		for (MatchingText rule : rules)
+		for (MatchingRule rule : rules)
 		{
 			if (rule.matches(txDescription))
 			{

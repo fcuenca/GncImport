@@ -1,7 +1,7 @@
 package gncimport.interactors;
 
 import gncimport.models.RuleModel;
-import gncimport.transfer.MatchingText;
+import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class PropertyEditInteractor implements RuleTester
 
 	public interface OutPort
 	{
-		boolean editProperties(List<MatchingText> ignoreRules, RuleTester tester);
+		boolean editProperties(List<MatchingRule> ignoreRules, RuleTester tester);
 	}
 	
 	public PropertyEditInteractor(OutPort outPort, RuleModel model)
@@ -25,7 +25,7 @@ public class PropertyEditInteractor implements RuleTester
 
 	public void editProperties()
 	{
-		List<MatchingText> ignoreRules = new ArrayList<MatchingText>();
+		List<MatchingRule> ignoreRules = new ArrayList<MatchingRule>();
 		
 		_model.copyIgnoreRules(ignoreRules);
 
@@ -36,7 +36,7 @@ public class PropertyEditInteractor implements RuleTester
 	}
 	
 	@Override
-	public boolean tryRulesWithText(String textToMatch, Iterable<MatchingText> candidateRules)
+	public boolean tryRulesWithText(String textToMatch, Iterable<MatchingRule> candidateRules)
 	{
 		return _model.testRulesWithText(textToMatch, candidateRules);
 	}

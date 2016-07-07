@@ -1,12 +1,12 @@
 package gncimport.models;
 
-import gncimport.transfer.MatchingText;
+import gncimport.transfer.MatchingRule;
 
 import java.util.List;
 
 public interface RuleModel
 {
-	void replaceIgnoreRules(List<MatchingText> rules);
-	void copyIgnoreRules(List<MatchingText> rules);
-	boolean testRulesWithText(String text, Iterable<MatchingText> candidateRules);
+	void replaceIgnoreRules(List<MatchingRule> rules);
+	void copyIgnoreRules(List<MatchingRule> rules);
+	boolean testRulesWithText(String text, Iterable<MatchingRule> candidateRules);
 }

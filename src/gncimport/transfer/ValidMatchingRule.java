@@ -1,11 +1,11 @@
 package gncimport.transfer;
 
-public class ValidMachingText extends MatchingText
+public class ValidMatchingRule extends MatchingRule
 {
 	
 	private String _text;
 	
-	protected ValidMachingText(String text)
+	protected ValidMatchingRule(String text)
 	{
 		this._text = text;
 	}
@@ -29,9 +29,9 @@ public class ValidMachingText extends MatchingText
 	}
 
 	@Override
-	public MatchingText copy()
+	public MatchingRule copy()
 	{
-		return new ValidMachingText(_text);
+		return new ValidMatchingRule(_text);
 	}
 
 	@Override
