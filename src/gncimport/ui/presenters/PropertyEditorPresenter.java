@@ -2,6 +2,7 @@ package gncimport.ui.presenters;
 
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.swing.PropertyEditorTableModel;
@@ -18,7 +19,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	}
 
 	@Override
-	public boolean editProperties(final List<MatchingRule> rules, RuleTester tester)
+	public boolean editProperties(final List<MatchingRule> rules, List<OverrideRule> accountOverrideRules, RuleTester tester)
 	{		
 		PropertyEditorTableModel tableModel = new PropertyEditorTableModel(rules, tester);
 

@@ -1,6 +1,7 @@
 package gncimport.tests.unit;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.when;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.models.RuleModel;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
 
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ public class PropertyEditInteractorTests
 
 	@Captor
 	private ArgumentCaptor<List<MatchingRule>> _expectedList;
+	@Captor
+	private ArgumentCaptor<List<OverrideRule>> _expectedAccOverrideList;
 	
 	@Before
 	public void Setup()
@@ -68,7 +72,7 @@ public class PropertyEditInteractorTests
 		
 		_interactor.editProperties();
 		
-		verify(_outPort).editProperties(_expectedList.capture(), same(_interactor));
+		verify(_outPort).editProperties(_expectedList.capture(), _expectedAccOverrideList.capture(), same(_interactor));
 		assertThat(_expectedList.getValue(), hasSize(2));
 		assertThat(_expectedList.getValue(), hasItems( testRule("rule-1"), testRule("rule-2")));
 	}
@@ -91,7 +95,7 @@ public class PropertyEditInteractorTests
 				return true;
 			}
 			
-		}).when(_outPort).editProperties(anyListOf(MatchingRule.class), same(_interactor));
+		}).when(_outPort).editProperties(anyListOf(MatchingRule.class), anyListOf(OverrideRule.class), same(_interactor));
 		
 		_interactor.editProperties();
 		
@@ -101,7 +105,7 @@ public class PropertyEditInteractorTests
 	@Test
 	public void keeps_properties_unchanged_when_user_cancel_edits()
 	{
-		when(_outPort.editProperties(anyListOf(MatchingRule.class), same(_interactor))).thenReturn(false);
+		when(_outPort.editProperties(anyListOf(MatchingRule.class), anyListOf(OverrideRule.class), same(_interactor))).thenReturn(false);
 		
 		_interactor.editProperties();
 		
