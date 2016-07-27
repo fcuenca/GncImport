@@ -74,7 +74,9 @@ public class HypodermicAppDriver3
 			//not used here
 		}
 	};
+	
 	private List<MatchingRule> _observedIgnoreRules = new ArrayList<MatchingRule>();	
+	private List<OverrideRule> _observedAccOverrideRules = new ArrayList<OverrideRule>();	
 		
 	public HypodermicAppDriver3(String defaultAccName, ConfigOptions config)
 	{
@@ -290,6 +292,7 @@ public class HypodermicAppDriver3
 			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, RuleTester tester)
 			{
 				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
+				_observedAccOverrideRules = new ArrayList<OverrideRule>(accountOverrides);
 				
 				return false;
 			}
@@ -306,7 +309,8 @@ public class HypodermicAppDriver3
 			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, RuleTester tester)
 			{
 				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
-				
+				_observedAccOverrideRules = new ArrayList<OverrideRule>(accountOverrides);
+
 				ignoreRules.clear();
 				
 				for (String rule : newRules)
@@ -388,7 +392,13 @@ public class HypodermicAppDriver3
 
 	public List<String> observedAccountOverrideRules()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<String> rules = new ArrayList<String>();
+		
+		for (OverrideRule rule : _observedAccOverrideRules)
+		{
+			rules.add(rule.textToMatch.text() + "|" + rule.override.text());
+		}
+		
+		return rules;
 	}
 }

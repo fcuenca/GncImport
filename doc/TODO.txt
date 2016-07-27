@@ -7,7 +7,8 @@ Features:
 
 
 Stories:
-* display current props
+* display empty table when there are no props
+- display current props
 - edit existing rules
 - validation
 	- desc can't be blank
@@ -22,11 +23,11 @@ Tasks:
 + Make TxOverride public to be used as transfer object
 + Better name for RuleDefinition -> is not a rule; it's some value entered by the user (directly or indirectly)
 + move behaviour to OverrideRule (make it less dumb)
-* new structure to pass rules around (ignore, override, etc.) -> use in PropertyEditInteractor.OutPort.editProperties
+* EditPropertiesDialog -> needs a new model that contains several table models
+  - PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
+- new structure to pass rules around (ignore, override, etc.) -> use in PropertyEditInteractor.OutPort.editProperties
 - ConfigOptions: get/set account override rules (copy..., replace...)
 - PropertyEditInteractor.editProperties needs to retrieve/pass on/replace rules
-- EditPropertiesDialog -> needs a new model that contains several table models
-- PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
 
 
 
