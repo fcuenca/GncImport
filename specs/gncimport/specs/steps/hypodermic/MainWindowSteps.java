@@ -369,6 +369,20 @@ public class MainWindowSteps
 	{
 		app().editIgnoreRules(rules);
 	}
+	
+	@When("^account override rules are set to:$")
+	public void account_override_rules_are_set_to(DataTable rules) throws Throwable
+	{
+		app().editAccOverrideRules(rules.asMaps());
+	}
+
+	@Then("^the properties file now contains (\\d+) account override rules$")
+	public void the_properties_file_now_contains_account_override_rules(int expectedRuleCount) throws Throwable
+	{
+		Properties props = app().getProperties();
+		
+		assertThatPropertiesContainsRules(props, ConfigOptions.ACC_OVERRIDE_RULE_KEY_REGEX, expectedRuleCount);
+	}
 
 	@Then("^the properties file now contains (\\d+) ignore rules$")
 	public void the_properties_file_now_contains_ignore_rules(int expectedRuleCount) throws Throwable

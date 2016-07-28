@@ -20,6 +20,7 @@ import gncimport.utils.ProgrammerError;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class HypodermicAppDriver3 
@@ -323,6 +324,34 @@ public class HypodermicAppDriver3
 		};
 		
 		_interactors.propertyEdit(boundary).editProperties();
+	}
+	
+	public void editAccOverrideRules(final List<Map<String, String>> newRules)
+	{
+		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
+		{
+			@Override
+			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, RuleTester tester)
+			{
+				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
+				_observedAccOverrideRules = new ArrayList<OverrideRule>(accountOverrides);
+
+				accountOverrides.clear();
+				
+				for (Map<String, String> map : newRules)
+				{
+					String desc = map.get("Description");
+					String account = map.get("Account");
+					
+					accountOverrides.add(new OverrideRule(desc, account));	
+				}
+				
+				return true;
+			}
+		};
+		
+		_interactors.propertyEdit(boundary).editProperties();
+
 	}
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)

@@ -19,4 +19,10 @@ Feature: Editing Configuration Properties
 		Given the properties file is initially empty
 		When properties are displayed
 		Then the app displays empty account override rule list
+		When account override rules are set to:
+			|Description                     |Account |                    
+			|MISC PAYMENT - IMH POOL I LP    |Housing |
+			|MISC PAYMENT - GOODLIFE CLUBS   |Health  |
+			|SAN CRISTOBAL SEG 1146ROSARIO.* |Casa Cordoba|
+	    Then the properties file now contains 3 account override rules   
 		
