@@ -2,8 +2,8 @@ package gncimport;
 
 import gncimport.models.RuleModel;
 import gncimport.models.TxMatcher;
-import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.UserEnteredMatchingRule;
 import gncimport.ui.UIConfig;
@@ -236,7 +236,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	@Override
 	public void replaceRulesWith(List<MatchingRule> newRules, Map<String, Object> allRules)
 	{
-		if(newRules == null)
+		if(newRules == null || allRules == null)
 		{
 			throw new IllegalArgumentException("rules cannot be null");
 		}
@@ -247,13 +247,16 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	@Override
 	public void copyRulesTo(List<MatchingRule> rules, Map<String, Object> allRules)
 	{
-		if(rules == null)
+		if(rules == null || allRules == null)
 		{
 			throw new IllegalArgumentException("rules cannot be null");
 		}
 		
 		rules.clear();
 		rules.addAll(_ignoreRules);
+		
+		allRules.clear();
+		allRules.put("ignore", new ArrayList<MatchingRule>(_ignoreRules));
 	}
 
 	public boolean testRulesWithText(String text, Iterable<MatchingRule> candidateRules)

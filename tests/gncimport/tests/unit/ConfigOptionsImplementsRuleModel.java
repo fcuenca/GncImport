@@ -1,6 +1,7 @@
 package gncimport.tests.unit;
 
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -11,7 +12,9 @@ import gncimport.ConfigPropertyBuilder;
 import gncimport.transfer.MatchingRule;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,25 +55,32 @@ public class ConfigOptionsImplementsRuleModel
 		_options = new ConfigOptions(sampleProperties());	
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void provides_current_ignore_rules()
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>();
+		Map<String, Object> allRules = new HashMap<String, Object>();
 		
-		_options.copyRulesTo(rules, null);
+		_options.copyRulesTo(rules, allRules);
 		
 		assertThat(rules, hasSize(2));
-		
 		assertThat(asTestRules(rules), hasItems(
+				new MatchingRuleForTest("WEB TRANSFER"), 
+				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*")));
+		
+		assertThat(allRules.size(), is(1));
+		assertThat(allRules, hasKey("ignore"));
+		assertThat(asTestRules((List<MatchingRule>) allRules.get("ignore")), hasItems(
 				new MatchingRuleForTest("WEB TRANSFER"), 
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*")));
 	}
 
 
 	@Test(expected=IllegalArgumentException.class)
-	public void rejects_null_when_providing_ignore_rules()
+	public void rejects_null_when_providing_rules()
 	{
-		_options.copyRulesTo(null, null);
+		_options.copyRulesTo(new ArrayList<MatchingRule>(), null);
 	}
 	
 	@Test
@@ -79,24 +89,35 @@ public class ConfigOptionsImplementsRuleModel
 		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
 				new MatchingRuleForTest("existing-1"), 
 				new MatchingRuleForTest("existing-2")));
+		Map<String, Object> allRules = new HashMap<String, Object>();
+		allRules.put("some key", "some value");
 		
-		_options.copyRulesTo(rules, null);
+		_options.copyRulesTo(rules, allRules);
 		
 		assertThat(rules, hasSize(2));
 		assertThat(asTestRules(rules), not(hasItems(new MatchingRuleForTest("existing-1"), new MatchingRuleForTest("existing-2"))));
+		
+		assertThat(allRules.size(), is(not(0)));
+		assertThat(allRules, not(hasKey("some key")));
 	}
 		
+	@SuppressWarnings("unchecked")
 	@Test
 	public void can_provide_empty_list_of_ignore_rules()
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>();
+		Map<String, Object> allRules = new HashMap<String, Object>();
 		
 		_options = new ConfigOptions(new Properties());
-		_options.copyRulesTo(rules, null);
+		_options.copyRulesTo(rules, allRules);
 		
 		assertThat(rules, is(empty()));
+		
+		assertThat(allRules, hasKey("ignore"));
+		assertThat((List<MatchingRule>)allRules.get("ignore"), is(empty()));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void updates_ignore_rules_making_a_copy_of_provided_list()
 	{
@@ -104,12 +125,15 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("new-rule-1"), 
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-2")));
+		Map<String, Object> allRules = new HashMap<String, Object>();
+		allRules.put("ignore", newRules);
 		
-		_options.replaceRulesWith(newRules, null);
+		_options.replaceRulesWith(newRules, allRules);
 						
 		List<MatchingRule> updatedRules = new ArrayList<MatchingRule>();
-		
-		_options.copyRulesTo(updatedRules, null);
+		Map<String, Object> updatedAllRules = new HashMap<String, Object>();
+
+		_options.copyRulesTo(updatedRules, updatedAllRules);
 		
 		assertThat(updatedRules, hasSize(3));
 		assertThat(asTestRules(updatedRules), hasItems(
@@ -117,15 +141,22 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("new-rule-1"), 
 				new MatchingRuleForTest("new-rule-2")));
 		
+		assertThat(asTestRules((List<MatchingRule>) updatedAllRules.get("ignore")), hasItems(
+				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
+				new MatchingRuleForTest("new-rule-1"), 
+				new MatchingRuleForTest("new-rule-2")));
+
 		newRules.clear(); // just to make sure this list object is not kept inside the options object
 		assertThat(newRules.size(), is(not(updatedRules.size())));
 
+		allRules.clear(); // just to make sure this list object is not kept inside the options object
+		assertThat(allRules.size(), is(not(updatedAllRules.size())));
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void rejects_null_when_updating_ignore_rules()
 	{
-		_options.replaceRulesWith(null, null);
+		_options.replaceRulesWith(new ArrayList<MatchingRule>(), null);
 	}
 	
 	@Test
@@ -136,7 +167,10 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-2")));
 		
-		_options.replaceRulesWith(newRules, null);
+		Map<String, Object> allRules = new HashMap<String, Object>();
+		allRules.put("ignore", newRules);
+		
+		_options.replaceRulesWith(newRules, allRules);
 		
 		assertThatPropertiesMatchRuleDefinitions(newRules, _options.getProperties(), ConfigOptions.IGNORE_RULE_KEY_REGEX);
 	}
