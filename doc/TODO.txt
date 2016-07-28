@@ -22,13 +22,13 @@ x TxOverrideRule -> replace with a composite RuleDefinition
 x Make TxOverride public to be used as transfer object
 x Better name for RuleDefinition -> is not a rule; it's some value entered by the user (directly or indirectly)
 x move behaviour to OverrideRule (make it less dumb)
-* EditPropertiesDialog -> needs a new model that contains several table models
+- EditPropertiesDialog -> needs a new model that contains several table models
   x add tabs to Property Edit dialog
   x add second tab for Override Rules
   - PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
-- new structure to pass rules around (ignore, override, etc.) -> use in PropertyEditInteractor.OutPort.editProperties
-- ConfigOptions: get/set account override rules (copy..., replace...)
+* ConfigOptions: get/set account override rules (copy..., replace...)
 - PropertyEditInteractor.editProperties needs to retrieve/pass on/replace rules
+- new structure to pass rules around (ignore, override, etc.) -> use in PropertyEditInteractor.OutPort.editProperties
 
 
 

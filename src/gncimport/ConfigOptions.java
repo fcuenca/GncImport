@@ -12,6 +12,7 @@ import gncimport.utils.ProgrammerError;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -244,7 +245,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	}
 
 	@Override
-	public void copyRulesTo(List<MatchingRule> rules)
+	public void copyRulesTo(List<MatchingRule> rules, Map<String, Object> allRules)
 	{
 		if(rules == null)
 		{

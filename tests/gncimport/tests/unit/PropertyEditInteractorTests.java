@@ -6,6 +6,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.anyMapOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doAnswer;
@@ -21,6 +22,7 @@ import gncimport.transfer.RuleTester;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -64,10 +66,16 @@ public class PropertyEditInteractorTests
                 @SuppressWarnings("unchecked")
 				List<MatchingRule> rules = (List<MatchingRule>) args[0];
                 rules.addAll(ListUtils.list_of(new MatchingRuleForTest("rule-1"), new MatchingRuleForTest("rule-2")));
+                
+//                @SuppressWarnings("unchecked")
+//				Map<String, Object> allRules = (Map<String, Object>) args[1];
+//                allRules.put("first", "list of rules 1");
+//                allRules.put("second", "list of rules 2");
+                
 				return null;
 			}
 			
-		}).when(_model).copyRulesTo(anyListOf(MatchingRule.class));
+		}).when(_model).copyRulesTo(anyListOf(MatchingRule.class), anyMapOf(String.class, Object.class));
 		
 		_interactor.editProperties();
 		

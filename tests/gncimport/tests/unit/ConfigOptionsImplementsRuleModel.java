@@ -57,7 +57,7 @@ public class ConfigOptionsImplementsRuleModel
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>();
 		
-		_options.copyRulesTo(rules);
+		_options.copyRulesTo(rules, null);
 		
 		assertThat(rules, hasSize(2));
 		
@@ -70,7 +70,7 @@ public class ConfigOptionsImplementsRuleModel
 	@Test(expected=IllegalArgumentException.class)
 	public void rejects_null_when_providing_ignore_rules()
 	{
-		_options.copyRulesTo(null);
+		_options.copyRulesTo(null, null);
 	}
 	
 	@Test
@@ -80,7 +80,7 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("existing-1"), 
 				new MatchingRuleForTest("existing-2")));
 		
-		_options.copyRulesTo(rules);
+		_options.copyRulesTo(rules, null);
 		
 		assertThat(rules, hasSize(2));
 		assertThat(asTestRules(rules), not(hasItems(new MatchingRuleForTest("existing-1"), new MatchingRuleForTest("existing-2"))));
@@ -92,7 +92,7 @@ public class ConfigOptionsImplementsRuleModel
 		List<MatchingRule> rules = new ArrayList<MatchingRule>();
 		
 		_options = new ConfigOptions(new Properties());
-		_options.copyRulesTo(rules);
+		_options.copyRulesTo(rules, null);
 		
 		assertThat(rules, is(empty()));
 	}
@@ -109,7 +109,7 @@ public class ConfigOptionsImplementsRuleModel
 						
 		List<MatchingRule> updatedRules = new ArrayList<MatchingRule>();
 		
-		_options.copyRulesTo(updatedRules);
+		_options.copyRulesTo(updatedRules, null);
 		
 		assertThat(updatedRules, hasSize(3));
 		assertThat(asTestRules(updatedRules), hasItems(

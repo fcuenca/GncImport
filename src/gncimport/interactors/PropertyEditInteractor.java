@@ -28,7 +28,7 @@ public class PropertyEditInteractor implements RuleTester
 	{
 		List<MatchingRule> ignoreRules = new ArrayList<MatchingRule>();
 		
-		_model.copyRulesTo(ignoreRules);
+		_model.copyRulesTo(ignoreRules, null);
 
 		if(_outPort.editProperties(ignoreRules, new ArrayList<OverrideRule>(), this))
 		{
