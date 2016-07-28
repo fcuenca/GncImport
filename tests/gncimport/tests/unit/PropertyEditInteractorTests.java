@@ -1,6 +1,7 @@
 package gncimport.tests.unit;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
@@ -21,6 +22,7 @@ import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +47,8 @@ public class PropertyEditInteractorTests
 	private ArgumentCaptor<List<MatchingRule>> _expectedList;
 	@Captor
 	private ArgumentCaptor<List<OverrideRule>> _expectedAccOverrideList;
+	@Captor
+	private ArgumentCaptor<Map<String, Object>> _expectedRules;
 	
 	@Before
 	public void Setup()
@@ -67,10 +71,10 @@ public class PropertyEditInteractorTests
 				List<MatchingRule> rules = (List<MatchingRule>) args[0];
                 rules.addAll(ListUtils.list_of(new MatchingRuleForTest("rule-1"), new MatchingRuleForTest("rule-2")));
                 
-//                @SuppressWarnings("unchecked")
-//				Map<String, Object> allRules = (Map<String, Object>) args[1];
-//                allRules.put("first", "list of rules 1");
-//                allRules.put("second", "list of rules 2");
+                @SuppressWarnings("unchecked")
+				Map<String, Object> allRules = (Map<String, Object>) args[1];
+                allRules.put("first", "list of rules 1");
+                allRules.put("second", "list of rules 2");
                 
 				return null;
 			}
@@ -79,9 +83,13 @@ public class PropertyEditInteractorTests
 		
 		_interactor.editProperties();
 		
-		verify(_outPort).editProperties(_expectedList.capture(), _expectedAccOverrideList.capture(), same(_interactor));
+		verify(_outPort).editProperties(_expectedList.capture(), _expectedAccOverrideList.capture(), _expectedRules.capture(), same(_interactor));
 		assertThat(_expectedList.getValue(), hasSize(2));
 		assertThat(_expectedList.getValue(), hasItems( testRule("rule-1"), testRule("rule-2")));
+		
+		assertThat(_expectedRules.getValue().size(), is(2));
+		assertThat(_expectedRules.getValue(), hasEntry("first", (Object)"list of rules 1"));
+		assertThat(_expectedRules.getValue(), hasEntry("second", (Object)"list of rules 2"));
 	}
 	
 	@Test
@@ -91,32 +99,42 @@ public class PropertyEditInteractorTests
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2")));
 		
+		final Map<String, Object> expectedRuleMap = new HashMap<String, Object>();
+		expectedRuleMap.put("first", "list of rules 1");
+		expectedRuleMap.put("second", "list of rules 2");
+		
 		doAnswer(new Answer<Boolean>(){
 			@Override
 			public Boolean answer(InvocationOnMock invocation) throws Throwable
 			{
                 Object[] args = invocation.getArguments();
+                
                 @SuppressWarnings("unchecked")
 				List<MatchingRule> rules = (List<MatchingRule>) args[0];
                 rules.addAll(ListUtils.list_of(new MatchingRuleForTest("rule-1"), new MatchingRuleForTest("rule-2")));
+                
+                @SuppressWarnings("unchecked")
+				Map<String, Object> allRules = (Map<String, Object>) args[2];
+                allRules.putAll(expectedRuleMap);
+                
 				return true;
 			}
 			
-		}).when(_outPort).editProperties(anyListOf(MatchingRule.class), anyListOf(OverrideRule.class), same(_interactor));
+		}).when(_outPort).editProperties(anyListOf(MatchingRule.class), anyListOf(OverrideRule.class), anyMapOf(String.class, Object.class), same(_interactor));
 		
 		_interactor.editProperties();
 		
-		verify(_model).replaceRulesWith(expectedEditedRules);
+		verify(_model).replaceRulesWith(expectedEditedRules, expectedRuleMap);
 	}
 	
 	@Test
 	public void keeps_properties_unchanged_when_user_cancel_edits()
 	{
-		when(_outPort.editProperties(anyListOf(MatchingRule.class), anyListOf(OverrideRule.class), same(_interactor))).thenReturn(false);
+		when(_outPort.editProperties(anyListOf(MatchingRule.class), anyListOf(OverrideRule.class), anyMapOf(String.class, Object.class), same(_interactor))).thenReturn(false);
 		
 		_interactor.editProperties();
 		
-		verify(_model, never()).replaceRulesWith(anyListOf(MatchingRule.class));
+		verify(_model, never()).replaceRulesWith(anyListOf(MatchingRule.class), anyMapOf(String.class, Object.class));
 	}
 	
 	@Test

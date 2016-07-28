@@ -51,7 +51,7 @@ public class PropertyEditorPresenterTests
 		
 		when(_view.editProperties(expectedTableModel.capture())).thenReturn(true);
 		
-		assertThat(_presenter.editProperties(rules, null, _tester), is(true));
+		assertThat(_presenter.editProperties(rules, null, null, _tester), is(true));
 		
 		PropertyEditorTableModel tm = expectedTableModel.getValue();
 		
@@ -65,7 +65,7 @@ public class PropertyEditorPresenterTests
 	{
 		when(_view.editProperties(any(PropertyEditorTableModel.class))).thenReturn(false);
 		
-		assertThat(_presenter.editProperties(new ArrayList<MatchingRule>(), null, _tester), is(false));
+		assertThat(_presenter.editProperties(new ArrayList<MatchingRule>(), null, null, _tester), is(false));
 	}
 	
 	@Test
@@ -79,7 +79,7 @@ public class PropertyEditorPresenterTests
 			.thenReturn(true)
 			.thenReturn(false);
 		
-		assertThat(_presenter.editProperties(rules, null, _tester), is(false));
+		assertThat(_presenter.editProperties(rules, null, null, _tester), is(false));
 		
 		verify(_view, times(2)).editProperties(any(PropertyEditorTableModel.class));
 		verify(_view).displayErrorMessage(anyString());

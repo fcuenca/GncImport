@@ -8,6 +8,7 @@ import gncimport.ui.TxView;
 import gncimport.ui.swing.PropertyEditorTableModel;
 
 import java.util.List;
+import java.util.Map;
 
 public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 {
@@ -19,7 +20,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	}
 
 	@Override
-	public boolean editProperties(final List<MatchingRule> rules, List<OverrideRule> accountOverrideRules, RuleTester tester)
+	public boolean editProperties(final List<MatchingRule> rules, List<OverrideRule> accountOverrideRules, Map<String, Object> allRules, RuleTester tester)
 	{		
 		PropertyEditorTableModel tableModel = new PropertyEditorTableModel(rules, tester);
 

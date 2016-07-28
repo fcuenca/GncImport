@@ -105,7 +105,7 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-2")));
 		
-		_options.replaceRulesWith(newRules);
+		_options.replaceRulesWith(newRules, null);
 						
 		List<MatchingRule> updatedRules = new ArrayList<MatchingRule>();
 		
@@ -125,7 +125,7 @@ public class ConfigOptionsImplementsRuleModel
 	@Test(expected=IllegalArgumentException.class)
 	public void rejects_null_when_updating_ignore_rules()
 	{
-		_options.replaceRulesWith(null);
+		_options.replaceRulesWith(null, null);
 	}
 	
 	@Test
@@ -136,7 +136,7 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-2")));
 		
-		_options.replaceRulesWith(newRules);
+		_options.replaceRulesWith(newRules, null);
 		
 		assertThatPropertiesMatchRuleDefinitions(newRules, _options.getProperties(), ConfigOptions.IGNORE_RULE_KEY_REGEX);
 	}

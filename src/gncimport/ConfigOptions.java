@@ -234,7 +234,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	}
 
 	@Override
-	public void replaceRulesWith(List<MatchingRule> newRules)
+	public void replaceRulesWith(List<MatchingRule> newRules, Map<String, Object> allRules)
 	{
 		if(newRules == null)
 		{

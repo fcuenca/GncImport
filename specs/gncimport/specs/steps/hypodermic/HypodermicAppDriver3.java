@@ -290,7 +290,7 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, RuleTester tester)
+			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, Map<String, Object> allRules, RuleTester tester)
 			{
 				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
 				_observedAccOverrideRules = new ArrayList<OverrideRule>(accountOverrides);
@@ -307,7 +307,7 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, RuleTester tester)
+			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, Map<String, Object> allRules,RuleTester tester)
 			{
 				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
 				_observedAccOverrideRules = new ArrayList<OverrideRule>(accountOverrides);
@@ -331,7 +331,7 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, RuleTester tester)
+			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, Map<String, Object> allRules, RuleTester tester)
 			{
 				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
 				_observedAccOverrideRules = new ArrayList<OverrideRule>(accountOverrides);
