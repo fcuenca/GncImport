@@ -18,6 +18,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
@@ -72,13 +73,30 @@ public class EditPropertiesDialog extends JDialog
 		setLayout(new BorderLayout());
 		setTitle("Property Editor");
 		setName("PROP_EDITOR_DLG");
+		
+		JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
+		tabs.setName("PROPERTY_TABS");
+		tabs.addTab("Ignore", createIgnoreListPanel(tableModel));
+		tabs.addTab("Acc Override", createAccOverridePanel());
 				
-		add(createIgnoreListPanel(tableModel), BorderLayout.PAGE_START);
-		add(createButtonPanel(), BorderLayout.PAGE_END);
+		add(tabs, BorderLayout.PAGE_START);
+		add(createOkCancelButtonPanel(), BorderLayout.PAGE_END);
 
 		setupCloseOnESCkey();
 		
 		pack();
+	}
+
+	private JPanel createAccOverridePanel()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+				
+		JTable table = new JTable();
+		table.setName("ACC_OVERRIDE_RULES");
+		panel.add(new JScrollPane(table), BorderLayout.PAGE_START);
+		
+		return panel;
 	}
 
 	private JPanel createIgnoreListPanel(final PropertyEditorTableModel ignoreTable)
@@ -163,7 +181,7 @@ public class EditPropertiesDialog extends JDialog
 		return toolBar;
 	}
 
-	private JPanel createButtonPanel()
+	private JPanel createOkCancelButtonPanel()
 	{
 		JButton button;
 

@@ -25,6 +25,7 @@ import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JComboBoxFixture;
 import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.swing.fixture.JLabelFixture;
+import org.fest.swing.fixture.JTabbedPaneFixture;
 import org.fest.swing.fixture.JTableCellFixture;
 import org.fest.swing.fixture.JTableFixture;
 import org.fest.swing.fixture.JTreeFixture;
@@ -294,9 +295,15 @@ public class GncImportAppDriver
 
 		DialogFixture dialog = _mainWindow.dialog("PROP_EDITOR_DLG");
 		
-		JTableFixture table = dialog.table("IGNORE_RULES");
+		JTabbedPaneFixture tabs = dialog.tabbedPane("PROPERTY_TABS");
+		tabs.selectTab("Ignore");
 		
+		JTableFixture table = dialog.table("IGNORE_RULES");
 		assertThat(table.rowCount(), is(expectedIgnoreRules));
+
+		tabs.selectTab("Acc Override");
+		table = dialog.table("ACC_OVERRIDE_RULES");
+		assertThat(table.rowCount(), is(0));
 		
 		dialog.button("OK_BUTTON").click();
 	}
