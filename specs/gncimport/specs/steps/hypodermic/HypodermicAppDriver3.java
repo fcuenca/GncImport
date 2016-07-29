@@ -290,10 +290,12 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, Map<String, Object> allRules, RuleTester tester)
+			public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
 			{
+				@SuppressWarnings("unchecked")
+				List<MatchingRule> ignoreRules = (List<MatchingRule>) allRules.get("ignore");
 				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
-				_observedAccOverrideRules = new ArrayList<OverrideRule>(accountOverrides);
+				_observedAccOverrideRules = new ArrayList<OverrideRule>();
 				
 				return false;
 			}
@@ -307,10 +309,12 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, Map<String, Object> allRules,RuleTester tester)
+			public boolean editProperties(Map<String, Object> allRules,RuleTester tester)
 			{
+				@SuppressWarnings("unchecked")
+				List<MatchingRule> ignoreRules = (List<MatchingRule>) allRules.get("ignore");
 				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
-				_observedAccOverrideRules = new ArrayList<OverrideRule>(accountOverrides);
+				_observedAccOverrideRules = new ArrayList<OverrideRule>();
 
 				ignoreRules.clear();
 				
@@ -331,20 +335,21 @@ public class HypodermicAppDriver3
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
 			@Override
-			public boolean editProperties(List<MatchingRule> ignoreRules, List<OverrideRule> accountOverrides, Map<String, Object> allRules, RuleTester tester)
+			public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
 			{
+				@SuppressWarnings("unchecked")
+				List<MatchingRule> ignoreRules = (List<MatchingRule>) allRules.get("ignore");
 				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
-				_observedAccOverrideRules = new ArrayList<OverrideRule>(accountOverrides);
+				_observedAccOverrideRules = new ArrayList<OverrideRule>();
 
-				accountOverrides.clear();
-				
-				for (Map<String, String> map : newRules)
-				{
-					String desc = map.get("Description");
-					String account = map.get("Account");
-					
-					accountOverrides.add(new OverrideRule(desc, account));	
-				}
+				//TODO: fix this
+//				for (Map<String, String> map : newRules)
+//				{
+//					String desc = map.get("Description");
+//					String account = map.get("Account");
+//					
+//					accountOverrides.add(new OverrideRule(desc, account));	
+//				}
 				
 				return true;
 			}

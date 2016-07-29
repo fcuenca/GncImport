@@ -15,7 +15,9 @@ import gncimport.ui.presenters.PropertyEditorPresenter;
 import gncimport.ui.swing.PropertyEditorTableModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,9 +51,12 @@ public class PropertyEditorPresenterTests
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2")));
 		
+		Map<String, Object> allRules = new HashMap<String, Object>();
+		allRules.put("ignore", rules);
+
 		when(_view.editProperties(expectedTableModel.capture())).thenReturn(true);
 		
-		assertThat(_presenter.editProperties(rules, null, null, _tester), is(true));
+		assertThat(_presenter.editProperties(allRules, _tester), is(true));
 		
 		PropertyEditorTableModel tm = expectedTableModel.getValue();
 		
@@ -63,23 +68,27 @@ public class PropertyEditorPresenterTests
 	@Test
 	public void signals_that_user_canceled_editing()
 	{
+		Map<String, Object> allRules = new HashMap<String, Object>();
+		
 		when(_view.editProperties(any(PropertyEditorTableModel.class))).thenReturn(false);
 		
-		assertThat(_presenter.editProperties(new ArrayList<MatchingRule>(), null, null, _tester), is(false));
+		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 	}
 	
 	@Test
 	public void displays_error_if_there_are_invalid_properties()
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2", false)));
-		
+				 new MatchingRuleForTest("rule-1"), 
+				 new MatchingRuleForTest("rule-2", false)));
+		Map<String, Object> allRules = new HashMap<String, Object>();
+		allRules.put("ignore", rules);
+
 		when(_view.editProperties(any(PropertyEditorTableModel.class)))
 			.thenReturn(true)
 			.thenReturn(false);
 		
-		assertThat(_presenter.editProperties(rules, null, null, _tester), is(false));
+		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 		
 		verify(_view, times(2)).editProperties(any(PropertyEditorTableModel.class));
 		verify(_view).displayErrorMessage(anyString());

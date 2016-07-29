@@ -2,7 +2,6 @@ package gncimport.ui.presenters;
 
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.transfer.MatchingRule;
-import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.swing.PropertyEditorTableModel;
@@ -20,8 +19,10 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	}
 
 	@Override
-	public boolean editProperties(final List<MatchingRule> rules, List<OverrideRule> accountOverrideRules, Map<String, Object> allRules, RuleTester tester)
+	public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
 	{		
+		@SuppressWarnings("unchecked")
+		List<MatchingRule> rules = (List<MatchingRule>) allRules.get("ignore");
 		PropertyEditorTableModel tableModel = new PropertyEditorTableModel(rules, tester);
 
 		boolean changesConfirmed;
