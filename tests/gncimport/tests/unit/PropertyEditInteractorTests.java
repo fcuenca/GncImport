@@ -124,7 +124,7 @@ public class PropertyEditInteractorTests
 		
 		_interactor.editProperties();
 		
-		verify(_model).replaceRulesWith(expectedEditedRules, expectedRuleMap);
+		verify(_model).replaceRulesWith(expectedRuleMap);
 	}
 	
 	@Test
@@ -134,7 +134,7 @@ public class PropertyEditInteractorTests
 		
 		_interactor.editProperties();
 		
-		verify(_model, never()).replaceRulesWith(anyListOf(MatchingRule.class), anyMapOf(String.class, Object.class));
+		verify(_model, never()).replaceRulesWith(anyMapOf(String.class, Object.class));
 	}
 	
 	@Test

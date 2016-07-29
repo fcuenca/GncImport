@@ -35,7 +35,7 @@ public class PropertyEditInteractor implements RuleTester
 
 		if(_outPort.editProperties(ignoreRules, new ArrayList<OverrideRule>(), allRules, this))
 		{
-			_model.replaceRulesWith(ignoreRules, allRules);
+			_model.replaceRulesWith(allRules);
 		}		
 	}
 	

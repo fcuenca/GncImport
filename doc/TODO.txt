@@ -33,6 +33,7 @@ x move behaviour to OverrideRule (make it less dumb)
 x PropertyEditInteractor.editProperties needs to retrieve/pass on/replace rules
    - remove list arguments from tests
 - Map<String, Object>: consider base class for the Values (?)
+- keys for the map: place constants somewhere else; create enum?
 - textMatchesRule, testRulesWithText -> ??
 
 

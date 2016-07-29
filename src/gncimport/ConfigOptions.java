@@ -233,15 +233,26 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		return txDescription;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void replaceRulesWith(List<MatchingRule> newRules, Map<String, Object> allRules)
+	public void replaceRulesWith(Map<String, Object> allRules)
 	{
-		if(newRules == null || allRules == null)
+		if(allRules == null)
 		{
 			throw new IllegalArgumentException("rules cannot be null");
 		}
-
-		_ignoreRules = new ArrayList<MatchingRule>(newRules);
+		
+		if (allRules.containsKey("ignore"))
+		{
+			List<MatchingRule> theNewRules;
+			theNewRules = (List<MatchingRule>) allRules.get("ignore");
+			_ignoreRules = new ArrayList<MatchingRule>(theNewRules);
+		}
+		else
+		{
+			throw new ProgrammerError("ignore rules not found in map");
+		}
+		
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
 import gncimport.ConfigPropertyBuilder;
 import gncimport.transfer.MatchingRule;
+import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -128,7 +129,7 @@ public class ConfigOptionsImplementsRuleModel
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", newRules);
 		
-		_options.replaceRulesWith(newRules, allRules);
+		_options.replaceRulesWith(allRules);
 						
 		List<MatchingRule> updatedRules = new ArrayList<MatchingRule>();
 		Map<String, Object> updatedAllRules = new HashMap<String, Object>();
@@ -156,7 +157,16 @@ public class ConfigOptionsImplementsRuleModel
 	@Test(expected=IllegalArgumentException.class)
 	public void rejects_null_when_updating_ignore_rules()
 	{
-		_options.replaceRulesWith(new ArrayList<MatchingRule>(), null);
+		_options.replaceRulesWith(null);
+	}
+	
+	@Test(expected=ProgrammerError.class)
+	public void rejects_map_without_proper_keys()
+	{
+		Map<String, Object> allRules = new HashMap<String, Object>();
+		allRules.put("some other key", "irrelevant");
+		
+		_options.replaceRulesWith(allRules);
 	}
 	
 	@Test
@@ -170,7 +180,7 @@ public class ConfigOptionsImplementsRuleModel
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", newRules);
 		
-		_options.replaceRulesWith(newRules, allRules);
+		_options.replaceRulesWith(allRules);
 		
 		assertThatPropertiesMatchRuleDefinitions(newRules, _options.getProperties(), ConfigOptions.IGNORE_RULE_KEY_REGEX);
 	}
