@@ -28,10 +28,13 @@ public class PropertyEditInteractor implements RuleTester
 
 	public void editProperties()
 	{
-		List<MatchingRule> ignoreRules = new ArrayList<MatchingRule>();
 		Map<String, Object> allRules = new HashMap<String, Object>();
+				
+		_model.copyRulesTo(allRules);
 		
-		_model.copyRulesTo(ignoreRules, allRules);
+		//TODO: REMOVE this code
+		List<MatchingRule> ignoreRules = new ArrayList<MatchingRule>(
+				(List<MatchingRule>)allRules.get("ignore"));
 
 		if(_outPort.editProperties(ignoreRules, new ArrayList<OverrideRule>(), allRules, this))
 		{

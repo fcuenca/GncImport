@@ -256,15 +256,12 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	}
 
 	@Override
-	public void copyRulesTo(List<MatchingRule> rules, Map<String, Object> allRules)
+	public void copyRulesTo(Map<String, Object> allRules)
 	{
-		if(rules == null || allRules == null)
+		if(allRules == null)
 		{
 			throw new IllegalArgumentException("rules cannot be null");
 		}
-		
-		rules.clear();
-		rules.addAll(_ignoreRules);
 		
 		allRules.clear();
 		allRules.put("ignore", new ArrayList<MatchingRule>(_ignoreRules));

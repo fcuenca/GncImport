@@ -2,7 +2,6 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
@@ -60,15 +59,9 @@ public class ConfigOptionsImplementsRuleModel
 	@Test
 	public void provides_current_ignore_rules()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>();
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		
-		_options.copyRulesTo(rules, allRules);
-		
-		assertThat(rules, hasSize(2));
-		assertThat(asTestRules(rules), hasItems(
-				new MatchingRuleForTest("WEB TRANSFER"), 
-				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*")));
+		_options.copyRulesTo(allRules);
 		
 		assertThat(allRules.size(), is(1));
 		assertThat(allRules, hasKey("ignore"));
@@ -81,22 +74,16 @@ public class ConfigOptionsImplementsRuleModel
 	@Test(expected=IllegalArgumentException.class)
 	public void rejects_null_when_providing_rules()
 	{
-		_options.copyRulesTo(new ArrayList<MatchingRule>(), null);
+		_options.copyRulesTo(null);
 	}
 	
 	@Test
 	public void replaces_content_when_providing_ignore_rules()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("existing-1"), 
-				new MatchingRuleForTest("existing-2")));
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("some key", "some value");
 		
-		_options.copyRulesTo(rules, allRules);
-		
-		assertThat(rules, hasSize(2));
-		assertThat(asTestRules(rules), not(hasItems(new MatchingRuleForTest("existing-1"), new MatchingRuleForTest("existing-2"))));
+		_options.copyRulesTo(allRules);
 		
 		assertThat(allRules.size(), is(not(0)));
 		assertThat(allRules, not(hasKey("some key")));
@@ -110,7 +97,7 @@ public class ConfigOptionsImplementsRuleModel
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		
 		_options = new ConfigOptions(new Properties());
-		_options.copyRulesTo(rules, allRules);
+		_options.copyRulesTo(allRules);
 		
 		assertThat(rules, is(empty()));
 		
@@ -131,26 +118,18 @@ public class ConfigOptionsImplementsRuleModel
 		
 		_options.replaceRulesWith(allRules);
 						
-		List<MatchingRule> updatedRules = new ArrayList<MatchingRule>();
 		Map<String, Object> updatedAllRules = new HashMap<String, Object>();
 
-		_options.copyRulesTo(updatedRules, updatedAllRules);
-		
-		assertThat(updatedRules, hasSize(3));
-		assertThat(asTestRules(updatedRules), hasItems(
-				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
-				new MatchingRuleForTest("new-rule-1"), 
-				new MatchingRuleForTest("new-rule-2")));
+		_options.copyRulesTo(updatedAllRules);
+
+		newRules.clear(); // just to make sure this list object is not kept inside the options object		
+		allRules.clear(); // just to make sure this list object is not kept inside the options object
 		
 		assertThat(asTestRules((List<MatchingRule>) updatedAllRules.get("ignore")), hasItems(
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-1"), 
 				new MatchingRuleForTest("new-rule-2")));
 
-		newRules.clear(); // just to make sure this list object is not kept inside the options object
-		assertThat(newRules.size(), is(not(updatedRules.size())));
-
-		allRules.clear(); // just to make sure this list object is not kept inside the options object
 		assertThat(allRules.size(), is(not(updatedAllRules.size())));
 	}
 
