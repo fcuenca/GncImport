@@ -9,9 +9,12 @@ import static org.mockito.Mockito.when;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.swing.PropertyEditorTableModel;
+import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -22,66 +25,73 @@ import org.junit.Test;
 public class PropertyEditorTableModelTests
 {
 	private RuleTester _tester;
+	private List<MatchingRule> _ignoreList;
+	private Map<String, Object> _ruleMap;
+	private PropertyEditorTableModel _tableModel;
 	
 	@Before
 	public void Setup()
 	{
 		_tester = mock(RuleTester.class);
+		
+		_ignoreList = new ArrayList<MatchingRule>(ListUtils.list_of(
+				new MatchingRuleForTest("rule-1"), 
+				new MatchingRuleForTest("rule-2")));
+		
+		_ruleMap = new HashMap<String, Object>();
+		_ruleMap.put("ignore", _ignoreList);
+		
+		_tableModel = new PropertyEditorTableModel(_ruleMap, _tester);		
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void rule_map_cannot_be_null()
+	{
+		new PropertyEditorTableModel(null, _tester);	
+	}
+	
+	@Test(expected=ProgrammerError.class)
+	public void rejects_map_without_ignore_list()
+	{
+		new PropertyEditorTableModel(new HashMap<String, Object>(), _tester);	
 	}
 
 	@Test
 	public void displays_list_of_rule_definitions()
-	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
-		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
-		assertThat(tm.getRowCount(), is(2));
-		assertThat(tm.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
-		assertThat(tm.getValueAt(1, 0), is((Object)new MatchingRuleForTest("rule-2")));
+	{		
+		assertThat(_tableModel.getRowCount(), is(2));
+		assertThat(_tableModel.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
+		assertThat(_tableModel.getValueAt(1, 0), is((Object)new MatchingRuleForTest("rule-2")));
 	}
 	
 	@Test
 	public void columns_are_editable()
-	{
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(new ArrayList<MatchingRule>(), _tester);
-		
+	{		
 		for(int i = 0; i < PropertyEditorTableModel.COLUMN_TITLES.length; i++)
 		{
-			assertThat(tm.isCellEditable(1, i), is(true));			
+			assertThat(_tableModel.isCellEditable(1, i), is(true));			
 		}
 	}
 	
 	@Test
 	public void all_columns_have_title()
 	{
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(new ArrayList<MatchingRule>(), _tester);
-
-		assertThat(tm.getColumnCount(), is(PropertyEditorTableModel.COLUMN_TITLES.length));
+		assertThat(_tableModel.getColumnCount(), is(PropertyEditorTableModel.COLUMN_TITLES.length));
 	}
 	
 	@Test
 	public void all_columns_have_types_defined()
 	{
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(new ArrayList<MatchingRule>(), _tester);
-
-		assertThat(tm.getColumnCount(), is(PropertyEditorTableModel.COLUMN_CLASSES.length));
+		assertThat(_tableModel.getColumnCount(), is(PropertyEditorTableModel.COLUMN_CLASSES.length));
 	}
 	
 	@Test
 	public void declared_column_types_match_values_returned()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("some rule")));
-
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-
 		for(int i = 0; i < PropertyEditorTableModel.COLUMN_CLASSES.length; i++)
 		{
-			Class<?> actual = tm.getValueAt(0, i).getClass();
-			Class<?> declared = tm.getColumnClass(i);
+			Class<?> actual = _tableModel.getValueAt(0, i).getClass();
+			Class<?> declared = _tableModel.getColumnClass(i);
 			
 			assertThat(String.format("declared class for column %d (%s) is not compatible actual class (%s)", i, declared, actual),
 					declared.isAssignableFrom(actual), is(true));
@@ -93,70 +103,41 @@ public class PropertyEditorTableModelTests
 
 	@Test
 	public void updates_rule_definitions()
-	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
-		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
-		tm.setValueAt(new MatchingRuleForTest("new value"), 1, 0);
-		assertThat(tm.getValueAt(1, 0), is((Object)new MatchingRuleForTest("new value")));
+	{		
+		_tableModel.setValueAt(new MatchingRuleForTest("new value"), 1, 0);
+		assertThat(_tableModel.getValueAt(1, 0), is((Object)new MatchingRuleForTest("new value")));
 	}
 	
 	@Test
 	public void valid_when_all_rules_are_valid()
-	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
-		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
-		assertThat(tm.isValid(), is(true));
+	{		
+		assertThat(_tableModel.isValid(), is(true));
 	}
 
 	@Test
 	public void invalid_when_at_least_one_rule_is_invalid()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2", false), 
-				new MatchingRuleForTest("rule-3")));
-		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
-		assertThat(tm.isValid(), is(false));
+		_ignoreList.add(new MatchingRuleForTest("rule-2", false));
+				
+		assertThat(_tableModel.isValid(), is(false));
 	}
 	
 	@Test
 	public void rules_can_be_appended()
-	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
+	{		
+		_tableModel.newRow();
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
-		tm.newRow();
-		
-		assertThat(tm.getRowCount(), is(3));
-		assertThat(tm.getValueAt(2, 0), is((Object)new MatchingRuleForTest("", false)));
+		assertThat(_tableModel.getRowCount(), is(3));
+		assertThat(_tableModel.getValueAt(2, 0), is((Object)new MatchingRuleForTest("", false)));
 	}
 	
 	@Test
 	public void adding_rule_notifies_listeners()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
-		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
 		TableModelListener listener = mock(TableModelListener.class);
-		tm.addTableModelListener(listener);
+		_tableModel.addTableModelListener(listener);
 		
-		tm.newRow();
+		_tableModel.newRow();
 		
 		verify(listener).tableChanged(any(TableModelEvent.class));
 	}
@@ -164,48 +145,30 @@ public class PropertyEditorTableModelTests
 	@Test
 	public void rules_can_be_removed()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
-		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
-		tm.removeRule(1);		
-		assertThat(tm.getRowCount(), is(1));
-		assertThat(tm.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
+		_tableModel.removeRule(1);		
+		assertThat(_tableModel.getRowCount(), is(1));
+		assertThat(_tableModel.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
 
-		tm.removeRule(0);		
-		assertThat(tm.getRowCount(), is(0));
+		_tableModel.removeRule(0);		
+		assertThat(_tableModel.getRowCount(), is(0));
 	}
 
 	@Test
 	public void removing_rules_out_of_bounds_is_ignored()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
+		_tableModel.removeRule(-1);
+		_tableModel.removeRule(2);
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
-		tm.removeRule(-1);
-		tm.removeRule(2);
-		
-		assertThat(tm.getRowCount(), is(2));
+		assertThat(_tableModel.getRowCount(), is(2));
 	}
 
 	@Test
 	public void removing_rule_notifies_listeners()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
-		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
 		TableModelListener listener = mock(TableModelListener.class);
-		tm.addTableModelListener(listener);
+		_tableModel.addTableModelListener(listener);
 		
-		tm.removeRule(0);
+		_tableModel.removeRule(0);
 		
 		verify(listener).tableChanged(any(TableModelEvent.class));
 	}
@@ -213,15 +176,8 @@ public class PropertyEditorTableModelTests
 	@Test
 	public void can_test_rules_against_sample_text()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
+		when(_tester.tryRulesWithText("rule-1", _ignoreList)).thenReturn(true);
 		
-		PropertyEditorTableModel tm = new PropertyEditorTableModel(rules, _tester);
-		
-		when(_tester.tryRulesWithText("rule-1", rules)).thenReturn(true);
-		
-		assertThat(tm.testRulesWithText("rule-1"), is(true));
-		
+		assertThat(_tableModel.testRulesWithText("rule-1"), is(true));
 	}
 }

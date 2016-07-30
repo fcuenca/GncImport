@@ -69,6 +69,7 @@ public class PropertyEditorPresenterTests
 	public void signals_that_user_canceled_editing()
 	{
 		Map<String, Object> allRules = new HashMap<String, Object>();
+		allRules.put("ignore", new ArrayList<MatchingRule>());
 		
 		when(_view.editProperties(any(PropertyEditorTableModel.class))).thenReturn(false);
 		

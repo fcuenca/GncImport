@@ -32,6 +32,9 @@ public class HypodermicAppDriver3
 	private AccountData _targetHierarchyRoot;
 	private AccountData _sourceAccount;
 	private List<AccountData> _candidateAccList;
+	
+	private List<MatchingRule> _observedIgnoreRules = new ArrayList<MatchingRule>();	
+	private List<OverrideRule> _observedAccOverrideRules = new ArrayList<OverrideRule>();	
 
 	class AccSelectionOutput implements AccSelectionInteractor.OutPort
 	{
@@ -76,9 +79,6 @@ public class HypodermicAppDriver3
 		}
 	};
 	
-	private List<MatchingRule> _observedIgnoreRules = new ArrayList<MatchingRule>();	
-	private List<OverrideRule> _observedAccOverrideRules = new ArrayList<OverrideRule>();	
-		
 	public HypodermicAppDriver3(String defaultAccName, ConfigOptions config)
 	{
 		_config = config;

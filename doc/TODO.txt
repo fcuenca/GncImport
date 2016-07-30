@@ -18,23 +18,12 @@ Stories:
 - try rules 
 
 Tasks:
-x TxOverrideRule -> replace with a composite RuleDefinition
-x Make TxOverride public to be used as transfer object
-x Better name for RuleDefinition -> is not a rule; it's some value entered by the user (directly or indirectly)
-x move behaviour to OverrideRule (make it less dumb)
-- EditPropertiesDialog -> needs a new model that contains several table models
-  x add tabs to Property Edit dialog
-  x add second tab for Override Rules
-x ConfigOptions: get/set account override rules (copy..., replace...)
-   x copyProperties: use the map instead of the list
-   x replaceProperties: use the map
-   x remove list parameters from outPort.editProperties
-x PropertyEditInteractor.editProperties needs to retrieve/pass on/replace rules
-   x remove list arguments from tests
-* PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
+- Config object to send acc override rules in the rule map -> should make the spec pass
+- PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
 - Map<String, Object>: consider base class for the Values (?)
 - keys for the map: place constants somewhere else; create enum?
 - textMatchesRule, testRulesWithText -> ??
+- UI test: change test to check contents of the acc override tab
 
 
 General improvements:
