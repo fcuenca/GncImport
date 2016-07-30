@@ -16,7 +16,6 @@ import static org.mockito.Mockito.when;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.models.RuleModel;
 import gncimport.transfer.MatchingRule;
-import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
 
 import java.util.ArrayList;
@@ -36,15 +35,10 @@ import org.mockito.stubbing.Answer;
 @RunWith(MockitoJUnitRunner.class)
 public class PropertyEditInteractorTests
 {
-	
 	private PropertyEditInteractor.OutPort _outPort;
 	private RuleModel _model;
 	private PropertyEditInteractor _interactor;
 
-	@Captor
-	private ArgumentCaptor<List<MatchingRule>> _expectedList;
-	@Captor
-	private ArgumentCaptor<List<OverrideRule>> _expectedAccOverrideList;
 	@Captor
 	private ArgumentCaptor<Map<String, Object>> _expectedRules;
 	
@@ -88,7 +82,7 @@ public class PropertyEditInteractorTests
 	public void updates_edited_properties_when_user_makes_changes()
 	{
 		final Map<String, Object> expectedRuleMap = new HashMap<String, Object>();
-		expectedRuleMap.put("ignore", new ArrayList<MatchingRule>()); //TODO: go back to plain strings
+		expectedRuleMap.put("first", "edited list of rules 2");
 		expectedRuleMap.put("second", "edited list of rules 2");
 		
 		doAnswer(new Answer<Boolean>(){
@@ -114,20 +108,6 @@ public class PropertyEditInteractorTests
 	@Test
 	public void keeps_properties_unchanged_when_user_cancel_edits()
 	{
-		doAnswer(new Answer<Void>(){
-			@Override
-			public Void answer(InvocationOnMock invocation) throws Throwable
-			{
-                Object[] args = invocation.getArguments();
-                @SuppressWarnings("unchecked")
-				Map<String, Object> allRules = (Map<String, Object>) args[0];
-                allRules.put("ignore", new ArrayList<MatchingRule>()); //TODO: go back to just strings
-                
-				return null;
-			}
-			
-		}).when(_model).copyRulesTo(anyMapOf(String.class, Object.class));
-
 		when(_outPort.editProperties(anyMapOf(String.class, Object.class), same(_interactor))).thenReturn(false);
 		
 		_interactor.editProperties();

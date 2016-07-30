@@ -25,13 +25,13 @@ x move behaviour to OverrideRule (make it less dumb)
 - EditPropertiesDialog -> needs a new model that contains several table models
   x add tabs to Property Edit dialog
   x add second tab for Override Rules
-  - PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
-* ConfigOptions: get/set account override rules (copy..., replace...)
+x ConfigOptions: get/set account override rules (copy..., replace...)
    x copyProperties: use the map instead of the list
    x replaceProperties: use the map
-   * remove list parameters from outPort.editProperties
+   x remove list parameters from outPort.editProperties
 x PropertyEditInteractor.editProperties needs to retrieve/pass on/replace rules
-   - remove list arguments from tests
+   x remove list arguments from tests
+* PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
 - Map<String, Object>: consider base class for the Values (?)
 - keys for the map: place constants somewhere else; create enum?
 - textMatchesRule, testRulesWithText -> ??
