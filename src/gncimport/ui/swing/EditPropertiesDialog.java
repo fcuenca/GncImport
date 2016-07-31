@@ -12,12 +12,14 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class EditPropertiesDialog extends JDialog
 {
 	private boolean _okClicked;
-	private IgnorePanel _ignorePanel;
+	private PropertyEditorPanel _currentPanel;
 	
 	public EditPropertiesDialog(Frame aFrame, PropertyEditorTableModel tableModel)
 	{
@@ -26,21 +28,35 @@ public class EditPropertiesDialog extends JDialog
 		setLayout(new BorderLayout());
 		setTitle("Property Editor");
 		setName("PROP_EDITOR_DLG");
-		
-		JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
-		tabs.setName("PROPERTY_TABS");
-		
-		_ignorePanel = new IgnorePanel(tableModel);
-
-		tabs.addTab("Ignore", _ignorePanel);
-		tabs.addTab("Acc Override", new AccOverridePanel());
-				
-		add(tabs, BorderLayout.PAGE_START);
+						
+		add(createTabs(tableModel), BorderLayout.PAGE_START);
 		add(createOkCancelButtonPanel(), BorderLayout.PAGE_END);
 
 		setupCloseOnESCkey();
 		
 		pack();
+	}
+
+	private JTabbedPane createTabs(PropertyEditorTableModel tableModel)
+	{
+		final JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
+		tabs.setName("PROPERTY_TABS");
+						
+		tabs.addTab("Ignore", new IgnorePanel(tableModel));
+		tabs.addTab("Acc Override", new AccOverridePanel());
+		
+		_currentPanel = ((PropertyEditorPanel)tabs.getSelectedComponent());
+		tabs.addChangeListener(new ChangeListener()
+		{
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				_currentPanel.stopEditing();
+				_currentPanel= ((PropertyEditorPanel)tabs.getSelectedComponent());
+			}
+		});
+		
+		return tabs;
 	}
 	
 	private JPanel createOkCancelButtonPanel()
@@ -82,10 +98,7 @@ public class EditPropertiesDialog extends JDialog
 
 	private void onOkClicked()
 	{
-		if (_ignorePanel._ignoreTable.getCellEditor() != null) 
-		{
-		      _ignorePanel._ignoreTable.getCellEditor().stopCellEditing();
-		}		
+		_currentPanel.stopEditing();
 		
 		setVisible(false);
 		dispose();

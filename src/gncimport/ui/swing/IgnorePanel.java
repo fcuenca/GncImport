@@ -9,14 +9,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 @SuppressWarnings("serial")
-public class IgnorePanel extends JPanel
+public class IgnorePanel extends PropertyEditorPanel
 {
 	JTable _ignoreTable;
 
@@ -99,4 +98,15 @@ public class IgnorePanel extends JPanel
 		
 		return toolBar;
 	}
+	
+	@Override
+	public void stopEditing()
+	{
+		if (_ignoreTable.getCellEditor() != null) 
+		{
+		      _ignoreTable.getCellEditor().stopCellEditing();
+		}
+	}
+
+
 }
