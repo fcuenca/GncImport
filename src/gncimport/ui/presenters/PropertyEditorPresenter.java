@@ -20,9 +20,8 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	@Override
 	public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
 	{		
-		PropertyEditorTableModel tableModel = new PropertyEditorTableModel(allRules, tester);
 		Map<String, PropertyEditorTableModel> modelMap = new HashMap<String, PropertyEditorTableModel>();
-		modelMap.put("ignore", tableModel);
+		modelMap.put("ignore", new PropertyEditorTableModel(allRules, tester));
 		
 		boolean changesConfirmed;
 		
@@ -34,7 +33,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 			{
 				return false;
 			}
-			else if(tableModel.isValid())
+			else if(allModelsAreValid(modelMap))
 			{
 				return true;
 			}
@@ -43,5 +42,14 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 				_view.displayErrorMessage("Fix invalid properties!!");
 			}
 		}
+	}
+
+	private boolean allModelsAreValid(Map<String, PropertyEditorTableModel> modelMap)
+	{
+		for (PropertyEditorTableModel tm : modelMap.values())
+		{
+			if(!tm.isValid()) return false;
+		}
+		return true;
 	}
 }
