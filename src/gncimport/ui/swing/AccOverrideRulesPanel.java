@@ -6,9 +6,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 @SuppressWarnings("serial")
-public class AccOverridePanel extends PropertyEditorPanel
+public class AccOverrideRulesPanel extends PropertyEditorPanel
 {
-	public AccOverridePanel()
+	public AccOverrideRulesPanel()
 	{
 		super();
 		setLayout(new BorderLayout());

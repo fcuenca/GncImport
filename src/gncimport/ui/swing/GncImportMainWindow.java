@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
@@ -421,9 +422,9 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 	
 	@Override
-	public boolean editProperties(PropertyEditorTableModel tm)
+	public boolean editProperties(Map<String, PropertyEditorTableModel> models)
 	{
-		EditPropertiesDialog dlg = new EditPropertiesDialog(null, tm);
+		EditPropertiesDialog dlg = new EditPropertiesDialog(null, models);
 		
 		return dlg.editProperties();
 	}

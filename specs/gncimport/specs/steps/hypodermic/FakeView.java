@@ -7,6 +7,7 @@ import gncimport.ui.swing.TxTableModel;
 
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -115,7 +116,7 @@ public class FakeView implements TxView
 	}
 
 	@Override
-	public boolean editProperties(PropertyEditorTableModel tm)
+	public boolean editProperties(Map<String, PropertyEditorTableModel> models)
 	{		
 		return false;
 	}

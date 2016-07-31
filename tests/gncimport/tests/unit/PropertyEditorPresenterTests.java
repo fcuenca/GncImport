@@ -2,8 +2,8 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyMapOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -30,7 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class PropertyEditorPresenterTests
 {
 	@Captor
-	private ArgumentCaptor<PropertyEditorTableModel> expectedTableModel;
+	private ArgumentCaptor<Map<String, PropertyEditorTableModel>> expectedModelMap;
 	
 	private TxView _view;
 	private PropertyEditorPresenter _presenter;
@@ -54,11 +54,11 @@ public class PropertyEditorPresenterTests
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", rules);
 
-		when(_view.editProperties(expectedTableModel.capture())).thenReturn(true);
+		when(_view.editProperties(expectedModelMap.capture())).thenReturn(true);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(true));
 		
-		PropertyEditorTableModel tm = expectedTableModel.getValue();
+		PropertyEditorTableModel tm = expectedModelMap.getValue().get("ignore");
 		
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
@@ -71,7 +71,7 @@ public class PropertyEditorPresenterTests
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", new ArrayList<MatchingRule>());
 		
-		when(_view.editProperties(any(PropertyEditorTableModel.class))).thenReturn(false);
+		when(_view.editProperties(anyMapOf(String.class, PropertyEditorTableModel.class))).thenReturn(false);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 	}
@@ -85,13 +85,13 @@ public class PropertyEditorPresenterTests
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", rules);
 
-		when(_view.editProperties(any(PropertyEditorTableModel.class)))
+		when(_view.editProperties(anyMapOf(String.class, PropertyEditorTableModel.class)))
 			.thenReturn(true)
 			.thenReturn(false);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 		
-		verify(_view, times(2)).editProperties(any(PropertyEditorTableModel.class));
+		verify(_view, times(2)).editProperties(anyMapOf(String.class, PropertyEditorTableModel.class));
 		verify(_view).displayErrorMessage(anyString());
 	}
 }

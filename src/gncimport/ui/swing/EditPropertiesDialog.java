@@ -5,6 +5,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -21,7 +22,7 @@ public class EditPropertiesDialog extends JDialog
 	private boolean _okClicked;
 	private PropertyEditorPanel _currentPanel;
 	
-	public EditPropertiesDialog(Frame aFrame, PropertyEditorTableModel tableModel)
+	public EditPropertiesDialog(Frame aFrame, Map<String, PropertyEditorTableModel> models)
 	{
 		super(aFrame, true);
 
@@ -29,7 +30,7 @@ public class EditPropertiesDialog extends JDialog
 		setTitle("Property Editor");
 		setName("PROP_EDITOR_DLG");
 						
-		add(createTabs(tableModel), BorderLayout.PAGE_START);
+		add(createTabs(models), BorderLayout.PAGE_START);
 		add(createOkCancelButtonPanel(), BorderLayout.PAGE_END);
 
 		setupCloseOnESCkey();
@@ -37,13 +38,13 @@ public class EditPropertiesDialog extends JDialog
 		pack();
 	}
 
-	private JTabbedPane createTabs(PropertyEditorTableModel tableModel)
+	private JTabbedPane createTabs(Map<String, PropertyEditorTableModel> models)
 	{
 		final JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
 		tabs.setName("PROPERTY_TABS");
 						
-		tabs.addTab("Ignore", new IgnorePanel(tableModel));
-		tabs.addTab("Acc Override", new AccOverridePanel());
+		tabs.addTab("Ignore", new IgnoreRulesPanel(models.get("ignore")));
+		tabs.addTab("Acc Override", new AccOverrideRulesPanel());
 		
 		_currentPanel = ((PropertyEditorPanel)tabs.getSelectedComponent());
 		tabs.addChangeListener(new ChangeListener()

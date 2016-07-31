@@ -15,11 +15,11 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 @SuppressWarnings("serial")
-public class IgnorePanel extends PropertyEditorPanel
+public class IgnoreRulesPanel extends PropertyEditorPanel
 {
 	JTable _ignoreTable;
 
-	public IgnorePanel(PropertyEditorTableModel ignoreTblModel)
+	public IgnoreRulesPanel(PropertyEditorTableModel ignoreTblModel)
 	{
 		super();
 		setLayout(new BorderLayout());

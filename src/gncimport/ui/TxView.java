@@ -6,6 +6,7 @@ import gncimport.ui.swing.PropertyEditorTableModel;
 import gncimport.ui.swing.TxTableModel;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -46,6 +47,6 @@ public interface TxView
 
 	void selectExpenseAccForTx(AccountData newAcc);
 
-	boolean editProperties(PropertyEditorTableModel tableModel);
+	boolean editProperties(Map<String, PropertyEditorTableModel> models);
 
 }

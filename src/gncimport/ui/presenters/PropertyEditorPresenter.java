@@ -5,6 +5,7 @@ import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.swing.PropertyEditorTableModel;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
@@ -20,12 +21,14 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
 	{		
 		PropertyEditorTableModel tableModel = new PropertyEditorTableModel(allRules, tester);
-
+		Map<String, PropertyEditorTableModel> modelMap = new HashMap<String, PropertyEditorTableModel>();
+		modelMap.put("ignore", tableModel);
+		
 		boolean changesConfirmed;
 		
 		while(true)
 		{
-			changesConfirmed = _view.editProperties(tableModel);
+			changesConfirmed = _view.editProperties(modelMap);
 			
 			if(!changesConfirmed)
 			{
