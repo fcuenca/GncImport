@@ -24,6 +24,7 @@ Tasks:
 - keys for the map: place constants somewhere else; create enum?
 - textMatchesRule, testRulesWithText -> ??
 - UI test: change test to check contents of the acc override tab
+- duplication in Config object & tests re:keys in map, types of objects in lists, etc
 
 
 General improvements:

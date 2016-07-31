@@ -400,6 +400,13 @@ public class MainWindowSteps
 		assertThat(actualRules, hasItems(expectedRules.toArray(new String[0])));
 	}
 	
+	@Then("^the app displays existing account override rules:$")
+	public void the_app_displays_existing_account_override_rules(DataTable arg1) throws Throwable
+	{
+		//TODO
+		fail("niy");
+	}
+	
 	@Then("^the app displays empty ignore rule list$")
 	public void the_app_displays_empty_ignore_rule_list() throws Throwable
 	{

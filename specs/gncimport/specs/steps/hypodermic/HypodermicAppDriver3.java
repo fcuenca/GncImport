@@ -289,13 +289,12 @@ public class HypodermicAppDriver3
 	{
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
+			@SuppressWarnings("unchecked")
 			@Override
 			public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
 			{
-				@SuppressWarnings("unchecked")
-				List<MatchingRule> ignoreRules = (List<MatchingRule>) allRules.get("ignore");
-				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
-				_observedAccOverrideRules = new ArrayList<OverrideRule>();
+				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get("ignore"));
+				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get("acc-override"));
 				
 				return false;
 			}
@@ -308,19 +307,18 @@ public class HypodermicAppDriver3
 	{		
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
+			@SuppressWarnings("unchecked")
 			@Override
 			public boolean editProperties(Map<String, Object> allRules,RuleTester tester)
 			{
-				@SuppressWarnings("unchecked")
-				List<MatchingRule> ignoreRules = (List<MatchingRule>) allRules.get("ignore");
-				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
-				_observedAccOverrideRules = new ArrayList<OverrideRule>();
+				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get("ignore"));
+				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get("acc-override"));
 
-				ignoreRules.clear();
+				((List<MatchingRule>) allRules.get("ignore")).clear();
 				
 				for (String rule : newRules)
 				{
-					ignoreRules.add(new UserEnteredMatchingRule(rule));					
+					((List<MatchingRule>) allRules.get("ignore")).add(new UserEnteredMatchingRule(rule));					
 				}
 				
 				return true;
@@ -334,22 +332,22 @@ public class HypodermicAppDriver3
 	{
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
+			@SuppressWarnings("unchecked")
 			@Override
 			public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
 			{
-				@SuppressWarnings("unchecked")
-				List<MatchingRule> ignoreRules = (List<MatchingRule>) allRules.get("ignore");
-				_observedIgnoreRules = new ArrayList<MatchingRule>(ignoreRules);
-				_observedAccOverrideRules = new ArrayList<OverrideRule>();
+				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get("ignore"));
+				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get("acc-override"));
 
-				//TODO: fix this
-//				for (Map<String, String> map : newRules)
-//				{
-//					String desc = map.get("Description");
-//					String account = map.get("Account");
-//					
-//					accountOverrides.add(new OverrideRule(desc, account));	
-//				}
+				((List<OverrideRule>) allRules.get("acc-override")).clear();
+
+				for (Map<String, String> map : newRules)
+				{
+					String desc = map.get("Description");
+					String account = map.get("Account");
+					
+					((List<OverrideRule>) allRules.get("acc-override")).add(new OverrideRule(desc, account));	
+				}
 				
 				return true;
 			}

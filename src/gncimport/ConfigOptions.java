@@ -242,17 +242,18 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			throw new IllegalArgumentException("rules cannot be null");
 		}
 		
-		if (allRules.containsKey("ignore"))
+		if (!(allRules.containsKey("ignore") && allRules.containsKey("acc-override")))
 		{
-			List<MatchingRule> theNewRules;
-			theNewRules = (List<MatchingRule>) allRules.get("ignore");
-			_ignoreRules = new ArrayList<MatchingRule>(theNewRules);
+			throw new ProgrammerError("Improper keys found in Rule Map: " + allRules.keySet());			
 		}
-		else
-		{
-			throw new ProgrammerError("ignore rules not found in map");
-		}
+
+	
+		List<MatchingRule> newIgnores;
+		newIgnores = (List<MatchingRule>) allRules.get("ignore");
+		_ignoreRules = new ArrayList<MatchingRule>(newIgnores);
 		
+		List<OverrideRule> newOverrides = (List<OverrideRule>)allRules.get("acc-override");
+		_accountOverrideRules = new ArrayList<OverrideRule>(newOverrides);	
 	}
 
 	@Override
@@ -265,6 +266,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		
 		allRules.clear();
 		allRules.put("ignore", new ArrayList<MatchingRule>(_ignoreRules));
+		allRules.put("acc-override", new ArrayList<OverrideRule>(_accountOverrideRules));
 	}
 
 	public boolean testRulesWithText(String text, Iterable<MatchingRule> candidateRules)

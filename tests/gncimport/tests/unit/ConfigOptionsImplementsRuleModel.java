@@ -1,5 +1,6 @@
 package gncimport.tests.unit;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.is;
@@ -9,6 +10,8 @@ import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
 import gncimport.ConfigPropertyBuilder;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.OverrideRule;
+import gncimport.transfer.UserEnteredMatchingRule;
 import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
@@ -63,11 +66,18 @@ public class ConfigOptionsImplementsRuleModel
 		
 		_options.copyRulesTo(allRules);
 		
-		assertThat(allRules.size(), is(1));
+		assertThat(allRules.size(), is(2));
+
 		assertThat(allRules, hasKey("ignore"));
+		assertThat(allRules, hasKey("acc-override"));
+
 		assertThat(asTestRules((List<MatchingRule>) allRules.get("ignore")), hasItems(
 				new MatchingRuleForTest("WEB TRANSFER"), 
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*")));
+		
+		assertThat((List<OverrideRule>)allRules.get("acc-override"), hasItems(
+				new OverrideRule("acc-desc-1", "acc-override-1"),
+				new OverrideRule("acc-desc-2", "acc-override-2")));
 	}
 
 
@@ -91,7 +101,7 @@ public class ConfigOptionsImplementsRuleModel
 		
 	@SuppressWarnings("unchecked")
 	@Test
-	public void can_provide_empty_list_of_ignore_rules()
+	public void if_no_properties_are_defined_empty_rule_lists_are_returned()
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>();
 		Map<String, Object> allRules = new HashMap<String, Object>();
@@ -103,18 +113,25 @@ public class ConfigOptionsImplementsRuleModel
 		
 		assertThat(allRules, hasKey("ignore"));
 		assertThat((List<MatchingRule>)allRules.get("ignore"), is(empty()));
+		assertThat(allRules, hasKey("acc-override"));
+		assertThat((List<OverrideRule>)allRules.get("acc-override"), is(empty()));
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void updates_ignore_rules_making_a_copy_of_provided_list()
 	{
-		List<MatchingRule> newRules = new ArrayList<MatchingRule>(ListUtils.list_of(
+		List<MatchingRule> newIgnores = new ArrayList<MatchingRule>(ListUtils.list_of(
 				new MatchingRuleForTest("new-rule-1"), 
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-2")));
+		
+		List<OverrideRule> newAccOverrides = new ArrayList<OverrideRule>(ListUtils.list_of(
+				new OverrideRule("new-desc", "new-override")));
+		
 		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("ignore", newRules);
+		allRules.put("ignore", newIgnores);
+		allRules.put("acc-override", newAccOverrides);
 		
 		_options.replaceRulesWith(allRules);
 						
@@ -122,13 +139,19 @@ public class ConfigOptionsImplementsRuleModel
 
 		_options.copyRulesTo(updatedAllRules);
 
-		newRules.clear(); // just to make sure this list object is not kept inside the options object		
-		allRules.clear(); // just to make sure this list object is not kept inside the options object
+		// just to make sure this list object is not kept inside the options object
+		newIgnores.clear();
+		newAccOverrides.clear();
+		allRules.clear(); 
 		
 		assertThat(asTestRules((List<MatchingRule>) updatedAllRules.get("ignore")), hasItems(
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-1"), 
 				new MatchingRuleForTest("new-rule-2")));
+		
+		assertThat((List<OverrideRule>)updatedAllRules.get("acc-override"), hasItems(
+				new OverrideRule("new-desc", "new-override")));
+
 
 		assertThat(allRules.size(), is(not(updatedAllRules.size())));
 	}
@@ -140,28 +163,47 @@ public class ConfigOptionsImplementsRuleModel
 	}
 	
 	@Test(expected=ProgrammerError.class)
-	public void rejects_map_without_proper_keys()
+	public void rejects_map_without_ignore_list()
 	{
 		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("some other key", "irrelevant");
+		allRules.put("acc-override", "irrelevant");
 		
 		_options.replaceRulesWith(allRules);
 	}
 	
-	@Test
-	public void updated_ignore_rules_added_to_property_file()
+	@Test(expected=ProgrammerError.class)
+	public void rejects_map_without_accOverride_list()
 	{
-		List<MatchingRule> newRules = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("new-rule-1"), 
-				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
-				new MatchingRuleForTest("new-rule-2")));
-		
 		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("ignore", newRules);
+		allRules.put("ignore", "irrelevant");
 		
 		_options.replaceRulesWith(allRules);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void updated_rules_added_to_property_file()
+	{
+		List<MatchingRule> newIgnores = new ArrayList<MatchingRule>(ListUtils.list_of(
+				new UserEnteredMatchingRule("new-rule-1"), 
+				new UserEnteredMatchingRule("MISC PAYMENT - RBC CREDIT CARD.*"), 
+				new UserEnteredMatchingRule("new-rule-2")));
 		
-		assertThatPropertiesMatchRuleDefinitions(newRules, _options.getProperties(), ConfigOptions.IGNORE_RULE_KEY_REGEX);
+		List<OverrideRule> newAccOverrides = new ArrayList<OverrideRule>(ListUtils.list_of(
+				new OverrideRule("new-desc", "new-override")));
+
+		Map<String, Object> allRules = new HashMap<String, Object>();
+		allRules.put("ignore", newIgnores);
+		allRules.put("acc-override", newAccOverrides);
+
+		_options.replaceRulesWith(allRules);
+				
+		ConfigOptions newConfig = new ConfigOptions(_options.getProperties());
+		Map<String, Object> newAllRules = new HashMap<String, Object>();
+		newConfig.copyRulesTo(newAllRules);
+		
+		assertThat((List<MatchingRule>)newAllRules.get("ignore"), containsInAnyOrder(newIgnores.toArray()));
+		assertThat((List<OverrideRule>)newAllRules.get("acc-override"), containsInAnyOrder(newAccOverrides.toArray()));
 	}
 
 	@Test
@@ -225,22 +267,6 @@ public class ConfigOptionsImplementsRuleModel
 		assertThat("unxpected number of properties found", propCount, is(newRules.size()));
 	}
 
-	private void assertThatPropertiesMatchRuleDefinitions(List<MatchingRule> newRules, Properties properties, String propKeyRegex)
-	{
-		int propCount = 0;
-		for (String key : properties.stringPropertyNames())
-		{
-			if (key.matches(propKeyRegex))
-			{
-				String value = properties.getProperty(key);
-				
-				assertThat("Unexpected property value found: " + value, newRules.indexOf(new MatchingRuleForTest(value)), is(not(-1)));
-				propCount++;
-			}
-		}
-		assertThat("unxpected number of properties found", propCount, is(newRules.size()));
-	}
-	
 	private void assertMonthlyAccListMatchesListInOrder(List<String> newRules, Properties properties)
 	{
 		int propCount = 0;

@@ -25,4 +25,10 @@ Feature: Editing Configuration Properties
 			|MISC PAYMENT - GOODLIFE CLUBS   |Health  |
 			|SAN CRISTOBAL SEG 1146ROSARIO.* |Casa Cordoba|
 	    Then the properties file now contains 3 account override rules   
-		
+	    When properties are displayed
+		Then the app displays existing account override rules:
+			|Description                     |Account |                    
+			|MISC PAYMENT - IMH POOL I LP    |Housing |
+			|MISC PAYMENT - GOODLIFE CLUBS   |Health  |
+			|SAN CRISTOBAL SEG 1146ROSARIO.* |Casa Cordoba|
+			
