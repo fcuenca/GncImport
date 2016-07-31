@@ -207,7 +207,7 @@ public class MainWindowSteps
 	@Then("^transactions can be associated with sub-accounts:$")
 	public void transactions_can_be_associated_with_sub_accounts(DataTable expectedAccounts) throws Throwable
 	{
-		List<List<String>> actual = buildObservedAccountList(expectedAccounts.topCells());
+		List<List<String>> actual = buildObservedAccountDiffList(expectedAccounts.topCells());
 		expectedAccounts.diff(actual);
 	}
 
@@ -401,10 +401,10 @@ public class MainWindowSteps
 	}
 	
 	@Then("^the app displays existing account override rules:$")
-	public void the_app_displays_existing_account_override_rules(DataTable arg1) throws Throwable
+	public void the_app_displays_existing_account_override_rules(DataTable expectedRules) throws Throwable
 	{
-		//TODO
-		fail("niy");
+		List<List<String>> actual = buildObservedAccountOverrideDiffList(expectedRules.topCells());
+		expectedRules.diff(actual);
 	}
 	
 	@Then("^the app displays empty ignore rule list$")
@@ -417,7 +417,7 @@ public class MainWindowSteps
 	@Then("^the app displays empty account override rule list$")
 	public void the_app_displays_empty_account_override_rule_list() throws Throwable
 	{
-		List<String> actualRules = app().observedAccountOverrideRules();
+		List<List<String>> actualRules = app().observedAccountOverrideRules();
 		assertThat(actualRules, is(empty()));
 	}
 
@@ -475,7 +475,7 @@ public class MainWindowSteps
 		return builder.build();
 	}
 
-	private List<List<String>> buildObservedAccountList(List<String> tableHeaders)
+	private List<List<String>> buildObservedAccountDiffList(List<String> tableHeaders)
 	{
 		List<List<String>> actual = new ArrayList<List<String>>();
 
@@ -490,6 +490,16 @@ public class MainWindowSteps
 			i++;
 		}
 		return actual;
+	}
+	
+	private List<List<String>> buildObservedAccountOverrideDiffList(List<String> topCells)
+	{
+		List<List<String>> rules = new ArrayList<List<String>>();
+		
+		rules.add(topCells);
+		rules.addAll(app().observedAccountOverrideRules());
+		
+		return rules;
 	}
 
 	private String buildRegexForNonMatchingTransactionDesc()

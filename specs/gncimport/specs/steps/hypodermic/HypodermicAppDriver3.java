@@ -8,6 +8,7 @@ import gncimport.interactors.PropertyEditInteractor;
 import gncimport.interactors.AccSelectionInteractor.NewHierarchyOpts;
 import gncimport.interactors.InteractorFactory;
 import gncimport.interactors.TxBrowseInteractor;
+import gncimport.tests.unit.ListUtils;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
 import gncimport.transfer.OverrideRule;
@@ -422,13 +423,13 @@ public class HypodermicAppDriver3
 		return rules;
 	}
 
-	public List<String> observedAccountOverrideRules()
+	public List<List<String>> observedAccountOverrideRules()
 	{
-		List<String> rules = new ArrayList<String>();
+		List<List<String>> rules = new ArrayList<List<String>>();
 		
 		for (OverrideRule rule : _observedAccOverrideRules)
 		{
-			rules.add(rule.textToMatch.text() + "|" + rule.override.text());
+			rules.add(new ArrayList<String>(ListUtils.list_of(rule.textToMatch.text(), rule.override.text())));
 		}
 		
 		return rules;
