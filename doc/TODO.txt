@@ -18,7 +18,7 @@ Stories:
 - try rules 
 
 Tasks:
-- Config object to send acc override rules in the rule map -> should make the spec pass
+* implement UI
 - PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
 - Map<String, Object>: consider base class for the Values (?)
 - keys for the map: place constants somewhere else; create enum?
