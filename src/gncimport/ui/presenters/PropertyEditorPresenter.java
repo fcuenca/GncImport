@@ -1,11 +1,13 @@
 package gncimport.ui.presenters;
 
 import gncimport.interactors.PropertyEditInteractor;
+import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.swing.PropertyEditorTableModel;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
@@ -20,8 +22,11 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	@Override
 	public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
 	{		
+		@SuppressWarnings("unchecked")
+		List<MatchingRule> ignoreRules = (List<MatchingRule>)allRules.get("ignore");
+		
 		Map<String, PropertyEditorTableModel> modelMap = new HashMap<String, PropertyEditorTableModel>();
-		modelMap.put("ignore", new PropertyEditorTableModel(allRules, tester));
+		modelMap.put("ignore", new PropertyEditorTableModel(ignoreRules, tester));
 		
 		boolean changesConfirmed;
 		

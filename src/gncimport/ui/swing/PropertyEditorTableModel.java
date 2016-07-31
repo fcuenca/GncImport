@@ -3,10 +3,8 @@ package gncimport.ui.swing;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
 import gncimport.transfer.UserEnteredMatchingRule;
-import gncimport.utils.ProgrammerError;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -19,16 +17,11 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 	private static final long serialVersionUID = 9060984673285510233L;
 	private RuleTester _ruleTester;
 
-	public PropertyEditorTableModel(Map<String, Object> allRules, RuleTester tester)
+	public PropertyEditorTableModel(List<MatchingRule> ignoreRules, RuleTester tester)
 	{
-		if(allRules == null) throw new IllegalArgumentException("Rule Map cannot be null");
-		
-		@SuppressWarnings("unchecked")
-		List<MatchingRule> rules = (List<MatchingRule>) allRules.get("ignore");
-
-		if(rules == null) throw new ProgrammerError("missing ignore list in rule map");
-		
-		this._rules = rules;
+		if(ignoreRules == null) throw new IllegalArgumentException("Ignore Rule List cannot be null");
+				
+		this._rules = ignoreRules;
 		this._ruleTester = tester;
 	}
 

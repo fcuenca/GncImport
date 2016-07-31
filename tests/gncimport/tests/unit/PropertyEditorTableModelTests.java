@@ -9,12 +9,9 @@ import static org.mockito.Mockito.when;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.swing.PropertyEditorTableModel;
-import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -26,7 +23,6 @@ public class PropertyEditorTableModelTests
 {
 	private RuleTester _tester;
 	private List<MatchingRule> _ignoreList;
-	private Map<String, Object> _ruleMap;
 	private PropertyEditorTableModel _tableModel;
 	
 	@Before
@@ -38,24 +34,15 @@ public class PropertyEditorTableModelTests
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2")));
 		
-		_ruleMap = new HashMap<String, Object>();
-		_ruleMap.put("ignore", _ignoreList);
-		
-		_tableModel = new PropertyEditorTableModel(_ruleMap, _tester);		
+		_tableModel = new PropertyEditorTableModel(_ignoreList, _tester);		
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void rule_map_cannot_be_null()
+	public void ignore_list_cannot_be_null()
 	{
 		new PropertyEditorTableModel(null, _tester);	
 	}
 	
-	@Test(expected=ProgrammerError.class)
-	public void rejects_map_without_ignore_list()
-	{
-		new PropertyEditorTableModel(new HashMap<String, Object>(), _tester);	
-	}
-
 	@Test
 	public void displays_list_of_rule_definitions()
 	{		
