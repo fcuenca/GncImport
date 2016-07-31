@@ -2,8 +2,8 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyMapOf;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,7 +12,7 @@ import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.presenters.PropertyEditorPresenter;
-import gncimport.ui.swing.PropertyEditorTableModel;
+import gncimport.ui.swing.RuleTableModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class PropertyEditorPresenterTests
 {
 	@Captor
-	private ArgumentCaptor<Map<String, PropertyEditorTableModel>> expectedModelMap;
+	private ArgumentCaptor<Map<String, RuleTableModel>> expectedModelMap;
 	
 	private TxView _view;
 	private PropertyEditorPresenter _presenter;
@@ -58,7 +58,7 @@ public class PropertyEditorPresenterTests
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(true));
 		
-		PropertyEditorTableModel tm = expectedModelMap.getValue().get("ignore");
+		RuleTableModel tm = expectedModelMap.getValue().get("ignore");
 		
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
@@ -71,7 +71,7 @@ public class PropertyEditorPresenterTests
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", new ArrayList<MatchingRule>());
 		
-		when(_view.editProperties(anyMapOf(String.class, PropertyEditorTableModel.class))).thenReturn(false);
+		when(_view.editProperties(anyMapOf(String.class, RuleTableModel.class))).thenReturn(false);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 	}
@@ -85,13 +85,13 @@ public class PropertyEditorPresenterTests
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", rules);
 
-		when(_view.editProperties(anyMapOf(String.class, PropertyEditorTableModel.class)))
+		when(_view.editProperties(anyMapOf(String.class, RuleTableModel.class)))
 			.thenReturn(true)
 			.thenReturn(false);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 		
-		verify(_view, times(2)).editProperties(anyMapOf(String.class, PropertyEditorTableModel.class));
+		verify(_view, times(2)).editProperties(anyMapOf(String.class, RuleTableModel.class));
 		verify(_view).displayErrorMessage(anyString());
 	}
 }

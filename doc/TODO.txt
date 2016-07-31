@@ -19,7 +19,6 @@ Stories:
 
 Tasks:
 * implement UI
-- PropertyEditorTableModel -> rename? make intelligent (handle 1 or 2 columns?)?
 - Map<String, Object>: consider base class for the Values (?)
 - keys for the map: place constants somewhere else; create enum?
 - textMatchesRule, testRulesWithText -> ??

@@ -422,7 +422,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 	
 	@Override
-	public boolean editProperties(Map<String, PropertyEditorTableModel> models)
+	public boolean editProperties(Map<String, RuleTableModel> models)
 	{
 		EditPropertiesDialog dlg = new EditPropertiesDialog(null, models);
 		

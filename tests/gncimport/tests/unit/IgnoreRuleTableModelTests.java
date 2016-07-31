@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
-import gncimport.ui.swing.PropertyEditorTableModel;
+import gncimport.ui.swing.IgnoreRulesTableModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +19,11 @@ import javax.swing.event.TableModelListener;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PropertyEditorTableModelTests
+public class IgnoreRuleTableModelTests
 {
 	private RuleTester _tester;
 	private List<MatchingRule> _ignoreList;
-	private PropertyEditorTableModel _tableModel;
+	private IgnoreRulesTableModel _tableModel;
 	
 	@Before
 	public void Setup()
@@ -34,13 +34,13 @@ public class PropertyEditorTableModelTests
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2")));
 		
-		_tableModel = new PropertyEditorTableModel(_ignoreList, _tester);		
+		_tableModel = new IgnoreRulesTableModel(_ignoreList, _tester);		
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void ignore_list_cannot_be_null()
 	{
-		new PropertyEditorTableModel(null, _tester);	
+		new IgnoreRulesTableModel(null, _tester);	
 	}
 	
 	@Test
@@ -54,7 +54,7 @@ public class PropertyEditorTableModelTests
 	@Test
 	public void columns_are_editable()
 	{		
-		for(int i = 0; i < PropertyEditorTableModel.COLUMN_TITLES.length; i++)
+		for(int i = 0; i < IgnoreRulesTableModel.COLUMN_TITLES.length; i++)
 		{
 			assertThat(_tableModel.isCellEditable(1, i), is(true));			
 		}
@@ -63,19 +63,19 @@ public class PropertyEditorTableModelTests
 	@Test
 	public void all_columns_have_title()
 	{
-		assertThat(_tableModel.getColumnCount(), is(PropertyEditorTableModel.COLUMN_TITLES.length));
+		assertThat(_tableModel.getColumnCount(), is(IgnoreRulesTableModel.COLUMN_TITLES.length));
 	}
 	
 	@Test
 	public void all_columns_have_types_defined()
 	{
-		assertThat(_tableModel.getColumnCount(), is(PropertyEditorTableModel.COLUMN_CLASSES.length));
+		assertThat(_tableModel.getColumnCount(), is(IgnoreRulesTableModel.COLUMN_CLASSES.length));
 	}
 	
 	@Test
 	public void declared_column_types_match_values_returned()
 	{
-		for(int i = 0; i < PropertyEditorTableModel.COLUMN_CLASSES.length; i++)
+		for(int i = 0; i < IgnoreRulesTableModel.COLUMN_CLASSES.length; i++)
 		{
 			Class<?> actual = _tableModel.getValueAt(0, i).getClass();
 			Class<?> declared = _tableModel.getColumnClass(i);

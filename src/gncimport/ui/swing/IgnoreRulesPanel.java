@@ -19,7 +19,7 @@ public class IgnoreRulesPanel extends PropertyEditorPanel
 {
 	JTable _ignoreTable;
 
-	public IgnoreRulesPanel(PropertyEditorTableModel ignoreTblModel)
+	public IgnoreRulesPanel(IgnoreRulesTableModel ignoreTblModel)
 	{
 		super();
 		setLayout(new BorderLayout());
@@ -30,7 +30,7 @@ public class IgnoreRulesPanel extends PropertyEditorPanel
 		add(createToolBar(_ignoreTable, ignoreTblModel), BorderLayout.PAGE_END);
 	}
 
-	JToolBar createToolBar(final JTable theTable, final PropertyEditorTableModel ignoreTblModel)
+	JToolBar createToolBar(final JTable theTable, final IgnoreRulesTableModel ignoreTblModel)
 	{
 		JButton button;
 		JToolBar toolBar = new JToolBar();

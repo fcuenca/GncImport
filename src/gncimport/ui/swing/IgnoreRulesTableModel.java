@@ -6,18 +6,16 @@ import gncimport.transfer.UserEnteredMatchingRule;
 
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
-
-public final class PropertyEditorTableModel extends AbstractTableModel
+@SuppressWarnings("serial")
+public final class IgnoreRulesTableModel extends RuleTableModel
 {
 	public static final String[] COLUMN_TITLES = { "Description Pattern" };
 	public static final Class<?>[] COLUMN_CLASSES = { MatchingRule.class };
 
 	private final List<MatchingRule> _rules;
-	private static final long serialVersionUID = 9060984673285510233L;
 	private RuleTester _ruleTester;
 
-	public PropertyEditorTableModel(List<MatchingRule> ignoreRules, RuleTester tester)
+	public IgnoreRulesTableModel(List<MatchingRule> ignoreRules, RuleTester tester)
 	{
 		if(ignoreRules == null) throw new IllegalArgumentException("Ignore Rule List cannot be null");
 				
@@ -61,6 +59,7 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 		_rules.set(row, (MatchingRule) value);
 	}
 
+	@Override
 	public boolean isValid()
 	{
 		for (MatchingRule rule : _rules)
@@ -76,12 +75,14 @@ public final class PropertyEditorTableModel extends AbstractTableModel
 		return COLUMN_CLASSES[col];
 	}
 
+	@Override
 	public void newRow()
 	{
 		_rules.add(new UserEnteredMatchingRule(""));
 		fireTableDataChanged();
 	}
 
+	@Override
 	public void removeRule(int row)
 	{
 		if(row >= 0 && row < _rules.size())

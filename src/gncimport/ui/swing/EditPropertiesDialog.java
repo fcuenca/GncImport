@@ -22,7 +22,7 @@ public class EditPropertiesDialog extends JDialog
 	private boolean _okClicked;
 	private PropertyEditorPanel _currentPanel;
 	
-	public EditPropertiesDialog(Frame aFrame, Map<String, PropertyEditorTableModel> models)
+	public EditPropertiesDialog(Frame aFrame, Map<String, RuleTableModel> models)
 	{
 		super(aFrame, true);
 
@@ -38,12 +38,12 @@ public class EditPropertiesDialog extends JDialog
 		pack();
 	}
 
-	private JTabbedPane createTabs(Map<String, PropertyEditorTableModel> models)
+	private JTabbedPane createTabs(Map<String, RuleTableModel> models)
 	{
 		final JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
 		tabs.setName("PROPERTY_TABS");
 						
-		tabs.addTab("Ignore", new IgnoreRulesPanel(models.get("ignore")));
+		tabs.addTab("Ignore", new IgnoreRulesPanel((IgnoreRulesTableModel) models.get("ignore")));
 		tabs.addTab("Acc Override", new AccOverrideRulesPanel());
 		
 		_currentPanel = ((PropertyEditorPanel)tabs.getSelectedComponent());

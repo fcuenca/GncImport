@@ -15,7 +15,7 @@ public class RuleTable extends JTable
 	final Color ALTERNATE_BACKGROUND_COLOR = new Color(209, 229, 255);
 	final Color SELECTION_BACKGROUND_COLOR = new Color(52, 117, 237);
 
-	public RuleTable(PropertyEditorTableModel model) 
+	public RuleTable(RuleTableModel model) 
 	{
 		super(model);
 		

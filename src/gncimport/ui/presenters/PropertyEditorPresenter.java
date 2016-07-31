@@ -4,7 +4,8 @@ import gncimport.interactors.PropertyEditInteractor;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
-import gncimport.ui.swing.PropertyEditorTableModel;
+import gncimport.ui.swing.IgnoreRulesTableModel;
+import gncimport.ui.swing.RuleTableModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +26,8 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 		@SuppressWarnings("unchecked")
 		List<MatchingRule> ignoreRules = (List<MatchingRule>)allRules.get("ignore");
 		
-		Map<String, PropertyEditorTableModel> modelMap = new HashMap<String, PropertyEditorTableModel>();
-		modelMap.put("ignore", new PropertyEditorTableModel(ignoreRules, tester));
+		Map<String, RuleTableModel> modelMap = new HashMap<String, RuleTableModel>();
+		modelMap.put("ignore", new IgnoreRulesTableModel(ignoreRules, tester));
 		
 		boolean changesConfirmed;
 		
@@ -49,9 +50,9 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 		}
 	}
 
-	private boolean allModelsAreValid(Map<String, PropertyEditorTableModel> modelMap)
+	private boolean allModelsAreValid(Map<String, RuleTableModel> modelMap)
 	{
-		for (PropertyEditorTableModel tm : modelMap.values())
+		for (RuleTableModel tm : modelMap.values())
 		{
 			if(!tm.isValid()) return false;
 		}
