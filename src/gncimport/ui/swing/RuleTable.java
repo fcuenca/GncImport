@@ -15,14 +15,14 @@ public class RuleTable extends JTable
 	final Color ALTERNATE_BACKGROUND_COLOR = new Color(209, 229, 255);
 	final Color SELECTION_BACKGROUND_COLOR = new Color(52, 117, 237);
 
-	public RuleTable(RuleTableModel model) 
+	public RuleTable(RuleTableModel model, String name) 
 	{
 		super(model);
 		
 		setDefaultRenderer(MatchingRule.class, new RuleDefCellRenderer());
 		setDefaultEditor(MatchingRule.class, new RuleDefCellEditor());
 		
-		setName("IGNORE_RULES");
+		setName(name);
 		setModel(model);
 	}
 	

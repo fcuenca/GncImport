@@ -44,7 +44,7 @@ public class EditPropertiesDialog extends JDialog
 		tabs.setName("PROPERTY_TABS");
 						
 		tabs.addTab("Ignore", new IgnoreRulesPanel((IgnoreRulesTableModel) models.get("ignore")));
-		tabs.addTab("Acc Override", new AccOverrideRulesPanel());
+		tabs.addTab("Acc Override", new AccOverrideRulesPanel((AccOverrideRulesTableModel)models.get("acc-override")));
 		
 		_currentPanel = ((PropertyEditorPanel)tabs.getSelectedComponent());
 		tabs.addChangeListener(new ChangeListener()

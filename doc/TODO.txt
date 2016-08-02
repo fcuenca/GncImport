@@ -7,7 +7,7 @@ Features:
 
 
 Stories:
-* display current props
+x display current props
 - edit existing rules
 - validation
 	- desc can't be blank
@@ -18,7 +18,6 @@ Stories:
 - try rules 
 
 Tasks:
-* implement UI
 - Map<String, Object>: consider base class for the Values (?)
 - keys for the map: place constants somewhere else; create enum?
 - textMatchesRule, testRulesWithText -> ??
