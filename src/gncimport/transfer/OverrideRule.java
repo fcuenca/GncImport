@@ -12,6 +12,12 @@ public class OverrideRule
 		this.override = new UserEnteredMatchingRule(overrideTxt);
 	}
 	
+	public OverrideRule(MatchingRule textToMatch, MatchingRule overrideText)
+	{
+		this.textToMatch = textToMatch;
+		this.override = overrideText;
+	}
+
 	public boolean isValid()
 	{
 		return textToMatch.isValid() && override.isValid();

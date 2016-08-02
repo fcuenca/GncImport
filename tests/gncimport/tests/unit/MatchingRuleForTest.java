@@ -2,7 +2,7 @@ package gncimport.tests.unit;
 
 import gncimport.transfer.MatchingRule;
 
-class MatchingRuleForTest extends MatchingRule
+public class MatchingRuleForTest extends MatchingRule
 {
 	private String _text;
 	private boolean _isValid = true;

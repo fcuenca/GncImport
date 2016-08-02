@@ -2,13 +2,8 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import gncimport.transfer.MatchingRule;
-import gncimport.transfer.RuleTester;
-import gncimport.ui.swing.IgnoreRulesTableModel;
+import gncimport.transfer.OverrideRule;
+import gncimport.ui.swing.AccOverrideRulesTableModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,63 +14,69 @@ import javax.swing.event.TableModelListener;
 import org.junit.Before;
 import org.junit.Test;
 
-public class IgnoreRuleTableModelTests
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.any;
+
+
+public class AccOverrideRulesTableModelTests
 {
-	private RuleTester _tester;
-	private List<MatchingRule> _ignoreList;
-	private IgnoreRulesTableModel _tableModel;
-	
+	private AccOverrideRulesTableModel _tableModel;
+	private List<OverrideRule> _overrideList;
+
 	@Before
-	public void Setup()
+	public void SetUp()
 	{
-		_tester = mock(RuleTester.class);
+		_overrideList = new ArrayList<OverrideRule>(ListUtils.list_of(
+				new OverrideRule("desc-1", "acc-1"),
+				new OverrideRule("desc-2", "acc-2")));
 		
-		_ignoreList = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new MatchingRuleForTest("rule-1"), 
-				new MatchingRuleForTest("rule-2")));
-		
-		_tableModel = new IgnoreRulesTableModel(_ignoreList, _tester);		
+		_tableModel = new AccOverrideRulesTableModel(_overrideList);		
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void ignore_list_cannot_be_null()
+	public void override_list_cannot_be_null()
 	{
-		new IgnoreRulesTableModel(null, _tester);	
+		new AccOverrideRulesTableModel(null);	
 	}
 	
 	@Test
-	public void displays_list_of_rule_definitions()
+	public void displays_list_of_overrides()
 	{		
 		assertThat(_tableModel.getRowCount(), is(2));
-		assertThat(_tableModel.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
-		assertThat(_tableModel.getValueAt(1, 0), is((Object)new MatchingRuleForTest("rule-2")));
+		
+		assertThat(_tableModel.getValueAt(0, 0), is((Object)new MatchingRuleForTest("desc-1")));
+		assertThat(_tableModel.getValueAt(0, 1), is((Object)new MatchingRuleForTest("acc-1")));
+
+		assertThat(_tableModel.getValueAt(1, 0), is((Object)new MatchingRuleForTest("desc-2")));
+		assertThat(_tableModel.getValueAt(1, 1), is((Object)new MatchingRuleForTest("acc-2")));
 	}
-	
+
 	@Test
 	public void columns_are_editable()
 	{		
-		for(int i = 0; i < IgnoreRulesTableModel.COLUMN_TITLES.length; i++)
+		for(int i = 0; i < AccOverrideRulesTableModel.COLUMN_TITLES.length; i++)
 		{
 			assertThat(_tableModel.isCellEditable(1, i), is(true));			
 		}
 	}
-	
+
 	@Test
 	public void all_columns_have_title()
 	{
-		assertThat(_tableModel.getColumnCount(), is(IgnoreRulesTableModel.COLUMN_TITLES.length));
+		assertThat(_tableModel.getColumnCount(), is(AccOverrideRulesTableModel.COLUMN_TITLES.length));
 	}
 	
 	@Test
 	public void all_columns_have_types_defined()
 	{
-		assertThat(_tableModel.getColumnCount(), is(IgnoreRulesTableModel.COLUMN_CLASSES.length));
+		assertThat(_tableModel.getColumnCount(), is(AccOverrideRulesTableModel.COLUMN_CLASSES.length));
 	}
 	
 	@Test
 	public void declared_column_types_match_values_returned()
 	{
-		for(int i = 0; i < IgnoreRulesTableModel.COLUMN_CLASSES.length; i++)
+		for(int i = 0; i < AccOverrideRulesTableModel.COLUMN_CLASSES.length; i++)
 		{
 			Class<?> actual = _tableModel.getValueAt(0, i).getClass();
 			Class<?> declared = _tableModel.getColumnClass(i);
@@ -92,10 +93,16 @@ public class IgnoreRuleTableModelTests
 	public void updates_rule_definitions()
 	{		
 		_tableModel.setValueAt(new MatchingRuleForTest("new value"), 1, 0);
+		_tableModel.setValueAt(new MatchingRuleForTest("new acc"), 0, 1);
+		
 		assertThat(_tableModel.getValueAt(1, 0), is((Object)new MatchingRuleForTest("new value")));
+		assertThat(_tableModel.getValueAt(1, 1), is((Object)new MatchingRuleForTest("acc-2")));		
+
+		assertThat(_tableModel.getValueAt(0, 0), is((Object)new MatchingRuleForTest("desc-1")));
+		assertThat(_tableModel.getValueAt(0, 1), is((Object)new MatchingRuleForTest("new acc")));		
 	}
 	
-	@Test
+  	@Test
 	public void valid_when_all_rules_are_valid()
 	{		
 		assertThat(_tableModel.isValid(), is(true));
@@ -104,7 +111,7 @@ public class IgnoreRuleTableModelTests
 	@Test
 	public void invalid_when_at_least_one_rule_is_invalid()
 	{
-		_ignoreList.add(new MatchingRuleForTest("rule-2", false));
+		_overrideList.add(new OverrideRule(new MatchingRuleForTest("invalid", false), new MatchingRuleForTest("valid")));
 				
 		assertThat(_tableModel.isValid(), is(false));
 	}
@@ -116,6 +123,7 @@ public class IgnoreRuleTableModelTests
 		
 		assertThat(_tableModel.getRowCount(), is(3));
 		assertThat(_tableModel.getValueAt(2, 0), is((Object)new MatchingRuleForTest("", false)));
+		assertThat(_tableModel.getValueAt(2, 1), is((Object)new MatchingRuleForTest("", false)));
 	}
 	
 	@Test
@@ -134,7 +142,7 @@ public class IgnoreRuleTableModelTests
 	{
 		_tableModel.removeRule(1);		
 		assertThat(_tableModel.getRowCount(), is(1));
-		assertThat(_tableModel.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
+		assertThat(_tableModel.getValueAt(0, 1), is((Object)new MatchingRuleForTest("acc-1")));
 
 		_tableModel.removeRule(0);		
 		assertThat(_tableModel.getRowCount(), is(0));
@@ -158,13 +166,5 @@ public class IgnoreRuleTableModelTests
 		_tableModel.removeRule(0);
 		
 		verify(listener).tableChanged(any(TableModelEvent.class));
-	}
-		
-	@Test
-	public void can_test_rules_against_sample_text()
-	{
-		when(_tester.tryRulesWithText("rule-1", _ignoreList)).thenReturn(true);
-		
-		assertThat(_tableModel.testRulesWithText("rule-1"), is(true));
 	}
 }
