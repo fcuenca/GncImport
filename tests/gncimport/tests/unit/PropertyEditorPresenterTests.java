@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.presenters.PropertyEditorPresenter;
@@ -45,14 +46,19 @@ public class PropertyEditorPresenterTests
 	}
 	
 	@Test
-	public void displays_ignore_rules()
+	public void displays_rules()
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2")));
 		
+		List<OverrideRule> rules2 = new ArrayList<OverrideRule>(ListUtils.list_of(
+				new OverrideRule("rule-1", "acc-1"), 
+				new OverrideRule("rule-2", "acc-2")));
+	
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", rules);
+		allRules.put("acc-override", rules2);
 
 		when(_view.editProperties(expectedModelMap.capture())).thenReturn(true);
 		
@@ -63,6 +69,13 @@ public class PropertyEditorPresenterTests
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
 		assertThat(tm.getValueAt(1, 0), is((Object)new MatchingRuleForTest("rule-2")));
+		
+		RuleTableModel tm2 = expectedModelMap.getValue().get("acc-override");
+		
+		assertThat(tm2.getRowCount(), is(2));
+		assertThat(tm2.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
+		assertThat(tm2.getValueAt(1, 1), is((Object)new MatchingRuleForTest("acc-2")));
+
 	}
 	
 	@Test
@@ -70,6 +83,7 @@ public class PropertyEditorPresenterTests
 	{
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", new ArrayList<MatchingRule>());
+		allRules.put("acc-override", new ArrayList<OverrideRule>());
 		
 		when(_view.editProperties(anyMapOf(String.class, RuleTableModel.class))).thenReturn(false);
 		
@@ -84,6 +98,8 @@ public class PropertyEditorPresenterTests
 				 new MatchingRuleForTest("rule-2", false)));
 		Map<String, Object> allRules = new HashMap<String, Object>();
 		allRules.put("ignore", rules);
+		allRules.put("acc-override", new ArrayList<OverrideRule>());
+
 
 		when(_view.editProperties(anyMapOf(String.class, RuleTableModel.class)))
 			.thenReturn(true)
