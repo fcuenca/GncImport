@@ -289,7 +289,7 @@ public class GncImportAppDriver
 		}
 	}
 
-	public void editProperties(int expectedIgnoreRules)
+	public void editPropertiesAndExpectRowsToMatch(int expectedIgnoreRules, int expectedAccOverrideRules)
 	{
 		_mainWindow.menuItem("EDIT_PROPERTIES").click();
 
@@ -303,7 +303,7 @@ public class GncImportAppDriver
 
 		tabs.selectTab("Acc Override");
 		table = dialog.table("ACC_OVERRIDE_RULES");
-		//TODO: assertThat(table.rowCount(), is(3)); //TODO: pass hard-coded value as argument
+		assertThat(table.rowCount(), is(expectedAccOverrideRules)); 
 		
 		dialog.button("OK_BUTTON").click();
 	}

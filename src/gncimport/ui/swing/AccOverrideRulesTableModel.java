@@ -24,6 +24,12 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 	{
 		return COLUMN_TITLES.length;
 	}
+	
+	@Override
+	public String getColumnName(int col)
+	{
+		return COLUMN_TITLES[col];
+	}
 
 	@Override
 	public int getRowCount()

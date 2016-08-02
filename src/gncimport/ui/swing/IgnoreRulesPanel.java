@@ -17,17 +17,15 @@ import javax.swing.JToolBar;
 @SuppressWarnings("serial")
 public class IgnoreRulesPanel extends PropertyEditorPanel
 {
-	JTable _ignoreTable;
-
-	public IgnoreRulesPanel(IgnoreRulesTableModel ignoreTblModel)
+	public IgnoreRulesPanel(IgnoreRulesTableModel tableModel)
 	{
 		super();
 		setLayout(new BorderLayout());
 
-		_ignoreTable = new RuleTable(ignoreTblModel);
+		_ruleTable = new RuleTable(tableModel, "IGNORE_RULES");
 		
-		add(new JScrollPane(_ignoreTable), BorderLayout.PAGE_START);
-		add(createToolBar(_ignoreTable, ignoreTblModel), BorderLayout.PAGE_END);
+		add(new JScrollPane(_ruleTable), BorderLayout.PAGE_START);
+		add(createToolBar(_ruleTable, tableModel), BorderLayout.PAGE_END);
 	}
 
 	JToolBar createToolBar(final JTable theTable, final IgnoreRulesTableModel ignoreTblModel)
@@ -98,15 +96,4 @@ public class IgnoreRulesPanel extends PropertyEditorPanel
 		
 		return toolBar;
 	}
-	
-	@Override
-	public void stopEditing()
-	{
-		if (_ignoreTable.getCellEditor() != null) 
-		{
-		      _ignoreTable.getCellEditor().stopCellEditing();
-		}
-	}
-
-
 }
