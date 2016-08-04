@@ -8,5 +8,5 @@ public interface RuleModel
 {
 	void replaceRulesWith(Map<String, Object> allRules);
 	void copyRulesTo(Map<String, Object> allRules);
-	boolean testRulesWithText(String text, Iterable<MatchingRule> candidateRules);
+	boolean testMatchingRulesWithText(String text, Iterable<MatchingRule> candidateRules);
 }

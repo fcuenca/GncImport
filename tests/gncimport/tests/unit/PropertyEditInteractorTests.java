@@ -137,7 +137,7 @@ public class PropertyEditInteractorTests
 				return false;
 			}
 			
-		}).when(_model).testRulesWithText(anyString(), anyListOf(MatchingRule.class));
+		}).when(_model).testMatchingRulesWithText(anyString(), anyListOf(MatchingRule.class));
 		
 		RuleTester tester = _interactor;
 		

@@ -19,6 +19,10 @@ x remove rules
 - sort by any column
 
 Tasks:
+- Test in Rule Model (Config)
+- Test in Rule Tester (Interactor)
+- Test in UI
+
 - Map<String, Object>: consider base class for the Values (?)
 - keys for the map: place constants somewhere else; create enum?
 - textMatchesRule, testRulesWithText -> ??

@@ -115,18 +115,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	@Override
 	public String findAccountOverride(String txDescription)
 	{
-		//TODO: find a better way to handle this case (class with two purposes) 
-		// here the OverrideRule is used for a slightly different purpose:
-		// the override text is not to be replaced in the matching text, but to override something else (the Account, in this case)
-		for (OverrideRule rule : _accountOverrideRules)
-		{
-			if (rule.matches(txDescription))
-			{
-				return rule.override.text();
-			}
-		}
-
-		return null;
+		return getOverrideForTextUsingRules(txDescription, _accountOverrideRules);
 	}
 
 	@Override
@@ -269,7 +258,8 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		allRules.put("acc-override", new ArrayList<OverrideRule>(_accountOverrideRules));
 	}
 
-	public boolean testRulesWithText(String text, Iterable<MatchingRule> candidateRules)
+	@Override
+	public boolean testMatchingRulesWithText(String text, Iterable<MatchingRule> candidateRules)
 	{
 		for (MatchingRule rule : candidateRules)
 		{
@@ -280,6 +270,21 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		};
 		
 		return textMatchesRule(text, candidateRules);
+	}
+
+	public String testOverrideRulesWithText(String textToMatch, List<OverrideRule> rules)
+	{
+		for (OverrideRule rule : rules)
+		{
+			if(!rule.isValid())
+			{
+				throw new IllegalArgumentException("list contains invalid rule: " + rule);
+			}
+		};
+
+		String override = getOverrideForTextUsingRules(textToMatch, rules);
+		
+		return override == null ? "" : override;
 	}
 
 	private boolean textMatchesRule(String txDescription, Iterable<MatchingRule> rules)
@@ -293,4 +298,22 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		}
 		return false;
 	}
+	
+	private String getOverrideForTextUsingRules(String txDescription, List<OverrideRule> rules)
+	{
+		//TODO: find a better way to handle this case (class with two purposes) 
+		// here the OverrideRule is used for a slightly different purpose:
+		// the override text is not to be replaced in the matching text, but to override something else (the Account, in this case)
+		for (OverrideRule rule : rules)
+		{
+			if (rule.matches(txDescription))
+			{
+				return rule.override.text();
+			}
+		}
+
+		return null;
+	}
+
+
 }

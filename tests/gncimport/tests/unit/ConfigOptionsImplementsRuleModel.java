@@ -231,24 +231,44 @@ public class ConfigOptionsImplementsRuleModel
 	}
 	
 	@Test
-	public void can_test_candidate_properties()
+	public void can_test_candidate_ignore_rules()
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2")));
 
-		assertThat(_options.testRulesWithText("rule-1", rules), is(true));
-		assertThat(_options.testRulesWithText("doesn't match", rules), is(false));
+		assertThat(_options.testMatchingRulesWithText("rule-1", rules), is(true));
+		assertThat(_options.testMatchingRulesWithText("doesn't match", rules), is(false));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void candidate_rules_must_be_valid_when_testing_them()
+	public void candidate_ignore_rules_must_be_valid_when_testing_them()
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2", false)));
 		
-		_options.testRulesWithText("rule-1", rules); // should throw
+		_options.testMatchingRulesWithText("rule-1", rules); // should throw
+	}
+		
+	@Test
+	public void can_test_override_rules()
+	{
+		List<OverrideRule> rules = new ArrayList<OverrideRule>(ListUtils.list_of(
+				new OverrideRule("some text", "override")));
+		
+		assertThat(_options.testOverrideRulesWithText("doesn't match", rules), is(""));
+		assertThat(_options.testOverrideRulesWithText("some text", rules), is("override"));
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void candidate_override_rules_must_be_valid_when_testing_them()
+	{
+		List<OverrideRule> rules = new ArrayList<OverrideRule>(ListUtils.list_of(
+				new OverrideRule("some text", "override"),
+				new OverrideRule(new MatchingRuleForTest("invalid", false), new MatchingRuleForTest("some value"))));
+		
+		_options.testOverrideRulesWithText("some text", rules); //should throw
 	}
 
 	private void assertThatPropertiesMatchList(List<String> newRules, Properties properties, String propKeyRegex)
