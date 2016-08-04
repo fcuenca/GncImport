@@ -8,13 +8,13 @@ Features:
 
 Stories:
 x display current props
-- edit existing rules
-- validation
+x edit existing rules
+x validation
 	- desc can't be blank
 	- account can't be blank
 	- desc needs to be a valid regex
-- add new rules
-- remove rules
+x add new rules
+x remove rules
 - try rules 
 - sort by any column
 

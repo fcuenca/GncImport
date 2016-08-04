@@ -28,36 +28,14 @@ public class IgnoreRulesPanel extends PropertyEditorPanel
 		add(createToolBar(_ruleTable, tableModel), BorderLayout.PAGE_END);
 	}
 
-	JToolBar createToolBar(final JTable theTable, final IgnoreRulesTableModel ignoreTblModel)
+	@Override
+	protected JToolBar createToolBar(final JTable theTable, final RuleTableModel tableModel)
 	{
-		JButton button;
-		JToolBar toolBar = new JToolBar();
-		
-		button = new JButton("+");
-		button.setToolTipText("Add new Rule");
-		toolBar.add(button);
-		button.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				ignoreTblModel.newRow();
-			}
-		});
-	
-		button = new JButton("-");
-		button.setToolTipText("Remove selected Rule");
-		toolBar.add(button);
-		button.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				ignoreTblModel.removeRule(theTable.getSelectedRow());
-			}
-		});
+		JToolBar toolBar = super.createToolBar(theTable, tableModel);
 				
 		toolBar.addSeparator();
 		
-		button = new JButton();
+		JButton button = new JButton();
 		button.setToolTipText("Try Rules");
 		final JTextField textField = new JTextField();
 		final JLabel resultLabel = new JLabel();
@@ -69,7 +47,7 @@ public class IgnoreRulesPanel extends PropertyEditorPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if(ignoreTblModel.testRulesWithText(textField.getText()))
+				if(((IgnoreRulesTableModel)tableModel).testRulesWithText(textField.getText()))
 				{
 					resultLabel.setIcon(passIcon);
 				}

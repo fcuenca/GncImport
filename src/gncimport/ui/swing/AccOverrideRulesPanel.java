@@ -16,5 +16,6 @@ public class AccOverrideRulesPanel extends PropertyEditorPanel
 		_ruleTable.setName("ACC_OVERRIDE_RULES");
 		
 		add(new JScrollPane(_ruleTable), BorderLayout.PAGE_START);
+		add(createToolBar(_ruleTable, tableModel), BorderLayout.PAGE_END);
 	}
 }
