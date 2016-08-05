@@ -272,7 +272,8 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		return textMatchesRule(text, candidateRules);
 	}
 
-	public String testOverrideRulesWithText(String textToMatch, List<OverrideRule> rules)
+	@Override
+	public String testOverrideRulesWithText(String textToMatch, Iterable<OverrideRule> rules)
 	{
 		for (OverrideRule rule : rules)
 		{
@@ -299,7 +300,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		return false;
 	}
 	
-	private String getOverrideForTextUsingRules(String txDescription, List<OverrideRule> rules)
+	private String getOverrideForTextUsingRules(String txDescription, Iterable<OverrideRule> rules)
 	{
 		//TODO: find a better way to handle this case (class with two purposes) 
 		// here the OverrideRule is used for a slightly different purpose:

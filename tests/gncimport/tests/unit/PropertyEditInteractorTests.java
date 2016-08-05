@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.models.RuleModel;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
 
 import java.util.ArrayList;
@@ -118,7 +119,8 @@ public class PropertyEditInteractorTests
 	@Test
 	public void implements_rule_tester_interface()
 	{
-		final Iterable<MatchingRule> rules = new ArrayList<MatchingRule>();
+		final Iterable<MatchingRule> ignoreRules = new ArrayList<MatchingRule>();
+		final Iterable<OverrideRule> overrideRules = new ArrayList<OverrideRule>();
 			
 		doAnswer(new Answer<Boolean>(){
             @SuppressWarnings("unchecked")
@@ -129,7 +131,7 @@ public class PropertyEditInteractorTests
 				String text = (String) args[0];
 				List<MatchingRule> candidates = (List<MatchingRule>) args[1];
 				
-				if(rules != candidates) fail("unrecognized list of rules");
+				if(ignoreRules != candidates) fail("unrecognized list of ignore rules");
 				
 				if(text.equals("rule-1")) return true;
 				if(text.equals("rule-2")) return false;
@@ -138,10 +140,31 @@ public class PropertyEditInteractorTests
 			}
 			
 		}).when(_model).testMatchingRulesWithText(anyString(), anyListOf(MatchingRule.class));
-		
+
+		doAnswer(new Answer<String>(){
+            @SuppressWarnings("unchecked")
+			@Override
+			public String answer(InvocationOnMock invocation) throws Throwable
+			{
+                Object[] args = invocation.getArguments();
+				String text = (String) args[0];
+				List<OverrideRule> candidates = (List<OverrideRule>) args[1];
+				
+				if(overrideRules != candidates) fail("unrecognized list of override rules");
+				
+				if(text.equals("rule-1")) return "override";
+	
+				return "";
+			}
+			
+		}).when(_model).testOverrideRulesWithText(anyString(), anyListOf(OverrideRule.class));
+
 		RuleTester tester = _interactor;
 		
-		assertThat(tester.tryRulesWithText("rule-1", rules), is(true));
-		assertThat(tester.tryRulesWithText("rule-2", rules), is(false));
+		assertThat(tester.tryRulesWithText("rule-1", ignoreRules), is(true));
+		assertThat(tester.tryRulesWithText("rule-2", ignoreRules), is(false));
+
+		assertThat(tester.tryOverrideRulesWithText("rule-1", overrideRules), is("override"));
+		assertThat(tester.tryOverrideRulesWithText("rule-2", overrideRules), is(""));
 	}
 }

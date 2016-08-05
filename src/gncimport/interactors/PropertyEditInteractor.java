@@ -2,6 +2,7 @@ package gncimport.interactors;
 
 import gncimport.models.RuleModel;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
 
 import java.util.HashMap;
@@ -39,6 +40,12 @@ public class PropertyEditInteractor implements RuleTester
 	public boolean tryRulesWithText(String textToMatch, Iterable<MatchingRule> candidateRules)
 	{
 		return _model.testMatchingRulesWithText(textToMatch, candidateRules);
+	}
+
+	@Override
+	public String tryOverrideRulesWithText(String textToMatch, Iterable<OverrideRule> candidateRules)
+	{
+		return _model.testOverrideRulesWithText(textToMatch, candidateRules);
 	}
 
 }

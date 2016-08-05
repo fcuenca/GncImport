@@ -15,13 +15,13 @@ x validation
 	- desc needs to be a valid regex
 x add new rules
 x remove rules
-- try rules 
+* try rules 
 - sort by any column
 
 Tasks:
-- Test in Rule Model (Config)
+x Test in Rule Model (Config)
 - Test in Rule Tester (Interactor)
-- Test in UI
+- Test in UI (table model)
 
 - Map<String, Object>: consider base class for the Values (?)
 - keys for the map: place constants somewhere else; create enum?
