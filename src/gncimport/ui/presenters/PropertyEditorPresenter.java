@@ -30,8 +30,8 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 		List<OverrideRule> accOverrideRules = (List<OverrideRule>)allRules.get("acc-override");
 		
 		Map<String, RuleTableModel> modelMap = new HashMap<String, RuleTableModel>();
-		modelMap.put("ignore", new IgnoreRulesTableModel(ignoreRules, tester));
-		modelMap.put("acc-override", new AccOverrideRulesTableModel(accOverrideRules));
+		modelMap.put("ignore", new IgnoreRulesTableModel(ignoreRules, tester)); //TODO: connection b/w table model and tester is not really tested
+		modelMap.put("acc-override", new AccOverrideRulesTableModel(accOverrideRules, tester));
 		
 		boolean changesConfirmed;
 		

@@ -3,6 +3,7 @@ package gncimport.tests.unit;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.transfer.OverrideRule;
+import gncimport.transfer.RuleTester;
 import gncimport.ui.swing.AccOverrideRulesTableModel;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.mockito.Matchers.any;
 
 
@@ -23,21 +25,24 @@ public class AccOverrideRulesTableModelTests
 {
 	private AccOverrideRulesTableModel _tableModel;
 	private List<OverrideRule> _overrideList;
+	private RuleTester _tester;
 
 	@Before
 	public void SetUp()
 	{
+		_tester = mock(RuleTester.class);
+
 		_overrideList = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("desc-1", "acc-1"),
 				new OverrideRule("desc-2", "acc-2")));
 		
-		_tableModel = new AccOverrideRulesTableModel(_overrideList);		
+		_tableModel = new AccOverrideRulesTableModel(_overrideList, _tester);		
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void override_list_cannot_be_null()
 	{
-		new AccOverrideRulesTableModel(null);	
+		new AccOverrideRulesTableModel(null, _tester);	
 	}
 	
 	@Test
@@ -167,4 +172,13 @@ public class AccOverrideRulesTableModelTests
 		
 		verify(listener).tableChanged(any(TableModelEvent.class));
 	}
+	
+	@Test
+	public void can_test_rules_against_sample_text()
+	{
+		when(_tester.tryOverrideRulesWithText("rule-1", _overrideList)).thenReturn("override");
+		
+		assertThat(_tableModel.testRulesWithText("rule-1"), is("override"));
+	}
+
 }

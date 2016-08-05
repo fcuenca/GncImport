@@ -20,7 +20,7 @@ x remove rules
 
 Tasks:
 x Test in Rule Model (Config)
-- Test in Rule Tester (Interactor)
+x Test in Rule Tester (Interactor)
 - Test in UI (table model)
 
 - Map<String, Object>: consider base class for the Values (?)

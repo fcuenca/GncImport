@@ -2,6 +2,7 @@ package gncimport.ui.swing;
 
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.OverrideRule;
+import gncimport.transfer.RuleTester;
 
 import java.util.List;
 
@@ -12,11 +13,13 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 	public static final Class<?>[] COLUMN_CLASSES = { MatchingRule.class,  MatchingRule.class };
 
 	private List<OverrideRule> _rules;
+	private RuleTester _tester;
 
-	public AccOverrideRulesTableModel(List<OverrideRule> overrides)
+	public AccOverrideRulesTableModel(List<OverrideRule> overrides, RuleTester tester)
 	{
 		if(overrides == null) throw new IllegalArgumentException("Override list cannot be null");
 		_rules = overrides;
+		_tester = tester;
 	}
 
 	@Override
@@ -93,5 +96,10 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 			if(!rule.isValid()) return false;
 		}
 		return true;
+	}
+
+	public String testRulesWithText(String textToMatch)
+	{
+		return _tester.tryOverrideRulesWithText(textToMatch, _rules);
 	}
 }
