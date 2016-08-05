@@ -2,10 +2,15 @@ package gncimport.ui.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 @SuppressWarnings("serial")
@@ -48,6 +53,50 @@ public abstract class PropertyEditorPanel extends JPanel
 			}
 		});
 		
+		toolBar.addSeparator();
+		
+		button = new JButton();
+		button.setToolTipText("Try Rules");
+		final JTextField textField = new JTextField();
+		final JLabel resultLabel = new JLabel();
+		final ImageIcon passIcon = new ImageIcon(getClass().getResource("pass.png"), "pass");
+		final ImageIcon failIcon = new ImageIcon(getClass().getResource("fail.png"), "fail");
+		
+		button.setIcon(new ImageIcon(getClass().getResource("tryMe.png"), "try me"));
+		button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if(testStringAgainstRules(textField.getText(), resultLabel))
+				{
+					resultLabel.setIcon(passIcon);
+				}
+				else
+				{
+					resultLabel.setIcon(failIcon);
+				}
+			}
+		});
+		
+		textField.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				resultLabel.setText(null);
+				resultLabel.setIcon(null);
+				super.keyPressed(e);
+			}
+		});
+	
+		toolBar.add(button);
+		toolBar.add(textField);
+		toolBar.add(resultLabel);
+
+		
 		return toolBar;
 	}
+	
+	protected abstract boolean testStringAgainstRules(String testString, JLabel resultLabel);
+
 }

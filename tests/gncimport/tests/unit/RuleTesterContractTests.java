@@ -82,8 +82,8 @@ public class RuleTesterContractTests
 		}).when(_model).testMatchingRulesWithText(anyString(), anyListOf(MatchingRule.class));
 
 		
-		assertThat(_tester.tryRulesWithText("rule-1", ignoreRules), is(true));
-		assertThat(_tester.tryRulesWithText("rule-2", ignoreRules), is(false));
+		assertThat(_tester.tryMatchingRulesWithText("rule-1", ignoreRules), is(true));
+		assertThat(_tester.tryMatchingRulesWithText("rule-2", ignoreRules), is(false));
 	}
 
 	@Test

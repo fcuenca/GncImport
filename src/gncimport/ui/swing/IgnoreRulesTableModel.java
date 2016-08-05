@@ -94,6 +94,6 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 
 	public boolean testRulesWithText(String sampleText)
 	{
-		return _ruleTester.tryRulesWithText(sampleText, _rules);
+		return _ruleTester.tryMatchingRulesWithText(sampleText, _rules);
 	}
 }

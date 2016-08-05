@@ -163,7 +163,7 @@ public class IgnoreRulesTableModelTests
 	@Test
 	public void can_test_rules_against_sample_text()
 	{
-		when(_tester.tryRulesWithText("rule-1", _ignoreList)).thenReturn(true);
+		when(_tester.tryMatchingRulesWithText("rule-1", _ignoreList)).thenReturn(true);
 		
 		assertThat(_tableModel.testRulesWithText("rule-1"), is(true));
 	}
