@@ -5,7 +5,7 @@ import gncimport.utils.ProgrammerError;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public abstract class MatchingRule
+public abstract class MatchingRule implements TransactionRule
 {
 	protected MatchingRule create(String text)
 	{
@@ -47,12 +47,12 @@ public abstract class MatchingRule
 		return errorMsg;
 	}
 	
-	public abstract boolean isValid();
 	public abstract String text();
 	public abstract String hint();
 	public abstract String displayText();
 	public abstract MatchingRule copy();
 	
+	@Override
 	public boolean matches(String someText)
 	{
 		return someText.trim().matches(text());

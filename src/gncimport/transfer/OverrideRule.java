@@ -1,7 +1,7 @@
 package gncimport.transfer;
 
 
-public class OverrideRule
+public class OverrideRule implements TransactionRule
 {
 	public final MatchingRule textToMatch;
 	public final MatchingRule override;
@@ -18,11 +18,13 @@ public class OverrideRule
 		this.override = overrideText;
 	}
 
+	@Override
 	public boolean isValid()
 	{
 		return textToMatch.isValid() && override.isValid();
 	}
 	
+	@Override
 	public boolean matches(String someText)
 	{
 		return textToMatch.matches(someText);

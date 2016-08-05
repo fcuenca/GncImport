@@ -12,7 +12,6 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 	public static final String[] COLUMN_TITLES = { "Description Pattern" };
 	public static final Class<?>[] COLUMN_CLASSES = { MatchingRule.class };
 
-	private final List<MatchingRule> _rules;
 	private RuleTester _ruleTester;
 
 	public IgnoreRulesTableModel(List<MatchingRule> ignoreRules, RuleTester tester)
@@ -53,20 +52,11 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
-		_rules.set(row, (MatchingRule) value);
-	}
-
-	@Override
-	public boolean isValid()
-	{
-		for (MatchingRule rule : _rules)
-		{
-			if(!rule.isValid()) return false;
-		}
-		return true;
+		((List<MatchingRule>)_rules).set(row, (MatchingRule) value);
 	}
 
 	@Override
@@ -75,10 +65,11 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 		return COLUMN_CLASSES[col];
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void newRow()
 	{
-		_rules.add(new UserEnteredMatchingRule(""));
+		((List<MatchingRule>)_rules).add(new UserEnteredMatchingRule(""));
 		fireTableDataChanged();
 	}
 
@@ -92,8 +83,9 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean testRulesWithText(String sampleText)
 	{
-		return _ruleTester.tryMatchingRulesWithText(sampleText, _rules);
+		return _ruleTester.tryMatchingRulesWithText(sampleText, (Iterable<MatchingRule>) _rules);
 	}
 }

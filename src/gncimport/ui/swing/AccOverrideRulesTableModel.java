@@ -12,7 +12,6 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 	public static final String[] COLUMN_TITLES = { "Description Pattern", "Account Override" };
 	public static final Class<?>[] COLUMN_CLASSES = { MatchingRule.class,  MatchingRule.class };
 
-	private List<OverrideRule> _rules;
 	private RuleTester _tester;
 
 	public AccOverrideRulesTableModel(List<OverrideRule> overrides, RuleTester tester)
@@ -43,7 +42,7 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
-		OverrideRule rule = _rules.get(rowIndex);
+		OverrideRule rule = (OverrideRule) _rules.get(rowIndex);
 		return columnIndex == 0? rule.textToMatch : rule.override;
 	}
 	
@@ -59,16 +58,17 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 		return COLUMN_CLASSES[col];
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
-		OverrideRule rule = _rules.get(row);
+		OverrideRule rule = (OverrideRule) _rules.get(row);
 		OverrideRule updated;
 		
 		if(col == 0) updated = new OverrideRule((MatchingRule)value, rule.override);
 		else updated = new OverrideRule(rule.textToMatch, (MatchingRule)value);
 		
-		_rules.set(row, updated);
+		((List<OverrideRule>)_rules).set(row, updated);
 	}
 
 	@Override
@@ -81,25 +81,17 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void newRow()
 	{
-		_rules.add(new OverrideRule("", ""));
+		((List<OverrideRule>)_rules).add(new OverrideRule("", ""));
 		fireTableDataChanged();		
 	}
 
-	@Override
-	public boolean isValid()
-	{
-		for (OverrideRule rule : _rules)
-		{
-			if(!rule.isValid()) return false;
-		}
-		return true;
-	}
-
+	@SuppressWarnings("unchecked")
 	public String testRulesWithText(String textToMatch)
 	{
-		return _tester.tryOverrideRulesWithText(textToMatch, _rules);
+		return _tester.tryOverrideRulesWithText(textToMatch, (Iterable<OverrideRule>)_rules);
 	}
 }
