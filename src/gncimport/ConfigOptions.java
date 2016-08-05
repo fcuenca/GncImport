@@ -5,6 +5,7 @@ import gncimport.models.TxMatcher;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.OverrideRule;
+import gncimport.transfer.TransactionRule;
 import gncimport.transfer.UserEnteredMatchingRule;
 import gncimport.ui.UIConfig;
 import gncimport.utils.ProgrammerError;
@@ -258,32 +259,21 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		allRules.put("acc-override", new ArrayList<OverrideRule>(_accountOverrideRules));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean testMatchingRulesWithText(String text, Iterable<MatchingRule> candidateRules)
+	public boolean testMatchingRulesWithText(String text, Iterable<? extends TransactionRule> candidateRules)
 	{
-		for (MatchingRule rule : candidateRules)
-		{
-			if(!rule.isValid())
-			{
-				throw new IllegalArgumentException("list contains invalid rule: " + rule.text());
-			}
-		};
-		
-		return textMatchesRule(text, candidateRules);
+		throwIfAnyRuleIsInvalid(candidateRules);
+		return textMatchesRule(text, (Iterable<MatchingRule>) candidateRules);
 	}
 
 	@Override
-	public String testOverrideRulesWithText(String textToMatch, Iterable<OverrideRule> rules)
+	public String testOverrideRulesWithText(String textToMatch, Iterable<? extends TransactionRule> rules)
 	{
-		for (OverrideRule rule : rules)
-		{
-			if(!rule.isValid())
-			{
-				throw new IllegalArgumentException("list contains invalid rule: " + rule);
-			}
-		};
+		throwIfAnyRuleIsInvalid(rules);
 
-		String override = getOverrideForTextUsingRules(textToMatch, rules);
+		@SuppressWarnings("unchecked")
+		String override = getOverrideForTextUsingRules(textToMatch, (Iterable<OverrideRule>) rules);
 		
 		return override == null ? "" : override;
 	}
@@ -316,5 +306,15 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		return null;
 	}
 
+	private void throwIfAnyRuleIsInvalid(Iterable<? extends TransactionRule> candidateRules)
+	{
+		for (TransactionRule rule : candidateRules)
+		{
+			if(!rule.isValid())
+			{
+				throw new IllegalArgumentException("list contains invalid rule: " + rule);
+			}
+		};
+	}
 
 }

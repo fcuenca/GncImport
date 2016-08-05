@@ -3,6 +3,6 @@ package gncimport.transfer;
 
 public interface RuleTester
 {
-	boolean tryMatchingRulesWithText(String textToMatch, Iterable<MatchingRule> candidateRules);
-	String tryOverrideRulesWithText(String textToMatch, Iterable<OverrideRule> candidateRules);
+	boolean tryMatchingRulesWithText(String textToMatch, Iterable<? extends TransactionRule> candidateRules);
+	String tryOverrideRulesWithText(String textToMatch, Iterable<? extends TransactionRule> candidateRules);
 }
