@@ -69,6 +69,6 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 
 	public String testRulesWithText(String textToMatch)
 	{
-		return _tester.tryOverrideRulesWithText(textToMatch, _rules);
+		return _tester.tryRulesWithText(textToMatch, _rules);
 	}
 }

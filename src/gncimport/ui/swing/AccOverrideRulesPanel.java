@@ -24,16 +24,9 @@ public class AccOverrideRulesPanel extends PropertyEditorPanel
 	{
 		String result = ((AccOverrideRulesTableModel) _ruleTable.getModel()).testRulesWithText(testString);
 		
-		if(result != "")
-		{
-			resultLabel.setText(result);
-			return true;
-		}
-		else
-		{
-			resultLabel.setText(null);
-			return false;
-		}
+		resultLabel.setText(result);
+		
+		return result != null;
 	}
 
 }

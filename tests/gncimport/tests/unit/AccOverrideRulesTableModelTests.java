@@ -176,7 +176,7 @@ public class AccOverrideRulesTableModelTests
 	@Test
 	public void can_test_rules_against_sample_text()
 	{
-		when(_tester.tryOverrideRulesWithText("rule-1", _overrideList)).thenReturn("override");
+		when(_tester.tryRulesWithText("rule-1", _overrideList)).thenReturn("override");
 		
 		assertThat(_tableModel.testRulesWithText("rule-1"), is("override"));
 	}

@@ -11,9 +11,9 @@ import static org.mockito.Mockito.reset;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.interactors.PropertyEditInteractor.OutPort;
 import gncimport.models.RuleModel;
-import gncimport.transfer.MatchingRule;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
+import gncimport.transfer.TransactionRule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
 
 @RunWith(Parameterized.class)
 public class RuleTesterContractTests
@@ -57,39 +58,31 @@ public class RuleTesterContractTests
 		_model = model;
 	}
 	
-	@Test
-	public void trying_ignore_rules()
+	class TransactionRuleForTest implements TransactionRule
 	{
-		final Iterable<MatchingRule> ignoreRules = new ArrayList<MatchingRule>();
-			
-		doAnswer(new Answer<String>(){
-            @SuppressWarnings("unchecked")
-			@Override
-			public String answer(InvocationOnMock invocation) throws Throwable
-			{
-                Object[] args = invocation.getArguments();
-				String text = (String) args[0];
-				List<MatchingRule> candidates = (List<MatchingRule>) args[1];
-				
-				if(ignoreRules != candidates) fail("unrecognized list of ignore rules");
-				
-				if(text.equals("rule-1")) return "IGNORE";
-				if(text.equals("rule-2")) return null;
-				
-				return "";
-			}
-			
-		}).when(_model).testRulesWithText(anyString(), anyListOf(MatchingRule.class));
+		@Override
+		public boolean isValid()
+		{
+			return true;
+		}
 
-		
-		assertThat(_tester.tryMatchingRulesWithText("rule-1", ignoreRules), is(true));
-		assertThat(_tester.tryMatchingRulesWithText("rule-2", ignoreRules), is(false));
+		@Override
+		public boolean matches(String someText)
+		{
+			return true;
+		}
+
+		@Override
+		public String textForPossitiveMatch()
+		{
+			return "matches";
+		}	
 	}
-
+	
 	@Test
-	public void trying_override_rules()
+	public void trying_rules_to_see_if_they_match()
 	{
-		final Iterable<OverrideRule> overrideRules = new ArrayList<OverrideRule>();
+		final Iterable<TransactionRuleForTest> someRules = new ArrayList<TransactionRuleForTest>();
 			
 		doAnswer(new Answer<String>(){
             @SuppressWarnings("unchecked")
@@ -97,20 +90,20 @@ public class RuleTesterContractTests
 			public String answer(InvocationOnMock invocation) throws Throwable
 			{
                 Object[] args = invocation.getArguments();
-				String text = (String) args[0];
-				List<OverrideRule> candidates = (List<OverrideRule>) args[1];
+                
+				String actualText = (String) args[0];
+				List<TransactionRuleForTest> actualRules = (List<TransactionRuleForTest>) args[1];
 				
-				if(overrideRules != candidates) fail("unrecognized list of override rules");
-				
-				if(text.equals("rule-1")) return "override";
+				if(someRules != actualRules) fail("unrecognized list of override rules");	
+				if(actualText.equals("rule-1")) return "override";
 	
 				return "";
 			}
 			
 		}).when(_model).testRulesWithText(anyString(), anyListOf(OverrideRule.class));
 
-		assertThat(_tester.tryOverrideRulesWithText("rule-1", overrideRules), is("override"));
-		assertThat(_tester.tryOverrideRulesWithText("rule-2", overrideRules), is(""));
+		assertThat(_tester.tryRulesWithText("rule-1", someRules), is("override"));
+		assertThat(_tester.tryRulesWithText("rule-2", someRules), is(""));
 	}
 
 }
