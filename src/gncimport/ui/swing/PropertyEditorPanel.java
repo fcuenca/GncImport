@@ -1,5 +1,6 @@
 package gncimport.ui.swing;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -9,14 +10,25 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 @SuppressWarnings("serial")
-public abstract class PropertyEditorPanel extends JPanel
+public class PropertyEditorPanel extends JPanel
 {
-	protected JTable _ruleTable;
+	private RuleTable _ruleTable;
+	
+	public PropertyEditorPanel(RuleTableModel model, String name)
+	{
+		_ruleTable = new RuleTable(model, name);
+		
+		setLayout(new BorderLayout());
+		
+		add(new JScrollPane(_ruleTable), BorderLayout.PAGE_START);
+		add(createToolBar(_ruleTable, model), BorderLayout.PAGE_END);
+	}
 
 	public void stopEditing()
 	{
@@ -101,6 +113,9 @@ public abstract class PropertyEditorPanel extends JPanel
 		return toolBar;
 	}
 	
-	protected abstract String testStringAgainstRules(String testString);
+	private String testStringAgainstRules(String testString)
+	{
+		return ((RuleTableModel) _ruleTable.getModel()).testRulesWithText(testString);
+	}
 
 }
