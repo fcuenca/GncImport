@@ -67,7 +67,11 @@ public abstract class PropertyEditorPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if(testStringAgainstRules(textField.getText(), resultLabel))
+				String result = testStringAgainstRules(textField.getText());
+
+				resultLabel.setText(result);
+				
+				if(result != null)
 				{
 					resultLabel.setIcon(passIcon);
 				}
@@ -97,6 +101,6 @@ public abstract class PropertyEditorPanel extends JPanel
 		return toolBar;
 	}
 	
-	protected abstract boolean testStringAgainstRules(String testString, JLabel resultLabel);
+	protected abstract String testStringAgainstRules(String testString);
 
 }

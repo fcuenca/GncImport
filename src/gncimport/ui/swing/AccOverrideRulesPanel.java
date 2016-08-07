@@ -2,7 +2,6 @@ package gncimport.ui.swing;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
@@ -20,13 +19,10 @@ public class AccOverrideRulesPanel extends PropertyEditorPanel
 		add(createToolBar(_ruleTable, tableModel), BorderLayout.PAGE_END);
 	}
 	
-	protected boolean testStringAgainstRules(String testString, JLabel resultLabel)
+	@Override
+	protected String testStringAgainstRules(String testString)
 	{
-		String result = ((AccOverrideRulesTableModel) _ruleTable.getModel()).testRulesWithText(testString);
-		
-		resultLabel.setText(result);
-		
-		return result != null;
+		return ((AccOverrideRulesTableModel) _ruleTable.getModel()).testRulesWithText(testString);
 	}
 
 }

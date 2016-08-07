@@ -2,7 +2,6 @@ package gncimport.ui.swing;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
@@ -20,8 +19,8 @@ public class IgnoreRulesPanel extends PropertyEditorPanel
 	}
 
 	@Override
-	protected boolean testStringAgainstRules(String testString, JLabel notUsed)
+	protected String testStringAgainstRules(String testString)
 	{
-		return ((IgnoreRulesTableModel) _ruleTable.getModel()).testRulesWithText((testString)) != null;
+		return ((IgnoreRulesTableModel) _ruleTable.getModel()).testRulesWithText((testString));
 	}
 }
