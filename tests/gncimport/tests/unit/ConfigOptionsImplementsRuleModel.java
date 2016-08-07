@@ -238,8 +238,8 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2")));
 
-		assertThat(_options.testMatchingRulesWithText("rule-1", rules), is("IGNORE"));
-		assertThat(_options.testMatchingRulesWithText("doesn't match", rules), nullValue());
+		assertThat(_options.testRulesWithText("rule-1", rules), is("IGNORE"));
+		assertThat(_options.testRulesWithText("doesn't match", rules), nullValue());
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -249,7 +249,7 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2", false)));
 		
-		_options.testMatchingRulesWithText("rule-1", rules); // should throw
+		_options.testRulesWithText("rule-1", rules); // should throw
 	}
 		
 	@Test
@@ -258,8 +258,8 @@ public class ConfigOptionsImplementsRuleModel
 		List<OverrideRule> rules = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("some text", "override")));
 		
-		assertThat(_options.testOverrideRulesWithText("doesn't match", rules), nullValue());
-		assertThat(_options.testOverrideRulesWithText("some text", rules), is("override"));
+		assertThat(_options.testRulesWithText("doesn't match", rules), nullValue());
+		assertThat(_options.testRulesWithText("some text", rules), is("override"));
 	}
 
 	@Test(expected=IllegalArgumentException.class)
@@ -269,7 +269,7 @@ public class ConfigOptionsImplementsRuleModel
 				new OverrideRule("some text", "override"),
 				new OverrideRule(new MatchingRuleForTest("invalid", false), new MatchingRuleForTest("some value"))));
 		
-		_options.testOverrideRulesWithText("some text", rules); //should throw
+		_options.testRulesWithText("some text", rules); //should throw
 	}
 
 	private void assertThatPropertiesMatchList(List<String> newRules, Properties properties, String propKeyRegex)

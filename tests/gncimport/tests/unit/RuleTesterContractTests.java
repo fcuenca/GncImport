@@ -79,7 +79,7 @@ public class RuleTesterContractTests
 				return "";
 			}
 			
-		}).when(_model).testMatchingRulesWithText(anyString(), anyListOf(MatchingRule.class));
+		}).when(_model).testRulesWithText(anyString(), anyListOf(MatchingRule.class));
 
 		
 		assertThat(_tester.tryMatchingRulesWithText("rule-1", ignoreRules), is(true));
@@ -107,7 +107,7 @@ public class RuleTesterContractTests
 				return "";
 			}
 			
-		}).when(_model).testOverrideRulesWithText(anyString(), anyListOf(OverrideRule.class));
+		}).when(_model).testRulesWithText(anyString(), anyListOf(OverrideRule.class));
 
 		assertThat(_tester.tryOverrideRulesWithText("rule-1", overrideRules), is("override"));
 		assertThat(_tester.tryOverrideRulesWithText("rule-2", overrideRules), is(""));

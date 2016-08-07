@@ -260,13 +260,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	}
 
 	@Override
-	public String testMatchingRulesWithText(String text, Iterable<? extends TransactionRule> candidateRules)
-	{
-		return testOverrideRulesWithText(text, candidateRules);
-	}
-
-	@Override
-	public String testOverrideRulesWithText(String textToMatch, Iterable<? extends TransactionRule> rules)
+	public String testRulesWithText(String textToMatch, Iterable<? extends TransactionRule> rules)
 	{
 		for (TransactionRule rule : rules)
 		{

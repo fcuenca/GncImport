@@ -9,7 +9,6 @@ public interface RuleModel
 	void replaceRulesWith(Map<String, Object> allRules);
 	void copyRulesTo(Map<String, Object> allRules);
 	
-	public String testMatchingRulesWithText(String textToMatch, Iterable<? extends TransactionRule> candidateRules);
-	public String testOverrideRulesWithText(String textToMatch, Iterable<? extends TransactionRule> rules);
+	public String testRulesWithText(String textToMatch, Iterable<? extends TransactionRule> rules);
 
 }
