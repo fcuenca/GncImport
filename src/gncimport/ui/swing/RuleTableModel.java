@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 public abstract class RuleTableModel extends AbstractTableModel
 {
 	protected List<? extends TransactionRule> _rules;
-	protected RuleTester _tester;
+	private RuleTester _tester;
 
 	public RuleTableModel(List<? extends TransactionRule> rules, RuleTester tester)
 	{
@@ -52,6 +52,11 @@ public abstract class RuleTableModel extends AbstractTableModel
 			_rules.remove(row);
 			fireTableDataChanged();
 		}
+	}
+
+	public String testRulesWithText(String sampleText)
+	{
+		return _tester.tryRulesWithText(sampleText, _rules);
 	}
 
 }

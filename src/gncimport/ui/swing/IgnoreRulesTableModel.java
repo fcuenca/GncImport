@@ -55,9 +55,4 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 		((List<MatchingRule>)_rules).add(new UserEnteredMatchingRule(""));
 		fireTableDataChanged();
 	}
-
-	public String testRulesWithText(String sampleText)
-	{
-		return _tester.tryRulesWithText(sampleText, _rules);
-	}
 }

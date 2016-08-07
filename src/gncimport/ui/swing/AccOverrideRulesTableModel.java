@@ -62,9 +62,4 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 		((List<OverrideRule>)_rules).add(new OverrideRule("", ""));
 		fireTableDataChanged();		
 	}
-
-	public String testRulesWithText(String textToMatch)
-	{
-		return _tester.tryRulesWithText(textToMatch, _rules);
-	}
 }
