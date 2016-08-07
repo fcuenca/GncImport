@@ -74,7 +74,7 @@ public class RuleTesterContractTests
 				if(ignoreRules != candidates) fail("unrecognized list of ignore rules");
 				
 				if(text.equals("rule-1")) return "IGNORE";
-				if(text.equals("rule-2")) return "";
+				if(text.equals("rule-2")) return null;
 				
 				return "";
 			}

@@ -116,13 +116,13 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	@Override
 	public String findAccountOverride(String txDescription)
 	{
-		return getOverrideForTextUsingRules(txDescription, _accountOverrideRules);
+		return getTextIfPossitiveMatch(txDescription, _accountOverrideRules);
 	}
 
 	@Override
 	public boolean isToBeIgnored(String txDescription)
 	{
-		return textMatchesRule(txDescription, _ignoreRules);
+		return getTextIfPossitiveMatch(txDescription, _ignoreRules) != null;
 	}
 
 	@Override
@@ -259,62 +259,36 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		allRules.put("acc-override", new ArrayList<OverrideRule>(_accountOverrideRules));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String testMatchingRulesWithText(String text, Iterable<? extends TransactionRule> candidateRules)
 	{
-		throwIfAnyRuleIsInvalid(candidateRules);
-		return textMatchesRule(text, (Iterable<MatchingRule>) candidateRules) ? "IGNORE" : "";
+		return testOverrideRulesWithText(text, candidateRules);
 	}
 
 	@Override
 	public String testOverrideRulesWithText(String textToMatch, Iterable<? extends TransactionRule> rules)
 	{
-		throwIfAnyRuleIsInvalid(rules);
-
-		@SuppressWarnings("unchecked")
-		String override = getOverrideForTextUsingRules(textToMatch, (Iterable<OverrideRule>) rules);
-		
-		return override == null ? "" : override;
-	}
-
-	private boolean textMatchesRule(String txDescription, Iterable<MatchingRule> rules)
-	{
-		for (MatchingRule rule : rules)
-		{
-			if (rule.matches(txDescription))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private String getOverrideForTextUsingRules(String txDescription, Iterable<OverrideRule> rules)
-	{
-		//TODO: find a better way to handle this case (class with two purposes) 
-		// here the OverrideRule is used for a slightly different purpose:
-		// the override text is not to be replaced in the matching text, but to override something else (the Account, in this case)
-		for (OverrideRule rule : rules)
-		{
-			if (rule.matches(txDescription))
-			{
-				return rule.override.text();
-			}
-		}
-
-		return null;
-	}
-
-	private void throwIfAnyRuleIsInvalid(Iterable<? extends TransactionRule> candidateRules)
-	{
-		for (TransactionRule rule : candidateRules)
+		for (TransactionRule rule : rules)
 		{
 			if(!rule.isValid())
 			{
 				throw new IllegalArgumentException("list contains invalid rule: " + rule);
 			}
 		};
+		return getTextIfPossitiveMatch(textToMatch, rules); 
+	}
+
+	private String getTextIfPossitiveMatch(String textToMatch, Iterable<? extends TransactionRule> rules)
+	{
+		for (TransactionRule rule : rules)
+		{
+			if (rule.matches(textToMatch))
+			{
+				return rule.textForPossitiveMatch();
+			}
+		}
+
+		return null;
 	}
 
 }

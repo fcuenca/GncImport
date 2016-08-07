@@ -93,4 +93,12 @@ public abstract class MatchingRule implements TransactionRule
 	{
 		return getClass().getSimpleName() + " [" + isValid() + ", " + text() + "]";
 	}
+	
+	@Override
+	public String textForPossitiveMatch()
+	{
+		return "IGNORE";
+	}
+
+	
 }

@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
@@ -238,7 +239,7 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("rule-2")));
 
 		assertThat(_options.testMatchingRulesWithText("rule-1", rules), is("IGNORE"));
-		assertThat(_options.testMatchingRulesWithText("doesn't match", rules), is(""));
+		assertThat(_options.testMatchingRulesWithText("doesn't match", rules), nullValue());
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -257,7 +258,7 @@ public class ConfigOptionsImplementsRuleModel
 		List<OverrideRule> rules = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("some text", "override")));
 		
-		assertThat(_options.testOverrideRulesWithText("doesn't match", rules), is(""));
+		assertThat(_options.testOverrideRulesWithText("doesn't match", rules), nullValue());
 		assertThat(_options.testOverrideRulesWithText("some text", rules), is("override"));
 	}
 

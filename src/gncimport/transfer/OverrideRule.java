@@ -78,4 +78,10 @@ public class OverrideRule implements TransactionRule
 			return false;
 		return true;
 	}
+
+	@Override
+	public String textForPossitiveMatch()
+	{
+		return override.text();
+	}
 }
