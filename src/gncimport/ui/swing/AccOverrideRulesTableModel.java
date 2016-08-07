@@ -34,28 +34,16 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 	}
 
 	@Override
-	public int getRowCount()
+	public Class<?> getColumnClass(int col)
 	{
-		return _rules.size();
+		return COLUMN_CLASSES[col];
 	}
-
+	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
 		OverrideRule rule = (OverrideRule) _rules.get(rowIndex);
 		return columnIndex == 0? rule.textToMatch : rule.override;
-	}
-	
-	@Override
-	public boolean isCellEditable(int row, int col)
-	{
-		return true;
-	}
-
-	@Override
-	public Class<?> getColumnClass(int col)
-	{
-		return COLUMN_CLASSES[col];
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -69,16 +57,6 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 		else updated = new OverrideRule(rule.textToMatch, (MatchingRule)value);
 		
 		((List<OverrideRule>)_rules).set(row, updated);
-	}
-
-	@Override
-	public void removeRule(int row)
-	{
-		if(row >= 0 && row < _rules.size())
-		{
-			_rules.remove(row);
-			fireTableDataChanged();
-		}
 	}
 
 	@SuppressWarnings("unchecked")

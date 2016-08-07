@@ -29,27 +29,21 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 	}
 
 	@Override
-	public int getRowCount()
-	{
-		return _rules.size();
-	}
-
-	@Override
 	public String getColumnName(int col)
 	{
 		return COLUMN_TITLES[col];
 	}
 
 	@Override
+	public Class<?> getColumnClass(int col)
+	{
+		return COLUMN_CLASSES[col];
+	}
+	
+	@Override
 	public Object getValueAt(int row, int col)
 	{
-		return (MatchingRule)_rules.get(row);
-	}
-
-	@Override
-	public boolean isCellEditable(int row, int col)
-	{
-		return true;
+		return _rules.get(row);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,28 +53,12 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 		((List<MatchingRule>)_rules).set(row, (MatchingRule) value);
 	}
 
-	@Override
-	public Class<?> getColumnClass(int col)
-	{
-		return COLUMN_CLASSES[col];
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public void newRow()
 	{
 		((List<MatchingRule>)_rules).add(new UserEnteredMatchingRule(""));
 		fireTableDataChanged();
-	}
-
-	@Override
-	public void removeRule(int row)
-	{
-		if(row >= 0 && row < _rules.size())
-		{
-			_rules.remove(row);
-			fireTableDataChanged();
-		}
 	}
 
 	@SuppressWarnings("unchecked")
