@@ -237,8 +237,8 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2")));
 
-		assertThat(_options.testMatchingRulesWithText("rule-1", rules), is(true));
-		assertThat(_options.testMatchingRulesWithText("doesn't match", rules), is(false));
+		assertThat(_options.testMatchingRulesWithText("rule-1", rules), is("IGNORE"));
+		assertThat(_options.testMatchingRulesWithText("doesn't match", rules), is(""));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

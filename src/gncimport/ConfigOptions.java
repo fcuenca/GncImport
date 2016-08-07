@@ -261,10 +261,10 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean testMatchingRulesWithText(String text, Iterable<? extends TransactionRule> candidateRules)
+	public String testMatchingRulesWithText(String text, Iterable<? extends TransactionRule> candidateRules)
 	{
 		throwIfAnyRuleIsInvalid(candidateRules);
-		return textMatchesRule(text, (Iterable<MatchingRule>) candidateRules);
+		return textMatchesRule(text, (Iterable<MatchingRule>) candidateRules) ? "IGNORE" : "";
 	}
 
 	@Override

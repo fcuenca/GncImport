@@ -62,10 +62,10 @@ public class RuleTesterContractTests
 	{
 		final Iterable<MatchingRule> ignoreRules = new ArrayList<MatchingRule>();
 			
-		doAnswer(new Answer<Boolean>(){
+		doAnswer(new Answer<String>(){
             @SuppressWarnings("unchecked")
 			@Override
-			public Boolean answer(InvocationOnMock invocation) throws Throwable
+			public String answer(InvocationOnMock invocation) throws Throwable
 			{
                 Object[] args = invocation.getArguments();
 				String text = (String) args[0];
@@ -73,10 +73,10 @@ public class RuleTesterContractTests
 				
 				if(ignoreRules != candidates) fail("unrecognized list of ignore rules");
 				
-				if(text.equals("rule-1")) return true;
-				if(text.equals("rule-2")) return false;
+				if(text.equals("rule-1")) return "IGNORE";
+				if(text.equals("rule-2")) return "";
 				
-				return false;
+				return "";
 			}
 			
 		}).when(_model).testMatchingRulesWithText(anyString(), anyListOf(MatchingRule.class));

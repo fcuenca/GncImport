@@ -38,7 +38,7 @@ public class PropertyEditInteractor implements RuleTester
 	@Override
 	public boolean tryMatchingRulesWithText(String textToMatch, Iterable<? extends TransactionRule> candidateRules)
 	{
-		return _model.testMatchingRulesWithText(textToMatch, candidateRules);
+		return _model.testMatchingRulesWithText(textToMatch, candidateRules).equals("IGNORE");
 	}
 
 	@Override
