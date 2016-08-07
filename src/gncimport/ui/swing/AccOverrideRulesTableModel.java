@@ -67,9 +67,8 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 		fireTableDataChanged();		
 	}
 
-	@SuppressWarnings("unchecked")
 	public String testRulesWithText(String textToMatch)
 	{
-		return _tester.tryOverrideRulesWithText(textToMatch, (Iterable<OverrideRule>)_rules);
+		return _tester.tryOverrideRulesWithText(textToMatch, _rules);
 	}
 }

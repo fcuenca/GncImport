@@ -61,9 +61,8 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 		fireTableDataChanged();
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean testRulesWithText(String sampleText)
 	{
-		return _ruleTester.tryMatchingRulesWithText(sampleText, (Iterable<MatchingRule>) _rules);
+		return _ruleTester.tryMatchingRulesWithText(sampleText, _rules);
 	}
 }
