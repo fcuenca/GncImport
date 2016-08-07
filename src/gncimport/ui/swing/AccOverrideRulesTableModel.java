@@ -12,13 +12,9 @@ public class AccOverrideRulesTableModel extends RuleTableModel
 	public static final String[] COLUMN_TITLES = { "Description Pattern", "Account Override" };
 	public static final Class<?>[] COLUMN_CLASSES = { MatchingRule.class,  MatchingRule.class };
 
-	private RuleTester _tester;
-
 	public AccOverrideRulesTableModel(List<OverrideRule> overrides, RuleTester tester)
 	{
-		if(overrides == null) throw new IllegalArgumentException("Override list cannot be null");
-		_rules = overrides;
-		_tester = tester;
+		super(overrides, tester);
 	}
 
 	@Override

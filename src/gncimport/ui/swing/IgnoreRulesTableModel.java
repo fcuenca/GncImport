@@ -12,14 +12,9 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 	public static final String[] COLUMN_TITLES = { "Description Pattern" };
 	public static final Class<?>[] COLUMN_CLASSES = { MatchingRule.class };
 
-	private RuleTester _ruleTester;
-
 	public IgnoreRulesTableModel(List<MatchingRule> ignoreRules, RuleTester tester)
 	{
-		if(ignoreRules == null) throw new IllegalArgumentException("Ignore Rule List cannot be null");
-				
-		this._rules = ignoreRules;
-		this._ruleTester = tester;
+		super(ignoreRules, tester);
 	}
 
 	@Override
@@ -61,9 +56,8 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 		fireTableDataChanged();
 	}
 
-	public boolean testRulesWithText(String sampleText)
+	public String testRulesWithText(String sampleText)
 	{
-		//return _ruleTester.tryMatchingRulesWithText(sampleText, _rules);
-		return _ruleTester.tryRulesWithText(sampleText, _rules) != null;
+		return _tester.tryRulesWithText(sampleText, _rules);
 	}
 }

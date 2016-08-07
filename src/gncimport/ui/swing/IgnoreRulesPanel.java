@@ -22,6 +22,6 @@ public class IgnoreRulesPanel extends PropertyEditorPanel
 	@Override
 	protected boolean testStringAgainstRules(String testString, JLabel notUsed)
 	{
-		return ((IgnoreRulesTableModel) _ruleTable.getModel()).testRulesWithText((testString));
+		return ((IgnoreRulesTableModel) _ruleTable.getModel()).testRulesWithText((testString)) != null;
 	}
 }

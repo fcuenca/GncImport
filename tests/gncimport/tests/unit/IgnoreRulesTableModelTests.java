@@ -165,6 +165,6 @@ public class IgnoreRulesTableModelTests
 	{
 		when(_tester.tryRulesWithText("rule-1", _ignoreList)).thenReturn("IGNORE");
 		
-		assertThat(_tableModel.testRulesWithText("rule-1"), is(true));
+		assertThat(_tableModel.testRulesWithText("rule-1"), is("IGNORE"));
 	}
 }

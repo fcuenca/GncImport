@@ -1,5 +1,6 @@
 package gncimport.ui.swing;
 
+import gncimport.transfer.RuleTester;
 import gncimport.transfer.TransactionRule;
 
 import java.util.List;
@@ -10,7 +11,16 @@ import javax.swing.table.AbstractTableModel;
 public abstract class RuleTableModel extends AbstractTableModel
 {
 	protected List<? extends TransactionRule> _rules;
+	protected RuleTester _tester;
 
+	public RuleTableModel(List<? extends TransactionRule> rules, RuleTester tester)
+	{
+		if(rules == null) throw new IllegalArgumentException("Rule List cannot be null");
+
+		_rules = rules;
+		_tester = tester;
+	}
+	
 	public abstract void newRow();
 	
 	public boolean isValid()
