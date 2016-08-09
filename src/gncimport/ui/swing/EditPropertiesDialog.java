@@ -1,5 +1,7 @@
 package gncimport.ui.swing;
 
+import gncimport.transfer.RuleCategory;
+
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -22,10 +24,10 @@ public class EditPropertiesDialog extends JDialog
 	private boolean _okClicked;
 	private PropertyEditorPanel _currentPanel;
 	
-	public EditPropertiesDialog(Frame aFrame, Map<String, RuleTableModel> models)
+	public EditPropertiesDialog(Frame aFrame, Map<RuleCategory, RuleTableModel> models)
 	{
 		super(aFrame, true);
-
+		
 		setLayout(new BorderLayout());
 		setTitle("Property Editor");
 		setName("PROP_EDITOR_DLG");
@@ -38,13 +40,13 @@ public class EditPropertiesDialog extends JDialog
 		pack();
 	}
 
-	private JTabbedPane createTabs(Map<String, RuleTableModel> models)
+	private JTabbedPane createTabs(Map<RuleCategory, RuleTableModel> models)
 	{
 		final JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
 		tabs.setName("PROPERTY_TABS");
 						
-		tabs.addTab("Ignore", new PropertyEditorPanel((RuleTableModel) models.get("ignore"), "IGNORE_RULES"));
-		tabs.addTab("Acc Override", new PropertyEditorPanel((RuleTableModel)models.get("acc-override"), "ACC_OVERRIDE_RULES"));
+		tabs.addTab("Ignore", new PropertyEditorPanel(models.get(RuleCategory.ignore), "IGNORE_RULES"));
+		tabs.addTab("Acc Override", new PropertyEditorPanel(models.get(RuleCategory.acc_override), "ACC_OVERRIDE_RULES"));
 		
 		_currentPanel = ((PropertyEditorPanel)tabs.getSelectedComponent());
 		tabs.addChangeListener(new ChangeListener()

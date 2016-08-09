@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.OverrideRule;
+import gncimport.transfer.RuleCategory;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.presenters.PropertyEditorPresenter;
@@ -31,7 +32,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class PropertyEditorPresenterTests
 {
 	@Captor
-	private ArgumentCaptor<Map<String, RuleTableModel>> expectedModelMap;
+	private ArgumentCaptor<Map<RuleCategory, RuleTableModel>> expectedModelMap;
 	
 	private TxView _view;
 	private PropertyEditorPresenter _presenter;
@@ -64,13 +65,13 @@ public class PropertyEditorPresenterTests
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(true));
 		
-		RuleTableModel tm = expectedModelMap.getValue().get("ignore");
+		RuleTableModel tm = expectedModelMap.getValue().get(RuleCategory.ignore);
 		
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
 		assertThat(tm.getValueAt(1, 0), is((Object)new MatchingRuleForTest("rule-2")));
 		
-		RuleTableModel tm2 = expectedModelMap.getValue().get("acc-override");
+		RuleTableModel tm2 = expectedModelMap.getValue().get(RuleCategory.acc_override);
 		
 		assertThat(tm2.getRowCount(), is(2));
 		assertThat(tm2.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
@@ -85,7 +86,7 @@ public class PropertyEditorPresenterTests
 		allRules.put("ignore", new ArrayList<MatchingRule>());
 		allRules.put("acc-override", new ArrayList<OverrideRule>());
 		
-		when(_view.editProperties(anyMapOf(String.class, RuleTableModel.class))).thenReturn(false);
+		when(_view.editProperties(anyMapOf(RuleCategory.class, RuleTableModel.class))).thenReturn(false);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 	}
@@ -101,13 +102,13 @@ public class PropertyEditorPresenterTests
 		allRules.put("acc-override", new ArrayList<OverrideRule>());
 
 
-		when(_view.editProperties(anyMapOf(String.class, RuleTableModel.class)))
+		when(_view.editProperties(anyMapOf(RuleCategory.class, RuleTableModel.class)))
 			.thenReturn(true)
 			.thenReturn(false);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 		
-		verify(_view, times(2)).editProperties(anyMapOf(String.class, RuleTableModel.class));
+		verify(_view, times(2)).editProperties(anyMapOf(RuleCategory.class, RuleTableModel.class));
 		verify(_view).displayErrorMessage(anyString());
 	}
 }

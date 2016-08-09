@@ -3,6 +3,7 @@ package gncimport.ui.presenters;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.OverrideRule;
+import gncimport.transfer.RuleCategory;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.swing.AccOverrideRulesTableModel;
@@ -29,9 +30,9 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 		List<MatchingRule> ignoreRules = (List<MatchingRule>)allRules.get("ignore");
 		List<OverrideRule> accOverrideRules = (List<OverrideRule>)allRules.get("acc-override");
 		
-		Map<String, RuleTableModel> modelMap = new HashMap<String, RuleTableModel>();
-		modelMap.put("ignore", new IgnoreRulesTableModel(ignoreRules, tester)); //TODO: connection b/w table model and tester is not really tested
-		modelMap.put("acc-override", new AccOverrideRulesTableModel(accOverrideRules, tester));
+		Map<RuleCategory, RuleTableModel> modelMap = new HashMap<RuleCategory, RuleTableModel>();
+		modelMap.put(RuleCategory.ignore, new IgnoreRulesTableModel(ignoreRules, tester)); //TODO: connection b/w table model and tester is not really tested
+		modelMap.put(RuleCategory.acc_override, new AccOverrideRulesTableModel(accOverrideRules, tester));
 		
 		boolean changesConfirmed;
 		
@@ -54,7 +55,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 		}
 	}
 
-	private boolean allModelsAreValid(Map<String, RuleTableModel> modelMap)
+	private boolean allModelsAreValid(Map<RuleCategory, RuleTableModel> modelMap) //TODO: pass values collection -- whole map not needed
 	{
 		for (RuleTableModel tm : modelMap.values())
 		{

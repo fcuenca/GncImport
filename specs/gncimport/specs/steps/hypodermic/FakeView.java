@@ -1,6 +1,7 @@
 package gncimport.specs.steps.hypodermic;
 
 import gncimport.transfer.AccountData;
+import gncimport.transfer.RuleCategory;
 import gncimport.ui.TxView;
 import gncimport.ui.swing.RuleTableModel;
 import gncimport.ui.swing.TxTableModel;
@@ -116,7 +117,7 @@ public class FakeView implements TxView
 	}
 
 	@Override
-	public boolean editProperties(Map<String, RuleTableModel> models)
+	public boolean editProperties(Map<RuleCategory, RuleTableModel> models)
 	{		
 		return false;
 	}

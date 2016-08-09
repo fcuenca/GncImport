@@ -2,6 +2,7 @@ package gncimport.ui.swing;
 
 import gncimport.GncImportApp;
 import gncimport.transfer.AccountData;
+import gncimport.transfer.RuleCategory;
 import gncimport.ui.EventDispatcher;
 import gncimport.ui.TxView;
 import gncimport.ui.events.CreateAccHierarchyEvent;
@@ -422,7 +423,7 @@ public class GncImportMainWindow extends JPanel implements TxView, ActionListene
 	}
 	
 	@Override
-	public boolean editProperties(Map<String, RuleTableModel> models)
+	public boolean editProperties(Map<RuleCategory, RuleTableModel> models)
 	{
 		EditPropertiesDialog dlg = new EditPropertiesDialog(null, models);
 		
