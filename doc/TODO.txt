@@ -25,8 +25,6 @@ x Test in UI (table model)
 
 - Map<String, Object>: consider base class for the Values (?)
 - keys for the map: place constants somewhere else; create enum?
-- textMatchesRule, testRulesWithText -> ??
-- UI test: change test to check contents of the acc override tab
 - duplication in Config object & tests re:keys in map, types of objects in lists, etc
 - duplication all over around "ignore", "acc-override" (presenter, interactor, tests,....)
 
@@ -38,6 +36,7 @@ General improvements:
 - GncFile.addTransaction: validate source/target account are valid IDs (exist in file) 
 - Change the UI to a wizard (with steps) 
 - Presenter exception handling tests: find a way to generalize the test (using reflection?)
+- Smells around TransactionRule.textForPossitiveMatch()
 
 ==================
 DONE:

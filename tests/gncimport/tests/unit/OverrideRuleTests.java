@@ -50,6 +50,14 @@ public class OverrideRuleTests
 		
 		assertThat(rule.applyOverrideTo(text), is("some.xyz.text.xyz.end"));
 	}
+	
+	@Test
+	public void will_return_the_override_text_when_the_rule_is_a_match()
+	{
+		OverrideRule rule = new OverrideRule("matching text", "override");
+		
+		assertThat(rule.textForPossitiveMatch(), is("override"));
+	}
 
 
 

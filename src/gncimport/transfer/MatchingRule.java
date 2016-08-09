@@ -97,7 +97,11 @@ public abstract class MatchingRule implements TransactionRule
 	@Override
 	public String textForPossitiveMatch()
 	{
-		return "IGNORE";
+		return "MATCH"; // This value is really arbitrary: nothing (including the tests) should rely on it for anything significant
+		// HOWEVER: it's displayed in the UI when an ignore rule is tested, so the last statement is not *technically* correct :-/
+		// This method is really needed so that other code operating on rules can treat them polymorphically.
+		// The tests document current behaviour, and they don't rely on the returned value.
+		// This is smelly, but I can't put my finger on it..... (maybe the problem is just the name?)
 	}
 
 	

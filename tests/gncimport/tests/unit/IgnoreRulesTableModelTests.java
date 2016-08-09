@@ -163,8 +163,8 @@ public class IgnoreRulesTableModelTests
 	@Test
 	public void can_test_rules_against_sample_text()
 	{
-		when(_tester.tryRulesWithText("rule-1", _ignoreList)).thenReturn("IGNORE");
+		when(_tester.tryRulesWithText("rule-1", _ignoreList)).thenReturn("ARBITRARY TEXT");
 		
-		assertThat(_tableModel.testRulesWithText("rule-1"), is("IGNORE"));
+		assertThat(_tableModel.testRulesWithText("rule-1"), is("ARBITRARY TEXT"));
 	}
 }

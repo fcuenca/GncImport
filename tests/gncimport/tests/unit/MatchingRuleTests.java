@@ -1,6 +1,8 @@
 package gncimport.tests.unit;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.*;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.UserEnteredMatchingRule;
@@ -8,7 +10,7 @@ import gncimport.utils.ProgrammerError;
 
 import org.junit.Test;
 
-public class MatchingTextTests
+public class MatchingRuleTests
 {	
 	@Test
 	public void valid_regex_makes_a_valid_rule()
@@ -110,6 +112,15 @@ public class MatchingTextTests
 		
 		assertThat(rule.matches("  abcd   "), is(true));
 	}
+	
+	@Test
+	public void will_return_some_arbitrary_string_to_indicate_the_rule_is_a_match() //Hmmm... :-/
+	{
+		MatchingRule rule = new UserEnteredMatchingRule("the rule");
+		
+		assertThat(rule.textForPossitiveMatch(), not(nullValue())); 
+	}
+
 
 
 }

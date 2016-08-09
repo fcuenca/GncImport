@@ -238,7 +238,7 @@ public class ConfigOptionsImplementsRuleModel
 				new MatchingRuleForTest("rule-1"), 
 				new MatchingRuleForTest("rule-2")));
 
-		assertThat(_options.testRulesWithText("rule-1", rules), is("IGNORE"));
+		assertThat(_options.testRulesWithText("rule-1", rules), is(not(nullValue())));
 		assertThat(_options.testRulesWithText("doesn't match", rules), nullValue());
 	}
 	
