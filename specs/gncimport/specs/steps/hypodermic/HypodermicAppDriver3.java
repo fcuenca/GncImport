@@ -38,6 +38,14 @@ public class HypodermicAppDriver3
 	private List<MatchingRule> _observedIgnoreRules = new ArrayList<MatchingRule>();	
 	private List<OverrideRule> _observedAccOverrideRules = new ArrayList<OverrideRule>();	
 
+	@SuppressWarnings("unchecked")
+	private void collectObservedRules(Map<RuleCategory, Object> allRules)
+	{
+		_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get(RuleCategory.ignore));
+		_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.acc_override));
+	}
+
+
 	class AccSelectionOutput implements AccSelectionInteractor.OutPort
 	{
 		@Override
@@ -291,13 +299,10 @@ public class HypodermicAppDriver3
 	{
 		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
 		{
-			@SuppressWarnings("unchecked")
 			@Override
 			public boolean editProperties(Map<RuleCategory, Object> allRules, RuleTester tester)
 			{
-				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get(RuleCategory.ignore));
-				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.acc_override));
-				
+				collectObservedRules(allRules);
 				return false;
 			}
 		};
@@ -313,8 +318,7 @@ public class HypodermicAppDriver3
 			@Override
 			public boolean editProperties(Map<RuleCategory, Object> allRules,RuleTester tester)
 			{
-				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get(RuleCategory.ignore));
-				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.acc_override));
+				collectObservedRules(allRules);
 
 				((List<MatchingRule>) allRules.get(RuleCategory.ignore)).clear();
 				
@@ -338,8 +342,7 @@ public class HypodermicAppDriver3
 			@Override
 			public boolean editProperties(Map<RuleCategory, Object> allRules, RuleTester tester)
 			{
-				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get(RuleCategory.ignore));
-				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.acc_override));
+				collectObservedRules(allRules);
 
 				((List<OverrideRule>) allRules.get(RuleCategory.acc_override)).clear();
 
@@ -353,6 +356,7 @@ public class HypodermicAppDriver3
 				
 				return true;
 			}
+
 		};
 		
 		_interactors.propertyEdit(boundary).editProperties();
