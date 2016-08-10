@@ -25,10 +25,10 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
-	{		
-		List<MatchingRule> ignoreRules = (List<MatchingRule>)allRules.get("ignore");
-		List<OverrideRule> accOverrideRules = (List<OverrideRule>)allRules.get("acc-override");
+	public boolean editProperties(Map<RuleCategory, Object> allRules, RuleTester tester)
+	{	
+		List<MatchingRule> ignoreRules = (List<MatchingRule>)allRules.get(RuleCategory.ignore);
+		List<OverrideRule> accOverrideRules = (List<OverrideRule>)allRules.get(RuleCategory.acc_override);
 		
 		Map<RuleCategory, RuleTableModel> modelMap = new HashMap<RuleCategory, RuleTableModel>();
 		modelMap.put(RuleCategory.ignore, new IgnoreRulesTableModel(ignoreRules, tester)); //TODO: connection b/w table model and tester is not really tested

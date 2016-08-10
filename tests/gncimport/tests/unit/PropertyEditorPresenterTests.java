@@ -57,9 +57,9 @@ public class PropertyEditorPresenterTests
 				new OverrideRule("rule-1", "acc-1"), 
 				new OverrideRule("rule-2", "acc-2")));
 	
-		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("ignore", rules);
-		allRules.put("acc-override", rules2);
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.ignore, rules);
+		allRules.put(RuleCategory.acc_override, rules2);
 
 		when(_view.editProperties(expectedModelMap.capture())).thenReturn(true);
 		
@@ -82,9 +82,9 @@ public class PropertyEditorPresenterTests
 	@Test
 	public void signals_that_user_canceled_editing()
 	{
-		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("ignore", new ArrayList<MatchingRule>());
-		allRules.put("acc-override", new ArrayList<OverrideRule>());
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.ignore, new ArrayList<MatchingRule>());
+		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>());
 		
 		when(_view.editProperties(anyMapOf(RuleCategory.class, RuleTableModel.class))).thenReturn(false);
 		
@@ -97,9 +97,9 @@ public class PropertyEditorPresenterTests
 		List<MatchingRule> rules = new ArrayList<MatchingRule>(ListUtils.list_of(
 				 new MatchingRuleForTest("rule-1"), 
 				 new MatchingRuleForTest("rule-2", false)));
-		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("ignore", rules);
-		allRules.put("acc-override", new ArrayList<OverrideRule>());
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.ignore, rules);
+		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>());
 
 
 		when(_view.editProperties(anyMapOf(RuleCategory.class, RuleTableModel.class)))

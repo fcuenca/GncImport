@@ -12,6 +12,7 @@ import gncimport.tests.unit.ListUtils;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
 import gncimport.transfer.OverrideRule;
+import gncimport.transfer.RuleCategory;
 import gncimport.transfer.RuleTester;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.TxData;
@@ -292,10 +293,10 @@ public class HypodermicAppDriver3
 		{
 			@SuppressWarnings("unchecked")
 			@Override
-			public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
+			public boolean editProperties(Map<RuleCategory, Object> allRules, RuleTester tester)
 			{
-				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get("ignore"));
-				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get("acc-override"));
+				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get(RuleCategory.ignore));
+				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.acc_override));
 				
 				return false;
 			}
@@ -310,16 +311,16 @@ public class HypodermicAppDriver3
 		{
 			@SuppressWarnings("unchecked")
 			@Override
-			public boolean editProperties(Map<String, Object> allRules,RuleTester tester)
+			public boolean editProperties(Map<RuleCategory, Object> allRules,RuleTester tester)
 			{
-				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get("ignore"));
-				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get("acc-override"));
+				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get(RuleCategory.ignore));
+				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.acc_override));
 
-				((List<MatchingRule>) allRules.get("ignore")).clear();
+				((List<MatchingRule>) allRules.get(RuleCategory.ignore)).clear();
 				
 				for (String rule : newRules)
 				{
-					((List<MatchingRule>) allRules.get("ignore")).add(new UserEnteredMatchingRule(rule));					
+					((List<MatchingRule>) allRules.get(RuleCategory.ignore)).add(new UserEnteredMatchingRule(rule));					
 				}
 				
 				return true;
@@ -335,19 +336,19 @@ public class HypodermicAppDriver3
 		{
 			@SuppressWarnings("unchecked")
 			@Override
-			public boolean editProperties(Map<String, Object> allRules, RuleTester tester)
+			public boolean editProperties(Map<RuleCategory, Object> allRules, RuleTester tester)
 			{
-				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get("ignore"));
-				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get("acc-override"));
+				_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get(RuleCategory.ignore));
+				_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.acc_override));
 
-				((List<OverrideRule>) allRules.get("acc-override")).clear();
+				((List<OverrideRule>) allRules.get(RuleCategory.acc_override)).clear();
 
 				for (Map<String, String> map : newRules)
 				{
 					String desc = map.get("Description");
 					String account = map.get("Account");
 					
-					((List<OverrideRule>) allRules.get("acc-override")).add(new OverrideRule(desc, account));	
+					((List<OverrideRule>) allRules.get(RuleCategory.acc_override)).add(new OverrideRule(desc, account));	
 				}
 				
 				return true;

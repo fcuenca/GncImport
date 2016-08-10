@@ -24,7 +24,6 @@ x Test in Rule Tester (Interactor)
 x Test in UI (table model)
 
 - Map<String, Object>: consider base class for the Values (?)
-- keys for the map: place constants somewhere else; create enum?
 - duplication in Config object & tests re:keys in map, types of objects in lists, etc
 - duplication all over around "ignore", "acc-override" (presenter, interactor, tests,....)
 

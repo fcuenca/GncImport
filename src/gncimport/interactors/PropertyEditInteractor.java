@@ -1,6 +1,7 @@
 package gncimport.interactors;
 
 import gncimport.models.RuleModel;
+import gncimport.transfer.RuleCategory;
 import gncimport.transfer.RuleTester;
 import gncimport.transfer.TransactionRule;
 
@@ -14,7 +15,7 @@ public class PropertyEditInteractor implements RuleTester
 
 	public interface OutPort
 	{
-		boolean editProperties(Map<String, Object> allRules, RuleTester tester);
+		boolean editProperties(Map<RuleCategory, Object> allRules, RuleTester tester);
 	}
 	
 	public PropertyEditInteractor(OutPort outPort, RuleModel model)
@@ -25,7 +26,7 @@ public class PropertyEditInteractor implements RuleTester
 
 	public void editProperties()
 	{
-		Map<String, Object> allRules = new HashMap<String, Object>();
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 				
 		_model.copyRulesTo(allRules);
 		

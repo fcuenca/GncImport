@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.models.RuleModel;
+import gncimport.transfer.RuleCategory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class PropertyEditInteractorTests
 	private PropertyEditInteractor _interactor;
 
 	@Captor
-	private ArgumentCaptor<Map<String, Object>> _expectedRules;
+	private ArgumentCaptor<Map<RuleCategory, Object>> _expectedRules;
 	
 	@Before
 	public void Setup()
@@ -53,30 +54,30 @@ public class PropertyEditInteractorTests
 			{
                 Object[] args = invocation.getArguments();
                 @SuppressWarnings("unchecked")
-				Map<String, Object> allRules = (Map<String, Object>) args[0];
-                allRules.put("first", "list of rules 1");
-                allRules.put("second", "list of rules 2");
+				Map<RuleCategory, Object> allRules = (Map<RuleCategory, Object>) args[0];
+                allRules.put(RuleCategory.ignore, "list of rules 1");
+                allRules.put(RuleCategory.acc_override, "list of rules 2");
                 
 				return null;
 			}
 			
-		}).when(_model).copyRulesTo(anyMapOf(String.class, Object.class));
+		}).when(_model).copyRulesTo(anyMapOf(RuleCategory.class, Object.class));
 		
 		_interactor.editProperties();
 		
 		verify(_outPort).editProperties(_expectedRules.capture(), same(_interactor));
 		
 		assertThat(_expectedRules.getValue().size(), is(2));
-		assertThat(_expectedRules.getValue(), hasEntry("first", (Object)"list of rules 1"));
-		assertThat(_expectedRules.getValue(), hasEntry("second", (Object)"list of rules 2"));
+		assertThat(_expectedRules.getValue(), hasEntry(RuleCategory.ignore, (Object)"list of rules 1"));
+		assertThat(_expectedRules.getValue(), hasEntry(RuleCategory.acc_override, (Object)"list of rules 2"));
 	}
 	
 	@Test
 	public void updates_edited_properties_when_user_makes_changes()
 	{
-		final Map<String, Object> expectedRuleMap = new HashMap<String, Object>();
-		expectedRuleMap.put("first", "edited list of rules 2");
-		expectedRuleMap.put("second", "edited list of rules 2");
+		final Map<RuleCategory, Object> expectedRuleMap = new HashMap<RuleCategory, Object>();
+		expectedRuleMap.put(RuleCategory.ignore, "edited list of rules 2");
+		expectedRuleMap.put(RuleCategory.acc_override, "edited list of rules 2");
 		
 		doAnswer(new Answer<Boolean>(){
 			@Override
@@ -85,13 +86,13 @@ public class PropertyEditInteractorTests
                 Object[] args = invocation.getArguments();
                 
                 @SuppressWarnings("unchecked")
-				Map<String, Object> allRules = (Map<String, Object>) args[0];
+				Map<RuleCategory, Object> allRules = (Map<RuleCategory, Object>) args[0];
                 allRules.putAll(expectedRuleMap);
                 
 				return true;
 			}
 			
-		}).when(_outPort).editProperties(anyMapOf(String.class, Object.class), same(_interactor));
+		}).when(_outPort).editProperties(anyMapOf(RuleCategory.class, Object.class), same(_interactor));
 		
 		_interactor.editProperties();
 		
@@ -101,11 +102,11 @@ public class PropertyEditInteractorTests
 	@Test
 	public void keeps_properties_unchanged_when_user_cancel_edits()
 	{
-		when(_outPort.editProperties(anyMapOf(String.class, Object.class), same(_interactor))).thenReturn(false);
+		when(_outPort.editProperties(anyMapOf(RuleCategory.class, Object.class), same(_interactor))).thenReturn(false);
 		
 		_interactor.editProperties();
 		
-		verify(_model, never()).replaceRulesWith(anyMapOf(String.class, Object.class));
+		verify(_model, never()).replaceRulesWith(anyMapOf(RuleCategory.class, Object.class));
 	}
 	
 }

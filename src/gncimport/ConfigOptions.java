@@ -5,6 +5,7 @@ import gncimport.models.TxMatcher;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.OverrideRule;
+import gncimport.transfer.RuleCategory;
 import gncimport.transfer.TransactionRule;
 import gncimport.transfer.UserEnteredMatchingRule;
 import gncimport.ui.UIConfig;
@@ -225,38 +226,39 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void replaceRulesWith(Map<String, Object> allRules)
+	public void replaceRulesWith(Map<RuleCategory, Object> allRules)
 	{
 		if(allRules == null)
 		{
 			throw new IllegalArgumentException("rules cannot be null");
 		}
 		
-		if (!(allRules.containsKey("ignore") && allRules.containsKey("acc-override")))
+		if (!(allRules.containsKey(RuleCategory.ignore) && allRules.containsKey(RuleCategory.acc_override)))
 		{
 			throw new ProgrammerError("Improper keys found in Rule Map: " + allRules.keySet());			
 		}
 
 	
 		List<MatchingRule> newIgnores;
-		newIgnores = (List<MatchingRule>) allRules.get("ignore");
+		newIgnores = (List<MatchingRule>) allRules.get(RuleCategory.ignore);
 		_ignoreRules = new ArrayList<MatchingRule>(newIgnores);
 		
-		List<OverrideRule> newOverrides = (List<OverrideRule>)allRules.get("acc-override");
+		List<OverrideRule> newOverrides = (List<OverrideRule>)allRules.get(RuleCategory.acc_override);
 		_accountOverrideRules = new ArrayList<OverrideRule>(newOverrides);	
 	}
 
 	@Override
-	public void copyRulesTo(Map<String, Object> allRules)
+	public void copyRulesTo(Map<RuleCategory, Object> allRules)
 	{
+		
 		if(allRules == null)
 		{
 			throw new IllegalArgumentException("rules cannot be null");
 		}
 		
 		allRules.clear();
-		allRules.put("ignore", new ArrayList<MatchingRule>(_ignoreRules));
-		allRules.put("acc-override", new ArrayList<OverrideRule>(_accountOverrideRules));
+		allRules.put(RuleCategory.ignore, new ArrayList<MatchingRule>(_ignoreRules));
+		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>(_accountOverrideRules));
 	}
 
 	@Override

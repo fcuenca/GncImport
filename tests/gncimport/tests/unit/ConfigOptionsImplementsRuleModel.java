@@ -12,6 +12,7 @@ import gncimport.ConfigOptions;
 import gncimport.ConfigPropertyBuilder;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.OverrideRule;
+import gncimport.transfer.RuleCategory;
 import gncimport.transfer.UserEnteredMatchingRule;
 import gncimport.utils.ProgrammerError;
 
@@ -63,20 +64,20 @@ public class ConfigOptionsImplementsRuleModel
 	@Test
 	public void provides_current_ignore_rules()
 	{
-		Map<String, Object> allRules = new HashMap<String, Object>();
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		
 		_options.copyRulesTo(allRules);
 		
 		assertThat(allRules.size(), is(2));
 
-		assertThat(allRules, hasKey("ignore"));
-		assertThat(allRules, hasKey("acc-override"));
+		assertThat(allRules, hasKey(RuleCategory.ignore));
+		assertThat(allRules, hasKey(RuleCategory.acc_override));
 
-		assertThat(asTestRules((List<MatchingRule>) allRules.get("ignore")), hasItems(
+		assertThat(asTestRules((List<MatchingRule>) allRules.get(RuleCategory.ignore)), hasItems(
 				new MatchingRuleForTest("WEB TRANSFER"), 
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*")));
 		
-		assertThat((List<OverrideRule>)allRules.get("acc-override"), hasItems(
+		assertThat((List<OverrideRule>)allRules.get(RuleCategory.acc_override), hasItems(
 				new OverrideRule("acc-desc-1", "acc-override-1"),
 				new OverrideRule("acc-desc-2", "acc-override-2")));
 	}
@@ -91,13 +92,13 @@ public class ConfigOptionsImplementsRuleModel
 	@Test
 	public void replaces_content_when_providing_ignore_rules()
 	{
-		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("some key", "some value");
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.none, "some value"); // TODO: Hmmmm....
 		
 		_options.copyRulesTo(allRules);
 		
 		assertThat(allRules.size(), is(not(0)));
-		assertThat(allRules, not(hasKey("some key")));
+		assertThat(allRules, not(hasKey(RuleCategory.none)));
 	}
 		
 	@SuppressWarnings("unchecked")
@@ -105,17 +106,17 @@ public class ConfigOptionsImplementsRuleModel
 	public void if_no_properties_are_defined_empty_rule_lists_are_returned()
 	{
 		List<MatchingRule> rules = new ArrayList<MatchingRule>();
-		Map<String, Object> allRules = new HashMap<String, Object>();
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		
 		_options = new ConfigOptions(new Properties());
 		_options.copyRulesTo(allRules);
 		
 		assertThat(rules, is(empty()));
 		
-		assertThat(allRules, hasKey("ignore"));
-		assertThat((List<MatchingRule>)allRules.get("ignore"), is(empty()));
-		assertThat(allRules, hasKey("acc-override"));
-		assertThat((List<OverrideRule>)allRules.get("acc-override"), is(empty()));
+		assertThat(allRules, hasKey(RuleCategory.ignore));
+		assertThat((List<MatchingRule>)allRules.get(RuleCategory.ignore), is(empty()));
+		assertThat(allRules, hasKey(RuleCategory.acc_override));
+		assertThat((List<OverrideRule>)allRules.get(RuleCategory.acc_override), is(empty()));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -130,13 +131,13 @@ public class ConfigOptionsImplementsRuleModel
 		List<OverrideRule> newAccOverrides = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("new-desc", "new-override")));
 		
-		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("ignore", newIgnores);
-		allRules.put("acc-override", newAccOverrides);
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.ignore, newIgnores);
+		allRules.put(RuleCategory.acc_override, newAccOverrides);
 		
 		_options.replaceRulesWith(allRules);
 						
-		Map<String, Object> updatedAllRules = new HashMap<String, Object>();
+		Map<RuleCategory, Object> updatedAllRules = new HashMap<RuleCategory, Object>();
 
 		_options.copyRulesTo(updatedAllRules);
 
@@ -145,12 +146,12 @@ public class ConfigOptionsImplementsRuleModel
 		newAccOverrides.clear();
 		allRules.clear(); 
 		
-		assertThat(asTestRules((List<MatchingRule>) updatedAllRules.get("ignore")), hasItems(
+		assertThat(asTestRules((List<MatchingRule>) updatedAllRules.get(RuleCategory.ignore)), hasItems(
 				new MatchingRuleForTest("MISC PAYMENT - RBC CREDIT CARD.*"), 
 				new MatchingRuleForTest("new-rule-1"), 
 				new MatchingRuleForTest("new-rule-2")));
 		
-		assertThat((List<OverrideRule>)updatedAllRules.get("acc-override"), hasItems(
+		assertThat((List<OverrideRule>)updatedAllRules.get(RuleCategory.acc_override), hasItems(
 				new OverrideRule("new-desc", "new-override")));
 
 
@@ -166,8 +167,8 @@ public class ConfigOptionsImplementsRuleModel
 	@Test(expected=ProgrammerError.class)
 	public void rejects_map_without_ignore_list()
 	{
-		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("acc-override", "irrelevant");
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.acc_override, "irrelevant");
 		
 		_options.replaceRulesWith(allRules);
 	}
@@ -175,8 +176,8 @@ public class ConfigOptionsImplementsRuleModel
 	@Test(expected=ProgrammerError.class)
 	public void rejects_map_without_accOverride_list()
 	{
-		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("ignore", "irrelevant");
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.ignore, "irrelevant");
 		
 		_options.replaceRulesWith(allRules);
 	}
@@ -193,18 +194,18 @@ public class ConfigOptionsImplementsRuleModel
 		List<OverrideRule> newAccOverrides = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("new-desc", "new-override")));
 
-		Map<String, Object> allRules = new HashMap<String, Object>();
-		allRules.put("ignore", newIgnores);
-		allRules.put("acc-override", newAccOverrides);
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.ignore, newIgnores);
+		allRules.put(RuleCategory.acc_override, newAccOverrides);
 
 		_options.replaceRulesWith(allRules);
 				
 		ConfigOptions newConfig = new ConfigOptions(_options.getProperties());
-		Map<String, Object> newAllRules = new HashMap<String, Object>();
+		Map<RuleCategory, Object> newAllRules = new HashMap<RuleCategory, Object>();
 		newConfig.copyRulesTo(newAllRules);
 		
-		assertThat((List<MatchingRule>)newAllRules.get("ignore"), containsInAnyOrder(newIgnores.toArray()));
-		assertThat((List<OverrideRule>)newAllRules.get("acc-override"), containsInAnyOrder(newAccOverrides.toArray()));
+		assertThat((List<MatchingRule>)newAllRules.get(RuleCategory.ignore), containsInAnyOrder(newIgnores.toArray()));
+		assertThat((List<OverrideRule>)newAllRules.get(RuleCategory.acc_override), containsInAnyOrder(newAccOverrides.toArray()));
 	}
 
 	@Test
