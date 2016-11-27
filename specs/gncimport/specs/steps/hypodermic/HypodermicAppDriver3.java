@@ -37,12 +37,14 @@ public class HypodermicAppDriver3
 	
 	private List<MatchingRule> _observedIgnoreRules = new ArrayList<MatchingRule>();	
 	private List<OverrideRule> _observedAccOverrideRules = new ArrayList<OverrideRule>();	
+	private List<OverrideRule> _observedTxOverrideRules = new ArrayList<OverrideRule>();	
 
 	@SuppressWarnings("unchecked")
 	private void collectObservedRules(Map<RuleCategory, Object> allRules)
 	{
 		_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get(RuleCategory.ignore));
 		_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.acc_override));
+		_observedTxOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.tx_override));
 	}
 
 
@@ -430,9 +432,19 @@ public class HypodermicAppDriver3
 
 	public List<List<String>> observedAccountOverrideRules()
 	{
+		return rulesAsStringList(_observedAccOverrideRules);
+	}
+
+	public List<List<String>> observedTransactionRewriteRules()
+	{
+		return rulesAsStringList(_observedTxOverrideRules);
+	}
+
+	private List<List<String>> rulesAsStringList(List<OverrideRule> ruleList)
+	{
 		List<List<String>> rules = new ArrayList<List<String>>();
 		
-		for (OverrideRule rule : _observedAccOverrideRules)
+		for (OverrideRule rule : ruleList)
 		{
 			rules.add(new ArrayList<String>(ListUtils.list_of(rule.textToMatch.text(), rule.override.text())));
 		}

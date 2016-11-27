@@ -26,6 +26,7 @@ Tasks:
 Later:
 - Map<String, Object>: consider base class for the Values (?)
 - duplication in Config object & tests re:keys in map, types of objects in lists, etc
+   => adding a value to RuleCategory causes shotgun surgery in copyTo, replaceWith -> similar actions for each element 
 - duplication all over around "ignore", "acc-override" (presenter, interactor, tests,....)
 
 

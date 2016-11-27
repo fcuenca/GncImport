@@ -62,16 +62,17 @@ public class ConfigOptionsImplementsRuleModel
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void provides_current_ignore_rules()
+	public void provides_current_set_of_rules()
 	{
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		
 		_options.copyRulesTo(allRules);
 		
-		assertThat(allRules.size(), is(2));
+		assertThat(allRules.size(), is(3));
 
 		assertThat(allRules, hasKey(RuleCategory.ignore));
 		assertThat(allRules, hasKey(RuleCategory.acc_override));
+		assertThat(allRules, hasKey(RuleCategory.tx_override));
 
 		assertThat(asTestRules((List<MatchingRule>) allRules.get(RuleCategory.ignore)), hasItems(
 				new MatchingRuleForTest("WEB TRANSFER"), 
@@ -80,7 +81,11 @@ public class ConfigOptionsImplementsRuleModel
 		assertThat((List<OverrideRule>)allRules.get(RuleCategory.acc_override), hasItems(
 				new OverrideRule("acc-desc-1", "acc-override-1"),
 				new OverrideRule("acc-desc-2", "acc-override-2")));
-	}
+
+		assertThat((List<OverrideRule>)allRules.get(RuleCategory.tx_override), hasItems(
+				new OverrideRule("tx-desc-1", "tx-override-1"),
+				new OverrideRule("tx-desc-2", "tx-override-2")));
+}
 
 
 	@Test(expected=IllegalArgumentException.class)
@@ -105,18 +110,17 @@ public class ConfigOptionsImplementsRuleModel
 	@Test
 	public void if_no_properties_are_defined_empty_rule_lists_are_returned()
 	{
-		List<MatchingRule> rules = new ArrayList<MatchingRule>();
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		
 		_options = new ConfigOptions(new Properties());
 		_options.copyRulesTo(allRules);
-		
-		assertThat(rules, is(empty()));
-		
+				
 		assertThat(allRules, hasKey(RuleCategory.ignore));
 		assertThat((List<MatchingRule>)allRules.get(RuleCategory.ignore), is(empty()));
 		assertThat(allRules, hasKey(RuleCategory.acc_override));
 		assertThat((List<OverrideRule>)allRules.get(RuleCategory.acc_override), is(empty()));
+		assertThat(allRules, hasKey(RuleCategory.tx_override));
+		assertThat((List<OverrideRule>)allRules.get(RuleCategory.tx_override), is(empty()));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -130,10 +134,14 @@ public class ConfigOptionsImplementsRuleModel
 		
 		List<OverrideRule> newAccOverrides = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("new-desc", "new-override")));
-		
+
+		List<OverrideRule> newTxRewrites = new ArrayList<OverrideRule>(ListUtils.list_of(
+				new OverrideRule("new-tx-desc", "new-tx-rewrite")));
+
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		allRules.put(RuleCategory.ignore, newIgnores);
 		allRules.put(RuleCategory.acc_override, newAccOverrides);
+		allRules.put(RuleCategory.tx_override, newTxRewrites);
 		
 		_options.replaceRulesWith(allRules);
 						
@@ -144,6 +152,7 @@ public class ConfigOptionsImplementsRuleModel
 		// just to make sure this list object is not kept inside the options object
 		newIgnores.clear();
 		newAccOverrides.clear();
+		newTxRewrites.clear();
 		allRules.clear(); 
 		
 		assertThat(asTestRules((List<MatchingRule>) updatedAllRules.get(RuleCategory.ignore)), hasItems(
@@ -153,6 +162,9 @@ public class ConfigOptionsImplementsRuleModel
 		
 		assertThat((List<OverrideRule>)updatedAllRules.get(RuleCategory.acc_override), hasItems(
 				new OverrideRule("new-desc", "new-override")));
+
+		assertThat((List<OverrideRule>)updatedAllRules.get(RuleCategory.tx_override), hasItems(
+				new OverrideRule("new-tx-desc", "new-tx-rewrite")));
 
 
 		assertThat(allRules.size(), is(not(updatedAllRules.size())));
@@ -181,7 +193,18 @@ public class ConfigOptionsImplementsRuleModel
 		
 		_options.replaceRulesWith(allRules);
 	}
+
+	@Test(expected=ProgrammerError.class)
+	public void rejects_map_without_txRewite_list()
+	{
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.ignore, "irrelevant");
+		allRules.put(RuleCategory.acc_override, "irrelevant");
+		
+		_options.replaceRulesWith(allRules);
+	}
 	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void updated_rules_added_to_property_file()
@@ -194,9 +217,13 @@ public class ConfigOptionsImplementsRuleModel
 		List<OverrideRule> newAccOverrides = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("new-desc", "new-override")));
 
+		List<OverrideRule> newRewrites = new ArrayList<OverrideRule>(ListUtils.list_of(
+				new OverrideRule("new-tx-desc", "new-tx-override")));
+		
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		allRules.put(RuleCategory.ignore, newIgnores);
 		allRules.put(RuleCategory.acc_override, newAccOverrides);
+		allRules.put(RuleCategory.tx_override, newRewrites);
 
 		_options.replaceRulesWith(allRules);
 				
@@ -206,6 +233,7 @@ public class ConfigOptionsImplementsRuleModel
 		
 		assertThat((List<MatchingRule>)newAllRules.get(RuleCategory.ignore), containsInAnyOrder(newIgnores.toArray()));
 		assertThat((List<OverrideRule>)newAllRules.get(RuleCategory.acc_override), containsInAnyOrder(newAccOverrides.toArray()));
+		assertThat((List<OverrideRule>)newAllRules.get(RuleCategory.tx_override), containsInAnyOrder(newRewrites.toArray()));
 	}
 
 	@Test

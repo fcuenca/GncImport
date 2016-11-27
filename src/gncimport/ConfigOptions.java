@@ -29,7 +29,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	public static final String MONTHLY_ACC_KEY_REGEX = "monthly\\.([0-9]+)";
 
 	private List<OverrideRule> _accountOverrideRules = new ArrayList<OverrideRule>();
-	private List<OverrideRule> _rewriteRule = new ArrayList<OverrideRule>();
+	private List<OverrideRule> _rewriteRules = new ArrayList<OverrideRule>();
 	private List<MatchingRule> _ignoreRules = new ArrayList<MatchingRule>();
 	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
 	private String _lastGnc;
@@ -89,7 +89,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	private void createTxOverrideRule(String key, String value)
 	{		
 		captureOverrideRuleIfApplicable(key, value, ACC_OVERRIDE_RULE_KEY_REGEX, _accountOverrideRules);
-		captureOverrideRuleIfApplicable(key, value, TX_REWRITE_RULE_KEY_REGEX, _rewriteRule);
+		captureOverrideRuleIfApplicable(key, value, TX_REWRITE_RULE_KEY_REGEX, _rewriteRules);
 	}
 
 	private void captureOverrideRuleIfApplicable(String key, String value, String propertyName, List<OverrideRule> ruleCollection)
@@ -173,7 +173,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		}		
 		
 		index = 0;
-		for (Iterator<OverrideRule> iterator = _rewriteRule.iterator(); iterator.hasNext();)
+		for (Iterator<OverrideRule> iterator = _rewriteRules.iterator(); iterator.hasNext();)
 		{
 			OverrideRule rule = iterator.next();
 			
@@ -214,7 +214,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	@Override
 	public String rewriteDescription(String txDescription)
 	{
-		for (OverrideRule rule : _rewriteRule)
+		for (OverrideRule rule : _rewriteRules)
 		{			
 			if(rule.matches(txDescription))
 			{
@@ -233,7 +233,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			throw new IllegalArgumentException("rules cannot be null");
 		}
 		
-		if (!(allRules.containsKey(RuleCategory.ignore) && allRules.containsKey(RuleCategory.acc_override)))
+		if (!(allRules.containsKey(RuleCategory.ignore) && allRules.containsKey(RuleCategory.acc_override) && allRules.containsKey(RuleCategory.tx_override)))
 		{
 			throw new ProgrammerError("Improper keys found in Rule Map: " + allRules.keySet());			
 		}
@@ -245,7 +245,10 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		
 		List<OverrideRule> newOverrides = (List<OverrideRule>)allRules.get(RuleCategory.acc_override);
 		_accountOverrideRules = new ArrayList<OverrideRule>(newOverrides);	
-	}
+
+		List<OverrideRule> newRewrites = (List<OverrideRule>)allRules.get(RuleCategory.tx_override);
+		_rewriteRules = new ArrayList<OverrideRule>(newRewrites);	
+}
 
 	@Override
 	public void copyRulesTo(Map<RuleCategory, Object> allRules)
@@ -259,6 +262,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		allRules.clear();
 		allRules.put(RuleCategory.ignore, new ArrayList<MatchingRule>(_ignoreRules));
 		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>(_accountOverrideRules));
+		allRules.put(RuleCategory.tx_override, new ArrayList<OverrideRule>(_rewriteRules));
 	}
 
 	@Override

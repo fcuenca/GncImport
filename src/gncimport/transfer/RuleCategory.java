@@ -4,5 +4,6 @@ public enum RuleCategory
 {
 	none,
 	ignore, 
-	acc_override;
+	acc_override, 
+	tx_override;
 }
