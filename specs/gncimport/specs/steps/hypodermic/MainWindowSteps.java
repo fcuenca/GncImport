@@ -35,6 +35,7 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.PendingException;
 
 public class MainWindowSteps
 {
@@ -419,6 +420,13 @@ public class MainWindowSteps
 	{
 		List<List<String>> actualRules = app().observedAccountOverrideRules();
 		assertThat(actualRules, is(empty()));
+	}
+	
+	@Then("^the app displays empty transaction rewrite rule list$")
+	public void the_app_displays_empty_transaction_rewrite_rule_list() throws Throwable
+	{
+		// Express the Regexp above with the code you wish you had
+		throw new PendingException();
 	}
 
 	private Properties createMonthlyAccountRules(List<MonthlyAccountParam> subAccounts)

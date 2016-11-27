@@ -32,3 +32,8 @@ Feature: Editing Configuration Properties
 			|MISC PAYMENT - GOODLIFE CLUBS   |Health  |
 			|SAN CRISTOBAL SEG 1146ROSARIO.* |Casa Cordoba|
 			
+	Scenario: editing transaction rewrite rules
+		Given the properties file is initially empty
+		When properties are displayed
+		Then the app displays empty transaction rewrite rule list
+			

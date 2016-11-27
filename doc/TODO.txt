@@ -1,28 +1,29 @@
 TODO:
 
 Features:
-* Editing properties - account override rules
-- Editing properties - transaction rewrite rules
+* Editing properties - transaction rewrite rules
 - Editing properties - monthly accounts
 
 
 Stories:
-x display current props
-x edit existing rules
-x validation
+* display current props
+- edit existing rules
+- validation
 	- desc can't be blank
 	- account can't be blank
 	- desc needs to be a valid regex
-x add new rules
-x remove rules
-x try rules 
+- add new rules
+- remove rules
+- try rules 
 - sort by any column
 
 Tasks:
-x Test in Rule Model (Config)
-x Test in Rule Tester (Interactor)
-x Test in UI (table model)
+- Test in Rule Model (Config)
+- Test in Rule Tester (Interactor)
+- Test in UI (table model)
 
+
+Later:
 - Map<String, Object>: consider base class for the Values (?)
 - duplication in Config object & tests re:keys in map, types of objects in lists, etc
 - duplication all over around "ignore", "acc-override" (presenter, interactor, tests,....)
