@@ -6,18 +6,17 @@ Features:
 
 
 Stories:
-* display current props
-* edit existing rules
+- display current Monthly Accounts
+- edit existing rules (change)
+- change order of accounts
 - validation
-	- desc can't be blank
 	- account can't be blank
-	- desc needs to be a valid regex
-- add new rules
-- remove rules
-- try rules 
-- sort by any column
+- add new account
+- remove account
+- (override & ignore rules) sort by any column
 
 Tasks:
+- Create  Monhtly Account Editor Panel - add to EditPropertiesDialog.createTabs 
 - Test in Rule Model (Config)
 - Test in Rule Tester (Interactor)
 - Test in UI (table model)
