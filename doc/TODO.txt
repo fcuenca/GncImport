@@ -24,10 +24,13 @@ Tasks:
 
 
 Later:
+- rename AccOverrideRulesTableModel -> it's not just for AccOverride
+- fix conceptual duplication in displays_rules in PropertyEditorPresenterTests - also in other tests that need to build allRules with the correct number of objects
+- PropEditorPresenter.editProperties also has the same problem -> smell: type code (RuleCategory enum)
+	- duplication all over around "ignore", "acc-override" (presenter, interactor, tests,....) -> Replace Type Code With Class refactoring
 - Map<String, Object>: consider base class for the Values (?)
 - duplication in Config object & tests re:keys in map, types of objects in lists, etc
    => adding a value to RuleCategory causes shotgun surgery in copyTo, replaceWith -> similar actions for each element 
-- duplication all over around "ignore", "acc-override" (presenter, interactor, tests,....)
 
 
 General improvements:

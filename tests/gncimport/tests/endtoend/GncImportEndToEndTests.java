@@ -191,7 +191,7 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 		_fs.setupConfigFile(TestFiles.CFG_WITH_MATCHING_RULES, TestFiles.CFG_WITH_REWRITE_RULES);
 
 		_app = new GncImportAppDriver(robot());	
-		_app.editPropertiesAndExpectRowsToMatch(1, 3);
+		_app.editPropertiesAndExpectRowsToMatch(1, 3, 2);
 	}
 	
 	private void forceAppShutdown()

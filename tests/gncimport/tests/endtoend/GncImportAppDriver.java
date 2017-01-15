@@ -289,7 +289,7 @@ public class GncImportAppDriver
 		}
 	}
 
-	public void editPropertiesAndExpectRowsToMatch(int expectedIgnoreRules, int expectedAccOverrideRules)
+	public void editPropertiesAndExpectRowsToMatch(int expectedIgnoreRules, int expectedAccOverrideRules, int expectedTxOverrideRules)
 	{
 		_mainWindow.menuItem("EDIT_PROPERTIES").click();
 
@@ -304,6 +304,10 @@ public class GncImportAppDriver
 		tabs.selectTab("Acc Override");
 		table = dialog.table("ACC_OVERRIDE_RULES");
 		assertThat(table.rowCount(), is(expectedAccOverrideRules)); 
+		
+		tabs.selectTab("Tx Override");
+		table = dialog.table("TX_OVERRIDE_RULES");
+		assertThat(table.rowCount(), is(expectedTxOverrideRules)); 
 		
 		dialog.button("OK_BUTTON").click();
 	}

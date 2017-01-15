@@ -57,26 +57,36 @@ public class PropertyEditorPresenterTests
 				new OverrideRule("rule-1", "acc-1"), 
 				new OverrideRule("rule-2", "acc-2")));
 	
+		List<OverrideRule> rules3 = new ArrayList<OverrideRule>(ListUtils.list_of(
+				new OverrideRule("rule-1", "tx-override-1"), 
+				new OverrideRule("rule-2", "tx-override-2"), 
+				new OverrideRule("rule-3", "tx-override-3")));
+	
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		allRules.put(RuleCategory.ignore, rules);
 		allRules.put(RuleCategory.acc_override, rules2);
+		allRules.put(RuleCategory.tx_override, rules3);
 
 		when(_view.editProperties(expectedModelMap.capture())).thenReturn(true);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(true));
 		
 		RuleTableModel tm = expectedModelMap.getValue().get(RuleCategory.ignore);
-		
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
 		assertThat(tm.getValueAt(1, 0), is((Object)new MatchingRuleForTest("rule-2")));
 		
 		RuleTableModel tm2 = expectedModelMap.getValue().get(RuleCategory.acc_override);
-		
 		assertThat(tm2.getRowCount(), is(2));
 		assertThat(tm2.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
 		assertThat(tm2.getValueAt(1, 1), is((Object)new MatchingRuleForTest("acc-2")));
 
+		RuleTableModel tm3 = expectedModelMap.getValue().get(RuleCategory.tx_override);
+		assertThat(tm3.getRowCount(), is(3));
+		assertThat(tm3.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
+		assertThat(tm3.getValueAt(1, 1), is((Object)new MatchingRuleForTest("tx-override-2")));
+		assertThat(tm3.getValueAt(2, 1), is((Object)new MatchingRuleForTest("tx-override-3")));
+		
 	}
 	
 	@Test
@@ -85,6 +95,7 @@ public class PropertyEditorPresenterTests
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		allRules.put(RuleCategory.ignore, new ArrayList<MatchingRule>());
 		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>());
+		allRules.put(RuleCategory.tx_override, new ArrayList<OverrideRule>());
 		
 		when(_view.editProperties(anyMapOf(RuleCategory.class, RuleTableModel.class))).thenReturn(false);
 		
@@ -100,6 +111,7 @@ public class PropertyEditorPresenterTests
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		allRules.put(RuleCategory.ignore, rules);
 		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>());
+		allRules.put(RuleCategory.tx_override, new ArrayList<OverrideRule>());
 
 
 		when(_view.editProperties(anyMapOf(RuleCategory.class, RuleTableModel.class)))

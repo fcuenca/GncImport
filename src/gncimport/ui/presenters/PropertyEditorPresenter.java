@@ -29,10 +29,12 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 	{	
 		List<MatchingRule> ignoreRules = (List<MatchingRule>)allRules.get(RuleCategory.ignore);
 		List<OverrideRule> accOverrideRules = (List<OverrideRule>)allRules.get(RuleCategory.acc_override);
+		List<OverrideRule> txOverrideRules = (List<OverrideRule>)allRules.get(RuleCategory.tx_override);
 		
 		Map<RuleCategory, RuleTableModel> modelMap = new HashMap<RuleCategory, RuleTableModel>();
 		modelMap.put(RuleCategory.ignore, new IgnoreRulesTableModel(ignoreRules, tester)); //TODO: connection b/w table model and tester is not really tested
 		modelMap.put(RuleCategory.acc_override, new AccOverrideRulesTableModel(accOverrideRules, tester));
+		modelMap.put(RuleCategory.tx_override, new AccOverrideRulesTableModel(txOverrideRules, tester));
 		
 		boolean changesConfirmed;
 		

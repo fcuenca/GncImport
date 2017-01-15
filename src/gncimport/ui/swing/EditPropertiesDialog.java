@@ -47,6 +47,7 @@ public class EditPropertiesDialog extends JDialog
 						
 		tabs.addTab("Ignore", new PropertyEditorPanel(models.get(RuleCategory.ignore), "IGNORE_RULES"));
 		tabs.addTab("Acc Override", new PropertyEditorPanel(models.get(RuleCategory.acc_override), "ACC_OVERRIDE_RULES"));
+		tabs.addTab("Tx Override", new PropertyEditorPanel(models.get(RuleCategory.tx_override), "TX_OVERRIDE_RULES"));
 		
 		_currentPanel = ((PropertyEditorPanel)tabs.getSelectedComponent());
 		tabs.addChangeListener(new ChangeListener()
