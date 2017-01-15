@@ -22,7 +22,7 @@ import javax.swing.event.ChangeListener;
 public class EditPropertiesDialog extends JDialog
 {
 	private boolean _okClicked;
-	private PropertyEditorPanel _currentPanel;
+	private TxRuleEditorPanel _currentPanel;
 	
 	public EditPropertiesDialog(Frame aFrame, Map<RuleCategory, RuleTableModel> models)
 	{
@@ -45,18 +45,18 @@ public class EditPropertiesDialog extends JDialog
 		final JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
 		tabs.setName("PROPERTY_TABS");
 						
-		tabs.addTab("Ignore", new PropertyEditorPanel(models.get(RuleCategory.ignore), "IGNORE_RULES"));
-		tabs.addTab("Acc Override", new PropertyEditorPanel(models.get(RuleCategory.acc_override), "ACC_OVERRIDE_RULES"));
-		tabs.addTab("Tx Override", new PropertyEditorPanel(models.get(RuleCategory.tx_override), "TX_OVERRIDE_RULES"));
+		tabs.addTab("Ignore", new TxRuleEditorPanel(models.get(RuleCategory.ignore), "IGNORE_RULES"));
+		tabs.addTab("Acc Override", new TxRuleEditorPanel(models.get(RuleCategory.acc_override), "ACC_OVERRIDE_RULES"));
+		tabs.addTab("Tx Override", new TxRuleEditorPanel(models.get(RuleCategory.tx_override), "TX_OVERRIDE_RULES"));
 		
-		_currentPanel = ((PropertyEditorPanel)tabs.getSelectedComponent());
+		_currentPanel = ((TxRuleEditorPanel)tabs.getSelectedComponent());
 		tabs.addChangeListener(new ChangeListener()
 		{
 			@Override
 			public void stateChanged(ChangeEvent e)
 			{
 				_currentPanel.stopEditing();
-				_currentPanel= ((PropertyEditorPanel)tabs.getSelectedComponent());
+				_currentPanel= ((TxRuleEditorPanel)tabs.getSelectedComponent());
 			}
 		});
 		

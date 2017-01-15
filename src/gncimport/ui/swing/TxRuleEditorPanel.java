@@ -16,11 +16,11 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 @SuppressWarnings("serial")
-public class PropertyEditorPanel extends JPanel
+public class TxRuleEditorPanel extends JPanel
 {
 	private RuleTable _ruleTable;
 	
-	public PropertyEditorPanel(RuleTableModel model, String name)
+	public TxRuleEditorPanel(RuleTableModel model, String name)
 	{
 		_ruleTable = new RuleTable(model, name);
 		
