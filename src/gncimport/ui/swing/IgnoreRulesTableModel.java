@@ -14,19 +14,7 @@ public final class IgnoreRulesTableModel extends RuleTableModel
 
 	public IgnoreRulesTableModel(List<MatchingRule> ignoreRules, RuleTester tester)
 	{
-		super(ignoreRules, tester);
-	}
-
-	@Override
-	public int getColumnCount()
-	{
-		return COLUMN_TITLES.length;
-	}
-
-	@Override
-	public String getColumnName(int col)
-	{
-		return COLUMN_TITLES[col];
+		super(COLUMN_TITLES, ignoreRules, tester);
 	}
 
 	@Override

@@ -4,7 +4,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
-import gncimport.ui.swing.AccOverrideRulesTableModel;
+import gncimport.transfer.TransactionRule;
+import gncimport.ui.swing.OverrideRuleTableModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,23 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Matchers.any;
 
 
-public class AccOverrideRulesTableModelTests
+public class OverrideRuleTableModelTests
 {
-	private AccOverrideRulesTableModel _tableModel;
+	private OverrideRuleTableModel _tableModel;
 	private List<OverrideRule> _overrideList;
 	private RuleTester _tester;
+	
+	@SuppressWarnings("serial")
+	static class TableModelForTesting extends OverrideRuleTableModel
+	{
+		public static final String[] COLUMN_TITLES = { "Col 1", "Col 2" };
+
+		public TableModelForTesting(List<? extends TransactionRule> rules, RuleTester tester)
+		{
+			super(COLUMN_TITLES, rules, tester);
+		}
+		
+	}
 
 	@Before
 	public void SetUp()
@@ -36,13 +49,13 @@ public class AccOverrideRulesTableModelTests
 				new OverrideRule("desc-1", "acc-1"),
 				new OverrideRule("desc-2", "acc-2")));
 		
-		_tableModel = new AccOverrideRulesTableModel(_overrideList, _tester);		
+		_tableModel = new TableModelForTesting(_overrideList, _tester);		
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void override_list_cannot_be_null()
 	{
-		new AccOverrideRulesTableModel(null, _tester);	
+		new TableModelForTesting(null, _tester);	
 	}
 	
 	@Test
@@ -60,7 +73,7 @@ public class AccOverrideRulesTableModelTests
 	@Test
 	public void columns_are_editable()
 	{		
-		for(int i = 0; i < AccOverrideRulesTableModel.COLUMN_TITLES.length; i++)
+		for(int i = 0; i < TableModelForTesting.COLUMN_TITLES.length; i++)
 		{
 			assertThat(_tableModel.isCellEditable(1, i), is(true));			
 		}
@@ -69,19 +82,19 @@ public class AccOverrideRulesTableModelTests
 	@Test
 	public void all_columns_have_title()
 	{
-		assertThat(_tableModel.getColumnCount(), is(AccOverrideRulesTableModel.COLUMN_TITLES.length));
+		assertThat(_tableModel.getColumnCount(), is(TableModelForTesting.COLUMN_TITLES.length));
 	}
 	
 	@Test
 	public void all_columns_have_types_defined()
 	{
-		assertThat(_tableModel.getColumnCount(), is(AccOverrideRulesTableModel.COLUMN_CLASSES.length));
+		assertThat(_tableModel.getColumnCount(), is(TableModelForTesting.COLUMN_CLASSES.length));
 	}
 	
 	@Test
 	public void declared_column_types_match_values_returned()
 	{
-		for(int i = 0; i < AccOverrideRulesTableModel.COLUMN_CLASSES.length; i++)
+		for(int i = 0; i < TableModelForTesting.COLUMN_CLASSES.length; i++)
 		{
 			Class<?> actual = _tableModel.getValueAt(0, i).getClass();
 			Class<?> declared = _tableModel.getColumnClass(i);

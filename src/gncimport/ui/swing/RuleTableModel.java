@@ -13,15 +13,35 @@ public abstract class RuleTableModel extends AbstractTableModel
 	protected List<? extends TransactionRule> _rules;
 	private RuleTester _tester;
 
-	public RuleTableModel(List<? extends TransactionRule> rules, RuleTester tester)
+	protected String[] _columnTitles;
+
+	public RuleTableModel(String[] colTitles, List<? extends TransactionRule> rules, RuleTester tester)
 	{
 		if(rules == null) throw new IllegalArgumentException("Rule List cannot be null");
 
+		_columnTitles = colTitles;
 		_rules = rules;
 		_tester = tester;
 	}
 	
 	public abstract void newRow();
+	
+	protected String[] getColumnTitles()
+	{
+		return _columnTitles;
+	}
+	
+	@Override
+	public int getColumnCount()
+	{
+		return getColumnTitles().length;
+	}
+
+	@Override
+	public String getColumnName(int col)
+	{
+		return getColumnTitles()[col];
+	}
 	
 	public boolean isValid()
 	{

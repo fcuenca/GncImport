@@ -9,6 +9,7 @@ import gncimport.ui.TxView;
 import gncimport.ui.swing.AccOverrideRulesTableModel;
 import gncimport.ui.swing.IgnoreRulesTableModel;
 import gncimport.ui.swing.RuleTableModel;
+import gncimport.ui.swing.TxOverrideRuleTableModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 		Map<RuleCategory, RuleTableModel> modelMap = new HashMap<RuleCategory, RuleTableModel>();
 		modelMap.put(RuleCategory.ignore, new IgnoreRulesTableModel(ignoreRules, tester)); //TODO: connection b/w table model and tester is not really tested
 		modelMap.put(RuleCategory.acc_override, new AccOverrideRulesTableModel(accOverrideRules, tester));
-		modelMap.put(RuleCategory.tx_override, new AccOverrideRulesTableModel(txOverrideRules, tester));
+		modelMap.put(RuleCategory.tx_override, new TxOverrideRuleTableModel(txOverrideRules, tester));
 		
 		boolean changesConfirmed;
 		
