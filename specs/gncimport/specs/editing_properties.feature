@@ -40,5 +40,11 @@ Feature: Editing Configuration Properties
 			|Description                       |Override    |                    
 			|MISC PAYMENT - IMH POOL I LP      |Monthly Rent|
 			|COINAMATIC - (IDP PURCHASE - \\d+)|Laundry - $1|
-	    Then the properties file now contains 2 transaction override rules   
+	    Then the properties file now contains 2 transaction override rules 
+	    When properties are displayed
+	 	Then the app displays existing transaction override rules:
+			|Description                       |Override    |                    
+			|MISC PAYMENT - IMH POOL I LP      |Monthly Rent|
+			|COINAMATIC - (IDP PURCHASE - \\d+)|Laundry - $1|
+	      
 			

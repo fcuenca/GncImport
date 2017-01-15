@@ -403,8 +403,13 @@ public class MainWindowSteps
 	@Then("^the app displays existing account override rules:$")
 	public void the_app_displays_existing_account_override_rules(DataTable expectedRules) throws Throwable
 	{
-		List<List<String>> actual = buildObservedAccountOverrideDiffList(expectedRules.topCells());
-		expectedRules.diff(actual);
+		diffOverrideRules(expectedRules, app().observedAccountOverrideRules());
+	}
+
+	@Then("^the app displays existing transaction override rules:$")
+	public void the_app_displays_existing_transaction_override_rules(DataTable expectedRules) throws Throwable
+	{
+				diffOverrideRules(expectedRules, app().observedTransactionRewriteRules());
 	}
 	
 	@Then("^the app displays empty ignore rule list$")
@@ -495,6 +500,16 @@ public class MainWindowSteps
 		
 		return builder.build();
 	}
+	
+	private void diffOverrideRules(DataTable expectedRules, List<List<String>> observedRules)
+	{
+		List<List<String>> actual = new ArrayList<List<String>>();
+		
+		actual.add(expectedRules.topCells());
+		actual.addAll(observedRules);
+		
+		expectedRules.diff(actual);
+	}
 
 	private List<List<String>> buildObservedAccountDiffList(List<String> tableHeaders)
 	{
@@ -513,16 +528,6 @@ public class MainWindowSteps
 		return actual;
 	}
 	
-	private List<List<String>> buildObservedAccountOverrideDiffList(List<String> topCells)
-	{
-		List<List<String>> rules = new ArrayList<List<String>>();
-		
-		rules.add(topCells);
-		rules.addAll(app().observedAccountOverrideRules());
-		
-		return rules;
-	}
-
 	private String buildRegexForNonMatchingTransactionDesc()
 	{
 		// Builds a negative look-ahead regex: (?!one|two|three).+
