@@ -23,7 +23,7 @@ public class FileSystemDriver
 	{
 		try 
 		{
-			copyFile(TestFiles.GNC_TEST_FILE, TMP_CHECKBOOK_NEW_XML);
+			copyFile(TMP_CHECKBOOK_NEW_XML, TestFiles.GNC_TEST_FILE);
 			
 			new File(TMP_GNCIMPORT).delete();
 		} 
@@ -33,9 +33,9 @@ public class FileSystemDriver
 		}
 	}
 	
-	public void setupConfigFile(String cfgFilePath) throws IOException
+	public void setupConfigFile(String... cfgFilePath) throws IOException
 	{
-		copyFile(cfgFilePath, TMP_GNCIMPORT);
+		copyFile(TMP_GNCIMPORT, cfgFilePath);
 	}
 	
 	public void assertGncFileTxCountEquals(int expectedTxCount) throws IOException 
@@ -62,24 +62,28 @@ public class FileSystemDriver
 		File f = new File(source);
 		String dest = "/tmp/TMP_" + f.getName();
 		
-		copyFile(source, dest);
+		copyFile(dest, source);
 		
 		return dest;
 	}
 
-	private void copyFile(String source, String dest) throws IOException
+	private void copyFile(String dest, String... sources) throws IOException
 	{
 		InputStream is = null;
 		OutputStream os = null;
 		try
 		{
-			is = new FileInputStream(new File(source));
 			os = new FileOutputStream(new File(dest));
-			byte[] buffer = new byte[1024];
-			int length;
-			while ((length = is.read(buffer)) > 0)
-			{
-				os.write(buffer, 0, length);
+			
+			for (String sourceFile: sources)
+			{				
+				is = new FileInputStream(new File(sourceFile));
+				byte[] buffer = new byte[1024];
+				int length;
+				while ((length = is.read(buffer)) > 0)
+				{
+					os.write(buffer, 0, length);
+				}
 			}
 		}
 		finally
