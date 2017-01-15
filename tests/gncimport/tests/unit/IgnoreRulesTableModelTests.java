@@ -132,19 +132,19 @@ public class IgnoreRulesTableModelTests
 	@Test
 	public void rules_can_be_removed()
 	{
-		_tableModel.removeRule(1);		
+		_tableModel.removeRow(1);		
 		assertThat(_tableModel.getRowCount(), is(1));
 		assertThat(_tableModel.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
 
-		_tableModel.removeRule(0);		
+		_tableModel.removeRow(0);		
 		assertThat(_tableModel.getRowCount(), is(0));
 	}
 
 	@Test
 	public void removing_rules_out_of_bounds_is_ignored()
 	{
-		_tableModel.removeRule(-1);
-		_tableModel.removeRule(2);
+		_tableModel.removeRow(-1);
+		_tableModel.removeRow(2);
 		
 		assertThat(_tableModel.getRowCount(), is(2));
 	}
@@ -155,7 +155,7 @@ public class IgnoreRulesTableModelTests
 		TableModelListener listener = mock(TableModelListener.class);
 		_tableModel.addTableModelListener(listener);
 		
-		_tableModel.removeRule(0);
+		_tableModel.removeRow(0);
 		
 		verify(listener).tableChanged(any(TableModelEvent.class));
 	}

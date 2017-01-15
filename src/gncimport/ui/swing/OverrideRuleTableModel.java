@@ -8,7 +8,7 @@ import gncimport.transfer.TransactionRule;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public abstract class OverrideRuleTableModel extends RuleTableModel
+public abstract class OverrideRuleTableModel extends TxRuleTableModel
 {
 	public static final Class<?>[] COLUMN_CLASSES = { MatchingRule.class,  MatchingRule.class };
 

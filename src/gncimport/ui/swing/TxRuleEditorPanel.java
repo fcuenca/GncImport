@@ -1,6 +1,5 @@
 package gncimport.ui.swing;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -9,64 +8,20 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 @SuppressWarnings("serial")
-public class TxRuleEditorPanel extends JPanel
+public class TxRuleEditorPanel extends PropertyEditorPanel
 {
-	private RuleTable _ruleTable;
-	
-	public TxRuleEditorPanel(RuleTableModel model, String name)
+	public TxRuleEditorPanel(TxRuleTableModel model, String name)
 	{
-		_ruleTable = new RuleTable(model, name);
-		
-		setLayout(new BorderLayout());
-		
-		add(new JScrollPane(_ruleTable), BorderLayout.PAGE_START);
-		add(createToolBar(_ruleTable, model), BorderLayout.PAGE_END);
+		super(new RuleTable(model, name));
 	}
 
-	public void stopEditing()
-	{
-		if (_ruleTable.getCellEditor() != null) 
-		{
-		      _ruleTable.getCellEditor().stopCellEditing();
-		}
-	}
-
-	protected JToolBar createToolBar(final JTable theTable, final RuleTableModel ignoreTblModel)
+	protected void addPanelSpecificToolbarControls(JToolBar toolBar)
 	{
 		JButton button;
-		JToolBar toolBar = new JToolBar();
-		
-		button = new JButton("+");
-		button.setToolTipText("Add new Rule");
-		toolBar.add(button);
-		button.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				ignoreTblModel.newRow();
-			}
-		});
-	
-		button = new JButton("-");
-		button.setToolTipText("Remove selected Rule");
-		toolBar.add(button);
-		button.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				ignoreTblModel.removeRule(theTable.getSelectedRow());
-			}
-		});
-		
-		toolBar.addSeparator();
-		
 		button = new JButton();
 		button.setToolTipText("Try Rules");
 		final JTextField textField = new JTextField();
@@ -108,14 +63,11 @@ public class TxRuleEditorPanel extends JPanel
 		toolBar.add(button);
 		toolBar.add(textField);
 		toolBar.add(resultLabel);
-
-		
-		return toolBar;
 	}
 	
 	private String testStringAgainstRules(String testString)
 	{
-		return ((RuleTableModel) _ruleTable.getModel()).testRulesWithText(testString);
+		return ((TxRuleTableModel) _propertyTable.getModel()).testRulesWithText(testString);
 	}
 
 }

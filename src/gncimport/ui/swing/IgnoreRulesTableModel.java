@@ -7,7 +7,7 @@ import gncimport.transfer.UserEnteredMatchingRule;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public final class IgnoreRulesTableModel extends RuleTableModel
+public final class IgnoreRulesTableModel extends TxRuleTableModel
 {
 	public static final String[] COLUMN_TITLES = { "Description Pattern" };
 	public static final Class<?>[] COLUMN_CLASSES = { MatchingRule.class };

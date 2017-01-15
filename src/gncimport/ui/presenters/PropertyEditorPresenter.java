@@ -8,7 +8,7 @@ import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.swing.AccOverrideRulesTableModel;
 import gncimport.ui.swing.IgnoreRulesTableModel;
-import gncimport.ui.swing.RuleTableModel;
+import gncimport.ui.swing.TxRuleTableModel;
 import gncimport.ui.swing.TxOverrideRuleTableModel;
 
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 		List<OverrideRule> accOverrideRules = (List<OverrideRule>)allRules.get(RuleCategory.acc_override);
 		List<OverrideRule> txOverrideRules = (List<OverrideRule>)allRules.get(RuleCategory.tx_override);
 		
-		Map<RuleCategory, RuleTableModel> modelMap = new HashMap<RuleCategory, RuleTableModel>();
+		Map<RuleCategory, TxRuleTableModel> modelMap = new HashMap<RuleCategory, TxRuleTableModel>();
 		modelMap.put(RuleCategory.ignore, new IgnoreRulesTableModel(ignoreRules, tester)); //TODO: connection b/w table model and tester is not really tested
 		modelMap.put(RuleCategory.acc_override, new AccOverrideRulesTableModel(accOverrideRules, tester));
 		modelMap.put(RuleCategory.tx_override, new TxOverrideRuleTableModel(txOverrideRules, tester));
@@ -58,9 +58,9 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 		}
 	}
 
-	private boolean allModelsAreValid(Map<RuleCategory, RuleTableModel> modelMap) //TODO: pass values collection -- whole map not needed
+	private boolean allModelsAreValid(Map<RuleCategory, TxRuleTableModel> modelMap) //TODO: pass values collection -- whole map not needed
 	{
-		for (RuleTableModel tm : modelMap.values())
+		for (TxRuleTableModel tm : modelMap.values())
 		{
 			if(!tm.isValid()) return false;
 		}
