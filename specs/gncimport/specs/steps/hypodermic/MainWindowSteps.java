@@ -427,6 +427,20 @@ public class MainWindowSteps
 		List<List<String>> actualRules = app().observedTransactionRewriteRules();
 		assertThat(actualRules, is(empty()));
 	}
+	
+	@When("^transaction override rules are set to:$")
+	public void transaction_override_rules_are_set_to(DataTable rules) throws Throwable
+	{
+		app().editTxOverrideRules(rules.asMaps());
+	}
+
+	@Then("^the properties file now contains (\\d+) transaction override rules$")
+	public void the_properties_file_now_contains_transaction_override_rules(int expectedRuleCount) throws Throwable
+	{
+		Properties props = app().getProperties();
+		
+		assertThatPropertiesContainsRules(props, ConfigOptions.TX_REWRITE_RULE_KEY_REGEX, expectedRuleCount);
+	}
 
 	private Properties createMonthlyAccountRules(List<MonthlyAccountParam> subAccounts)
 	{

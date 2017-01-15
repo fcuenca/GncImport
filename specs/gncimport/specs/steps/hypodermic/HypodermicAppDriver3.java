@@ -364,6 +364,33 @@ public class HypodermicAppDriver3
 		_interactors.propertyEdit(boundary).editProperties();
 
 	}
+	
+	public void editTxOverrideRules(final List<Map<String, String>> newRules)
+	{
+		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
+		{
+			@SuppressWarnings("unchecked")
+			@Override
+			public boolean editProperties(Map<RuleCategory, Object> allRules, RuleTester tester)
+			{
+				collectObservedRules(allRules);
+
+				((List<OverrideRule>) allRules.get(RuleCategory.tx_override)).clear();
+
+				for (Map<String, String> map : newRules)
+				{
+					String desc = map.get("Description");
+					String override = map.get("Override");
+					
+					((List<OverrideRule>) allRules.get(RuleCategory.tx_override)).add(new OverrideRule(desc, override));	
+				}
+				
+				return true;
+			}
+		};
+			
+		_interactors.propertyEdit(boundary).editProperties();
+	}
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
 	private AccountData findFirstAccWithNameInList(String accountName, List<AccountData> accounts)

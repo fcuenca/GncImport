@@ -36,4 +36,9 @@ Feature: Editing Configuration Properties
 		Given the properties file is initially empty
 		When properties are displayed
 		Then the app displays empty transaction rewrite rule list
+		When transaction override rules are set to:
+			|Description                       |Override    |                    
+			|MISC PAYMENT - IMH POOL I LP      |Monthly Rent|
+			|COINAMATIC - (IDP PURCHASE - \\d+)|Laundry - $1|
+	    Then the properties file now contains 2 transaction override rules   
 			

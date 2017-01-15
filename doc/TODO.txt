@@ -7,7 +7,7 @@ Features:
 
 Stories:
 * display current props
-- edit existing rules
++ edit existing rules
 - validation
 	- desc can't be blank
 	- account can't be blank

@@ -173,13 +173,6 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 
 	}
 	
-	private void forceAppShutdown()
-	{
-		_app.shutdown();
-		_app = null;
-		robot().cleanUp();
-	}
-	
 	@Test
 	public void creates_standardized_account_hierarchies() throws IOException
 	{
@@ -199,5 +192,12 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 
 		_app = new GncImportAppDriver(robot());	
 		_app.editPropertiesAndExpectRowsToMatch(1, 3);
+	}
+	
+	private void forceAppShutdown()
+	{
+		_app.shutdown();
+		_app = null;
+		robot().cleanUp();
 	}
 }
