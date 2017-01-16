@@ -52,14 +52,7 @@ public class EditPropertiesDialog extends JDialog
 		tabs.addTab("Ignore", new TxRuleEditorPanel((TxRuleTableModel) models.get(RuleCategory.ignore), "IGNORE_RULES"));
 		tabs.addTab("Acc Override", new TxRuleEditorPanel((TxRuleTableModel) models.get(RuleCategory.acc_override), "ACC_OVERRIDE_RULES"));
 		tabs.addTab("Tx Override", new TxRuleEditorPanel((TxRuleTableModel) models.get(RuleCategory.tx_override), "TX_OVERRIDE_RULES"));
-		
-		//TODO <<<
-		List<MonthlyAccountParam> accList = new ArrayList<MonthlyAccountParam>(ListUtils.list_of(
-				new MonthlyAccountParam(1, "Misc Expenses"),
-				new MonthlyAccountParam(2, "Groceries"),
-				new MonthlyAccountParam(3, "Living Expenses")));
-		tabs.addTab("Monthy Accs", new MonthlyAccsEditorPanel(new MonthlyAccTableModel(accList), "MONTHLY_ACCS_RULES"));
-		// <<<<
+		tabs.addTab("Monthy Accs", new MonthlyAccsEditorPanel(models.get(RuleCategory.monthly_accs), "MONTHLY_ACCS_RULES"));
 		
 		_currentPanel = ((PropertyEditorPanel)tabs.getSelectedComponent());
 		tabs.addChangeListener(new ChangeListener()
