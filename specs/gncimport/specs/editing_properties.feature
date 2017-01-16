@@ -47,4 +47,9 @@ Feature: Editing Configuration Properties
 			|MISC PAYMENT - IMH POOL I LP      |Monthly Rent|
 			|COINAMATIC - (IDP PURCHASE - \\d+)|Laundry - $1|
 	      
+	Scenario: editing monthly account hierarchy template
+		Given the properties file is initially empty
+		When properties are displayed
+		Then the app displays an empty monthly account hierarchy template
+		
 			

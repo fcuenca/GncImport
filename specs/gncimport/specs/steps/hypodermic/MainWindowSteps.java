@@ -433,6 +433,13 @@ public class MainWindowSteps
 		assertThat(actualRules, is(empty()));
 	}
 	
+	@Then("^the app displays an empty monthly account hierarchy template$")
+	public void the_app_displays_an_empty_monthly_account_hierarchy_template() throws Throwable
+	{
+		List<List<String>> actual = app().observedMonthlyAccsTemplate();
+		assertThat(actual, is(empty()));
+	}
+	
 	@When("^transaction override rules are set to:$")
 	public void transaction_override_rules_are_set_to(DataTable rules) throws Throwable
 	{

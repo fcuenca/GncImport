@@ -5,5 +5,6 @@ public enum RuleCategory
 	none,
 	ignore, 
 	acc_override, 
-	tx_override;
+	tx_override, 
+	monthly_accs;
 }

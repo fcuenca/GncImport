@@ -11,6 +11,7 @@ import gncimport.interactors.TxBrowseInteractor;
 import gncimport.tests.unit.ListUtils;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
+import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleCategory;
 import gncimport.transfer.RuleTester;
@@ -38,6 +39,8 @@ public class HypodermicAppDriver3
 	private List<MatchingRule> _observedIgnoreRules = new ArrayList<MatchingRule>();	
 	private List<OverrideRule> _observedAccOverrideRules = new ArrayList<OverrideRule>();	
 	private List<OverrideRule> _observedTxOverrideRules = new ArrayList<OverrideRule>();	
+	private List<MonthlyAccountParam> _observedMonthlyAccounts = new ArrayList<MonthlyAccountParam>();
+
 
 	@SuppressWarnings("unchecked")
 	private void collectObservedRules(Map<RuleCategory, Object> allRules)
@@ -45,6 +48,7 @@ public class HypodermicAppDriver3
 		_observedIgnoreRules = new ArrayList<MatchingRule>((List<MatchingRule>) allRules.get(RuleCategory.ignore));
 		_observedAccOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.acc_override));
 		_observedTxOverrideRules = new ArrayList<OverrideRule>((List<OverrideRule>)allRules.get(RuleCategory.tx_override));
+		_observedMonthlyAccounts = new ArrayList<MonthlyAccountParam>((List<MonthlyAccountParam>)allRules.get(RuleCategory.monthly_accs));
 	}
 
 
@@ -474,6 +478,18 @@ public class HypodermicAppDriver3
 		for (OverrideRule rule : ruleList)
 		{
 			rules.add(new ArrayList<String>(ListUtils.list_of(rule.textToMatch.text(), rule.override.text())));
+		}
+		
+		return rules;
+	}
+
+	public List<List<String>> observedMonthlyAccsTemplate()
+	{
+		List<List<String>> rules = new ArrayList<List<String>>();
+		
+		for (MonthlyAccountParam p : _observedMonthlyAccounts)
+		{
+			rules.add(new ArrayList<String>(ListUtils.list_of("" + p.sequenceNo, p.accName)));
 		}
 		
 		return rules;
