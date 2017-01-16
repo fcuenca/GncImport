@@ -3,7 +3,7 @@ package gncimport.ui;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
 import gncimport.transfer.RuleCategory;
-import gncimport.ui.swing.TxRuleTableModel;
+import gncimport.ui.swing.PropertyTableModel;
 import gncimport.ui.swing.TxTableModel;
 
 import java.util.List;
@@ -48,6 +48,6 @@ public interface TxView
 
 	void selectExpenseAccForTx(AccountData newAcc);
 
-	boolean editProperties(Map<RuleCategory, TxRuleTableModel> models);
+	boolean editProperties(Map<RuleCategory, PropertyTableModel> models);
 
 }

@@ -28,7 +28,7 @@ public class EditPropertiesDialog extends JDialog
 	private boolean _okClicked;
 	private PropertyEditorPanel _currentPanel;
 	
-	public EditPropertiesDialog(Frame aFrame, Map<RuleCategory, TxRuleTableModel> models)
+	public EditPropertiesDialog(Frame aFrame, Map<RuleCategory, PropertyTableModel> models)
 	{
 		super(aFrame, true);
 		
@@ -44,14 +44,14 @@ public class EditPropertiesDialog extends JDialog
 		pack();
 	}
 
-	private JTabbedPane createTabs(Map<RuleCategory, TxRuleTableModel> models)
+	private JTabbedPane createTabs(Map<RuleCategory, PropertyTableModel> models)
 	{
 		final JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
 		tabs.setName("PROPERTY_TABS");
 						
-		tabs.addTab("Ignore", new TxRuleEditorPanel(models.get(RuleCategory.ignore), "IGNORE_RULES"));
-		tabs.addTab("Acc Override", new TxRuleEditorPanel(models.get(RuleCategory.acc_override), "ACC_OVERRIDE_RULES"));
-		tabs.addTab("Tx Override", new TxRuleEditorPanel(models.get(RuleCategory.tx_override), "TX_OVERRIDE_RULES"));
+		tabs.addTab("Ignore", new TxRuleEditorPanel((TxRuleTableModel) models.get(RuleCategory.ignore), "IGNORE_RULES"));
+		tabs.addTab("Acc Override", new TxRuleEditorPanel((TxRuleTableModel) models.get(RuleCategory.acc_override), "ACC_OVERRIDE_RULES"));
+		tabs.addTab("Tx Override", new TxRuleEditorPanel((TxRuleTableModel) models.get(RuleCategory.tx_override), "TX_OVERRIDE_RULES"));
 		
 		//TODO <<<
 		List<MonthlyAccountParam> accList = new ArrayList<MonthlyAccountParam>(ListUtils.list_of(

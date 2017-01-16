@@ -14,6 +14,7 @@ import gncimport.transfer.RuleCategory;
 import gncimport.transfer.RuleTester;
 import gncimport.ui.TxView;
 import gncimport.ui.presenters.PropertyEditorPresenter;
+import gncimport.ui.swing.PropertyTableModel;
 import gncimport.ui.swing.TxRuleTableModel;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class PropertyEditorPresenterTests
 {
 	@Captor
-	private ArgumentCaptor<Map<RuleCategory, TxRuleTableModel>> expectedModelMap;
+	private ArgumentCaptor<Map<RuleCategory, PropertyTableModel>> expectedModelMap;
 	
 	private TxView _view;
 	private PropertyEditorPresenter _presenter;
@@ -71,17 +72,17 @@ public class PropertyEditorPresenterTests
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(true));
 		
-		TxRuleTableModel tm = expectedModelMap.getValue().get(RuleCategory.ignore);
+		TxRuleTableModel tm = (TxRuleTableModel) expectedModelMap.getValue().get(RuleCategory.ignore);
 		assertThat(tm.getRowCount(), is(2));
 		assertThat(tm.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
 		assertThat(tm.getValueAt(1, 0), is((Object)new MatchingRuleForTest("rule-2")));
 		
-		TxRuleTableModel tm2 = expectedModelMap.getValue().get(RuleCategory.acc_override);
+		TxRuleTableModel tm2 = (TxRuleTableModel) expectedModelMap.getValue().get(RuleCategory.acc_override);
 		assertThat(tm2.getRowCount(), is(2));
 		assertThat(tm2.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
 		assertThat(tm2.getValueAt(1, 1), is((Object)new MatchingRuleForTest("acc-2")));
 
-		TxRuleTableModel tm3 = expectedModelMap.getValue().get(RuleCategory.tx_override);
+		TxRuleTableModel tm3 = (TxRuleTableModel) expectedModelMap.getValue().get(RuleCategory.tx_override);
 		assertThat(tm3.getRowCount(), is(3));
 		assertThat(tm3.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
 		assertThat(tm3.getValueAt(1, 1), is((Object)new MatchingRuleForTest("tx-override-2")));
@@ -97,7 +98,7 @@ public class PropertyEditorPresenterTests
 		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>());
 		allRules.put(RuleCategory.tx_override, new ArrayList<OverrideRule>());
 		
-		when(_view.editProperties(anyMapOf(RuleCategory.class, TxRuleTableModel.class))).thenReturn(false);
+		when(_view.editProperties(anyMapOf(RuleCategory.class, PropertyTableModel.class))).thenReturn(false);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 	}
@@ -114,13 +115,13 @@ public class PropertyEditorPresenterTests
 		allRules.put(RuleCategory.tx_override, new ArrayList<OverrideRule>());
 
 
-		when(_view.editProperties(anyMapOf(RuleCategory.class, TxRuleTableModel.class)))
+		when(_view.editProperties(anyMapOf(RuleCategory.class, PropertyTableModel.class)))
 			.thenReturn(true)
 			.thenReturn(false);
 		
 		assertThat(_presenter.editProperties(allRules, _tester), is(false));
 		
-		verify(_view, times(2)).editProperties(anyMapOf(RuleCategory.class, TxRuleTableModel.class));
+		verify(_view, times(2)).editProperties(anyMapOf(RuleCategory.class, PropertyTableModel.class));
 		verify(_view).displayErrorMessage(anyString());
 	}
 }
