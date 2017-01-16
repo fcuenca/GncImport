@@ -24,6 +24,7 @@ public abstract class TxRuleTableModel extends PropertyTableModel
 	@Override
 	public abstract void newRow();
 	
+	@Override
 	public boolean isValid()
 	{
 		for (TransactionRule rule : _rules)

@@ -9,6 +9,8 @@ public abstract class PropertyTableModel extends AbstractTableModel
 	
 	public abstract void newRow();
 	public abstract void removeRow(int row);
+	public abstract boolean isValid();
+
 	
 	protected PropertyTableModel(String[] colTitles)
 	{

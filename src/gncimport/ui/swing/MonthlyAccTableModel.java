@@ -54,4 +54,11 @@ public class MonthlyAccTableModel extends PropertyTableModel
 
 	}
 
+	@Override
+	public boolean isValid()
+	{
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }
