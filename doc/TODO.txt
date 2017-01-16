@@ -29,7 +29,8 @@ Later:
 	- duplication all over around "ignore", "acc-override" (presenter, interactor, tests,....) -> Replace Type Code With Class refactoring
 - Map<String, Object>: consider base class for the Values (?)
 - duplication in Config object & tests re:keys in map, types of objects in lists, etc
-   => adding a value to RuleCategory causes shotgun surgery in copyTo, replaceWith -> similar actions for each element 
+   => adding a value to RuleCategory causes shotgun surgery in copyTo, replaceWith -> similar actions for each element
+      => perhaps refactor to Memento (??) 
 - push up COLUMN_CLASSES from table model classes
 
 General improvements:

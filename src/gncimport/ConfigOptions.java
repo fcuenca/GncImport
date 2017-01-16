@@ -233,7 +233,10 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			throw new IllegalArgumentException("rules cannot be null");
 		}
 		
-		if (!(allRules.containsKey(RuleCategory.ignore) && allRules.containsKey(RuleCategory.acc_override) && allRules.containsKey(RuleCategory.tx_override)))
+		if (!(allRules.containsKey(RuleCategory.ignore) && 
+			  allRules.containsKey(RuleCategory.acc_override) &&
+			  allRules.containsKey(RuleCategory.tx_override) && 
+			  allRules.containsKey(RuleCategory.monthly_accs)))
 		{
 			throw new ProgrammerError("Improper keys found in Rule Map: " + allRules.keySet());			
 		}
@@ -248,6 +251,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 
 		List<OverrideRule> newRewrites = (List<OverrideRule>)allRules.get(RuleCategory.tx_override);
 		_rewriteRules = new ArrayList<OverrideRule>(newRewrites);	
+
+		List<MonthlyAccountParam> newMonthlyAccs = (List<MonthlyAccountParam>)allRules.get(RuleCategory.monthly_accs);
+		_monthlyAccounts = new ArrayList<MonthlyAccountParam>(newMonthlyAccs);	
 }
 
 	@Override

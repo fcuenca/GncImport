@@ -147,10 +147,14 @@ public class ConfigOptionsImplementsRuleModel
 		List<OverrideRule> newTxRewrites = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("new-tx-desc", "new-tx-rewrite")));
 
+		List<MonthlyAccountParam> newMonthlyAccs = new ArrayList<MonthlyAccountParam>(ListUtils.list_of(
+				new MonthlyAccountParam(1, "new-acc-1")));
+
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		allRules.put(RuleCategory.ignore, newIgnores);
 		allRules.put(RuleCategory.acc_override, newAccOverrides);
 		allRules.put(RuleCategory.tx_override, newTxRewrites);
+		allRules.put(RuleCategory.monthly_accs, newMonthlyAccs);
 		
 		_options.replaceRulesWith(allRules);
 						
@@ -162,6 +166,7 @@ public class ConfigOptionsImplementsRuleModel
 		newIgnores.clear();
 		newAccOverrides.clear();
 		newTxRewrites.clear();
+		newMonthlyAccs.clear();
 		allRules.clear(); 
 		
 		assertThat(asTestRules((List<MatchingRule>) updatedAllRules.get(RuleCategory.ignore)), hasItems(
@@ -174,6 +179,9 @@ public class ConfigOptionsImplementsRuleModel
 
 		assertThat((List<OverrideRule>)updatedAllRules.get(RuleCategory.tx_override), hasItems(
 				new OverrideRule("new-tx-desc", "new-tx-rewrite")));
+
+		assertThat((List<MonthlyAccountParam>)updatedAllRules.get(RuleCategory.monthly_accs), hasItems(
+				new MonthlyAccountParam(1, "new-acc-1")));
 
 
 		assertThat(allRules.size(), is(not(updatedAllRules.size())));
@@ -213,6 +221,17 @@ public class ConfigOptionsImplementsRuleModel
 		_options.replaceRulesWith(allRules);
 	}
 	
+	@Test(expected=ProgrammerError.class)
+	public void rejects_map_without_account_list()
+	{
+		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
+		allRules.put(RuleCategory.ignore, "irrelevant");
+		allRules.put(RuleCategory.acc_override, "irrelevant");
+		allRules.put(RuleCategory.tx_override, "irrelevant");
+		
+		_options.replaceRulesWith(allRules);
+	}
+	
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -228,11 +247,15 @@ public class ConfigOptionsImplementsRuleModel
 
 		List<OverrideRule> newRewrites = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("new-tx-desc", "new-tx-override")));
+
+		List<MonthlyAccountParam> newMonthlyAccs = new ArrayList<MonthlyAccountParam>(ListUtils.list_of(
+				new MonthlyAccountParam(1, "new-acc-1")));
 		
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		allRules.put(RuleCategory.ignore, newIgnores);
 		allRules.put(RuleCategory.acc_override, newAccOverrides);
 		allRules.put(RuleCategory.tx_override, newRewrites);
+		allRules.put(RuleCategory.monthly_accs, newMonthlyAccs);
 
 		_options.replaceRulesWith(allRules);
 				
@@ -243,6 +266,7 @@ public class ConfigOptionsImplementsRuleModel
 		assertThat((List<MatchingRule>)newAllRules.get(RuleCategory.ignore), containsInAnyOrder(newIgnores.toArray()));
 		assertThat((List<OverrideRule>)newAllRules.get(RuleCategory.acc_override), containsInAnyOrder(newAccOverrides.toArray()));
 		assertThat((List<OverrideRule>)newAllRules.get(RuleCategory.tx_override), containsInAnyOrder(newRewrites.toArray()));
+		assertThat((List<MonthlyAccountParam>)newAllRules.get(RuleCategory.monthly_accs), containsInAnyOrder(newMonthlyAccs.toArray()));
 	}
 
 	@Test
