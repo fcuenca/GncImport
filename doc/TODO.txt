@@ -1,22 +1,21 @@
 TODO:
 
 Features:
-* Editing properties - transaction rewrite rules
-- Editing properties - monthly accounts
+* Editing properties - monthly accounts
 
 
 Stories:
-- display current Monthly Accounts
-- edit existing rules (change)
+x display current Monthly Accounts
+* accounts are displayed in order
+- add & remove accounts
 - change order of accounts
+- edit existing rules (add, remove, modify)
 - validation
 	- account can't be blank
-- add new account
-- remove account
-- (override & ignore rules) sort by any column
+	- no "wholes" in the sequence
+- (override & ignore rules) sort by any column (UI only)
 
 Tasks:
-- Create  Monhtly Account Editor Panel - add to EditPropertiesDialog.createTabs 
 - Test in Rule Model (Config)
 - Test in Rule Tester (Interactor)
 - Test in UI (table model)
@@ -70,4 +69,5 @@ DONE:
 - (DECIDED NOT TO) script the generation of the jar app 
 - generate monthly account hierarchy (from menu option?)
 - Editing properties - ignore rules
+- Editing properties - override rules (account & transaction description)
 
