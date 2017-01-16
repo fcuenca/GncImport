@@ -409,7 +409,13 @@ public class MainWindowSteps
 	@Then("^the app displays existing transaction override rules:$")
 	public void the_app_displays_existing_transaction_override_rules(DataTable expectedRules) throws Throwable
 	{
-				diffOverrideRules(expectedRules, app().observedTransactionRewriteRules());
+		diffOverrideRules(expectedRules, app().observedTransactionRewriteRules());
+	}
+	
+	@Then("^the app displays existing monthly account hierarchy template:$")
+	public void the_app_displays_existing_monthly_account_hierarchy_template(DataTable expectedRules) throws Throwable
+	{
+		diffOverrideRules(expectedRules, app().observedMonthlyAccsTemplate());
 	}
 	
 	@Then("^the app displays empty ignore rule list$")
@@ -452,6 +458,20 @@ public class MainWindowSteps
 		Properties props = app().getProperties();
 		
 		assertThatPropertiesContainsRules(props, ConfigOptions.TX_REWRITE_RULE_KEY_REGEX, expectedRuleCount);
+	}
+	
+	@When("^the monthly account hierarchy template is set to:$")
+	public void the_monthly_account_hierarchy_template_is_set_to(DataTable rules) throws Throwable
+	{
+		app().editMonthlyAccTemplate(rules.asMaps());
+	}
+
+	@Then("^the properties file now contains (\\d+) monthly accounts$")
+	public void the_properties_file_now_contains_monthly_accounts(int expectedCount) throws Throwable
+	{
+		Properties props = app().getProperties();
+		
+		assertThatPropertiesContainsRules(props, ConfigOptions.MONTHLY_ACC_KEY_REGEX, expectedCount);
 	}
 
 	private Properties createMonthlyAccountRules(List<MonthlyAccountParam> subAccounts)

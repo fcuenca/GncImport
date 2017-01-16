@@ -395,6 +395,34 @@ public class HypodermicAppDriver3
 			
 		_interactors.propertyEdit(boundary).editProperties();
 	}
+	
+	public void editMonthlyAccTemplate(final List<Map<String, String>> newRules)
+	{
+		PropertyEditInteractor.OutPort boundary = new PropertyEditInteractor.OutPort()
+		{
+			@SuppressWarnings("unchecked")
+			@Override
+			public boolean editProperties(Map<RuleCategory, Object> allRules, RuleTester tester)
+			{
+				collectObservedRules(allRules);
+
+				((List<MonthlyAccountParam>) allRules.get(RuleCategory.monthly_accs)).clear();
+
+				for (Map<String, String> map : newRules)
+				{
+					int order = Integer.parseInt(map.get("Order"));
+					String account = map.get("Account");
+					
+					((List<MonthlyAccountParam>) allRules.get(RuleCategory.monthly_accs)).add(new MonthlyAccountParam(order, account));	
+				}
+				
+				return true;
+			}
+		};
+			
+		_interactors.propertyEdit(boundary).editProperties();		
+	}
+
 
 	//TODO: extract utility functions that manipulate Gnc classes into different module (in GncXmlLib perhaps?)
 	private AccountData findFirstAccWithNameInList(String accountName, List<AccountData> accounts)
@@ -494,4 +522,5 @@ public class HypodermicAppDriver3
 		
 		return rules;
 	}
+
 }

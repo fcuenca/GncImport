@@ -51,5 +51,17 @@ Feature: Editing Configuration Properties
 		Given the properties file is initially empty
 		When properties are displayed
 		Then the app displays an empty monthly account hierarchy template
+		When the monthly account hierarchy template is set to:
+			|Order | Account       |
+			| 1    | Misc Expenses |
+			| 2    | Groceries     |
+			| 3    | Car           |                   
+	    Then the properties file now contains 3 monthly accounts 
+	    When properties are displayed
+	 	Then the app displays existing monthly account hierarchy template:
+			|Order | Account       |
+			| 1    | Misc Expenses |
+			| 2    | Groceries     |
+			| 3    | Car           |                   
 		
 			
