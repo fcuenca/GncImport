@@ -263,6 +263,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		allRules.put(RuleCategory.ignore, new ArrayList<MatchingRule>(_ignoreRules));
 		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>(_accountOverrideRules));
 		allRules.put(RuleCategory.tx_override, new ArrayList<OverrideRule>(_rewriteRules));
+		allRules.put(RuleCategory.monthly_accs, new ArrayList<MonthlyAccountParam>(_monthlyAccounts));
 	}
 
 	@Override

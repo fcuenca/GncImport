@@ -11,6 +11,7 @@ import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
 import gncimport.ConfigPropertyBuilder;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleCategory;
 import gncimport.transfer.UserEnteredMatchingRule;
@@ -68,11 +69,12 @@ public class ConfigOptionsImplementsRuleModel
 		
 		_options.copyRulesTo(allRules);
 		
-		assertThat(allRules.size(), is(3));
+		assertThat(allRules.size(), is(4));
 
 		assertThat(allRules, hasKey(RuleCategory.ignore));
 		assertThat(allRules, hasKey(RuleCategory.acc_override));
 		assertThat(allRules, hasKey(RuleCategory.tx_override));
+		assertThat(allRules, hasKey(RuleCategory.monthly_accs));
 
 		assertThat(asTestRules((List<MatchingRule>) allRules.get(RuleCategory.ignore)), hasItems(
 				new MatchingRuleForTest("WEB TRANSFER"), 
@@ -85,6 +87,11 @@ public class ConfigOptionsImplementsRuleModel
 		assertThat((List<OverrideRule>)allRules.get(RuleCategory.tx_override), hasItems(
 				new OverrideRule("tx-desc-1", "tx-override-1"),
 				new OverrideRule("tx-desc-2", "tx-override-2")));
+		
+		assertThat((List<MonthlyAccountParam>)allRules.get(RuleCategory.monthly_accs), hasItems(
+				new MonthlyAccountParam(1, "month-1"),
+				new MonthlyAccountParam(2, "month-2"),
+				new MonthlyAccountParam(3, "month-3")));
 }
 
 
@@ -121,6 +128,8 @@ public class ConfigOptionsImplementsRuleModel
 		assertThat((List<OverrideRule>)allRules.get(RuleCategory.acc_override), is(empty()));
 		assertThat(allRules, hasKey(RuleCategory.tx_override));
 		assertThat((List<OverrideRule>)allRules.get(RuleCategory.tx_override), is(empty()));
+		assertThat(allRules, hasKey(RuleCategory.monthly_accs));
+		assertThat((List<MonthlyAccountParam>)allRules.get(RuleCategory.monthly_accs), is(empty()));
 	}
 	
 	@SuppressWarnings("unchecked")
