@@ -7,9 +7,18 @@ import javax.swing.JToolBar;
 public class MonthlyAccsEditorPanel extends PropertyEditorPanel
 {
 
+	public static class MonthlyAccTable extends JTable
+	{
+		public MonthlyAccTable(PropertyTableModel tm, String name)
+		{
+			super(tm);
+			setName(name);
+		}
+	}
+	
 	protected MonthlyAccsEditorPanel(PropertyTableModel tm, String name)
 	{
-		super(new JTable(tm));
+		super(new MonthlyAccTable(tm, name));
 	}
 
 	@Override

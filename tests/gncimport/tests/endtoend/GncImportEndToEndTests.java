@@ -188,10 +188,10 @@ public class GncImportEndToEndTests extends FestSwingJUnitTestCase
 	@Test
 	public void edits_configuration_properties() throws IOException
 	{
-		_fs.setupConfigFile(TestFiles.CFG_WITH_MATCHING_RULES, TestFiles.CFG_WITH_REWRITE_RULES);
+		_fs.setupConfigFile(TestFiles.CFG_WITH_MATCHING_RULES, TestFiles.CFG_WITH_REWRITE_RULES, TestFiles.CFG_WITH_MONTHLY_ACCOUNTS);
 
 		_app = new GncImportAppDriver(robot());	
-		_app.editPropertiesAndExpectRowsToMatch(1, 3, 2);
+		_app.editPropertiesAndExpectRowsToMatch(1, 3, 2, 5);
 	}
 	
 	private void forceAppShutdown()
