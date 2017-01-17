@@ -20,8 +20,8 @@ public class MonthlyAccTableModelTests
 	public void setUp() throws Exception
 	{
 		List<MonthlyAccountParam> accList = new ArrayList<MonthlyAccountParam>(ListUtils.list_of(
-				new MonthlyAccountParam(1, "Misc Expenses"),
 				new MonthlyAccountParam(2, "Groceries"),
+				new MonthlyAccountParam(1, "Misc Expenses"),
 				new MonthlyAccountParam(3, "Living Expenses")));
 		
 		_tableModel = new MonthlyAccTableModel(accList);

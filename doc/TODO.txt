@@ -6,7 +6,7 @@ Features:
 
 Stories:
 x display current Monthly Accounts
-* accounts are displayed in order
+x accounts are displayed in order
 - add & remove accounts
 - change order of accounts
 - edit existing rules (add, remove, modify)
