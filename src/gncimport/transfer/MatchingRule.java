@@ -5,9 +5,9 @@ import gncimport.utils.ProgrammerError;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public abstract class MatchingRule implements TransactionRule, WholeValue
+public abstract class MatchingRule extends WholeValue implements TransactionRule
 {
-	protected MatchingRule create(String text)
+	protected WholeValue create(String text)
 	{
 		if(text == null)
 		{
@@ -26,7 +26,7 @@ public abstract class MatchingRule implements TransactionRule, WholeValue
 		}
 	}
 
-	private String validateText(String text)
+	public static String validateText(String text)
 	{
 		String errorMsg = null;
 		if(text.trim().isEmpty())

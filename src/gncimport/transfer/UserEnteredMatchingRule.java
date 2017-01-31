@@ -2,7 +2,7 @@ package gncimport.transfer;
 
 public class UserEnteredMatchingRule extends MatchingRule
 {
-	private final MatchingRule _backingRule;
+	private final WholeValue _backingRule;
 	
 	public UserEnteredMatchingRule(String ruleText)
 	{

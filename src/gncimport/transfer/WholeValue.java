@@ -1,12 +1,12 @@
 package gncimport.transfer;
 
-public interface WholeValue
+public abstract class WholeValue
 {
-	public String hint();
-	public String displayText();
-	public boolean isValid();
+	public abstract String hint();
+	public abstract String displayText();
+	public abstract boolean isValid();
 	
-	public String text();
-	public WholeValue copy();
+	public abstract String text();
+	public abstract WholeValue copy();
 
 }
