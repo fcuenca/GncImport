@@ -12,6 +12,15 @@ public class MonthlyAccTableModel extends PropertyTableModel
 {
 	public static final String[] COLUMN_TITLES = { "Order", "Account Name" };
 	
+	public static final Class<?>[] COLUMN_CLASSES = { Object.class,  MonthlyAccountParam.class };
+
+	@Override
+	public Class<?> getColumnClass(int col)
+	{
+		return COLUMN_CLASSES[col];
+	}
+
+	
 	private List<MonthlyAccountParam> _accList;
 
 	public MonthlyAccTableModel(List<MonthlyAccountParam> accList)
