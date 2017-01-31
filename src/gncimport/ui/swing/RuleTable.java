@@ -9,7 +9,7 @@ public class RuleTable extends StripePatternTable
 	{		
 		super(model, name);
 		
-		setDefaultRenderer(MatchingRule.class, new RuleDefCellRenderer());
+		setDefaultRenderer(MatchingRule.class, new ValueRenderer());
 		setDefaultEditor(MatchingRule.class, new RuleDefCellEditor());
 	}
 }

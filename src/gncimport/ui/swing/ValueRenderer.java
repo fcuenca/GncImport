@@ -8,11 +8,11 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class RuleDefCellRenderer extends DefaultTableCellRenderer
+public class ValueRenderer extends DefaultTableCellRenderer
 {
 	private static final long serialVersionUID = 2707482275266150989L;
 
-	public RuleDefCellRenderer()
+	public ValueRenderer()
 	{
 		setHorizontalTextPosition(SwingConstants.LEFT);
 	}

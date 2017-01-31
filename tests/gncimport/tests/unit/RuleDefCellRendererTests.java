@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.transfer.MatchingRule;
-import gncimport.ui.swing.RuleDefCellRenderer;
+import gncimport.ui.swing.ValueRenderer;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class RuleDefCellRendererTests
 	@Test
 	public void renders_rule_definition_display_text()
 	{
-		RuleDefCellRenderer renderer = new RuleDefCellRenderer();
+		ValueRenderer renderer = new ValueRenderer();
 		MatchingRule ruleDef = new MatchingRuleForTest("some rule");
 		
 		renderer.setValue(ruleDef);
@@ -25,7 +25,7 @@ public class RuleDefCellRendererTests
 	@Test
 	public void valid_rule_definitions_dont_have_icon_and_tooltip()
 	{
-		RuleDefCellRenderer renderer = new RuleDefCellRenderer();
+		ValueRenderer renderer = new ValueRenderer();
 		MatchingRule ruleDef = new MatchingRuleForTest("some rule");
 		
 		renderer.setValue(ruleDef);
@@ -37,7 +37,7 @@ public class RuleDefCellRendererTests
 	@Test
 	public void invalid_rule_definitions_use_hint_as_tooltip()
 	{
-		RuleDefCellRenderer renderer = new RuleDefCellRenderer();
+		ValueRenderer renderer = new ValueRenderer();
 		MatchingRule ruleDef = new MatchingRuleForTest("some rule", false);
 		
 		renderer.setValue(ruleDef);
@@ -48,7 +48,7 @@ public class RuleDefCellRendererTests
 	@Test
 	public void invalid_rule_definition_renders_icon()
 	{
-		RuleDefCellRenderer renderer = new RuleDefCellRenderer();
+		ValueRenderer renderer = new ValueRenderer();
 		MatchingRule ruleDef = new MatchingRuleForTest("some rule", false);
 		
 		renderer.setValue(ruleDef);
