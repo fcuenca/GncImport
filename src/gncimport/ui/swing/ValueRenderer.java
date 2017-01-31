@@ -1,8 +1,8 @@
 package gncimport.ui.swing;
 
-import java.net.URL;
+import gncimport.transfer.WholeValue;
 
-import gncimport.transfer.MatchingRule;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
@@ -20,7 +20,7 @@ public class ValueRenderer extends DefaultTableCellRenderer
 	@Override
 	public void setValue(Object value)
 	{
-		MatchingRule renderable = (MatchingRule) value;
+		WholeValue renderable = (WholeValue) value;
 		
 		setText(renderable.displayText());
 		

@@ -1,6 +1,6 @@
 package gncimport.transfer;
 
-public interface ValueObject
+public interface WholeValue
 {
 	public String hint();
 	public String displayText();

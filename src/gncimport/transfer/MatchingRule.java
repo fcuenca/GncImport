@@ -5,7 +5,7 @@ import gncimport.utils.ProgrammerError;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public abstract class MatchingRule implements TransactionRule, ValueObject
+public abstract class MatchingRule implements TransactionRule, WholeValue
 {
 	protected MatchingRule create(String text)
 	{
