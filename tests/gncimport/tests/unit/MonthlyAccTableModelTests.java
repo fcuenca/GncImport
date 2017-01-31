@@ -62,5 +62,28 @@ public class MonthlyAccTableModelTests
 		new MonthlyAccTableModel(null);	
 	}
 
+	@Test
+	public void all_columns_have_types_defined()
+	{
+		assertThat(_tableModel.getColumnCount(), is(MonthlyAccTableModel.COLUMN_CLASSES.length));
+	}
+	
+	@Test
+	public void declared_column_types_match_values_returned()
+	{
+		for(int i = 0; i < MonthlyAccTableModel.COLUMN_CLASSES.length; i++)
+		{
+			Class<?> actual = _tableModel.getValueAt(0, i).getClass();
+			Class<?> declared = _tableModel.getColumnClass(i);
+			
+			assertThat(String.format("declared class for column %d (%s) is not compatible actual class (%s)", i, declared, actual),
+					declared.isAssignableFrom(actual), is(true));
+			
+			if(i != 0) assertThat("declared class for column " + i + " can not be Object",
+						declared.equals(Object.class), is(false));
+		}
+	}
+
+
 
 }
