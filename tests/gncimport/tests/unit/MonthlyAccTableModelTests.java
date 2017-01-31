@@ -46,13 +46,13 @@ public class MonthlyAccTableModelTests
 		assertThat(_tableModel.getRowCount(), is(3));
 		
 		assertThat(_tableModel.getValueAt(0, 0), is((Object)1));
-		assertThat(_tableModel.getValueAt(0, 1), is((Object)"Misc Expenses"));
+		assertThat(_tableModel.getValueAt(0, 1), is((Object)(new MonthlyAccountParam(1, "Misc Expenses"))));
 		
 		assertThat(_tableModel.getValueAt(1, 0), is((Object)2));
-		assertThat(_tableModel.getValueAt(1, 1), is((Object)"Groceries"));
+		assertThat(_tableModel.getValueAt(1, 1), is((Object)(new MonthlyAccountParam(2, "Groceries"))));
 		
 		assertThat(_tableModel.getValueAt(2, 0), is((Object)3));
-		assertThat(_tableModel.getValueAt(2, 1), is((Object)"Living Expenses"));
+		assertThat(_tableModel.getValueAt(2, 1), is((Object)(new MonthlyAccountParam(3, "Living Expenses"))));
 	}
 
 

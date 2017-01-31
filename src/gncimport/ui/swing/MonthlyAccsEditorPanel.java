@@ -1,5 +1,7 @@
 package gncimport.ui.swing;
 
+import gncimport.transfer.MonthlyAccountParam;
+
 import javax.swing.JToolBar;
 
 @SuppressWarnings("serial")
@@ -11,6 +13,7 @@ public class MonthlyAccsEditorPanel extends PropertyEditorPanel
 		public MonthlyAccTable(PropertyTableModel tm, String name)
 		{
 			super(tm, name);
+			setDefaultRenderer(MonthlyAccountParam.class, new ValueRenderer());
 		}
 	}
 	

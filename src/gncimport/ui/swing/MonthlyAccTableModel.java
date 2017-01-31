@@ -64,7 +64,7 @@ public class MonthlyAccTableModel extends PropertyTableModel
 	{
 		final MonthlyAccountParam row = _accList.get(rowIndex);
 		
-		return columnIndex == 0 ? row.sequenceNo : row.accName;
+		return columnIndex == 0 ? row.sequenceNo : row;
 	}
 
 	@Override

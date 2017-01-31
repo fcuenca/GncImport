@@ -1,6 +1,6 @@
 package gncimport.transfer;
 
-public class MonthlyAccountParam
+public class MonthlyAccountParam implements WholeValue
 {
 	public final int sequenceNo;
 	public final String accName;
@@ -47,5 +47,23 @@ public class MonthlyAccountParam
 	public String toString()
 	{
 		return "MonthlyAccountParam(" + sequenceNo + ", " + accName + ")";
+	}
+
+	@Override
+	public String hint()
+	{
+		return null;
+	}
+
+	@Override
+	public String displayText()
+	{
+		return accName;
+	}
+
+	@Override
+	public boolean isValid()
+	{
+		return true;
 	}
 }

@@ -9,7 +9,7 @@ import gncimport.ui.swing.ValueRenderer;
 
 import org.junit.Test;
 
-public class RuleDefCellRendererTests
+public class ValueRendererTests
 {
 	@Test
 	public void renders_rule_definition_display_text()
