@@ -1,6 +1,7 @@
 package gncimport.tests.unit;
 
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.WholeValue;
 
 public class MatchingRuleForTest extends MatchingRule
 {
@@ -37,7 +38,7 @@ public class MatchingRuleForTest extends MatchingRule
 	}
 
 	@Override
-	public MatchingRule copy()
+	public WholeValue copy()
 	{
 		return new MatchingRuleForTest(_text);
 	}

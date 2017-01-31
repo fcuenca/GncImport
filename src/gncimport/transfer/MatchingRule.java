@@ -46,14 +46,7 @@ public abstract class MatchingRule implements TransactionRule, WholeValue
 		}
 		return errorMsg;
 	}
-	
-	public abstract String text();
-	@Override
-	public abstract String hint();
-	@Override
-	public abstract String displayText();
-	public abstract MatchingRule copy();
-	
+		
 	@Override
 	public boolean matches(String someText)
 	{

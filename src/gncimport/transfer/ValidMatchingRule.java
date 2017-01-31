@@ -29,7 +29,7 @@ public class ValidMatchingRule extends MatchingRule
 	}
 
 	@Override
-	public MatchingRule copy()
+	public WholeValue copy()
 	{
 		return new ValidMatchingRule(_text);
 	}

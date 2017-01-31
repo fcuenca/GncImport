@@ -30,7 +30,7 @@ public class InvalidMatchingRule extends MatchingRule
 	}
 
 	@Override
-	public MatchingRule copy()
+	public WholeValue copy()
 	{
 		return new InvalidMatchingRule(_offendingText, _hint);
 	}

@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.*;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.UserEnteredMatchingRule;
+import gncimport.transfer.WholeValue;
 import gncimport.utils.ProgrammerError;
 
 import org.junit.Test;
@@ -75,7 +76,7 @@ public class MatchingRuleTests
 	{
 		MatchingRule rule = new UserEnteredMatchingRule("rule");
 		
-		MatchingRule copy = rule.copy();
+		WholeValue copy = rule.copy();
 		
 		assertThat(copy.isValid(), is(true));
 		assertThat(copy.text(), is(rule.text()));
@@ -88,7 +89,7 @@ public class MatchingRuleTests
 	{
 		MatchingRule rule = new UserEnteredMatchingRule("");
 		
-		MatchingRule copy = rule.copy();
+		WholeValue copy = rule.copy();
 		
 		assertThat(copy.isValid(), is(false));
 		assertThat(copy.text(), is(rule.text()));

@@ -28,7 +28,7 @@ public class UserEnteredMatchingRule extends MatchingRule
 	}
 
 	@Override
-	public MatchingRule copy()
+	public WholeValue copy()
 	{
 		return _backingRule.copy();
 	}

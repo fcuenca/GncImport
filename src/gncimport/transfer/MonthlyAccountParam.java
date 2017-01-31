@@ -66,4 +66,18 @@ public class MonthlyAccountParam implements WholeValue
 	{
 		return true;
 	}
+
+	@Override
+	public String text()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public WholeValue copy()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
