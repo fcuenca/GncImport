@@ -2,6 +2,7 @@ package gncimport.tests.unit;
 
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.WholeValue;
+import gncimport.utils.ProgrammerError;
 
 public class MatchingRuleForTest extends MatchingRule implements WholeValue
 {
@@ -48,5 +49,4 @@ public class MatchingRuleForTest extends MatchingRule implements WholeValue
 	{
 		return "DISPLAY[" + _text + "]";
 	}
-	
 }

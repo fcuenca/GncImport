@@ -24,7 +24,7 @@ public class RuleDefCellEditorTests
 			@Override
 			protected void executeInEDT() throws Throwable
 			{
-				RuleDefCellEditor editor = new RuleDefCellEditor();
+				RuleDefCellEditor editor = new RuleDefCellEditor(UserEnteredMatchingRule.Factory);
 				MatchingRule ruleDef = new MatchingRuleForTest("some rule");
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
@@ -43,7 +43,7 @@ public class RuleDefCellEditorTests
 			@Override
 			protected void executeInEDT() throws Throwable
 			{
-				RuleDefCellEditor editor = new RuleDefCellEditor();
+				RuleDefCellEditor editor = new RuleDefCellEditor(UserEnteredMatchingRule.Factory);
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
 						new JTable(), new MatchingRuleForTest("some rule"), true, 0, 1);
