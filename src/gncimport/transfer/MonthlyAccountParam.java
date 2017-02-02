@@ -1,6 +1,6 @@
 package gncimport.transfer;
 
-public class MonthlyAccountParam extends WholeValue
+public class MonthlyAccountParam implements WholeValue
 {
 	public final int sequenceNo;
 	public final String accName;
@@ -76,13 +76,6 @@ public class MonthlyAccountParam extends WholeValue
 
 	@Override
 	public WholeValue copy()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String validateText(String text)
 	{
 		// TODO Auto-generated method stub
 		return null;

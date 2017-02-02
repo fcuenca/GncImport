@@ -1,10 +1,8 @@
 package gncimport.transfer;
 
-import gncimport.utils.ProgrammerError;
 
-public class ValidWholeValue extends WholeValue
+public class ValidWholeValue implements WholeValue
 {
-	
 	private String _text;
 	
 	protected ValidWholeValue(String text)
@@ -40,11 +38,5 @@ public class ValidWholeValue extends WholeValue
 	public String displayText()
 	{
 		return text();
-	}
-
-	@Override
-	public String validateText(String text)
-	{
-		throw new ProgrammerError("ahhhh!");
 	}
 }

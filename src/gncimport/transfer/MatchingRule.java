@@ -1,33 +1,8 @@
 package gncimport.transfer;
 
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
-public abstract class MatchingRule extends WholeValue implements TransactionRule
+public abstract class MatchingRule implements WholeValue, TransactionRule
 {
-	
-	@Override
-	public String validateText(String text)
-	{
-		String errorMsg = null;
-		if(text.trim().isEmpty())
-		{
-			errorMsg =  "Empty string is invalid";
-		}
-		else
-		{
-			try
-			{
-				Pattern.compile(text);
-			}
-			catch(PatternSyntaxException ex)
-			{
-				errorMsg =  "Invalid regex: " + ex.getDescription();
-			}
-		}
-		return errorMsg;
-	}
-		
 	@Override
 	public boolean matches(String someText)
 	{

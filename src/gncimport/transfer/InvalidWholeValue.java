@@ -1,8 +1,7 @@
 package gncimport.transfer;
 
-import gncimport.utils.ProgrammerError;
 
-public class InvalidWholeValue extends WholeValue
+public class InvalidWholeValue implements WholeValue
 {
 	private String _offendingText;
 	private String _hint;
@@ -41,11 +40,5 @@ public class InvalidWholeValue extends WholeValue
 	public String displayText()
 	{
 		return "<<" + _offendingText + ">>";
-	}
-
-	@Override
-	public String validateText(String text)
-	{
-		throw new ProgrammerError("ahhhhh!");
 	}
 }
