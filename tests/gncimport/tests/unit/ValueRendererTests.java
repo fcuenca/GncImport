@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import gncimport.transfer.MatchingRule;
 import gncimport.transfer.WholeValue;
 import gncimport.ui.swing.ValueRenderer;
 
@@ -16,7 +15,7 @@ public class ValueRendererTests
 	public void renders_rule_definition_display_text()
 	{
 		ValueRenderer renderer = new ValueRenderer();
-		WholeValue ruleDef = new MatchingRuleForTest("some rule");
+		WholeValue ruleDef = new WholeValueForTest("some rule");
 		
 		renderer.setValue(ruleDef);
 		
@@ -27,7 +26,7 @@ public class ValueRendererTests
 	public void valid_rule_definitions_dont_have_icon_and_tooltip()
 	{
 		ValueRenderer renderer = new ValueRenderer();
-		MatchingRule ruleDef = new MatchingRuleForTest("some rule");
+		WholeValue ruleDef = new WholeValueForTest("some rule");
 		
 		renderer.setValue(ruleDef);
 		
@@ -39,7 +38,7 @@ public class ValueRendererTests
 	public void invalid_rule_definitions_use_hint_as_tooltip()
 	{
 		ValueRenderer renderer = new ValueRenderer();
-		WholeValue ruleDef = new MatchingRuleForTest("some rule", false);
+		WholeValue ruleDef = new WholeValueForTest("some rule", false);
 		
 		renderer.setValue(ruleDef);
 		
@@ -50,7 +49,7 @@ public class ValueRendererTests
 	public void invalid_rule_definition_renders_icon()
 	{
 		ValueRenderer renderer = new ValueRenderer();
-		MatchingRule ruleDef = new MatchingRuleForTest("some rule", false);
+		WholeValue ruleDef = new WholeValueForTest("some rule", false);
 		
 		renderer.setValue(ruleDef);
 		

@@ -47,8 +47,8 @@ public class IgnoreRulesTableModelTests
 	public void displays_list_of_rule_definitions()
 	{		
 		assertThat(_tableModel.getRowCount(), is(2));
-		assertThat(_tableModel.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
-		assertThat(_tableModel.getValueAt(1, 0), is((Object)new MatchingRuleForTest("rule-2")));
+		assertThat(_tableModel.getValueAt(0, 0), is((Object)new WholeValueForTest("rule-1")));
+		assertThat(_tableModel.getValueAt(1, 0), is((Object)new WholeValueForTest("rule-2")));
 	}
 	
 	@Test
@@ -92,7 +92,7 @@ public class IgnoreRulesTableModelTests
 	public void updates_rule_definitions()
 	{		
 		_tableModel.setValueAt(new MatchingRuleForTest("new value"), 1, 0);
-		assertThat(_tableModel.getValueAt(1, 0), is((Object)new MatchingRuleForTest("new value")));
+		assertThat(_tableModel.getValueAt(1, 0), is((Object)new WholeValueForTest("new value")));
 	}
 	
 	@Test
@@ -115,7 +115,7 @@ public class IgnoreRulesTableModelTests
 		_tableModel.newRow();
 		
 		assertThat(_tableModel.getRowCount(), is(3));
-		assertThat(_tableModel.getValueAt(2, 0), is((Object)new MatchingRuleForTest("", false)));
+		assertThat(_tableModel.getValueAt(2, 0), is((Object)new WholeValueForTest("", false)));
 	}
 	
 	@Test
@@ -134,7 +134,7 @@ public class IgnoreRulesTableModelTests
 	{
 		_tableModel.removeRow(1);		
 		assertThat(_tableModel.getRowCount(), is(1));
-		assertThat(_tableModel.getValueAt(0, 0), is((Object)new MatchingRuleForTest("rule-1")));
+		assertThat(_tableModel.getValueAt(0, 0), is((Object)new WholeValueForTest("rule-1")));
 
 		_tableModel.removeRow(0);		
 		assertThat(_tableModel.getRowCount(), is(0));

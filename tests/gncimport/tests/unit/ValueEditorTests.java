@@ -2,8 +2,8 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import gncimport.transfer.MatchingRule;
 import gncimport.transfer.UserEnteredMatchingRule;
+import gncimport.transfer.WholeValue;
 import gncimport.ui.swing.ValueEditor;
 
 import javax.swing.JTable;
@@ -25,12 +25,12 @@ public class ValueEditorTests
 			protected void executeInEDT() throws Throwable
 			{
 				ValueEditor editor = new ValueEditor(UserEnteredMatchingRule.Factory);
-				MatchingRule ruleDef = new MatchingRuleForTest("some rule");
+				WholeValue valueToEdit = new WholeValueForTest("some rule");
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
-						new JTable(), ruleDef, true, 0, 1);
+						new JTable(), valueToEdit, true, 0, 1);
 
-				assertThat(tf.getText(), is(ruleDef.text()));
+				assertThat(tf.getText(), is(valueToEdit.text()));
 			}
 		});
 	}
@@ -46,7 +46,7 @@ public class ValueEditorTests
 				ValueEditor editor = new ValueEditor(UserEnteredMatchingRule.Factory);
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
-						new JTable(), new MatchingRuleForTest("some rule"), true, 0, 1);
+						new JTable(), new WholeValueForTest("some rule"), true, 0, 1);
 				
 				tf.setText("new rule");
 				

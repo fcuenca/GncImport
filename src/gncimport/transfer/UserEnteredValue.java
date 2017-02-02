@@ -73,7 +73,5 @@ public class UserEnteredValue implements WholeValue
 	public String toString()
 	{
 		return getClass().getSimpleName() + " [" + isValid() + ", " + text() + "]";
-	}
-
-	
+	}	
 }

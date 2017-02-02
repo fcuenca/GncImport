@@ -1,10 +1,9 @@
 package gncimport.tests.unit;
 
 import gncimport.transfer.MatchingRule;
-import gncimport.transfer.UserEnteredValue;
 import gncimport.transfer.WholeValue;
 
-public class MatchingRuleForTest extends MatchingRule implements WholeValue
+public class MatchingRuleForTest extends MatchingRule 
 {
 	private String _text;
 	private boolean _isValid = true;
@@ -33,26 +32,8 @@ public class MatchingRuleForTest extends MatchingRule implements WholeValue
 	}
 
 	@Override
-	public String hint()
-	{
-		return "HINT[" + _text + "]";
-	}
-
-	@Override
-	public WholeValue copy()
-	{
-		return new MatchingRuleForTest(_text);
-	}
-
-	@Override
-	public String displayText()
-	{
-		return "DISPLAY[" + _text + "]";
-	}
-
-	@Override
 	public WholeValue asScreenValue()
 	{
-		return new UserEnteredValue(this);
+		return new WholeValueForTest(text(), isValid());
 	}
 }
