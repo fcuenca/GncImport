@@ -71,4 +71,10 @@ public class UserEnteredMatchingRule extends MatchingRule implements WholeValue
 	{
 		return _backingRule.displayText();
 	}
+
+	@Override
+	public WholeValue asScreenValue()
+	{
+		return this;
+	}
 }

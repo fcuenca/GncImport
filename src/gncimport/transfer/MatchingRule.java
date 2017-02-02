@@ -4,6 +4,7 @@ package gncimport.transfer;
 public abstract class MatchingRule implements  TransactionRule
 {
 	public abstract String text();
+	public abstract WholeValue asScreenValue();
 	
 	@Override
 	public boolean matches(String someText)

@@ -26,7 +26,7 @@ public final class IgnoreRulesTableModel extends TxRuleTableModel
 	@Override
 	public Object getValueAt(int row, int col)
 	{
-		return _rules.get(row);
+		return ((MatchingRule)_rules.get(row)).asScreenValue();
 	}
 
 	@SuppressWarnings("unchecked")

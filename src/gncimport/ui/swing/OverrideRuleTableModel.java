@@ -27,7 +27,8 @@ public abstract class OverrideRuleTableModel extends TxRuleTableModel
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
 		OverrideRule rule = (OverrideRule) _rules.get(rowIndex);
-		return columnIndex == 0? rule.textToMatch : rule.override;
+		final MatchingRule result = columnIndex == 0? rule.textToMatch : rule.override;
+		return result.asScreenValue();
 	}
 
 	@SuppressWarnings("unchecked")
