@@ -4,7 +4,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.UserEnteredMatchingRule;
-import gncimport.ui.swing.RuleDefCellEditor;
+import gncimport.ui.swing.ValueEditor;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -13,7 +13,7 @@ import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiTask;
 import org.junit.Test;
 
-public class RuleDefCellEditorTests
+public class ValueEditorTests
 {
 
 	@Test
@@ -24,7 +24,7 @@ public class RuleDefCellEditorTests
 			@Override
 			protected void executeInEDT() throws Throwable
 			{
-				RuleDefCellEditor editor = new RuleDefCellEditor(UserEnteredMatchingRule.Factory);
+				ValueEditor editor = new ValueEditor(UserEnteredMatchingRule.Factory);
 				MatchingRule ruleDef = new MatchingRuleForTest("some rule");
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
@@ -43,7 +43,7 @@ public class RuleDefCellEditorTests
 			@Override
 			protected void executeInEDT() throws Throwable
 			{
-				RuleDefCellEditor editor = new RuleDefCellEditor(UserEnteredMatchingRule.Factory);
+				ValueEditor editor = new ValueEditor(UserEnteredMatchingRule.Factory);
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
 						new JTable(), new MatchingRuleForTest("some rule"), true, 0, 1);

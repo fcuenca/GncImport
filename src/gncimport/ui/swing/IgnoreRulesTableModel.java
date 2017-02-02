@@ -3,6 +3,7 @@ package gncimport.ui.swing;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
 import gncimport.transfer.UserEnteredMatchingRule;
+import gncimport.transfer.WholeValue;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public final class IgnoreRulesTableModel extends TxRuleTableModel
 {
 	public static final String[] COLUMN_TITLES = { "Description Pattern" };
-	public static final Class<?>[] COLUMN_CLASSES = { MatchingRule.class };
+	public static final Class<?>[] COLUMN_CLASSES = { WholeValue.class };
 
 	public IgnoreRulesTableModel(List<MatchingRule> ignoreRules, RuleTester tester)
 	{

@@ -16,18 +16,18 @@ public class MatchingRuleTests
 	@Test
 	public void valid_regex_makes_a_valid_rule()
 	{
-		WholeValue rule = new UserEnteredMatchingRule("rule text.*");
+		MatchingRule rule = new UserEnteredMatchingRule("rule text.*");
 		
 		assertThat(rule.isValid(), is(true));
 		assertThat(rule.text(), is("rule text.*"));
-		assertThat(rule.hint(), is(""));
-		assertThat(rule.displayText(), is(rule.text()));
+		assertThat(rule.asScreenValue().hint(), is(""));
+		assertThat(rule.asScreenValue().displayText(), is(rule.text()));
 	}
 	
 	@Test
 	public void valid_rules_are_trimmed()
 	{
-		WholeValue rule = new UserEnteredMatchingRule("   rule text    ");
+		MatchingRule rule = new UserEnteredMatchingRule("   rule text    ");
 		
 		assertThat(rule.text(), is("rule text"));
 	}
@@ -35,34 +35,34 @@ public class MatchingRuleTests
 	@Test
 	public void empty_string_makes_an_invalid_rule()
 	{
-		WholeValue rule = new UserEnteredMatchingRule("");
+		MatchingRule rule = new UserEnteredMatchingRule("");
 		
 		assertThat(rule.isValid(), is(false));
 		assertThat(rule.text(), is(""));
-		assertThat(rule.displayText(), is("<<>>"));
-		assertThat(rule.hint(), is("Empty string is invalid"));
+		assertThat(rule.asScreenValue().displayText(), is("<<>>"));
+		assertThat(rule.asScreenValue().hint(), is("Empty string is invalid"));
 	}
 
 	@Test
 	public void blank_space_makes_an_invalid_rule()
 	{
-		WholeValue rule = new UserEnteredMatchingRule("   ");
+		MatchingRule rule = new UserEnteredMatchingRule("   ");
 		
 		assertThat(rule.isValid(), is(false));
 		assertThat(rule.text(), is("   "));
-		assertThat(rule.displayText(), is("<<   >>"));
-		assertThat(rule.hint(), is("Empty string is invalid"));
+		assertThat(rule.asScreenValue().displayText(), is("<<   >>"));
+		assertThat(rule.asScreenValue().hint(), is("Empty string is invalid"));
 	}
 	
 	@Test
 	public void invalid_regex_makes_an_invalid_rule()
 	{
-		WholeValue rule = new UserEnteredMatchingRule("(missing bracket");
+		MatchingRule rule = new UserEnteredMatchingRule("(missing bracket");
 		
 		assertThat(rule.isValid(), is(false));
 		assertThat(rule.text(), is("(missing bracket"));
-		assertThat(rule.displayText(), is("<<(missing bracket>>"));
-		assertThat(rule.hint(), is("Invalid regex: Unclosed group"));
+		assertThat(rule.asScreenValue().displayText(), is("<<(missing bracket>>"));
+		assertThat(rule.asScreenValue().hint(), is("Invalid regex: Unclosed group"));
 	}
 	
 	@Test(expected=ProgrammerError.class)
@@ -74,27 +74,27 @@ public class MatchingRuleTests
 	@Test
 	public void copying_valid_rule_definition()
 	{
-		WholeValue rule = new UserEnteredMatchingRule("rule");
+		MatchingRule rule = new UserEnteredMatchingRule("rule");
 		
-		WholeValue copy = rule.copy();
+		WholeValue copy = rule.asScreenValue().copy();
 		
 		assertThat(copy.isValid(), is(true));
 		assertThat(copy.text(), is(rule.text()));
-		assertThat(copy.displayText(), is(rule.displayText()));
-		assertThat(copy.hint(), is(rule.hint()));
+		assertThat(copy.displayText(), is(rule.asScreenValue().displayText()));
+		assertThat(copy.hint(), is(rule.asScreenValue().hint()));
 	}
 	
 	@Test
 	public void copying_invalid_rule_definition()
 	{
-		WholeValue rule = new UserEnteredMatchingRule("");
+		MatchingRule rule = new UserEnteredMatchingRule("");
 		
-		WholeValue copy = rule.copy();
+		WholeValue copy = rule.asScreenValue().copy();
 		
 		assertThat(copy.isValid(), is(false));
 		assertThat(copy.text(), is(rule.text()));
-		assertThat(copy.displayText(), is(rule.displayText()));
-		assertThat(copy.hint(), is(rule.hint()));
+		assertThat(copy.displayText(), is(rule.asScreenValue().displayText()));
+		assertThat(copy.hint(), is(rule.asScreenValue().hint()));
 	}
 	
 	@Test

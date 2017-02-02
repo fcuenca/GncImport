@@ -9,12 +9,12 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-public class RuleDefCellEditor extends DefaultCellEditor
+public class ValueEditor extends DefaultCellEditor
 {
 	private static final long serialVersionUID = -5608349352281588071L;
 	private WholeValueFactory _factory;
 
-	public RuleDefCellEditor(WholeValueFactory factory)
+	public ValueEditor(WholeValueFactory factory)
 	{
 		super(new JTextField());
 		

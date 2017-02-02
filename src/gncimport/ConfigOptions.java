@@ -79,7 +79,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			UserEnteredMatchingRule def = new UserEnteredMatchingRule(value);
 			if(!def.isValid())
 			{
-				throw new InvalidConfigOption("Invalid property format: " + def.hint());
+				throw new InvalidConfigOption("Invalid property format: " + def.asScreenValue().hint());
 			}
 			
 			_ignoreRules.add(def);

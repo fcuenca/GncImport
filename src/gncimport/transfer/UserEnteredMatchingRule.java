@@ -3,9 +3,10 @@ package gncimport.transfer;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class UserEnteredMatchingRule extends MatchingRule implements WholeValue
+public class UserEnteredMatchingRule extends MatchingRule
 {
 	private final WholeValue _backingRule;
+	
 	public static final WholeValueFactory Factory = new WholeValueFactory()
 	{
 		@Override
@@ -39,7 +40,7 @@ public class UserEnteredMatchingRule extends MatchingRule implements WholeValue
 	
 	public UserEnteredMatchingRule(String ruleText)
 	{
-		_backingRule = Factory.newScreenValueFromText(ruleText);
+		_backingRule = new UserEnteredValue(Factory.newScreenValueFromText(ruleText));
 	}
 
 	@Override
@@ -55,26 +56,8 @@ public class UserEnteredMatchingRule extends MatchingRule implements WholeValue
 	}
 
 	@Override
-	public String hint()
-	{
-		return _backingRule.hint();
-	}
-
-	@Override
-	public WholeValue copy()
-	{
-		return _backingRule.copy();
-	}
-
-	@Override
-	public String displayText()
-	{
-		return _backingRule.displayText();
-	}
-
-	@Override
 	public WholeValue asScreenValue()
 	{
-		return this;
+		return _backingRule;
 	}
 }

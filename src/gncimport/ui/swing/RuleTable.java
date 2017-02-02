@@ -1,7 +1,7 @@
 package gncimport.ui.swing;
 
-import gncimport.transfer.MatchingRule;
 import gncimport.transfer.UserEnteredMatchingRule;
+import gncimport.transfer.WholeValue;
 
 @SuppressWarnings("serial")
 public class RuleTable extends StripePatternTable
@@ -10,7 +10,7 @@ public class RuleTable extends StripePatternTable
 	{		
 		super(model, name);
 		
-		setDefaultRenderer(MatchingRule.class, new ValueRenderer());
-		setDefaultEditor(MatchingRule.class, new RuleDefCellEditor(UserEnteredMatchingRule.Factory));
+		setDefaultRenderer(WholeValue.class, new ValueRenderer());
+		setDefaultEditor(WholeValue.class, new ValueEditor(UserEnteredMatchingRule.Factory));
 	}
 }
