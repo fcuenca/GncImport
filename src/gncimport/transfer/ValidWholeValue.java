@@ -1,11 +1,13 @@
 package gncimport.transfer;
 
-public class ValidMatchingRule extends MatchingRule
+import gncimport.utils.ProgrammerError;
+
+public class ValidWholeValue extends WholeValue
 {
 	
 	private String _text;
 	
-	protected ValidMatchingRule(String text)
+	protected ValidWholeValue(String text)
 	{
 		this._text = text;
 	}
@@ -31,12 +33,18 @@ public class ValidMatchingRule extends MatchingRule
 	@Override
 	public WholeValue copy()
 	{
-		return new ValidMatchingRule(_text);
+		return new ValidWholeValue(_text);
 	}
 
 	@Override
 	public String displayText()
 	{
 		return text();
+	}
+
+	@Override
+	public String validateText(String text)
+	{
+		throw new ProgrammerError("ahhhh!");
 	}
 }

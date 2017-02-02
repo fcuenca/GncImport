@@ -80,4 +80,11 @@ public class MonthlyAccountParam extends WholeValue
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String validateText(String text)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

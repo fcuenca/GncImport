@@ -1,11 +1,13 @@
 package gncimport.transfer;
 
-public class InvalidMatchingRule extends MatchingRule
+import gncimport.utils.ProgrammerError;
+
+public class InvalidWholeValue extends WholeValue
 {
 	private String _offendingText;
 	private String _hint;
 
-	protected InvalidMatchingRule(String offendingText, String hint)
+	protected InvalidWholeValue(String offendingText, String hint)
 	{
 		this._offendingText = offendingText;
 		this._hint = hint;
@@ -32,12 +34,18 @@ public class InvalidMatchingRule extends MatchingRule
 	@Override
 	public WholeValue copy()
 	{
-		return new InvalidMatchingRule(_offendingText, _hint);
+		return new InvalidWholeValue(_offendingText, _hint);
 	}
 
 	@Override
 	public String displayText()
 	{
 		return "<<" + _offendingText + ">>";
+	}
+
+	@Override
+	public String validateText(String text)
+	{
+		throw new ProgrammerError("ahhhhh!");
 	}
 }
