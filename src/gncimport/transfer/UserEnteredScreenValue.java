@@ -1,10 +1,10 @@
 package gncimport.transfer;
 
-public class UserEnteredValue implements WholeValue
+public class UserEnteredScreenValue implements ScreenValue
 {
-	private final WholeValue _backingValue;
+	private final ScreenValue _backingValue;
 
-	public UserEnteredValue(WholeValue backingValue)
+	public UserEnteredScreenValue(ScreenValue backingValue)
 	{
 		_backingValue = backingValue;
 	}
@@ -34,7 +34,7 @@ public class UserEnteredValue implements WholeValue
 	}
 
 	@Override
-	public WholeValue copy()
+	public ScreenValue copy()
 	{
 		return _backingValue.copy();
 	}
@@ -56,7 +56,7 @@ public class UserEnteredValue implements WholeValue
 			return true;
 		if (obj == null)
 			return false;
-		WholeValue other = (WholeValue) obj;
+		ScreenValue other = (ScreenValue) obj;
 		if (isValid() != other.isValid())
 			return false;
 		if (text() == null)

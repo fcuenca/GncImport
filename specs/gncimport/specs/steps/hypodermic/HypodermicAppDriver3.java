@@ -17,7 +17,7 @@ import gncimport.transfer.RuleCategory;
 import gncimport.transfer.RuleTester;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.TxData;
-import gncimport.transfer.UserEnteredMatchingRule;
+import gncimport.transfer.EditableMatchingRule;
 import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
@@ -330,7 +330,7 @@ public class HypodermicAppDriver3
 				
 				for (String rule : newRules)
 				{
-					((List<MatchingRule>) allRules.get(RuleCategory.ignore)).add(new UserEnteredMatchingRule(rule));					
+					((List<MatchingRule>) allRules.get(RuleCategory.ignore)).add(new EditableMatchingRule(rule));					
 				}
 				
 				return true;

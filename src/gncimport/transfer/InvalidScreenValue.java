@@ -1,12 +1,12 @@
 package gncimport.transfer;
 
 
-public class InvalidWholeValue implements WholeValue
+public class InvalidScreenValue implements ScreenValue
 {
 	private String _offendingText;
 	private String _hint;
 
-	protected InvalidWholeValue(String offendingText, String hint)
+	protected InvalidScreenValue(String offendingText, String hint)
 	{
 		this._offendingText = offendingText;
 		this._hint = hint;
@@ -31,9 +31,9 @@ public class InvalidWholeValue implements WholeValue
 	}
 
 	@Override
-	public WholeValue copy()
+	public ScreenValue copy()
 	{
-		return new InvalidWholeValue(_offendingText, _hint);
+		return new InvalidScreenValue(_offendingText, _hint);
 	}
 
 	@Override

@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.*;
 import gncimport.transfer.MatchingRule;
-import gncimport.transfer.UserEnteredMatchingRule;
-import gncimport.transfer.WholeValue;
+import gncimport.transfer.EditableMatchingRule;
+import gncimport.transfer.ScreenValue;
 import gncimport.utils.ProgrammerError;
 
 import org.junit.Test;
@@ -16,7 +16,7 @@ public class MatchingRuleTests
 	@Test
 	public void valid_regex_makes_a_valid_rule()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("rule text.*");
+		MatchingRule rule = new EditableMatchingRule("rule text.*");
 		
 		assertThat(rule.isValid(), is(true));
 		assertThat(rule.text(), is("rule text.*"));
@@ -27,7 +27,7 @@ public class MatchingRuleTests
 	@Test
 	public void valid_rules_are_trimmed()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("   rule text    ");
+		MatchingRule rule = new EditableMatchingRule("   rule text    ");
 		
 		assertThat(rule.text(), is("rule text"));
 	}
@@ -35,7 +35,7 @@ public class MatchingRuleTests
 	@Test
 	public void empty_string_makes_an_invalid_rule()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("");
+		MatchingRule rule = new EditableMatchingRule("");
 		
 		assertThat(rule.isValid(), is(false));
 		assertThat(rule.text(), is(""));
@@ -46,7 +46,7 @@ public class MatchingRuleTests
 	@Test
 	public void blank_space_makes_an_invalid_rule()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("   ");
+		MatchingRule rule = new EditableMatchingRule("   ");
 		
 		assertThat(rule.isValid(), is(false));
 		assertThat(rule.text(), is("   "));
@@ -57,7 +57,7 @@ public class MatchingRuleTests
 	@Test
 	public void invalid_regex_makes_an_invalid_rule()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("(missing bracket");
+		MatchingRule rule = new EditableMatchingRule("(missing bracket");
 		
 		assertThat(rule.isValid(), is(false));
 		assertThat(rule.text(), is("(missing bracket"));
@@ -68,15 +68,15 @@ public class MatchingRuleTests
 	@Test(expected=ProgrammerError.class)
 	public void null_is_rejected()
 	{
-		new UserEnteredMatchingRule(null); // will throw
+		new EditableMatchingRule(null); // will throw
 	}
 	
 	@Test
 	public void copying_valid_rule_definition()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("rule");
+		MatchingRule rule = new EditableMatchingRule("rule");
 		
-		WholeValue copy = rule.asScreenValue().copy();
+		ScreenValue copy = rule.asScreenValue().copy();
 		
 		assertThat(copy.isValid(), is(true));
 		assertThat(copy.text(), is(rule.text()));
@@ -87,9 +87,9 @@ public class MatchingRuleTests
 	@Test
 	public void copying_invalid_rule_definition()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("");
+		MatchingRule rule = new EditableMatchingRule("");
 		
-		WholeValue copy = rule.asScreenValue().copy();
+		ScreenValue copy = rule.asScreenValue().copy();
 		
 		assertThat(copy.isValid(), is(false));
 		assertThat(copy.text(), is(rule.text()));
@@ -100,7 +100,7 @@ public class MatchingRuleTests
 	@Test
 	public void can_determine_regex_match()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("ab(c+)d.*");
+		MatchingRule rule = new EditableMatchingRule("ab(c+)d.*");
 		
 		assertThat(rule.matches("abccccdx"), is(true));
 		assertThat(rule.matches("abXd"), is(false));
@@ -109,7 +109,7 @@ public class MatchingRuleTests
 	@Test
 	public void whitespace_is_ignore_when_matching_rules()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("abcd");
+		MatchingRule rule = new EditableMatchingRule("abcd");
 		
 		assertThat(rule.matches("  abcd   "), is(true));
 	}
@@ -117,7 +117,7 @@ public class MatchingRuleTests
 	@Test
 	public void will_return_some_arbitrary_string_to_indicate_the_rule_is_a_match() //Hmmm... :-/
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("the rule");
+		MatchingRule rule = new EditableMatchingRule("the rule");
 		
 		assertThat(rule.textForPossitiveMatch(), not(nullValue())); 
 	}

@@ -1,11 +1,11 @@
 package gncimport.transfer;
 
 
-public class ValidWholeValue implements WholeValue
+public class ValidScreenValue implements ScreenValue
 {
 	private String _text;
 	
-	protected ValidWholeValue(String text)
+	protected ValidScreenValue(String text)
 	{
 		this._text = text;
 	}
@@ -29,9 +29,9 @@ public class ValidWholeValue implements WholeValue
 	}
 
 	@Override
-	public WholeValue copy()
+	public ScreenValue copy()
 	{
-		return new ValidWholeValue(_text);
+		return new ValidScreenValue(_text);
 	}
 
 	@Override

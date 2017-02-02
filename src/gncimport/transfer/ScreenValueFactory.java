@@ -2,13 +2,13 @@ package gncimport.transfer;
 
 import gncimport.utils.ProgrammerError;
 
-public abstract class  WholeValueFactory
+public abstract class  ScreenValueFactory
 {
 	public abstract String validateStrRepresentation(String text);
 	
 	public abstract Object newDomainObjectFromText(String text);
 
-	public WholeValue newScreenValueFromText(String text)
+	public ScreenValue newScreenValueFromText(String text)
 	{
 		if(text == null)
 		{
@@ -19,11 +19,11 @@ public abstract class  WholeValueFactory
 		
 		if(errorMsg == null)
 		{
-			return new ValidWholeValue(text.trim());
+			return new ValidScreenValue(text.trim());
 		}
 		else
 		{
-			return new InvalidWholeValue(text, errorMsg);
+			return new InvalidScreenValue(text, errorMsg);
 		}
 	}	
 }

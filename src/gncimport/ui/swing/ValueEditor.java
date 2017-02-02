@@ -1,7 +1,7 @@
 package gncimport.ui.swing;
 
-import gncimport.transfer.WholeValue;
-import gncimport.transfer.WholeValueFactory;
+import gncimport.transfer.ScreenValue;
+import gncimport.transfer.ScreenValueFactory;
 
 import java.awt.Component;
 
@@ -12,9 +12,9 @@ import javax.swing.JTextField;
 public class ValueEditor extends DefaultCellEditor
 {
 	private static final long serialVersionUID = -5608349352281588071L;
-	private WholeValueFactory _factory;
+	private ScreenValueFactory _factory;
 
-	public ValueEditor(WholeValueFactory factory)
+	public ValueEditor(ScreenValueFactory factory)
 	{
 		super(new JTextField());
 		
@@ -29,7 +29,7 @@ public class ValueEditor extends DefaultCellEditor
 			int column)
 	{
 		JTextField tf = (JTextField)super.getTableCellEditorComponent(table, value, isSelected, row, column);
-		WholeValue rule = (WholeValue)value;
+		ScreenValue rule = (ScreenValue)value;
 		
 		tf.setText(rule.text());
 		return tf;

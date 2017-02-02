@@ -2,8 +2,8 @@ package gncimport.ui.swing;
 
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
-import gncimport.transfer.UserEnteredMatchingRule;
-import gncimport.transfer.WholeValue;
+import gncimport.transfer.EditableMatchingRule;
+import gncimport.transfer.ScreenValue;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public final class IgnoreRulesTableModel extends TxRuleTableModel
 {
 	public static final String[] COLUMN_TITLES = { "Description Pattern" };
-	public static final Class<?>[] COLUMN_CLASSES = { WholeValue.class };
+	public static final Class<?>[] COLUMN_CLASSES = { ScreenValue.class };
 
 	public IgnoreRulesTableModel(List<MatchingRule> ignoreRules, RuleTester tester)
 	{
@@ -41,7 +41,7 @@ public final class IgnoreRulesTableModel extends TxRuleTableModel
 	@Override
 	public void newRow()
 	{
-		((List<MatchingRule>)_rules).add(new UserEnteredMatchingRule(""));
+		((List<MatchingRule>)_rules).add(new EditableMatchingRule(""));
 		fireTableDataChanged();
 	}
 }

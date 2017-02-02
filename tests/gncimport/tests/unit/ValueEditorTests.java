@@ -2,8 +2,8 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import gncimport.transfer.UserEnteredMatchingRule;
-import gncimport.transfer.WholeValue;
+import gncimport.transfer.EditableMatchingRule;
+import gncimport.transfer.ScreenValue;
 import gncimport.ui.swing.ValueEditor;
 
 import javax.swing.JTable;
@@ -24,8 +24,8 @@ public class ValueEditorTests
 			@Override
 			protected void executeInEDT() throws Throwable
 			{
-				ValueEditor editor = new ValueEditor(UserEnteredMatchingRule.Factory);
-				WholeValue valueToEdit = new WholeValueForTest("some rule");
+				ValueEditor editor = new ValueEditor(EditableMatchingRule.Factory);
+				ScreenValue valueToEdit = new ScreenValueForTest("some rule");
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
 						new JTable(), valueToEdit, true, 0, 1);
@@ -43,14 +43,14 @@ public class ValueEditorTests
 			@Override
 			protected void executeInEDT() throws Throwable
 			{
-				ValueEditor editor = new ValueEditor(UserEnteredMatchingRule.Factory);
+				ValueEditor editor = new ValueEditor(EditableMatchingRule.Factory);
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
-						new JTable(), new WholeValueForTest("some rule"), true, 0, 1);
+						new JTable(), new ScreenValueForTest("some rule"), true, 0, 1);
 				
 				tf.setText("new rule");
 				
-				assertThat(editor.getCellEditorValue(), is((Object)new UserEnteredMatchingRule("new rule")));
+				assertThat(editor.getCellEditorValue(), is((Object)new EditableMatchingRule("new rule")));
 			}
 		});
 	}

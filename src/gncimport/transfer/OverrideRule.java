@@ -8,8 +8,8 @@ public class OverrideRule implements TransactionRule
 	
 	public OverrideRule(String matchingTxt, String overrideTxt)
 	{
-		this.textToMatch = new UserEnteredMatchingRule(matchingTxt);
-		this.override = new UserEnteredMatchingRule(overrideTxt);
+		this.textToMatch = new EditableMatchingRule(matchingTxt);
+		this.override = new EditableMatchingRule(overrideTxt);
 	}
 	
 	public OverrideRule(MatchingRule textToMatch, MatchingRule overrideText)

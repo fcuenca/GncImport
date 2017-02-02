@@ -1,7 +1,7 @@
 package gncimport.tests.unit;
 
 import gncimport.transfer.MatchingRule;
-import gncimport.transfer.WholeValue;
+import gncimport.transfer.ScreenValue;
 
 public class MatchingRuleForTest extends MatchingRule 
 {
@@ -32,8 +32,8 @@ public class MatchingRuleForTest extends MatchingRule
 	}
 
 	@Override
-	public WholeValue asScreenValue()
+	public ScreenValue asScreenValue()
 	{
-		return new WholeValueForTest(text(), isValid());
+		return new ScreenValueForTest(text(), isValid());
 	}
 }

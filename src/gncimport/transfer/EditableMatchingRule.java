@@ -3,11 +3,11 @@ package gncimport.transfer;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class UserEnteredMatchingRule extends MatchingRule
+public class EditableMatchingRule extends MatchingRule
 {
-	private final WholeValue _backingRule;
+	private final ScreenValue _backingRule;
 	
-	public static final WholeValueFactory Factory = new WholeValueFactory()
+	public static final ScreenValueFactory Factory = new ScreenValueFactory()
 	{
 		@Override
 		public String validateStrRepresentation(String text)
@@ -34,13 +34,13 @@ public class UserEnteredMatchingRule extends MatchingRule
 		@Override
 		public MatchingRule newDomainObjectFromText(String text)
 		{
-			return new UserEnteredMatchingRule(text);
+			return new EditableMatchingRule(text);
 		}
 	};
 	
-	public UserEnteredMatchingRule(String ruleText)
+	public EditableMatchingRule(String ruleText)
 	{
-		_backingRule = new UserEnteredValue(Factory.newScreenValueFromText(ruleText));
+		_backingRule = new UserEnteredScreenValue(Factory.newScreenValueFromText(ruleText));
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class UserEnteredMatchingRule extends MatchingRule
 	}
 
 	@Override
-	public WholeValue asScreenValue()
+	public ScreenValue asScreenValue()
 	{
 		return _backingRule;
 	}

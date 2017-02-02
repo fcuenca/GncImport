@@ -63,11 +63,11 @@ public class OverrideRuleTableModelTests
 	{		
 		assertThat(_tableModel.getRowCount(), is(2));
 		
-		assertThat(_tableModel.getValueAt(0, 0), is((Object)new WholeValueForTest("desc-1")));
-		assertThat(_tableModel.getValueAt(0, 1), is((Object)new WholeValueForTest("acc-1")));
+		assertThat(_tableModel.getValueAt(0, 0), is((Object)new ScreenValueForTest("desc-1")));
+		assertThat(_tableModel.getValueAt(0, 1), is((Object)new ScreenValueForTest("acc-1")));
 
-		assertThat(_tableModel.getValueAt(1, 0), is((Object)new WholeValueForTest("desc-2")));
-		assertThat(_tableModel.getValueAt(1, 1), is((Object)new WholeValueForTest("acc-2")));
+		assertThat(_tableModel.getValueAt(1, 0), is((Object)new ScreenValueForTest("desc-2")));
+		assertThat(_tableModel.getValueAt(1, 1), is((Object)new ScreenValueForTest("acc-2")));
 	}
 
 	@Test
@@ -113,11 +113,11 @@ public class OverrideRuleTableModelTests
 		_tableModel.setValueAt(new MatchingRuleForTest("new value"), 1, 0);
 		_tableModel.setValueAt(new MatchingRuleForTest("new acc"), 0, 1);
 		
-		assertThat(_tableModel.getValueAt(1, 0), is((Object)new WholeValueForTest("new value")));
-		assertThat(_tableModel.getValueAt(1, 1), is((Object)new WholeValueForTest("acc-2")));		
+		assertThat(_tableModel.getValueAt(1, 0), is((Object)new ScreenValueForTest("new value")));
+		assertThat(_tableModel.getValueAt(1, 1), is((Object)new ScreenValueForTest("acc-2")));		
 
-		assertThat(_tableModel.getValueAt(0, 0), is((Object)new WholeValueForTest("desc-1")));
-		assertThat(_tableModel.getValueAt(0, 1), is((Object)new WholeValueForTest("new acc")));		
+		assertThat(_tableModel.getValueAt(0, 0), is((Object)new ScreenValueForTest("desc-1")));
+		assertThat(_tableModel.getValueAt(0, 1), is((Object)new ScreenValueForTest("new acc")));		
 	}
 	
   	@Test
@@ -140,8 +140,8 @@ public class OverrideRuleTableModelTests
 		_tableModel.newRow();
 		
 		assertThat(_tableModel.getRowCount(), is(3));
-		assertThat(_tableModel.getValueAt(2, 0), is((Object)new WholeValueForTest("", false)));
-		assertThat(_tableModel.getValueAt(2, 1), is((Object)new WholeValueForTest("", false)));
+		assertThat(_tableModel.getValueAt(2, 0), is((Object)new ScreenValueForTest("", false)));
+		assertThat(_tableModel.getValueAt(2, 1), is((Object)new ScreenValueForTest("", false)));
 	}
 	
 	@Test
@@ -160,7 +160,7 @@ public class OverrideRuleTableModelTests
 	{
 		_tableModel.removeRow(1);		
 		assertThat(_tableModel.getRowCount(), is(1));
-		assertThat(_tableModel.getValueAt(0, 1), is((Object)new WholeValueForTest("acc-1")));
+		assertThat(_tableModel.getValueAt(0, 1), is((Object)new ScreenValueForTest("acc-1")));
 
 		_tableModel.removeRow(0);		
 		assertThat(_tableModel.getRowCount(), is(0));

@@ -1,18 +1,18 @@
 package gncimport.tests.unit;
 
-import gncimport.transfer.WholeValue;
+import gncimport.transfer.ScreenValue;
 
-public class WholeValueForTest implements WholeValue
+public class ScreenValueForTest implements ScreenValue
 {
 	private String _text;
 	private boolean _isValid = true;
 	
-	public WholeValueForTest(String text)
+	public ScreenValueForTest(String text)
 	{
 		this._text = text;
 	}
 
-	public WholeValueForTest(String text, boolean isValid)
+	public ScreenValueForTest(String text, boolean isValid)
 	{
 		this._text = text;
 		this._isValid = isValid;
@@ -38,9 +38,9 @@ public class WholeValueForTest implements WholeValue
 	}
 
 	@Override
-	public WholeValue copy()
+	public ScreenValue copy()
 	{
-		return new WholeValueForTest(_text, _isValid);
+		return new ScreenValueForTest(_text, _isValid);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class WholeValueForTest implements WholeValue
 			return true;
 		if (obj == null)
 			return false;
-		WholeValue other = (WholeValue) obj;
+		ScreenValue other = (ScreenValue) obj;
 		if (isValid() != other.isValid())
 			return false;
 		if (text() == null)

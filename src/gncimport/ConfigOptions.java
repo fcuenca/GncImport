@@ -7,7 +7,7 @@ import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleCategory;
 import gncimport.transfer.TransactionRule;
-import gncimport.transfer.UserEnteredMatchingRule;
+import gncimport.transfer.EditableMatchingRule;
 import gncimport.ui.UIConfig;
 import gncimport.utils.ProgrammerError;
 
@@ -76,7 +76,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	{
 		if (key.matches(IGNORE_RULE_KEY_REGEX))
 		{
-			UserEnteredMatchingRule def = new UserEnteredMatchingRule(value);
+			EditableMatchingRule def = new EditableMatchingRule(value);
 			if(!def.isValid())
 			{
 				throw new InvalidConfigOption("Invalid property format: " + def.asScreenValue().hint());

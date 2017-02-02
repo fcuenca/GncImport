@@ -1,6 +1,6 @@
 package gncimport.ui.swing;
 
-import gncimport.transfer.WholeValue;
+import gncimport.transfer.ScreenValue;
 
 import java.net.URL;
 
@@ -20,7 +20,7 @@ public class ValueRenderer extends DefaultTableCellRenderer
 	@Override
 	public void setValue(Object value)
 	{
-		WholeValue renderable = (WholeValue) value;
+		ScreenValue renderable = (ScreenValue) value;
 		
 		setText(renderable.displayText());
 		

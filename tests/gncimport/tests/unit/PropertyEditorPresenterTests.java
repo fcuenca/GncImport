@@ -82,19 +82,19 @@ public class PropertyEditorPresenterTests
 		
 		TxRuleTableModel tm = (TxRuleTableModel) expectedModelMap.getValue().get(RuleCategory.ignore);
 		assertThat(tm.getRowCount(), is(2));
-		assertThat(tm.getValueAt(0, 0), is((Object)new WholeValueForTest("rule-1")));
-		assertThat(tm.getValueAt(1, 0), is((Object)new WholeValueForTest("rule-2")));
+		assertThat(tm.getValueAt(0, 0), is((Object)new ScreenValueForTest("rule-1")));
+		assertThat(tm.getValueAt(1, 0), is((Object)new ScreenValueForTest("rule-2")));
 		
 		TxRuleTableModel tm2 = (TxRuleTableModel) expectedModelMap.getValue().get(RuleCategory.acc_override);
 		assertThat(tm2.getRowCount(), is(2));
-		assertThat(tm2.getValueAt(0, 0), is((Object)new WholeValueForTest("rule-1")));
-		assertThat(tm2.getValueAt(1, 1), is((Object)new WholeValueForTest("acc-2")));
+		assertThat(tm2.getValueAt(0, 0), is((Object)new ScreenValueForTest("rule-1")));
+		assertThat(tm2.getValueAt(1, 1), is((Object)new ScreenValueForTest("acc-2")));
 
 		TxRuleTableModel tm3 = (TxRuleTableModel) expectedModelMap.getValue().get(RuleCategory.tx_override);
 		assertThat(tm3.getRowCount(), is(3));
-		assertThat(tm3.getValueAt(0, 0), is((Object)new WholeValueForTest("rule-1")));
-		assertThat(tm3.getValueAt(1, 1), is((Object)new WholeValueForTest("tx-override-2")));
-		assertThat(tm3.getValueAt(2, 1), is((Object)new WholeValueForTest("tx-override-3")));
+		assertThat(tm3.getValueAt(0, 0), is((Object)new ScreenValueForTest("rule-1")));
+		assertThat(tm3.getValueAt(1, 1), is((Object)new ScreenValueForTest("tx-override-2")));
+		assertThat(tm3.getValueAt(2, 1), is((Object)new ScreenValueForTest("tx-override-3")));
 		
 		MonthlyAccTableModel tm4 = (MonthlyAccTableModel) expectedModelMap.getValue().get(RuleCategory.monthly_accs);
 		assertThat(tm4.getRowCount(), is(2));

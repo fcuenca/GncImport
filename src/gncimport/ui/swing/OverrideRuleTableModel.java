@@ -4,14 +4,14 @@ import gncimport.transfer.MatchingRule;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
 import gncimport.transfer.TransactionRule;
-import gncimport.transfer.WholeValue;
+import gncimport.transfer.ScreenValue;
 
 import java.util.List;
 
 @SuppressWarnings("serial")
 public abstract class OverrideRuleTableModel extends TxRuleTableModel
 {
-	public static final Class<?>[] COLUMN_CLASSES = { WholeValue.class,  WholeValue.class };
+	public static final Class<?>[] COLUMN_CLASSES = { ScreenValue.class,  ScreenValue.class };
 
 	public OverrideRuleTableModel(String[] colTitles, List<? extends TransactionRule> rules, RuleTester tester)
 	{

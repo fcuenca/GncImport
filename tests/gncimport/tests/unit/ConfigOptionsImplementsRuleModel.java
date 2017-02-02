@@ -14,7 +14,7 @@ import gncimport.transfer.MatchingRule;
 import gncimport.transfer.MonthlyAccountParam;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleCategory;
-import gncimport.transfer.UserEnteredMatchingRule;
+import gncimport.transfer.EditableMatchingRule;
 import gncimport.utils.ProgrammerError;
 
 import java.util.ArrayList;
@@ -238,9 +238,9 @@ public class ConfigOptionsImplementsRuleModel
 	public void updated_rules_added_to_property_file()
 	{
 		List<MatchingRule> newIgnores = new ArrayList<MatchingRule>(ListUtils.list_of(
-				new UserEnteredMatchingRule("new-rule-1"), 
-				new UserEnteredMatchingRule("MISC PAYMENT - RBC CREDIT CARD.*"), 
-				new UserEnteredMatchingRule("new-rule-2")));
+				new EditableMatchingRule("new-rule-1"), 
+				new EditableMatchingRule("MISC PAYMENT - RBC CREDIT CARD.*"), 
+				new EditableMatchingRule("new-rule-2")));
 		
 		List<OverrideRule> newAccOverrides = new ArrayList<OverrideRule>(ListUtils.list_of(
 				new OverrideRule("new-desc", "new-override")));
