@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.WholeValue;
 import gncimport.ui.swing.ValueRenderer;
 
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class ValueRendererTests
 	public void renders_rule_definition_display_text()
 	{
 		ValueRenderer renderer = new ValueRenderer();
-		MatchingRule ruleDef = new MatchingRuleForTest("some rule");
+		WholeValue ruleDef = new MatchingRuleForTest("some rule");
 		
 		renderer.setValue(ruleDef);
 		
@@ -38,7 +39,7 @@ public class ValueRendererTests
 	public void invalid_rule_definitions_use_hint_as_tooltip()
 	{
 		ValueRenderer renderer = new ValueRenderer();
-		MatchingRule ruleDef = new MatchingRuleForTest("some rule", false);
+		WholeValue ruleDef = new MatchingRuleForTest("some rule", false);
 		
 		renderer.setValue(ruleDef);
 		

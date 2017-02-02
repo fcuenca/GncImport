@@ -5,7 +5,7 @@ import java.util.regex.PatternSyntaxException;
 
 import gncimport.utils.ProgrammerError;
 
-public class UserEnteredMatchingRule extends MatchingRule
+public class UserEnteredMatchingRule extends MatchingRule implements WholeValue
 {
 	private final WholeValue _backingRule;
 	

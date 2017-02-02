@@ -76,7 +76,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	{
 		if (key.matches(IGNORE_RULE_KEY_REGEX))
 		{
-			MatchingRule def = new UserEnteredMatchingRule(value);
+			UserEnteredMatchingRule def = new UserEnteredMatchingRule(value);
 			if(!def.isValid())
 			{
 				throw new InvalidConfigOption("Invalid property format: " + def.hint());

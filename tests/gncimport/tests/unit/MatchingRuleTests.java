@@ -16,7 +16,7 @@ public class MatchingRuleTests
 	@Test
 	public void valid_regex_makes_a_valid_rule()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("rule text.*");
+		WholeValue rule = new UserEnteredMatchingRule("rule text.*");
 		
 		assertThat(rule.isValid(), is(true));
 		assertThat(rule.text(), is("rule text.*"));
@@ -27,7 +27,7 @@ public class MatchingRuleTests
 	@Test
 	public void valid_rules_are_trimmed()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("   rule text    ");
+		WholeValue rule = new UserEnteredMatchingRule("   rule text    ");
 		
 		assertThat(rule.text(), is("rule text"));
 	}
@@ -35,7 +35,7 @@ public class MatchingRuleTests
 	@Test
 	public void empty_string_makes_an_invalid_rule()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("");
+		WholeValue rule = new UserEnteredMatchingRule("");
 		
 		assertThat(rule.isValid(), is(false));
 		assertThat(rule.text(), is(""));
@@ -46,7 +46,7 @@ public class MatchingRuleTests
 	@Test
 	public void blank_space_makes_an_invalid_rule()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("   ");
+		WholeValue rule = new UserEnteredMatchingRule("   ");
 		
 		assertThat(rule.isValid(), is(false));
 		assertThat(rule.text(), is("   "));
@@ -57,7 +57,7 @@ public class MatchingRuleTests
 	@Test
 	public void invalid_regex_makes_an_invalid_rule()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("(missing bracket");
+		WholeValue rule = new UserEnteredMatchingRule("(missing bracket");
 		
 		assertThat(rule.isValid(), is(false));
 		assertThat(rule.text(), is("(missing bracket"));
@@ -74,7 +74,7 @@ public class MatchingRuleTests
 	@Test
 	public void copying_valid_rule_definition()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("rule");
+		WholeValue rule = new UserEnteredMatchingRule("rule");
 		
 		WholeValue copy = rule.copy();
 		
@@ -87,7 +87,7 @@ public class MatchingRuleTests
 	@Test
 	public void copying_invalid_rule_definition()
 	{
-		MatchingRule rule = new UserEnteredMatchingRule("");
+		WholeValue rule = new UserEnteredMatchingRule("");
 		
 		WholeValue copy = rule.copy();
 		
