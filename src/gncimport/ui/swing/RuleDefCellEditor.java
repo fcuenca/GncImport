@@ -39,6 +39,6 @@ public class RuleDefCellEditor extends DefaultCellEditor
 	public Object getCellEditorValue()
 	{
 		String theValue = (String)super.getCellEditorValue();
-		return _factory.ruleFromText(theValue);
+		return _factory.newDomainObjectFromText(theValue);
 	}
 }

@@ -6,9 +6,9 @@ public abstract class  WholeValueFactory
 {
 	public abstract String validateStrRepresentation(String text);
 	
-	public abstract MatchingRule ruleFromText(String text);
+	public abstract Object newDomainObjectFromText(String text);
 
-	public WholeValue valueFromText(String text)
+	public WholeValue newScreenValueFromText(String text)
 	{
 		if(text == null)
 		{

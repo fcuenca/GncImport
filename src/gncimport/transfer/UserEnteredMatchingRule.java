@@ -31,7 +31,7 @@ public class UserEnteredMatchingRule extends MatchingRule implements WholeValue
 		}
 
 		@Override
-		public MatchingRule ruleFromText(String text)
+		public MatchingRule newDomainObjectFromText(String text)
 		{
 			return new UserEnteredMatchingRule(text);
 		}
@@ -39,7 +39,7 @@ public class UserEnteredMatchingRule extends MatchingRule implements WholeValue
 	
 	public UserEnteredMatchingRule(String ruleText)
 	{
-		_backingRule = Factory.valueFromText(ruleText);
+		_backingRule = Factory.newScreenValueFromText(ruleText);
 	}
 
 	@Override
