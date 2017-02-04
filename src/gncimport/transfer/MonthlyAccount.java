@@ -1,11 +1,11 @@
 package gncimport.transfer;
 
-public class MonthlyAccountParam implements ScreenValue
+public class MonthlyAccount implements ScreenValue
 {
 	public final int sequenceNo;
 	public final String accName;
 
-	public MonthlyAccountParam(int code, String accName)
+	public MonthlyAccount(int code, String accName)
 	{
 		this.sequenceNo = code;
 		this.accName = accName;		
@@ -30,7 +30,7 @@ public class MonthlyAccountParam implements ScreenValue
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MonthlyAccountParam other = (MonthlyAccountParam) obj;
+		MonthlyAccount other = (MonthlyAccount) obj;
 		if (accName == null)
 		{
 			if (other.accName != null)
@@ -46,7 +46,7 @@ public class MonthlyAccountParam implements ScreenValue
 	@Override
 	public String toString()
 	{
-		return "MonthlyAccountParam(" + sequenceNo + ", " + accName + ")";
+		return "MonthlyAccount(" + sequenceNo + ", " + accName + ")";
 	}
 
 	@Override

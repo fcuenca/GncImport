@@ -1,6 +1,6 @@
 package gncimport.ui;
 
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 
 import java.util.List;
 
@@ -13,5 +13,5 @@ public interface UIConfig
 	void setLastGncDirectory(String path);
 	void setLastCsvDirectory(String path);
 	
-	List<MonthlyAccountParam> getMonthlyAccounts();
+	List<MonthlyAccount> getMonthlyAccounts();
 }

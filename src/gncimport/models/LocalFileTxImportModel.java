@@ -3,7 +3,7 @@ package gncimport.models;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 import gncimport.transfer.TxData;
 import gncimport.utils.ProgrammerError;
 import gnclib.GncFile;
@@ -309,7 +309,7 @@ public class LocalFileTxImportModel implements TxImportModel
 	}
 
 	@Override
-	public void createNewAccountHierarchy(AccountData parentAccount, String rootAccountName, Month month, List<MonthlyAccountParam> subAccList, String fileToSave)
+	public void createNewAccountHierarchy(AccountData parentAccount, String rootAccountName, Month month, List<MonthlyAccount> subAccList, String fileToSave)
 	{
 		try
 		{			
@@ -321,7 +321,7 @@ public class LocalFileTxImportModel implements TxImportModel
 			
 			Account root = _gnc.addSubAccount(rootAccountName, code, parent);
 			
-			for (MonthlyAccountParam p : subAccList)
+			for (MonthlyAccount p : subAccList)
 			{
 				_gnc.addSubAccount(p.accName, generateSubAccountCode(parentCode, month, p.sequenceNo), 	root);
 			}

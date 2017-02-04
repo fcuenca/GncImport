@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gncimport.interactors.AccSelectionInteractor;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 import gncimport.ui.TxView;
 import gncimport.ui.UIConfig;
 import gncimport.ui.commands.CreateAccHierarchyCommand;
@@ -43,7 +43,7 @@ public class CreateAccHierarchyCommandTests
 		_cmd.execute(new CreateAccHierarchyEvent("  "));
 		
 		verify(_view).displayErrorMessage(anyString());
-		verify(_interactor, never()).createNewAccountHierarchy(anyListOf(MonthlyAccountParam.class), anyString());
+		verify(_interactor, never()).createNewAccountHierarchy(anyListOf(MonthlyAccount.class), anyString());
 	}
 	
 	@Test
@@ -52,13 +52,13 @@ public class CreateAccHierarchyCommandTests
 		_cmd.execute(new CreateAccHierarchyEvent(null));
 		
 		verify(_view).displayErrorMessage(anyString());
-		verify(_interactor, never()).createNewAccountHierarchy(anyListOf(MonthlyAccountParam.class), anyString());
+		verify(_interactor, never()).createNewAccountHierarchy(anyListOf(MonthlyAccount.class), anyString());
 	}
 	
 	@Test
 	public void forwards_request_to_interactor()
 	{
-		List<MonthlyAccountParam> monthlyAccounts = new ArrayList<MonthlyAccountParam>();
+		List<MonthlyAccount> monthlyAccounts = new ArrayList<MonthlyAccount>();
 		
 		when(_config.getMonthlyAccounts()).thenReturn(monthlyAccounts);
 		

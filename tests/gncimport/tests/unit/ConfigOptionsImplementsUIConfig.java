@@ -6,7 +6,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 import gncimport.ConfigOptions;
 import gncimport.ConfigPropertyBuilder;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 import gncimport.utils.ProgrammerError;
 
 import java.util.Properties;
@@ -123,8 +123,8 @@ public class ConfigOptionsImplementsUIConfig
 
 		assertThat(options.getMonthlyAccounts(), hasSize(3));
 		assertThat(options.getMonthlyAccounts(), hasItems(
-				new MonthlyAccountParam(1, "Gastos Varios"),
-				new MonthlyAccountParam(2, "Departamento"),
-				new MonthlyAccountParam(3, "Salud")));
+				new MonthlyAccount(1, "Gastos Varios"),
+				new MonthlyAccount(2, "Departamento"),
+				new MonthlyAccount(3, "Salud")));
 	}	
 }

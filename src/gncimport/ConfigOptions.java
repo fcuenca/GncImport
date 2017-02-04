@@ -3,7 +3,7 @@ package gncimport;
 import gncimport.models.RuleModel;
 import gncimport.models.TxMatcher;
 import gncimport.transfer.MatchingRule;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleCategory;
 import gncimport.transfer.TransactionRule;
@@ -31,7 +31,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	private List<OverrideRule> _accountOverrideRules = new ArrayList<OverrideRule>();
 	private List<OverrideRule> _rewriteRules = new ArrayList<OverrideRule>();
 	private List<MatchingRule> _ignoreRules = new ArrayList<MatchingRule>();
-	private List<MonthlyAccountParam> _monthlyAccounts = new ArrayList<MonthlyAccountParam>();
+	private List<MonthlyAccount> _monthlyAccounts = new ArrayList<MonthlyAccount>();
 	private String _lastGnc;
 	private String _lastCsv;
 
@@ -66,7 +66,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 				throw new InvalidConfigOption("Invalid property format: " + value);
 			}
 			
-			MonthlyAccountParam p = new MonthlyAccountParam(Integer.parseInt(matcher.group(1)), value);
+			MonthlyAccount p = new MonthlyAccount(Integer.parseInt(matcher.group(1)), value);
 			
 			_monthlyAccounts.add(p);
 		}
@@ -181,9 +181,9 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 			builder.addDescRewriteRule(index, rule.textToMatch.text(), rule.override.text());
 		}	
 		
-		for (Iterator<MonthlyAccountParam> iterator = _monthlyAccounts.iterator(); iterator.hasNext();)
+		for (Iterator<MonthlyAccount> iterator = _monthlyAccounts.iterator(); iterator.hasNext();)
 		{
-			MonthlyAccountParam rule = iterator.next();
+			MonthlyAccount rule = iterator.next();
 			
 			builder.addSubAccountRule(rule.sequenceNo, rule.accName);
 		}		
@@ -206,7 +206,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 	}
 
 	@Override
-	public List<MonthlyAccountParam> getMonthlyAccounts()
+	public List<MonthlyAccount> getMonthlyAccounts()
 	{
 		return _monthlyAccounts;
 	}
@@ -252,8 +252,8 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		List<OverrideRule> newRewrites = (List<OverrideRule>)allRules.get(RuleCategory.tx_override);
 		_rewriteRules = new ArrayList<OverrideRule>(newRewrites);	
 
-		List<MonthlyAccountParam> newMonthlyAccs = (List<MonthlyAccountParam>)allRules.get(RuleCategory.monthly_accs);
-		_monthlyAccounts = new ArrayList<MonthlyAccountParam>(newMonthlyAccs);	
+		List<MonthlyAccount> newMonthlyAccs = (List<MonthlyAccount>)allRules.get(RuleCategory.monthly_accs);
+		_monthlyAccounts = new ArrayList<MonthlyAccount>(newMonthlyAccs);	
 }
 
 	@Override
@@ -269,7 +269,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		allRules.put(RuleCategory.ignore, new ArrayList<MatchingRule>(_ignoreRules));
 		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>(_accountOverrideRules));
 		allRules.put(RuleCategory.tx_override, new ArrayList<OverrideRule>(_rewriteRules));
-		allRules.put(RuleCategory.monthly_accs, new ArrayList<MonthlyAccountParam>(_monthlyAccounts));
+		allRules.put(RuleCategory.monthly_accs, new ArrayList<MonthlyAccount>(_monthlyAccounts));
 	}
 
 	@Override

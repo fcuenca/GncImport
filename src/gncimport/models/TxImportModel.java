@@ -2,7 +2,7 @@ package gncimport.models;
 
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 import gncimport.transfer.TxData;
 
 import java.util.Date;
@@ -33,5 +33,5 @@ public interface TxImportModel
 	List<TxData> filterTxList(Date fromDate, Date toDate);
 
 	void createNewAccountHierarchy(AccountData parentAccount, String hierarchyRoot, Month month, 
-			List<MonthlyAccountParam> subAccList, String fileNameToSave);
+			List<MonthlyAccount> subAccList, String fileNameToSave);
 }

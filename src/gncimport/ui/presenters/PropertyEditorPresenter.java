@@ -2,7 +2,7 @@ package gncimport.ui.presenters;
 
 import gncimport.interactors.PropertyEditInteractor;
 import gncimport.transfer.MatchingRule;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleCategory;
 import gncimport.transfer.RuleTester;
@@ -34,7 +34,7 @@ public class PropertyEditorPresenter implements PropertyEditInteractor.OutPort
 		List<MatchingRule> ignoreRules = (List<MatchingRule>)allRules.get(RuleCategory.ignore);
 		List<OverrideRule> accOverrideRules = (List<OverrideRule>)allRules.get(RuleCategory.acc_override);
 		List<OverrideRule> txOverrideRules = (List<OverrideRule>)allRules.get(RuleCategory.tx_override);
-		List<MonthlyAccountParam> monthlyAccounts = (List<MonthlyAccountParam>)allRules.get(RuleCategory.monthly_accs);
+		List<MonthlyAccount> monthlyAccounts = (List<MonthlyAccount>)allRules.get(RuleCategory.monthly_accs);
 		
 		Map<RuleCategory, PropertyTableModel> modelMap = new HashMap<RuleCategory, PropertyTableModel>();
 		modelMap.put(RuleCategory.ignore, new IgnoreRulesTableModel(ignoreRules, tester)); //TODO: connection b/w table model and tester is not really tested

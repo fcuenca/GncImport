@@ -2,7 +2,7 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 import gncimport.ui.swing.MonthlyAccTableModel;
 
 import java.util.ArrayList;
@@ -19,10 +19,10 @@ public class MonthlyAccTableModelTests
 	@Before
 	public void setUp() throws Exception
 	{
-		List<MonthlyAccountParam> accList = new ArrayList<MonthlyAccountParam>(ListUtils.list_of(
-				new MonthlyAccountParam(2, "Groceries"),
-				new MonthlyAccountParam(1, "Misc Expenses"),
-				new MonthlyAccountParam(3, "Living Expenses")));
+		List<MonthlyAccount> accList = new ArrayList<MonthlyAccount>(ListUtils.list_of(
+				new MonthlyAccount(2, "Groceries"),
+				new MonthlyAccount(1, "Misc Expenses"),
+				new MonthlyAccount(3, "Living Expenses")));
 		
 		_tableModel = new MonthlyAccTableModel(accList);
 	}
@@ -46,13 +46,13 @@ public class MonthlyAccTableModelTests
 		assertThat(_tableModel.getRowCount(), is(3));
 		
 		assertThat(_tableModel.getValueAt(0, 0), is((Object)1));
-		assertThat(_tableModel.getValueAt(0, 1), is((Object)(new MonthlyAccountParam(1, "Misc Expenses"))));
+		assertThat(_tableModel.getValueAt(0, 1), is((Object)(new MonthlyAccount(1, "Misc Expenses"))));
 		
 		assertThat(_tableModel.getValueAt(1, 0), is((Object)2));
-		assertThat(_tableModel.getValueAt(1, 1), is((Object)(new MonthlyAccountParam(2, "Groceries"))));
+		assertThat(_tableModel.getValueAt(1, 1), is((Object)(new MonthlyAccount(2, "Groceries"))));
 		
 		assertThat(_tableModel.getValueAt(2, 0), is((Object)3));
-		assertThat(_tableModel.getValueAt(2, 1), is((Object)(new MonthlyAccountParam(3, "Living Expenses"))));
+		assertThat(_tableModel.getValueAt(2, 1), is((Object)(new MonthlyAccount(3, "Living Expenses"))));
 	}
 
 

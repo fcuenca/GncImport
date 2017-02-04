@@ -3,7 +3,7 @@ package gncimport.interactors;
 import gncimport.models.TxImportModel;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class AccSelectionInteractor
 		return selectedAccount;
 	}
 		
-	public void createNewAccountHierarchy(List<MonthlyAccountParam> monthlyAccounts, String fileNameToSave)
+	public void createNewAccountHierarchy(List<MonthlyAccount> monthlyAccounts, String fileNameToSave)
 	{
 		List<AccountData> accounts = _model.getAccounts();
 		NewHierarchyOpts options = _output.promptForNewHierarchy(accounts);

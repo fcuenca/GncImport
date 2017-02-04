@@ -9,7 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.transfer.MatchingRule;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleCategory;
 import gncimport.transfer.RuleTester;
@@ -66,9 +66,9 @@ public class PropertyEditorPresenterTests
 				new OverrideRule("rule-2", "tx-override-2"), 
 				new OverrideRule("rule-3", "tx-override-3")));
 		
-		List<MonthlyAccountParam> rules4 = new ArrayList<MonthlyAccountParam>(ListUtils.list_of(
-				new MonthlyAccountParam(1, "acc-1"),
-				new MonthlyAccountParam(2, "acc-2")));
+		List<MonthlyAccount> rules4 = new ArrayList<MonthlyAccount>(ListUtils.list_of(
+				new MonthlyAccount(1, "acc-1"),
+				new MonthlyAccount(2, "acc-2")));
 	
 		Map<RuleCategory, Object> allRules = new HashMap<RuleCategory, Object>();
 		allRules.put(RuleCategory.ignore, rules);
@@ -99,7 +99,7 @@ public class PropertyEditorPresenterTests
 		MonthlyAccTableModel tm4 = (MonthlyAccTableModel) expectedModelMap.getValue().get(RuleCategory.monthly_accs);
 		assertThat(tm4.getRowCount(), is(2));
 		assertThat(tm4.getValueAt(0, 0), is((Object)1));
-		assertThat(tm4.getValueAt(1, 1), is((Object)(new MonthlyAccountParam(2, "acc-2"))));
+		assertThat(tm4.getValueAt(1, 1), is((Object)(new MonthlyAccount(2, "acc-2"))));
 	}
 	
 	@Test
@@ -109,7 +109,7 @@ public class PropertyEditorPresenterTests
 		allRules.put(RuleCategory.ignore, new ArrayList<MatchingRule>());
 		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>());
 		allRules.put(RuleCategory.tx_override, new ArrayList<OverrideRule>());
-		allRules.put(RuleCategory.monthly_accs, new ArrayList<MonthlyAccountParam>());
+		allRules.put(RuleCategory.monthly_accs, new ArrayList<MonthlyAccount>());
 
 		when(_view.editProperties(anyMapOf(RuleCategory.class, PropertyTableModel.class))).thenReturn(false);
 		
@@ -126,7 +126,7 @@ public class PropertyEditorPresenterTests
 		allRules.put(RuleCategory.ignore, rules);
 		allRules.put(RuleCategory.acc_override, new ArrayList<OverrideRule>());
 		allRules.put(RuleCategory.tx_override, new ArrayList<OverrideRule>());
-		allRules.put(RuleCategory.monthly_accs, new ArrayList<MonthlyAccountParam>());
+		allRules.put(RuleCategory.monthly_accs, new ArrayList<MonthlyAccount>());
 
 
 		when(_view.editProperties(anyMapOf(RuleCategory.class, PropertyTableModel.class)))

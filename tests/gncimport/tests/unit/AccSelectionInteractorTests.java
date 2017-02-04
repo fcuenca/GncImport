@@ -15,7 +15,7 @@ import gncimport.models.TxImportModel;
 import gncimport.tests.data.SampleAccountData;
 import gncimport.transfer.AccountData;
 import gncimport.transfer.Month;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,8 +132,8 @@ public class AccSelectionInteractorTests
 	{
 		List<AccountData> accountList = SampleAccountData.testAccountList();
 		
-		List<MonthlyAccountParam> standardMonthlyAccounts = new ArrayList<MonthlyAccountParam>();	
-		standardMonthlyAccounts.add(new MonthlyAccountParam(1, "some account"));
+		List<MonthlyAccount> standardMonthlyAccounts = new ArrayList<MonthlyAccount>();	
+		standardMonthlyAccounts.add(new MonthlyAccount(1, "some account"));
 		
 		NewHierarchyOpts options = new NewHierarchyOpts(new AccountData("account", "acc-id"), "New Hierarchy Root", new Month("January"));
 		
@@ -149,7 +149,7 @@ public class AccSelectionInteractorTests
 	public void hierarchy_not_created_when_selection_is_aborted()
 	{
 		List<AccountData> accountList = SampleAccountData.testAccountList();
-		List<MonthlyAccountParam> standardMonthlyAccounts = new ArrayList<MonthlyAccountParam>();	
+		List<MonthlyAccount> standardMonthlyAccounts = new ArrayList<MonthlyAccount>();	
 
 		when(_model.getAccounts()).thenReturn(accountList);		
 		when(_outPort.promptForNewHierarchy(accountList)).thenReturn(null);
@@ -157,7 +157,7 @@ public class AccSelectionInteractorTests
 		_interactor.createNewAccountHierarchy(standardMonthlyAccounts, "/the/file/name");
 		
 		verify(_model, never()).createNewAccountHierarchy(
-				any(AccountData.class), anyString(), any(Month.class), anyListOf(MonthlyAccountParam.class), anyString());
+				any(AccountData.class), anyString(), any(Month.class), anyListOf(MonthlyAccount.class), anyString());
 	}
 
 

@@ -1,6 +1,6 @@
 package gncimport.ui.swing;
 
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +12,7 @@ public class MonthlyAccTableModel extends PropertyTableModel
 {
 	public static final String[] COLUMN_TITLES = { "Order", "Account Name" };
 	
-	public static final Class<?>[] COLUMN_CLASSES = { Object.class,  MonthlyAccountParam.class };
+	public static final Class<?>[] COLUMN_CLASSES = { Object.class,  MonthlyAccount.class };
 
 	@Override
 	public Class<?> getColumnClass(int col)
@@ -21,9 +21,9 @@ public class MonthlyAccTableModel extends PropertyTableModel
 	}
 
 	
-	private List<MonthlyAccountParam> _accList;
+	private List<MonthlyAccount> _accList;
 
-	public MonthlyAccTableModel(List<MonthlyAccountParam> accList)
+	public MonthlyAccTableModel(List<MonthlyAccount> accList)
 	{
 		super(COLUMN_TITLES);
 		
@@ -32,13 +32,13 @@ public class MonthlyAccTableModel extends PropertyTableModel
 		_accList = sortedAccountList(accList);
 	}
 
-	private List<MonthlyAccountParam> sortedAccountList(List<MonthlyAccountParam> accList)
+	private List<MonthlyAccount> sortedAccountList(List<MonthlyAccount> accList)
 	{
-		List<MonthlyAccountParam> result = new ArrayList<MonthlyAccountParam>(accList);
-		Collections.sort(result, new Comparator<MonthlyAccountParam>()
+		List<MonthlyAccount> result = new ArrayList<MonthlyAccount>(accList);
+		Collections.sort(result, new Comparator<MonthlyAccount>()
 		{
 			@Override
-			public int compare(MonthlyAccountParam p1, MonthlyAccountParam p2)
+			public int compare(MonthlyAccount p1, MonthlyAccount p2)
 			{
 				return new Integer(p1.sequenceNo).compareTo(p2.sequenceNo);
 			}
@@ -62,7 +62,7 @@ public class MonthlyAccTableModel extends PropertyTableModel
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
-		final MonthlyAccountParam row = _accList.get(rowIndex);
+		final MonthlyAccount row = _accList.get(rowIndex);
 		
 		return columnIndex == 0 ? row.sequenceNo : row;
 	}

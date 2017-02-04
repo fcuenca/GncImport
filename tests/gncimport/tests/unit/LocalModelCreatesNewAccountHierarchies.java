@@ -7,7 +7,7 @@ import gncimport.models.GncXmlLibUtils;
 import gncimport.tests.data.TestDataConfig;
 import gncimport.tests.data.TestFiles;
 import gncimport.transfer.Month;
-import gncimport.transfer.MonthlyAccountParam;
+import gncimport.transfer.MonthlyAccount;
 
 import java.util.ArrayList;
 
@@ -37,10 +37,10 @@ public class LocalModelCreatesNewAccountHierarchies
 	@Test
 	public void new_hierarchy_is_added_to_the_gnc_file()
 	{
-		ArrayList<MonthlyAccountParam> subAccounts = new ArrayList<MonthlyAccountParam>();
-		subAccounts.add(new MonthlyAccountParam(1, "New Gastos Varios"));
-		subAccounts.add(new MonthlyAccountParam(2, "New Entertainment"));
-		subAccounts.add(new MonthlyAccountParam(3, "New Auto"));
+		ArrayList<MonthlyAccount> subAccounts = new ArrayList<MonthlyAccount>();
+		subAccounts.add(new MonthlyAccount(1, "New Gastos Varios"));
+		subAccounts.add(new MonthlyAccount(2, "New Entertainment"));
+		subAccounts.add(new MonthlyAccount(3, "New Auto"));
 
 		Month month = new Month(SOME_MONTH);
 		
@@ -59,9 +59,9 @@ public class LocalModelCreatesNewAccountHierarchies
 		assertThat("account's code should be based on parent, with month number", account.getCode(), is(validAccountCode(prefix, month, sequenceNo)));
 	}
 
-	private void assertEachSubAccountWasCorrectlyLinked(ArrayList<MonthlyAccountParam> expectedSubAccounts, Account root, String prefix, Month month)
+	private void assertEachSubAccountWasCorrectlyLinked(ArrayList<MonthlyAccount> expectedSubAccounts, Account root, String prefix, Month month)
 	{
-		for (MonthlyAccountParam p : expectedSubAccounts)
+		for (MonthlyAccount p : expectedSubAccounts)
 		{
 			Account acc = _model.findAccountByName(p.accName);
 			
@@ -92,7 +92,7 @@ public class LocalModelCreatesNewAccountHierarchies
 	@Test
 	public void saves_new_accounts_to_file()
 	{	
-		_model.createNewAccountHierarchy(GncXmlLibUtils.fromAccount(_parent), "This Month", IRRELEVANT_MONTH, new ArrayList<MonthlyAccountParam>(), "filename.gnc");
+		_model.createNewAccountHierarchy(GncXmlLibUtils.fromAccount(_parent), "This Month", IRRELEVANT_MONTH, new ArrayList<MonthlyAccount>(), "filename.gnc");
 		
 		assertThat(_model.detectedFileName, is("filename.gnc"));	
 	}
