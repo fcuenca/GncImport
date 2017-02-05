@@ -1,5 +1,6 @@
 package gncimport.ui.swing;
 
+import gncimport.transfer.EditableMatchingRule;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.OverrideRule;
 import gncimport.transfer.RuleTester;
@@ -38,9 +39,10 @@ public abstract class OverrideRuleTableModel extends TxRuleTableModel
 	{
 		OverrideRule rule = (OverrideRule) _rules.get(row);
 		OverrideRule updated;
+		MatchingRule editedValue = new EditableMatchingRule((String) value);
 		
-		if(col == 0) updated = new OverrideRule((MatchingRule)value, rule.override);
-		else updated = new OverrideRule(rule.textToMatch, (MatchingRule)value);
+		if(col == 0) updated = new OverrideRule(editedValue, rule.override);
+		else updated = new OverrideRule(rule.textToMatch, editedValue);
 		
 		((List<OverrideRule>)_rules).set(row, updated);
 	}

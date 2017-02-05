@@ -2,7 +2,6 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import gncimport.transfer.EditableMatchingRule;
 import gncimport.transfer.ScreenValue;
 import gncimport.ui.swing.ValueEditor;
 
@@ -24,7 +23,7 @@ public class ValueEditorTests
 			@Override
 			protected void executeInEDT() throws Throwable
 			{
-				ValueEditor editor = new ValueEditor(EditableMatchingRule.Factory);
+				ValueEditor editor = new ValueEditor();
 				ScreenValue valueToEdit = new ScreenValueForTest("some rule");
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
@@ -36,21 +35,21 @@ public class ValueEditorTests
 	}
 	
 	@Test
-	public void converts_entered_text_to_rule_definition()
+	public void returns_entered_text()
 	{
 		GuiActionRunner.execute(new GuiTask()
 		{
 			@Override
 			protected void executeInEDT() throws Throwable
 			{
-				ValueEditor editor = new ValueEditor(EditableMatchingRule.Factory);
+				ValueEditor editor = new ValueEditor();
 				
 				JTextField tf = (JTextField)editor.getTableCellEditorComponent(
 						new JTable(), new ScreenValueForTest("some rule"), true, 0, 1);
 				
 				tf.setText("new rule");
 				
-				assertThat(editor.getCellEditorValue(), is((Object)new EditableMatchingRule("new rule")));
+				assertThat(editor.getCellEditorValue(), is((Object)("new rule")));
 			}
 		});
 	}

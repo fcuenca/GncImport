@@ -6,20 +6,12 @@ public class MonthlyAccount
 	public final int sequenceNo;
 	private final ScreenValue _accName;
 
-	public static final ScreenValueFactory Factory = new ScreenValueFactory()
+	private static final ScreenValueFactory Factory = new ScreenValueFactory()
 	{
 		@Override
 		public String validateStrRepresentation(String text)
 		{
 			return null;
-		}
-
-		@Override
-		public MonthlyAccount editedValueFromText(String text, ScreenValue originalValue)
-		{
-			MonthlyAccount original = (MonthlyAccount) originalValue.domainValue();
-			
-			return new MonthlyAccount(original.sequenceNo, text);
 		}
 	};
 	

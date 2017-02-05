@@ -7,7 +7,7 @@ public class EditableMatchingRule extends MatchingRule
 {
 	private final ScreenValue _ruleExpression;
 	
-	public static final ScreenValueFactory Factory = new ScreenValueFactory()
+	private static final ScreenValueFactory Factory = new ScreenValueFactory()
 	{
 		@Override
 		public String validateStrRepresentation(String text)
@@ -30,17 +30,11 @@ public class EditableMatchingRule extends MatchingRule
 			}
 			return errorMsg;
 		}
-
-		@Override
-		public MatchingRule editedValueFromText(String text, ScreenValue originalValue)
-		{
-			return new EditableMatchingRule(text);
-		}
 	};
 	
 	public EditableMatchingRule(String ruleText)
 	{
-		_ruleExpression = new UserEnteredScreenValue(Factory.newScreenValueFromText(ruleText, null));
+		_ruleExpression = Factory.newScreenValueFromText(ruleText, this);
 	}
 
 	@Override

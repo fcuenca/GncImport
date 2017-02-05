@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gncimport.transfer.MatchingRule;
 import gncimport.transfer.RuleTester;
+import gncimport.transfer.ScreenValue;
 import gncimport.ui.swing.IgnoreRulesTableModel;
 
 import java.util.ArrayList;
@@ -91,8 +92,11 @@ public class IgnoreRulesTableModelTests
 	@Test
 	public void updates_rule_definitions()
 	{		
-		_tableModel.setValueAt(new MatchingRuleForTest("new value"), 1, 0);
-		assertThat(_tableModel.getValueAt(1, 0), is((Object)new ScreenValueForTest("new value")));
+		_tableModel.setValueAt("new value", 1, 0);
+		
+		ScreenValue newValue = (ScreenValue) _tableModel.getValueAt(1, 0);
+		assertThat(newValue, is((ScreenValue)new ScreenValueForTest("new value")));
+		assertThat(newValue.domainValue(), is((Object)new MatchingRuleForTest("new value")));
 	}
 	
 	@Test

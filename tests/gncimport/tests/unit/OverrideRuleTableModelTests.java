@@ -110,8 +110,8 @@ public class OverrideRuleTableModelTests
 	@Test
 	public void updates_rule_definitions()
 	{		
-		_tableModel.setValueAt(new MatchingRuleForTest("new value"), 1, 0);
-		_tableModel.setValueAt(new MatchingRuleForTest("new acc"), 0, 1);
+		_tableModel.setValueAt("new value", 1, 0);
+		_tableModel.setValueAt("new acc", 0, 1);
 		
 		assertThat(_tableModel.getValueAt(1, 0), is((Object)new ScreenValueForTest("new value")));
 		assertThat(_tableModel.getValueAt(1, 1), is((Object)new ScreenValueForTest("acc-2")));		

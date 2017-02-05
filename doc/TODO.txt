@@ -22,6 +22,7 @@ Tasks:
 
 
 Later:
+- EditableMatchingRule: remove and collapse into MatchingRule (?)
 - rename AccOverrideRulesTableModel -> it's not just for AccOverride
 - fix conceptual duplication in displays_rules in PropertyEditorPresenterTests - also in other tests that need to build allRules with the correct number of objects
 - PropEditorPresenter.editProperties also has the same problem -> smell: type code (RuleCategory enum)

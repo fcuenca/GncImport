@@ -15,7 +15,6 @@ import gncimport.ConfigPropertyBuilder;
 import gncimport.GncImportApp;
 import gncimport.adaptors.RbcExportParser;
 import gncimport.tests.data.TestFiles;
-import gncimport.transfer.MonthlyAccount;
 import gncimport.transfer.TxData;
 import gnclib.GncFile;
 
@@ -321,8 +320,14 @@ public class MainWindowSteps
 		}
 	}
 	
+	class MonthlyAccDetails
+	{
+		public int sequenceNo;
+		public String accName;
+	}
+	
 	@Given("^default sub-account list:$")
-	public void default_sub_account_list(List<MonthlyAccount> subAccounts) throws Throwable
+	public void default_sub_account_list(List<MonthlyAccDetails> subAccounts) throws Throwable
 	{
 		_context.properties.putAll(createMonthlyAccountRules(subAccounts));
 	}
@@ -474,13 +479,13 @@ public class MainWindowSteps
 		assertThatPropertiesContainsRules(props, ConfigOptions.MONTHLY_ACC_KEY_REGEX, expectedCount);
 	}
 
-	private Properties createMonthlyAccountRules(List<MonthlyAccount> subAccounts)
+	private Properties createMonthlyAccountRules(List<MonthlyAccDetails> subAccounts)
 	{
 		ConfigPropertyBuilder builder = new ConfigPropertyBuilder();
 		
-		for (MonthlyAccount rule : subAccounts)
+		for (MonthlyAccDetails rule : subAccounts)
 		{
-			builder.addSubAccountRule(rule.sequenceNo, rule.getAccName());
+			builder.addSubAccountRule(rule.sequenceNo, rule.accName);
 		}
 		
 		return builder.build();

@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import gncimport.transfer.EditableMatchingRule;
 import gncimport.transfer.MatchingRule;
+import gncimport.transfer.ScreenValue;
 import gncimport.utils.ProgrammerError;
 
 import org.junit.Test;
@@ -95,6 +96,12 @@ public class MatchingRuleTests
 		assertThat(rule.textForPossitiveMatch(), not(nullValue())); 
 	}
 
-
-
+	@Test
+	public void converts_to_screen_value()
+	{
+		MatchingRule rule = new EditableMatchingRule("the rule");
+		
+		assertThat(rule.asScreenValue(), is((ScreenValue)new ScreenValueForTest("the rule")));
+		assertThat(rule.asScreenValue().domainValue(), is((Object)rule));
+	}
 }

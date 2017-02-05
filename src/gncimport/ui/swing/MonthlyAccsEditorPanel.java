@@ -14,6 +14,7 @@ public class MonthlyAccsEditorPanel extends PropertyEditorPanel
 		{
 			super(tm, name);
 			setDefaultRenderer(ScreenValue.class, new ValueRenderer());
+			setDefaultEditor(ScreenValue.class, new ValueEditor());
 		}
 	}
 	

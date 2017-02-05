@@ -34,7 +34,7 @@ public final class IgnoreRulesTableModel extends TxRuleTableModel
 	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
-		((List<MatchingRule>)_rules).set(row, (MatchingRule) value);
+		((List<MatchingRule>)_rules).set(row, new EditableMatchingRule((String) value));
 	}
 
 	@SuppressWarnings("unchecked")
