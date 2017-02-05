@@ -185,7 +185,7 @@ public class ConfigOptions implements TxMatcher, UIConfig, RuleModel
 		{
 			MonthlyAccount rule = iterator.next();
 			
-			builder.addSubAccountRule(rule.sequenceNo, rule.accName);
+			builder.addSubAccountRule(rule.sequenceNo, rule.getAccName());
 		}		
 
 		return builder.build();

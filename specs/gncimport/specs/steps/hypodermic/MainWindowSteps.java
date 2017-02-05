@@ -480,7 +480,7 @@ public class MainWindowSteps
 		
 		for (MonthlyAccount rule : subAccounts)
 		{
-			builder.addSubAccountRule(rule.sequenceNo, rule.accName);
+			builder.addSubAccountRule(rule.sequenceNo, rule.getAccName());
 		}
 		
 		return builder.build();

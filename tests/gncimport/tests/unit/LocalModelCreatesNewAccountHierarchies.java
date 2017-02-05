@@ -63,7 +63,7 @@ public class LocalModelCreatesNewAccountHierarchies
 	{
 		for (MonthlyAccount p : expectedSubAccounts)
 		{
-			Account acc = _model.findAccountByName(p.accName);
+			Account acc = _model.findAccountByName(p.getAccName());
 			
 			assertAccountWasCorrectlyLinked(acc, root, prefix, month, p.sequenceNo);
 		}

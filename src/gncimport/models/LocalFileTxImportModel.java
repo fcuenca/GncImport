@@ -323,7 +323,7 @@ public class LocalFileTxImportModel implements TxImportModel
 			
 			for (MonthlyAccount p : subAccList)
 			{
-				_gnc.addSubAccount(p.accName, generateSubAccountCode(parentCode, month, p.sequenceNo), 	root);
+				_gnc.addSubAccount(p.getAccName(), generateSubAccountCode(parentCode, month, p.sequenceNo), 	root);
 			}
 			
 			saveToGncFile(fileToSave);

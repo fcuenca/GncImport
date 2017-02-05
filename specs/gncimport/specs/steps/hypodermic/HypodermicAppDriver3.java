@@ -517,7 +517,7 @@ public class HypodermicAppDriver3
 		
 		for (MonthlyAccount p : _observedMonthlyAccounts)
 		{
-			rules.add(new ArrayList<String>(ListUtils.list_of("" + p.sequenceNo, p.accName)));
+			rules.add(new ArrayList<String>(ListUtils.list_of("" + p.sequenceNo, p.getAccName())));
 		}
 		
 		return rules;

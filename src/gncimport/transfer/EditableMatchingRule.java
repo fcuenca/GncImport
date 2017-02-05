@@ -5,7 +5,7 @@ import java.util.regex.PatternSyntaxException;
 
 public class EditableMatchingRule extends MatchingRule
 {
-	private final ScreenValue _backingRule;
+	private final ScreenValue _ruleExpression;
 	
 	public static final ScreenValueFactory Factory = new ScreenValueFactory()
 	{
@@ -40,24 +40,24 @@ public class EditableMatchingRule extends MatchingRule
 	
 	public EditableMatchingRule(String ruleText)
 	{
-		_backingRule = new UserEnteredScreenValue(Factory.newScreenValueFromText(ruleText));
+		_ruleExpression = new UserEnteredScreenValue(Factory.newScreenValueFromText(ruleText));
 	}
 
 	@Override
 	public boolean isValid()
 	{
-		return _backingRule.isValid();
+		return _ruleExpression.isValid();
 	}
 
 	@Override
 	public String text()
 	{
-		return _backingRule.text();
+		return _ruleExpression.text();
 	}
 
 	@Override
 	public ScreenValue asScreenValue()
 	{
-		return _backingRule;
+		return _ruleExpression;
 	}
 }

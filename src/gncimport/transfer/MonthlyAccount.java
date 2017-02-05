@@ -4,8 +4,7 @@ package gncimport.transfer;
 public class MonthlyAccount
 {
 	public final int sequenceNo;
-	public final String accName;
-	private final ScreenValue _backing;
+	private final ScreenValue _accName;
 
 	
 	public static final ScreenValueFactory Factory = new ScreenValueFactory()
@@ -27,8 +26,7 @@ public class MonthlyAccount
 	public MonthlyAccount(int code, String accName)
 	{
 		this.sequenceNo = code;
-		this.accName = accName;
-		this._backing = Factory.newScreenValueFromText(accName);
+		this._accName = Factory.newScreenValueFromText(accName);
 	}
 
 	@Override
@@ -36,7 +34,7 @@ public class MonthlyAccount
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((accName == null) ? 0 : accName.hashCode());
+		result = prime * result + ((getAccName() == null) ? 0 : getAccName().hashCode());
 		result = prime * result + sequenceNo;
 		return result;
 	}
@@ -51,12 +49,12 @@ public class MonthlyAccount
 		if (getClass() != obj.getClass())
 			return false;
 		MonthlyAccount other = (MonthlyAccount) obj;
-		if (accName == null)
+		if (getAccName() == null)
 		{
-			if (other.accName != null)
+			if (other.getAccName() != null)
 				return false;
 		}
-		else if (!accName.equals(other.accName))
+		else if (!getAccName().equals(other.getAccName()))
 			return false;
 		if (sequenceNo != other.sequenceNo)
 			return false;
@@ -66,12 +64,17 @@ public class MonthlyAccount
 	@Override
 	public String toString()
 	{
-		return "MonthlyAccount(" + sequenceNo + ", " + accName + ")";
+		return "MonthlyAccount(" + sequenceNo + ", " + getAccName() + ")";
 	}
 
 	public ScreenValue asScreenValue()
 	{
-		return _backing;
+		return _accName;
+	}
+
+	public String getAccName()
+	{
+		return _accName.text();
 	}
 
 }
