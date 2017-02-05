@@ -1,7 +1,6 @@
 package gncimport.tests.unit;
 
 import gncimport.transfer.AbstractScreenValue;
-import gncimport.transfer.ScreenValue;
 
 public class ScreenValueForTest extends AbstractScreenValue 
 {
@@ -10,11 +9,12 @@ public class ScreenValueForTest extends AbstractScreenValue
 	
 	public ScreenValueForTest(String text)
 	{
-		this._text = text;
+		this(text, true);
 	}
 
 	public ScreenValueForTest(String text, boolean isValid)
 	{
+		super(null);
 		this._text = text;
 		this._isValid = isValid;
 	}
@@ -36,12 +36,6 @@ public class ScreenValueForTest extends AbstractScreenValue
 	public String hint()
 	{
 		return "HINT[" + _text + "]";
-	}
-
-	@Override
-	public ScreenValue copy()
-	{
-		return new ScreenValueForTest(_text, _isValid);
 	}
 
 	@Override

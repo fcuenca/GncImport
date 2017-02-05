@@ -1,11 +1,12 @@
 package gncimport.transfer;
 
-public class UserEnteredScreenValue extends AbstractScreenValue
+public class UserEnteredScreenValue extends AbstractScreenValue //TODO: this class adds nothing - REMOVE
 {
 	private final ScreenValue _backingValue;
 
 	public UserEnteredScreenValue(ScreenValue backingValue)
 	{
+		super(null);
 		_backingValue = backingValue;
 	}
 	
@@ -31,12 +32,6 @@ public class UserEnteredScreenValue extends AbstractScreenValue
 	public String text()
 	{
 		return _backingValue.text();
-	}
-
-	@Override
-	public ScreenValue copy()
-	{
-		return _backingValue.copy();
 	}
 	
 	@Override

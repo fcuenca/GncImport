@@ -54,8 +54,7 @@ public class MonthlyAccTableModelTests
 		assertThat(_tableModel.getValueAt(2, 0), is((Object)3));
 		assertThat(_tableModel.getValueAt(2, 1), is((Object)(new ScreenValueForTest("Living Expenses"))));
 	}
-
-
+	
 	@Test(expected=IllegalArgumentException.class)
 	public void account_list_cannot_be_null()
 	{

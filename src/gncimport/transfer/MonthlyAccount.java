@@ -6,7 +6,6 @@ public class MonthlyAccount
 	public final int sequenceNo;
 	private final ScreenValue _accName;
 
-	
 	public static final ScreenValueFactory Factory = new ScreenValueFactory()
 	{
 		@Override
@@ -18,7 +17,9 @@ public class MonthlyAccount
 		@Override
 		public MonthlyAccount editedValueFromText(String text, ScreenValue originalValue)
 		{
-			return new MonthlyAccount(-1, text);
+			MonthlyAccount original = (MonthlyAccount) originalValue.domainValue();
+			
+			return new MonthlyAccount(original.sequenceNo, text);
 		}
 	};
 	
@@ -26,7 +27,7 @@ public class MonthlyAccount
 	public MonthlyAccount(int code, String accName)
 	{
 		this.sequenceNo = code;
-		this._accName = Factory.newScreenValueFromText(accName);
+		this._accName = Factory.newScreenValueFromText(accName, this);
 	}
 
 	@Override

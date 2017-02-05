@@ -8,7 +8,7 @@ public abstract class  ScreenValueFactory
 	
 	public abstract Object editedValueFromText(String text, ScreenValue originalValue);
 
-	public ScreenValue newScreenValueFromText(String text)
+	public ScreenValue newScreenValueFromText(String text, Object domainValue)
 	{
 		if(text == null)
 		{
@@ -19,11 +19,11 @@ public abstract class  ScreenValueFactory
 		
 		if(errorMsg == null)
 		{
-			return new ValidScreenValue(text.trim());
+			return new ValidScreenValue(text.trim(), domainValue);
 		}
 		else
 		{
-			return new InvalidScreenValue(text, errorMsg);
+			return new InvalidScreenValue(text, errorMsg, domainValue);
 		}
 	}	
 }

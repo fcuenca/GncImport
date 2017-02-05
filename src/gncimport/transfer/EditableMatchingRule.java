@@ -40,7 +40,7 @@ public class EditableMatchingRule extends MatchingRule
 	
 	public EditableMatchingRule(String ruleText)
 	{
-		_ruleExpression = new UserEnteredScreenValue(Factory.newScreenValueFromText(ruleText));
+		_ruleExpression = new UserEnteredScreenValue(Factory.newScreenValueFromText(ruleText, null));
 	}
 
 	@Override

@@ -6,8 +6,9 @@ public class InvalidScreenValue extends AbstractScreenValue
 	private String _offendingText;
 	private String _hint;
 
-	protected InvalidScreenValue(String offendingText, String hint)
+	protected InvalidScreenValue(String offendingText, String hint, Object domainValue)
 	{
+		super(domainValue);
 		this._offendingText = offendingText;
 		this._hint = hint;
 	}
@@ -28,12 +29,6 @@ public class InvalidScreenValue extends AbstractScreenValue
 	public String hint()
 	{
 		return _hint;
-	}
-
-	@Override
-	public ScreenValue copy()
-	{
-		return new InvalidScreenValue(_offendingText, _hint);
 	}
 
 	@Override

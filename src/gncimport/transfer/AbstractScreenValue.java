@@ -3,7 +3,19 @@ package gncimport.transfer;
 
 public abstract class AbstractScreenValue implements ScreenValue
 {
+	private final Object _domainValue;
 
+	protected AbstractScreenValue(Object domainValue)
+	{
+		_domainValue = domainValue;
+	}
+
+	@Override
+	public Object domainValue()
+	{
+		return _domainValue;
+	}
+	
 	@Override
 	public int hashCode()
 	{

@@ -3,10 +3,9 @@ package gncimport.tests.unit;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.*;
-import gncimport.transfer.MatchingRule;
+import static org.junit.Assert.assertThat;
 import gncimport.transfer.EditableMatchingRule;
-import gncimport.transfer.ScreenValue;
+import gncimport.transfer.MatchingRule;
 import gncimport.utils.ProgrammerError;
 
 import org.junit.Test;
@@ -70,33 +69,7 @@ public class MatchingRuleTests
 	{
 		new EditableMatchingRule(null); // will throw
 	}
-	
-	@Test
-	public void copying_valid_rule_definition()
-	{
-		MatchingRule rule = new EditableMatchingRule("rule");
 		
-		ScreenValue copy = rule.asScreenValue().copy();
-		
-		assertThat(copy.isValid(), is(true));
-		assertThat(copy.text(), is(rule.text()));
-		assertThat(copy.displayText(), is(rule.asScreenValue().displayText()));
-		assertThat(copy.hint(), is(rule.asScreenValue().hint()));
-	}
-	
-	@Test
-	public void copying_invalid_rule_definition()
-	{
-		MatchingRule rule = new EditableMatchingRule("");
-		
-		ScreenValue copy = rule.asScreenValue().copy();
-		
-		assertThat(copy.isValid(), is(false));
-		assertThat(copy.text(), is(rule.text()));
-		assertThat(copy.displayText(), is(rule.asScreenValue().displayText()));
-		assertThat(copy.hint(), is(rule.asScreenValue().hint()));
-	}
-	
 	@Test
 	public void can_determine_regex_match()
 	{

@@ -5,8 +5,9 @@ public class ValidScreenValue extends AbstractScreenValue
 {
 	private String _text;
 	
-	protected ValidScreenValue(String text)
+	protected ValidScreenValue(String text, Object domainValue)
 	{
+		super(domainValue);
 		this._text = text;
 	}
 
@@ -26,12 +27,6 @@ public class ValidScreenValue extends AbstractScreenValue
 	public String hint()
 	{
 		return "";
-	}
-
-	@Override
-	public ScreenValue copy()
-	{
-		return new ValidScreenValue(_text);
 	}
 
 	@Override

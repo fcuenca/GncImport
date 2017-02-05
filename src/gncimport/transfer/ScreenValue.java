@@ -4,8 +4,7 @@ public interface ScreenValue
 {
 	public abstract String hint();
 	public abstract String displayText();
-	public abstract boolean isValid();
-	
+	public abstract boolean isValid();	
 	public abstract String text();
-	public abstract ScreenValue copy();	
+	public abstract Object domainValue();	
 }
