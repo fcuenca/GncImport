@@ -6,7 +6,7 @@ public abstract class  ScreenValueFactory
 {
 	public abstract String validateStrRepresentation(String text);
 	
-	public abstract Object newDomainObjectFromText(String text);
+	public abstract Object editedValueFromText(String text, ScreenValue originalValue);
 
 	public ScreenValue newScreenValueFromText(String text)
 	{

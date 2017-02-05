@@ -99,7 +99,7 @@ public class PropertyEditorPresenterTests
 		MonthlyAccTableModel tm4 = (MonthlyAccTableModel) expectedModelMap.getValue().get(RuleCategory.monthly_accs);
 		assertThat(tm4.getRowCount(), is(2));
 		assertThat(tm4.getValueAt(0, 0), is((Object)1));
-		assertThat(tm4.getValueAt(1, 1), is((Object)(new MonthlyAccount(2, "acc-2"))));
+		assertThat(tm4.getValueAt(1, 1), is((Object)(new ScreenValueForTest("acc-2"))));
 	}
 	
 	@Test

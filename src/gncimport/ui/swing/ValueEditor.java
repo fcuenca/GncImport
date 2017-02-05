@@ -13,6 +13,7 @@ public class ValueEditor extends DefaultCellEditor
 {
 	private static final long serialVersionUID = -5608349352281588071L;
 	private ScreenValueFactory _factory;
+	private ScreenValue _originalValue;
 
 	public ValueEditor(ScreenValueFactory factory)
 	{
@@ -29,16 +30,16 @@ public class ValueEditor extends DefaultCellEditor
 			int column)
 	{
 		JTextField tf = (JTextField)super.getTableCellEditorComponent(table, value, isSelected, row, column);
-		ScreenValue rule = (ScreenValue)value;
+		_originalValue = (ScreenValue)value;
 		
-		tf.setText(rule.text());
+		tf.setText(_originalValue.text());
 		return tf;
 	}
 
 	@Override
 	public Object getCellEditorValue()
 	{
-		String theValue = (String)super.getCellEditorValue();
-		return _factory.newDomainObjectFromText(theValue);
+		String newText = (String)super.getCellEditorValue();
+		return _factory.editedValueFromText(newText, _originalValue);
 	}
 }

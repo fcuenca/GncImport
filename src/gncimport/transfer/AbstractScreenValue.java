@@ -1,44 +1,9 @@
 package gncimport.transfer;
 
-public class UserEnteredScreenValue extends AbstractScreenValue
+
+public abstract class AbstractScreenValue implements ScreenValue
 {
-	private final ScreenValue _backingValue;
 
-	public UserEnteredScreenValue(ScreenValue backingValue)
-	{
-		_backingValue = backingValue;
-	}
-	
-	@Override
-	public String hint()
-	{
-		return _backingValue.hint();
-	}
-
-	@Override
-	public String displayText()
-	{
-		return _backingValue.displayText();
-	}
-
-	@Override
-	public boolean isValid()
-	{
-		return _backingValue.isValid();
-	}
-
-	@Override
-	public String text()
-	{
-		return _backingValue.text();
-	}
-
-	@Override
-	public ScreenValue copy()
-	{
-		return _backingValue.copy();
-	}
-	
 	@Override
 	public int hashCode()
 	{
@@ -68,10 +33,10 @@ public class UserEnteredScreenValue extends AbstractScreenValue
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return getClass().getSimpleName() + " [" + isValid() + ", " + text() + "]";
-	}	
+	}
 }

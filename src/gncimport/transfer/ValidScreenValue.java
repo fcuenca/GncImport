@@ -1,7 +1,7 @@
 package gncimport.transfer;
 
 
-public class ValidScreenValue implements ScreenValue
+public class ValidScreenValue extends AbstractScreenValue
 {
 	private String _text;
 	

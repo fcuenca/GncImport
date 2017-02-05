@@ -46,13 +46,13 @@ public class MonthlyAccTableModelTests
 		assertThat(_tableModel.getRowCount(), is(3));
 		
 		assertThat(_tableModel.getValueAt(0, 0), is((Object)1));
-		assertThat(_tableModel.getValueAt(0, 1), is((Object)(new MonthlyAccount(1, "Misc Expenses"))));
+		assertThat(_tableModel.getValueAt(0, 1), is((Object)(new ScreenValueForTest("Misc Expenses"))));
 		
 		assertThat(_tableModel.getValueAt(1, 0), is((Object)2));
-		assertThat(_tableModel.getValueAt(1, 1), is((Object)(new MonthlyAccount(2, "Groceries"))));
+		assertThat(_tableModel.getValueAt(1, 1), is((Object)(new ScreenValueForTest("Groceries"))));
 		
 		assertThat(_tableModel.getValueAt(2, 0), is((Object)3));
-		assertThat(_tableModel.getValueAt(2, 1), is((Object)(new MonthlyAccount(3, "Living Expenses"))));
+		assertThat(_tableModel.getValueAt(2, 1), is((Object)(new ScreenValueForTest("Living Expenses"))));
 	}
 
 

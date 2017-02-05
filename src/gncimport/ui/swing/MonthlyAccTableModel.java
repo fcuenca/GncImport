@@ -1,6 +1,7 @@
 package gncimport.ui.swing;
 
 import gncimport.transfer.MonthlyAccount;
+import gncimport.transfer.ScreenValue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +13,7 @@ public class MonthlyAccTableModel extends PropertyTableModel
 {
 	public static final String[] COLUMN_TITLES = { "Order", "Account Name" };
 	
-	public static final Class<?>[] COLUMN_CLASSES = { Object.class,  MonthlyAccount.class };
+	public static final Class<?>[] COLUMN_CLASSES = { Object.class,  ScreenValue.class };
 
 	@Override
 	public Class<?> getColumnClass(int col)
@@ -64,7 +65,7 @@ public class MonthlyAccTableModel extends PropertyTableModel
 	{
 		final MonthlyAccount row = _accList.get(rowIndex);
 		
-		return columnIndex == 0 ? row.sequenceNo : row;
+		return columnIndex == 0 ? row.sequenceNo : row.asScreenValue();
 	}
 
 	@Override

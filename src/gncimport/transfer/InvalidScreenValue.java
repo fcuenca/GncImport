@@ -1,7 +1,7 @@
 package gncimport.transfer;
 
 
-public class InvalidScreenValue implements ScreenValue
+public class InvalidScreenValue extends AbstractScreenValue
 {
 	private String _offendingText;
 	private String _hint;

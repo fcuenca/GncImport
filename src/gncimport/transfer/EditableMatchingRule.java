@@ -32,7 +32,7 @@ public class EditableMatchingRule extends MatchingRule
 		}
 
 		@Override
-		public MatchingRule newDomainObjectFromText(String text)
+		public MatchingRule editedValueFromText(String text, ScreenValue originalValue)
 		{
 			return new EditableMatchingRule(text);
 		}

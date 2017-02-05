@@ -1,6 +1,6 @@
 package gncimport.ui.swing;
 
-import gncimport.transfer.MonthlyAccount;
+import gncimport.transfer.ScreenValue;
 
 import javax.swing.JToolBar;
 
@@ -13,7 +13,7 @@ public class MonthlyAccsEditorPanel extends PropertyEditorPanel
 		public MonthlyAccTable(PropertyTableModel tm, String name)
 		{
 			super(tm, name);
-			setDefaultRenderer(MonthlyAccount.class, new ValueRenderer());
+			setDefaultRenderer(ScreenValue.class, new ValueRenderer());
 		}
 	}
 	

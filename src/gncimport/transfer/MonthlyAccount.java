@@ -1,14 +1,34 @@
 package gncimport.transfer;
 
-public class MonthlyAccount implements ScreenValue
+
+public class MonthlyAccount
 {
 	public final int sequenceNo;
 	public final String accName;
+	private final ScreenValue _backing;
+
+	
+	public static final ScreenValueFactory Factory = new ScreenValueFactory()
+	{
+		@Override
+		public String validateStrRepresentation(String text)
+		{
+			return null;
+		}
+
+		@Override
+		public MonthlyAccount editedValueFromText(String text, ScreenValue originalValue)
+		{
+			return new MonthlyAccount(-1, text);
+		}
+	};
+	
 
 	public MonthlyAccount(int code, String accName)
 	{
 		this.sequenceNo = code;
-		this.accName = accName;		
+		this.accName = accName;
+		this._backing = Factory.newScreenValueFromText(accName);
 	}
 
 	@Override
@@ -49,35 +69,9 @@ public class MonthlyAccount implements ScreenValue
 		return "MonthlyAccount(" + sequenceNo + ", " + accName + ")";
 	}
 
-	@Override
-	public String hint()
+	public ScreenValue asScreenValue()
 	{
-		return null;
+		return _backing;
 	}
 
-	@Override
-	public String displayText()
-	{
-		return accName;
-	}
-
-	@Override
-	public boolean isValid()
-	{
-		return true;
-	}
-
-	@Override
-	public String text()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ScreenValue copy()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
