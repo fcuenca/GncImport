@@ -2,6 +2,9 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import gncimport.transfer.MonthlyAccount;
 import gncimport.transfer.ScreenValue;
 import gncimport.ui.swing.MonthlyAccTableModel;
@@ -9,6 +12,9 @@ import gncimport.ui.swing.MonthlyAccTableModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -101,4 +107,67 @@ public class MonthlyAccTableModelTests
 				
 		assertThat(_tableModel.isValid(), is(false));
 	}
+	
+	@Test
+	public void rules_can_be_appended()
+	{		
+		_tableModel.newRow();
+		
+		assertThat(_tableModel.getRowCount(), is(4));
+		
+		ScreenValue newValue = (ScreenValue) _tableModel.getValueAt(3, IRRELEVANT);
+		assertThat(newValue, is((ScreenValue)new ScreenValueForTest("", false)));
+		assertThat(newValue.domainValue(), is((Object)new MonthlyAccount(4, "")));
+
+	}
+	
+	@Test
+	public void adding_account_notifies_listeners()
+	{
+		TableModelListener listener = mock(TableModelListener.class);
+		_tableModel.addTableModelListener(listener);
+		
+		_tableModel.newRow();
+		
+		verify(listener).tableChanged(any(TableModelEvent.class));
+	}
+
+	@Test
+	public void rules_can_be_removed()
+	{
+		_tableModel.removeRow(1);		
+		assertThat(_tableModel.getRowCount(), is(2));
+	}
+
+	@Test
+	public void removing_rules_out_of_bounds_is_ignored()
+	{
+		_tableModel.removeRow(-1);
+		_tableModel.removeRow(3);
+		
+		assertThat(_tableModel.getRowCount(), is(3));
+	}
+
+	@Test
+	public void removing_rule_notifies_listeners()
+	{
+		TableModelListener listener = mock(TableModelListener.class);
+		_tableModel.addTableModelListener(listener);
+		
+		_tableModel.removeRow(0);
+		
+		verify(listener).tableChanged(any(TableModelEvent.class));
+	}
+	
+	@Test
+	public void accounts_are_renumbered_after_removal()
+	{
+		_tableModel.removeRow(1);
+		
+		// This test relies on the fact that the account list is modified "in site" :-/
+		assertThat(_accList.get(0).sequenceNo, is(1));
+		assertThat(_accList.get(1).sequenceNo, is(2));
+	}
+
+
 }
