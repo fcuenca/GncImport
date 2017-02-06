@@ -11,7 +11,7 @@ public class MonthlyAccount
 		@Override
 		public String validateStrRepresentation(String text)
 		{
-			return null;
+			return text.trim().isEmpty() ? "Empty value not allowed!" : null;
 		}
 	};
 	
@@ -68,6 +68,11 @@ public class MonthlyAccount
 	public String getAccName()
 	{
 		return _accName.text();
+	}
+
+	public Boolean isValid()
+	{
+		return _accName.isValid();
 	}
 
 }
