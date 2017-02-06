@@ -77,15 +77,25 @@ public class MonthlyAccTableModel extends PropertyTableModel
 	@Override
 	public void newRow()
 	{
-		// TODO Auto-generated method stub
-
+		_accList.add(new MonthlyAccount(_accList.size() + 1, ""));
+		fireTableDataChanged();
 	}
 
 	@Override
 	public void removeRow(int row)
 	{
-		// TODO Auto-generated method stub
-
+		if(row >= 0 && row < _accList.size())
+		{
+			_accList.remove(row);
+			
+			for (int i = row; i < _accList.size(); i++)
+			{
+				MonthlyAccount current = _accList.get(i);
+				_accList.set(i, new MonthlyAccount(i + 1, current.getAccName()));
+			}
+			
+			fireTableDataChanged();
+		}
 	}
 
 	@Override
