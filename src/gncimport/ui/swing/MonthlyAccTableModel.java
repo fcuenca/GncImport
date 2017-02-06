@@ -91,7 +91,10 @@ public class MonthlyAccTableModel extends PropertyTableModel
 	@Override
 	public boolean isValid()
 	{
-		// TODO Auto-generated method stub
+		for (MonthlyAccount acc : _accList)
+		{
+			if(!acc.isValid()) return false;
+		}
 		return true;
 	}
 

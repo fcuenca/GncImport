@@ -18,16 +18,17 @@ public class MonthlyAccTableModelTests
 	private final int IRRELEVANT = new Random().nextInt();
 
 	private MonthlyAccTableModel _tableModel;
+	private List<MonthlyAccount> _accList;
 	
 	@Before
 	public void setUp() throws Exception
 	{
-		List<MonthlyAccount> accList = new ArrayList<MonthlyAccount>(ListUtils.list_of(
+		_accList = new ArrayList<MonthlyAccount>(ListUtils.list_of(
 				new MonthlyAccount(2, "Groceries"),
 				new MonthlyAccount(1, "Misc Expenses"),
 				new MonthlyAccount(3, "Living Expenses")));
 		
-		_tableModel = new MonthlyAccTableModel(accList);
+		_tableModel = new MonthlyAccTableModel(_accList);
 	}
 
 	@Test
@@ -85,5 +86,19 @@ public class MonthlyAccTableModelTests
 		
 		assertThat(newValue, is((ScreenValue)new ScreenValueForTest("some other account")));
 		assertThat(newValue.domainValue(), is((Object)new MonthlyAccount(1, "some other account")));
+	}
+	
+	@Test
+	public void valid_when_all_rules_are_valid()
+	{		
+		assertThat(_tableModel.isValid(), is(true));
+	}
+
+	@Test
+	public void invalid_when_at_least_one_rule_is_invalid()
+	{
+		_accList.add(new MonthlyAccount(IRRELEVANT, "irrelevant") { @Override public Boolean isValid() { return false; } } );
+				
+		assertThat(_tableModel.isValid(), is(false));
 	}
 }
