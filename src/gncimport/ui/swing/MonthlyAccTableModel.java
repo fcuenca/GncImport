@@ -3,7 +3,6 @@ package gncimport.ui.swing;
 import gncimport.transfer.MonthlyAccount;
 import gncimport.transfer.ScreenValue;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -11,9 +10,9 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class MonthlyAccTableModel extends PropertyTableModel
 {
-	public static final String[] COLUMN_TITLES = { "Order", "Account Name" };
+	public static final String[] COLUMN_TITLES = { "Account Name" };
 	
-	public static final Class<?>[] COLUMN_CLASSES = { Object.class,  ScreenValue.class };
+	public static final Class<?>[] COLUMN_CLASSES = {  ScreenValue.class };
 
 	@Override
 	public Class<?> getColumnClass(int col)
@@ -21,7 +20,6 @@ public class MonthlyAccTableModel extends PropertyTableModel
 		return COLUMN_CLASSES[col];
 	}
 
-	
 	private List<MonthlyAccount> _accList;
 
 	public MonthlyAccTableModel(List<MonthlyAccount> accList)
@@ -35,8 +33,8 @@ public class MonthlyAccTableModel extends PropertyTableModel
 
 	private List<MonthlyAccount> sortedAccountList(List<MonthlyAccount> accList)
 	{
-		List<MonthlyAccount> result = new ArrayList<MonthlyAccount>(accList);
-		Collections.sort(result, new Comparator<MonthlyAccount>()
+		// List needs to be sorted "in place", otherwise it won't be saved :-/
+		Collections.sort(accList, new Comparator<MonthlyAccount>()
 		{
 			@Override
 			public int compare(MonthlyAccount p1, MonthlyAccount p2)
@@ -45,7 +43,7 @@ public class MonthlyAccTableModel extends PropertyTableModel
 			}
 		});
 		
-		return result;
+		return accList;
 	}
 
 	@Override
@@ -57,17 +55,25 @@ public class MonthlyAccTableModel extends PropertyTableModel
 	@Override
 	public boolean isCellEditable(int row, int col)
 	{
-		return col != 0;
+		return true;
 	}
 
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex)
+	public Object getValueAt(int rowIndex, int _unused_)
 	{
 		final MonthlyAccount row = _accList.get(rowIndex);
 		
-		return columnIndex == 0 ? row.sequenceNo : row.asScreenValue();
+		return row.asScreenValue();
 	}
 
+	@Override 
+	public void setValueAt(Object aValue, int rowIndex, int _unused_) 
+	{
+		MonthlyAccount original = _accList.get(rowIndex);
+		
+		_accList.set(rowIndex, new MonthlyAccount(original.sequenceNo, (String)aValue));
+	};
+	
 	@Override
 	public void newRow()
 	{

@@ -34,6 +34,7 @@ Later:
 - push up COLUMN_CLASSES from table model classes
 
 General improvements:
+- Table Models have to edit the supplied lists "in place", or they won't be saved (i.e. all the lists are shared objects -- See MonthlyAccTable Model to see the issue this causes)
 - LocalFileTxImportModel could be implemented using the State Pattern 
 - better handle the two states of the model class, depending on which file has been loaded first
 - check that Target Account & Source accounts are different
