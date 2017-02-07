@@ -1,5 +1,7 @@
 package gncimport.ui.swing;
 
+import gncimport.transfer.ScreenValue;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -8,17 +10,20 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 @SuppressWarnings("serial")
-public class StripePatternTable extends JTable
+public class ScreenValueTable extends JTable
 {
 
 	final Color STANDARD_BACKGROUND_COLOR = Color.LIGHT_GRAY;
 	final Color ALTERNATE_BACKGROUND_COLOR = new Color(209, 229, 255);
 	final Color SELECTION_BACKGROUND_COLOR = new Color(52, 117, 237);
 
-	public StripePatternTable(TableModel model, String name) 
+	public ScreenValueTable(TableModel model, String name) 
 	{
 		setName(name);
 		setModel(model);
+		
+		setDefaultRenderer(ScreenValue.class, new ValueRenderer());
+		setDefaultEditor(ScreenValue.class, new ValueEditor());
 	}
 
 	@Override

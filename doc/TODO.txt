@@ -7,8 +7,8 @@ Features:
 Stories:
 x display current Monthly Accounts
 x accounts are displayed in order
-* add & remove accounts
-- change order of accounts
+x add & remove accounts
+* change order of accounts
 x edit existing rules (add, remove, modify)
 x validation
 	x account can't be blank

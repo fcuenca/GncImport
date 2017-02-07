@@ -16,7 +16,7 @@ public class TxRuleEditorPanel extends PropertyEditorPanel
 {
 	public TxRuleEditorPanel(TxRuleTableModel model, String name)
 	{
-		super(new RuleTable(model, name));
+		super(new ScreenValueTable(model, name));
 	}
 
 	protected void addPanelSpecificToolbarControls(JToolBar toolBar)
