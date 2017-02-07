@@ -10,8 +10,9 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class MonthlyAccTableModel extends PropertyTableModel
 {
-	public static final String[] COLUMN_TITLES = { "Account Name" };
+	private List<MonthlyAccount> _accList;
 	
+	public static final String[] COLUMN_TITLES = { "Account Name" };
 	public static final Class<?>[] COLUMN_CLASSES = {  ScreenValue.class };
 
 	@Override
@@ -19,8 +20,6 @@ public class MonthlyAccTableModel extends PropertyTableModel
 	{
 		return COLUMN_CLASSES[col];
 	}
-
-	private List<MonthlyAccount> _accList;
 
 	public MonthlyAccTableModel(List<MonthlyAccount> accList)
 	{
@@ -82,16 +81,18 @@ public class MonthlyAccTableModel extends PropertyTableModel
 	}
 
 	@Override
-	public void removeRow(int row)
+	public void removeRow(int selectedRow)
 	{
-		if(row >= 0 && row < _accList.size())
+		if(selectedRow >= 0 && selectedRow < _accList.size())
 		{
-			_accList.remove(row);
+			int seq = _accList.get(selectedRow).sequenceNo;
+			_accList.remove(selectedRow);
 			
-			for (int i = row; i < _accList.size(); i++)
+			for (int i = selectedRow; i < _accList.size(); i++)
 			{
 				MonthlyAccount current = _accList.get(i);
-				_accList.set(i, new MonthlyAccount(i + 1, current.getAccName()));
+				_accList.set(i, new MonthlyAccount(seq, current.getAccName()));
+				seq = current.sequenceNo;
 			}
 			
 			fireTableDataChanged();
