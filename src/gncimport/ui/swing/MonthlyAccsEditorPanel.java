@@ -18,7 +18,7 @@ public class MonthlyAccsEditorPanel extends PropertyEditorPanel
 	protected void addPanelSpecificToolbarControls(JToolBar toolBar)
 	{
 		JButton button;
-		//MonthlyAccTableModel model = (MonthlyAccTableModel) _propertyTable.getModel();
+		final MonthlyAccTableModel model = (MonthlyAccTableModel) _propertyTable.getModel();
 		
 		button = new JButton("Up");
 		button.setToolTipText("Move up");
@@ -27,7 +27,13 @@ public class MonthlyAccsEditorPanel extends PropertyEditorPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				//model.moveUp(theTable.getSelectedRow());
+				int selection = _propertyTable.getSelectedRow(); 
+				
+				if (selection != 0)
+				{
+					model.moveUp(selection);
+					_propertyTable.setRowSelectionInterval(selection - 1, selection - 1);
+				}
 			}
 		});
 

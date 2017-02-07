@@ -2,7 +2,6 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -53,10 +52,7 @@ public class MonthlyAccTableModelTests
 	@Test
 	public void displays_account_names_in_order()
 	{
-		assertThat(_tableModel.getRowCount(), is(3));
-		assertThat(_tableModel.getValueAt(0, IRRELEVANT), is((Object)(new ScreenValueForTest("Misc Expenses"))));
-		assertThat(_tableModel.getValueAt(1, IRRELEVANT), is((Object)(new ScreenValueForTest("Groceries"))));
-		assertThat(_tableModel.getValueAt(2, IRRELEVANT), is((Object)(new ScreenValueForTest("Living Expenses"))));
+		assertTableModelDisplays("Misc Expenses", "Groceries", "Living Expenses");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -88,11 +84,10 @@ public class MonthlyAccTableModelTests
 	public void updates_rule_definitions()
 	{		
 		_tableModel.setValueAt("some other account", 0, IRRELEVANT);
+		assertTableModelDisplays("some other account", "Groceries", "Living Expenses");
 		
-		ScreenValue newValue = (ScreenValue) _tableModel.getValueAt(0, IRRELEVANT);
-		
-		assertThat(newValue, is((ScreenValue)new ScreenValueForTest("some other account")));
-		assertThat(newValue.domainValue(), is((Object)new MonthlyAccount(1, "some other account")));
+		ScreenValue newValue = (ScreenValue) _tableModel.getValueAt(0, IRRELEVANT);		
+		assertThat(newValue.domainValue(), is((Object)new MonthlyAccount(1, "some other account")));		
 	}
 	
 	@Test
@@ -119,7 +114,6 @@ public class MonthlyAccTableModelTests
 		ScreenValue newValue = (ScreenValue) _tableModel.getValueAt(3, IRRELEVANT);
 		assertThat(newValue, is((ScreenValue)new ScreenValueForTest("", false)));
 		assertThat(newValue.domainValue(), is((Object)new MonthlyAccount(4, "")));
-
 	}
 	
 	@Test
@@ -137,7 +131,7 @@ public class MonthlyAccTableModelTests
 	public void rules_can_be_removed()
 	{
 		_tableModel.removeRow(1);		
-		assertThat(_tableModel.getRowCount(), is(2));
+		assertTableModelDisplays("Misc Expenses", "Living Expenses");
 	}
 
 	@Test
@@ -145,8 +139,7 @@ public class MonthlyAccTableModelTests
 	{
 		_tableModel.removeRow(-1);
 		_tableModel.removeRow(3);
-		
-		assertThat(_tableModel.getRowCount(), is(3));
+		assertTableModelDisplays("Misc Expenses", "Groceries", "Living Expenses");
 	}
 
 	@Test
@@ -174,9 +167,7 @@ public class MonthlyAccTableModelTests
 	{
 		_tableModel.moveUp(1);
 		
-		assertThat(_tableModel.getValueAt(0, IRRELEVANT), is((Object)(new ScreenValueForTest("Groceries"))));
-		assertThat(_tableModel.getValueAt(1, IRRELEVANT), is((Object)(new ScreenValueForTest("Misc Expenses"))));
-		assertThat(_tableModel.getValueAt(2, IRRELEVANT), is((Object)(new ScreenValueForTest("Living Expenses"))));
+		assertTableModelDisplays("Groceries", "Misc Expenses", "Living Expenses");
 	}
 
 	@Test
@@ -186,5 +177,45 @@ public class MonthlyAccTableModelTests
 		
 		assertThat(_accList.get(0).sequenceNo, is(1));
 		assertThat(_accList.get(1).sequenceNo, is(2));
+	}
+
+	@Test
+	public void moving_up_first_account_has_no_effect()
+	{
+		_tableModel.moveUp(0);
+		assertTableModelDisplays("Misc Expenses", "Groceries", "Living Expenses");
+	}
+
+	@Test
+	public void out_of_bounds_selection_ignored_when_moving_up()
+	{
+		_tableModel.moveUp(-1);
+		assertTableModelDisplays("Misc Expenses", "Groceries", "Living Expenses");
+
+		_tableModel.moveUp(_accList.size());
+		assertTableModelDisplays("Misc Expenses", "Groceries", "Living Expenses");
+	}
+	
+	@Test
+	public void moving_up_notifies_listeners()
+	{
+		TableModelListener listener = mock(TableModelListener.class);
+		_tableModel.addTableModelListener(listener);
+		
+		_tableModel.moveUp(1);
+		
+		verify(listener).tableChanged(any(TableModelEvent.class));
+	}
+
+	
+	private void assertTableModelDisplays(String... expectedAccNames)
+	{
+		assertThat(_tableModel.getRowCount(), is(expectedAccNames.length));
+		
+		for (int i = 0; i < expectedAccNames.length; i++)
+		{
+			assertThat("mismatch at element: " + i,
+					_tableModel.getValueAt(i, IRRELEVANT), is((Object)(new ScreenValueForTest(expectedAccNames[i]))));			
+		}
 	}
 }
