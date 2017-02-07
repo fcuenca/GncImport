@@ -171,16 +171,27 @@ public class MonthlyAccTableModelTests
 	}
 
 	@Test
+	public void accounts_can_be_moved_down()
+	{
+		_tableModel.moveDown(1);
+		
+		assertTableModelDisplaysAccounts("Misc Expenses", "Living Expenses", "Groceries");
+	}
+	
+	@Test
 	public void accounts_are_renumbered_after_moving_up()
 	{
 		_tableModel.moveUp(1);
-		
 		assertAccountsAreInSequence();
-		
-		assertThat(_accList.get(0).sequenceNo, is(1));
-		assertThat(_accList.get(1).sequenceNo, is(2));
 	}
 
+	@Test
+	public void accounts_are_renumbered_after_moving_down()
+	{
+		_tableModel.moveDown(1);
+		assertAccountsAreInSequence();
+	}
+	
 	@Test
 	public void moving_up_first_account_has_no_effect()
 	{
@@ -188,6 +199,13 @@ public class MonthlyAccTableModelTests
 		assertTableModelDisplaysAccounts("Misc Expenses", "Groceries", "Living Expenses");
 	}
 
+	@Test
+	public void moving_down_last_account_has_no_effect()
+	{
+		_tableModel.moveDown(2);
+		assertTableModelDisplaysAccounts("Misc Expenses", "Groceries", "Living Expenses");
+	}
+	
 	@Test
 	public void out_of_bounds_selection_ignored_when_moving_up()
 	{
@@ -199,6 +217,16 @@ public class MonthlyAccTableModelTests
 	}
 	
 	@Test
+	public void out_of_bounds_selection_ignored_when_moving_down()
+	{
+		_tableModel.moveDown(-1);
+		assertTableModelDisplaysAccounts("Misc Expenses", "Groceries", "Living Expenses");
+		
+		_tableModel.moveDown(_accList.size());
+		assertTableModelDisplaysAccounts("Misc Expenses", "Groceries", "Living Expenses");
+	}
+	
+	@Test
 	public void moving_up_notifies_listeners()
 	{
 		assertActionNotifiesListeners(new Runnable()
@@ -206,6 +234,18 @@ public class MonthlyAccTableModelTests
 			public void run()
 			{
 				_tableModel.moveUp(1);
+			}
+		});
+	}
+	
+	@Test
+	public void moving_down_notifies_listeners()
+	{
+		assertActionNotifiesListeners(new Runnable()
+		{
+			public void run()
+			{
+				_tableModel.moveDown(1);
 			}
 		});
 	}

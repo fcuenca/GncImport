@@ -8,7 +8,7 @@ Stories:
 x display current Monthly Accounts
 x accounts are displayed in order
 x add & remove accounts
-* change order of accounts
+x change order of accounts
 x edit existing rules (add, remove, modify)
 x validation
 	x account can't be blank
@@ -22,10 +22,6 @@ Tasks:
 
 
 Later:
-- MonthlyAccTableModel tests: remove duplication in assertions
-- MonthtlyAccTableModel shouldn't have to know that acc sequence numbers are not zero-based
-- clean up fireTableDataChanged duplication (code & tests)
-- EditableMatchingRule: remove and collapse into MatchingRule (?)
 - rename AccOverrideRulesTableModel -> it's not just for AccOverride
 - fix conceptual duplication in displays_rules in PropertyEditorPresenterTests - also in other tests that need to build allRules with the correct number of objects
 - PropEditorPresenter.editProperties also has the same problem -> smell: type code (RuleCategory enum)
@@ -34,7 +30,6 @@ Later:
 - duplication in Config object & tests re:keys in map, types of objects in lists, etc
    => adding a value to RuleCategory causes shotgun surgery in copyTo, replaceWith -> similar actions for each element
       => perhaps refactor to Memento (??) 
-- push up COLUMN_CLASSES from table model classes
 
 General improvements:
 - Table Models have to edit the supplied lists "in place", or they won't be saved (i.e. all the lists are shared objects -- See MonthlyAccTable Model to see the issue this causes)

@@ -111,15 +111,23 @@ public class MonthlyAccTableModel extends PropertyTableModel
 
 	public void moveUp(int selectedRow)
 	{
-		int prevRow = selectedRow - 1;
-		
-		if(prevRow >= 0 && prevRow < _accList.size() && selectedRow < _accList.size())
+		swapRows(selectedRow - 1, selectedRow);
+	}
+
+	public void moveDown(int selectedRow)
+	{
+		swapRows(selectedRow, selectedRow + 1);
+	}
+
+	private void swapRows(int first, int second)
+	{
+		if(first >= 0 && first < _accList.size() && second < _accList.size())
 		{
-			MonthlyAccount currentAcc = _accList.get(selectedRow);
-			MonthlyAccount prevAcc = _accList.get(prevRow);
+			MonthlyAccount firstAcc = _accList.get(first);
+			MonthlyAccount secondAcc = _accList.get(second);
 			
-			_accList.set(selectedRow, new MonthlyAccount(currentAcc.sequenceNo, prevAcc.getAccName()));
-			_accList.set(prevRow, new MonthlyAccount(prevAcc.sequenceNo, currentAcc.getAccName()));
+			_accList.set(second, new MonthlyAccount(secondAcc.sequenceNo, firstAcc.getAccName()));
+			_accList.set(first, new MonthlyAccount(firstAcc.sequenceNo, secondAcc.getAccName()));
 			
 			fireTableDataChanged();
 		}

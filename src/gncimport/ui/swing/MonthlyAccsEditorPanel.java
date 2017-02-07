@@ -44,7 +44,13 @@ public class MonthlyAccsEditorPanel extends PropertyEditorPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				//model.moveDown(theTable.getSelectedRow());
+				int selection = _propertyTable.getSelectedRow(); 
+				
+				if (selection != _propertyTable.getRowCount() - 1)
+				{
+					model.moveDown(selection);
+					_propertyTable.setRowSelectionInterval(selection + 1, selection + 1);
+				}
 			}
 		});
 		
