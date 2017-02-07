@@ -108,4 +108,15 @@ public class MonthlyAccTableModel extends PropertyTableModel
 		return true;
 	}
 
+	public void moveUp(int selectedRow)
+	{
+		int prevRow = selectedRow - 1;
+		
+		MonthlyAccount currentAcc = _accList.get(selectedRow);
+		MonthlyAccount prevAcc = _accList.get(prevRow);
+		
+		_accList.set(selectedRow, new MonthlyAccount(currentAcc.sequenceNo, prevAcc.getAccName()));
+		_accList.set(prevRow, new MonthlyAccount(prevAcc.sequenceNo, currentAcc.getAccName()));
+	}
+
 }

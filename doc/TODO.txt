@@ -22,6 +22,7 @@ Tasks:
 
 
 Later:
+- MonthtlyAccTableModel shouldn't have to know that acc sequence numbers are not zero-based
 - clean up fireTableDataChanged duplication (code & tests)
 - EditableMatchingRule: remove and collapse into MatchingRule (?)
 - rename AccOverrideRulesTableModel -> it's not just for AccOverride

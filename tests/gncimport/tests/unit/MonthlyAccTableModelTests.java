@@ -2,6 +2,7 @@ package gncimport.tests.unit;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -164,10 +165,26 @@ public class MonthlyAccTableModelTests
 	{
 		_tableModel.removeRow(1);
 		
-		// This test relies on the fact that the account list is modified "in site" :-/
 		assertThat(_accList.get(0).sequenceNo, is(1));
 		assertThat(_accList.get(1).sequenceNo, is(2));
 	}
+	
+	@Test
+	public void accounts_can_be_moved_up()
+	{
+		_tableModel.moveUp(1);
+		
+		assertThat(_tableModel.getValueAt(0, IRRELEVANT), is((Object)(new ScreenValueForTest("Groceries"))));
+		assertThat(_tableModel.getValueAt(1, IRRELEVANT), is((Object)(new ScreenValueForTest("Misc Expenses"))));
+		assertThat(_tableModel.getValueAt(2, IRRELEVANT), is((Object)(new ScreenValueForTest("Living Expenses"))));
+	}
 
-
+	@Test
+	public void accounts_are_renumbered_after_moving_up()
+	{
+		_tableModel.moveUp(1);
+		
+		assertThat(_accList.get(0).sequenceNo, is(1));
+		assertThat(_accList.get(1).sequenceNo, is(2));
+	}
 }

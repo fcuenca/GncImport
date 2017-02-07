@@ -1,5 +1,9 @@
 package gncimport.ui.swing;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 @SuppressWarnings("serial")
@@ -13,8 +17,31 @@ public class MonthlyAccsEditorPanel extends PropertyEditorPanel
 	@Override
 	protected void addPanelSpecificToolbarControls(JToolBar toolBar)
 	{
-		// TODO Auto-generated method stub
+		JButton button;
+		//MonthlyAccTableModel model = (MonthlyAccTableModel) _propertyTable.getModel();
+		
+		button = new JButton("Up");
+		button.setToolTipText("Move up");
+		toolBar.add(button);
+		button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				//model.moveUp(theTable.getSelectedRow());
+			}
+		});
 
+		button = new JButton("Down");
+		button.setToolTipText("Move down");
+		toolBar.add(button);
+		button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				//model.moveDown(theTable.getSelectedRow());
+			}
+		});
+		
 	}
 
 }
