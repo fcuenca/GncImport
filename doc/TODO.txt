@@ -32,6 +32,8 @@ Later:
       => perhaps refactor to Memento (??) 
 
 General improvements:
+- Remember OTHER account in drop-down
+- fix the need to re-open after adding new monthly accounts (drop-down doesn’t refresh)
 - Table Models have to edit the supplied lists "in place", or they won't be saved (i.e. all the lists are shared objects -- See MonthlyAccTable Model to see the issue this causes)
 - LocalFileTxImportModel could be implemented using the State Pattern 
 - better handle the two states of the model class, depending on which file has been loaded first
